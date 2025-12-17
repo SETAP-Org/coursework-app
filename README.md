@@ -1,4 +1,4 @@
-# Coursework Management System
+# Group Coursework Management System (GCMS)
 
 A comprehensive web-based platform designed to streamline group coursework management for university students. This application addresses common challenges in academic collaboration by consolidating communication, task management, and file sharing into a single, integrated solution.
 
