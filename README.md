@@ -47,4 +47,4 @@ Based on extensive user research with **15 interviews and a focus group**, we id
 ## Target Users
 University students working on group coursework projects across all disciplines, with an initial focus on those with Microsoft/Office 365 university accounts.
 
-> **Project Context:** Developed by Group 5B for the Software Engineering Theory & Practice (SETaP)
+> **Project Context:** Developed by Group 5B for the Software Engineering Theory & Practice (SETaP) module
