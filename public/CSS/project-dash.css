@@ -1,0 +1,264 @@
+:root {
+  --bg: #0b1220;
+  --card: rgba(255, 255, 255, .08);
+  --card2: rgba(255, 255, 255, .12);
+  --card3: rgba(47, 113, 226, 0.381);
+  --text: #e9eefc;
+  --muted: rgb(32, 133, 228);
+  --accent: #7c5cff;
+  --good: #3ddc97;
+  --bad: #ff5c7a;
+  --shadow: 0 18px 50px rgba(0, 0, 0, .35);
+  --radius: 18px;
+}
+
+* { box-sizing: border-box; }
+
+body{
+  margin: 0;
+  min-height: 100vh;
+  padding: 16px;
+  display: grid;     
+  gap: 24px;       
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  background:
+    radial-gradient(900px 500px at 10% 10%, rgba(124, 92, 255, .25), transparent 60%),
+    radial-gradient(700px 450px at 85% 20%, rgba(61, 220, 151, .18), transparent 60%),
+    radial-gradient(900px 600px at 60% 90%, rgba(255, 92, 122, .12), transparent 60%),
+    var(--bg);
+  color: var(--text);
+}
+
+.Dashboard-header,
+.Dashboard-content,
+.Dashboard-bottom,
+.Dashboard-footer{
+  width: 100%;
+}
+
+.Dashboard {
+  margin: 1px;
+  display: grid;
+  gap: 24px;
+  padding: 10px;
+  max-width: 2500px;
+  width: 100%;
+  height: 100%;
+}
+
+.card,
+.Dashboard-container,
+.small-box,
+.Dashboard-bottom,
+.Dashboard-footer {
+  background-color: var(--card);
+  border-radius: var(--radius);
+}
+
+.Dashboard-header {
+  height: auto;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  justify-content: space-between;
+  position: relative;
+  background-color: var(--card);
+  border-radius: var(--radius);
+}
+
+.Dashboard-header .card{
+  width: auto;
+  background: none;
+  padding: 0;
+}
+
+.Dashboard-header .card:nth-child(2) h2{
+  margin-left: 10px;
+}
+
+.Dashboard-links {
+  text-decoration: none;
+  color: var(--text);
+  font-size: 1rem;
+  padding: 8px 12px;
+  transition: color 0.3s ease;
+}
+
+.Dashboard-links:hover {
+  color: var(--accent);
+}
+
+.Dashboard-header .icon{
+  display: none;
+  color: var(--text);
+  font-size: 1.5rem;
+}
+
+.card, .card-inner {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: var(--card);
+  border-radius: var(--radius);
+}
+
+.card-inner {
+  margin-top: 10px;
+  height: 77%;
+  width: 98%;
+  margin-left: 10px;
+  display: flex;
+  grid-template-columns: repeat(2, minmax(110px, 1fr));
+  gap: 24px;
+}
+
+.inner-left-column, .inner-right-column {
+  flex:1;
+}
+
+.inner-left-column, .inner-right-column {
+  display: flex; 
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+}
+
+.box{
+  background-color: var(--card2);
+  border-radius: var(--radius);
+  padding: 16px;
+  flex: 1;
+}
+
+.card.small-box{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;         
+  height: 100%; 
+}
+
+.Dashboard-title { font-size: 1rem; }
+.Dashboard-text {
+  font-size: 1rem;
+  color: var(--muted);
+}
+.Dashboard-text:hover {
+  color: var(--text);
+  cursor: pointer;
+}
+
+.Dashboard-content {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) minmax(260px, 380px);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.Dashboard-container {
+  min-height: 420px;        
+  height: auto;
+}
+
+.Dashboard-right {
+  display: grid;
+  grid-template-rows: repeat(3, minmax(110px, 1fr));
+  gap: 24px;
+  width: 100%;           
+}
+
+.small-box {
+  width: 100%;
+  min-height: 110px;
+  height: auto;             
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 12px;
+}
+
+.Dashboard-bottom {
+  width: 100%;
+  min-height: 140px;
+  height: auto;              
+  display: flex;
+  gap: 50px;
+  padding: 12px 16px;
+}
+
+.Dashboard-footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 16px;
+}
+
+@media (max-width: 900px) {
+  .Dashboard-header .card:nth-child(2) {
+    display: none;
+  }
+
+  .Dashboard-header .icon {
+    display: block;
+    cursor: pointer;
+  }
+
+  .Dashboard-header.responsive {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .Dashboard-header.responsive .card:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-top: 15px;
+  }
+  
+  .Dashboard-header.responsive .card h1,
+  .Dashboard-header.responsive .card h2 {
+    padding: 8px 0;
+    width: 100%;
+  }
+
+  .Dashboard-header.responsive .icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  .Dashboard-content {
+    grid-template-columns: 1fr;
+  }
+
+  .Dashboard-right {
+    grid-template-rows: none;
+    grid-template-columns: 1fr; 
+  }
+
+  .Dashboard-bottom {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .card-inner {
+    flex-direction: column;
+    gap: 16px;
+    width: 97%;
+  }
+
+  .inner-left-column, .inner-right-column {
+    width: 95%;
+  }
+}
+
+@media (max-width: 520px) {
+  body { padding: 12px; }
+  .Dashboard { gap: 16px; }
+  .Dashboard-content { gap: 16px; }
+  .Dashboard-right { gap: 16px; }
+}
