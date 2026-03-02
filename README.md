@@ -5,9 +5,9 @@ A comprehensive web-based platform designed to streamline group coursework manag
 ---
 
 ## .env Structure
-```.env DATABASE_URL = postgresql://[username]:[password]@localhost:5432/gcms ```
-If you don't use a password for your psql, the url is just ```.env postgresql://[username]@localhost:5432/gcms```
-Where [username] is what appears before `=#` when typing psql into a terminal window
+<p>```DATABASE_URL = postgresql://[username]:[password]@localhost:5432/gcms```</p>
+<p>If you don't use a password for your psql, the url is just ```postgresql://[username]@localhost:5432/gcms```</p>
+> Where [username] is what appears before `=#` when typing psql into a terminal window
 
 ## Overview
 Managing group coursework often involves juggling multiple platforms—WhatsApp for communication, OneDrive for files, separate calendars for meetings, and informal methods for tracking contributions. Our platform eliminates this fragmentation by providing an **all-in-one solution** tailored specifically for student coursework projects.
