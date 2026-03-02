@@ -2,7 +2,7 @@
   "name": "group-coursework-management-system",
   "version": "1.0.0",
   "description": "A comprehensive web-based platform designed to streamline group coursework management for university students. This application addresses common challenges in academic collaboration by consolidating communication, task management, and file sharing into a single, integrated solution.",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node server.js --watch",
@@ -15,7 +15,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/SETAP-Org/group-coursework-management-system/issues"
   },
