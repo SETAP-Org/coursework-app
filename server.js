@@ -12,7 +12,7 @@ app.get("/", (req, res) => {
 
 app.get("/user-dashboard", (req, res) => {
   res.sendFile(path.join(__dirname, "public/pages", "user_dashboard.html"));
-})
+});
 
 app.listen(port, () => {
   console.log("Server running on http://localhost:3000/");
