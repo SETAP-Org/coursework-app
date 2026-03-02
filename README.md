@@ -12,7 +12,7 @@ A comprehensive web-based platform designed to streamline group coursework manag
 
 `postgresql://[username]@localhost:5432/gcms`
 
-> Where [username] is what appears before `=#` when typing psql into a terminal window
+> Where [username] is what appears before `=#` when typing psql into a terminal window.
 > This also assumes you have PostgreSQL configured to default to port `5431`
 
 ## Overview
