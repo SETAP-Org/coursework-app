@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node server.js --watch",
-    "install_db": "psql -f ./db/index.sql && psql -d gcms -f ./db/seed_dev.sql -v ON_ERROR_STOP=1"
+    "install_db": "sh shell_scripts/install_db.sh"
   },
   "repository": {
     "type": "git",
