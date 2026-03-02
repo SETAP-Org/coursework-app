@@ -28,6 +28,12 @@ CREATE TABLE USERS(
     UNIQUE (user_email)
 );
 
+INSERT INTO USERS (user_first_name, user_last_name, user_email)
+VALUES
+("Person", "1", "person1@email.com"),
+("Person", "1", "person1@email.com"),
+("Person", "1", "person1@email.com");
+
 CREATE TABLE PROJECTS(
     project_id SERIAL PRIMARY KEY,
     team_leader_id INT NOT NULL,
