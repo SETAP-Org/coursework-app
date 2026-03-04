@@ -1,6 +1,6 @@
 import express from "express";
 import path from "path";
-import { getAllUsersController } from "./controllers/userControllers.js";
+import { getAllUsersController, postUserController } from "./controllers/userControllers.js";
 
 const __dirname = import.meta.dirname;
 
@@ -8,6 +8,7 @@ const app = express();
 
 const port = 3000;
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json()); // Add this line
 
 // paths to navigate pages
 app.get("/", async (req, res) => {
@@ -24,3 +25,5 @@ app.listen(port, () => {
 
 // API routes
 app.get("/api/users/all", getAllUsersController)
+
+app.post("/api/users/postUser", postUserController)
