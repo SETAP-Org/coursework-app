@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node server.js --watch",
+    "dev": "cross-env NODE_ENV=development node server.js --watch",
+    "prod": "cross-env NODE_ENV=production node server.js --watch",
     "install_db": "sh shell_scripts/install_db.sh"
   },
   "repository": {
@@ -21,6 +22,7 @@
   },
   "homepage": "https://github.com/SETAP-Org/group-coursework-management-system#readme",
   "dependencies": {
+    "cross-env": "^10.1.0",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "pg": "^8.19.0"

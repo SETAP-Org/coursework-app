@@ -1,10 +1,14 @@
 import { Pool } from "pg";
 import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config({
+  path: `.env.${process.env.NODE_ENV}`
+});
+
+
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.DB_URL,
 });
 
 async function query(text, params) {
