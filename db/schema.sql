@@ -31,7 +31,6 @@ CREATE TABLE USERS(
 CREATE TABLE PROJECTS(
     project_id SERIAL PRIMARY KEY,
     team_leader_id INT NOT NULL,
-    project_board TEXT,
     project_name VARCHAR(50) NOT NULL,
     project_deadline DATE NOT NULL,
     p_date_created TIMESTAMP,
