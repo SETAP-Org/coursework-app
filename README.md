@@ -59,3 +59,38 @@ Based on extensive user research with **15 interviews and a focus group**, we id
 University students working on group coursework projects across all disciplines, with an initial focus on those with Microsoft/Office 365 university accounts.
 
 > **Project Context:** Developed by Group 5B for the Software Engineering Theory & Practice (SETaP) module
+
+
+## Check status of Postgre
+sc query postgresql-x64-18
+
+## if not running use this 
+net start postgresql-x64-18
+
+## if running 
+netstat -ano | findstr :5432
+
+## if stopped 
+net start postgresql-x64-18
+
+## psql dictionary 
+sc qc postgresql-x64-18
+
+## in the case tcp ip is broken 
+C:\Program Files\PostgreSQL\18\data\postgresql.conf
+
+## find these lines 
+#listen_addresses = 'localhost'
+#port = 5432
+
+## chamge to these 
+listen_addresses = '*'
+port = 5432
+
+## chage these 
+C:\Program Files\PostgreSQL\18\data\pg_hba.conf
+
+host    all     all     127.0.0.1/32    trust
+host    all     all     ::1/128         trust
+
+## password devpass
