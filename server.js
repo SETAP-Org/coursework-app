@@ -49,3 +49,13 @@ app.listen(port, () => {
 app.get("/api/users/all", getAllUsersController)
 
 app.post("/api/users/postUser", postUserController)
+
+app.get("/api/auth", passport.authenticate("microsoft"));
+
+app.get("/api/auth/callback", passport.authenticate("microsoft", {
+    failureRedirect: "/"
+  }),
+  (req, res) => {
+    res.redirect("/user-dashboard");
+  }
+);
