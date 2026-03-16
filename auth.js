@@ -1,6 +1,8 @@
 import passport from "passport";
 import { Strategy as MicrosoftStrategy } from "passport-microsoft";
-import "dotenv/config";
+import dotenv from 'dotenv';
+
+dotenv.config({path: ".env.auth"})
 
 passport.use(new MicrosoftStrategy({
 		clientID: process.env.CLIENT_ID,

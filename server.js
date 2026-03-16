@@ -2,8 +2,10 @@ import express from "express";
 import path from "path";
 import session from "express-session";
 import passport from "passport";
-import "dotenv/config";
+import dotenv from 'dotenv';
 import "./auth.js";
+
+dotenv.config({path: ".env.session-secret"});
 
 import { getAllUsersController, postUserController } from "./controllers/userControllers.js";
 
@@ -17,7 +19,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
 app.use(session({
-  secret: process.env.session.SESSION_SECRET,
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false
 }));
