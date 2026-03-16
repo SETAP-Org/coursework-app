@@ -3,7 +3,7 @@ import path from "path";
 import session from "express-session";
 import passport from "passport";
 import "dotenv/config";
-import "auth.js";
+import "./auth.js";
 
 import { getAllUsersController, postUserController } from "./controllers/userControllers.js";
 
@@ -56,6 +56,7 @@ app.get("/api/auth/callback", passport.authenticate("microsoft", {
     failureRedirect: "/"
   }),
   (req, res) => {
-    res.redirect("/user-dashboard");
+	res.redirect("/user-dashboard");
+	  console.log(req.user);
   }
 );
