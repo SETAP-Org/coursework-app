@@ -32,7 +32,7 @@ passport.use(new MicrosoftStrategy({
 		scope: ["User.Read"]
 	},
 	function(accessToken, refreshToken, profile, done) {
-		return done(null, profile);
+		return done(null, {...profile, accessToken, refreshToken});
 	})
 );
 
@@ -44,7 +44,9 @@ passport.serializeUser((user, done) => {
     microsoftId: user.id,
     firstName: user.name.givenName,
     lastName: user.name.familyName,
-    email: user.emails[0].value
+    email: user.emails[0].value,
+    accessToken: user.accessToken,
+    refreshToken: user.refreshToken
   }
   done(null, filteredUser);
 });
@@ -60,11 +62,11 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/user-dashboard", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/pages", "user_dashboard.html"));
-});
-
-app.listen(port, () => {
-  console.log("Server running on http://localhost:3000/");
+  if (req.user && req.user.accessToken) {
+    res.sendFile(path.join(__dirname, "public/pages", "user_dashboard.html"));
+  } else {
+    res.redirect("/");
+  }
 });
 
 // API routes
@@ -81,6 +83,9 @@ app.get(
   }),
   (req, res) => {
     res.redirect("/user-dashboard");
-    console.log(req.user);
   },
 );
+
+app.listen(port, () => {
+  console.log("Server running on http://localhost:3000/");
+});
