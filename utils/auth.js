@@ -42,6 +42,10 @@ export function connectMicrosoft(app) {
   });
 }
 
+export function authenticatePassport() {
+  passport.authenticate("microsoft");
+}
+
 export function isLoggedIn(req) {
   return req.user && req.user.accessToken;
 }

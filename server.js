@@ -16,7 +16,7 @@ import {
 
 // util imports
 import createSession from "./utils/session.js";
-import { connectMicrosoft } from "./utils/auth.js";
+import { connectMicrosoft, authenticatePassport } from "./utils/auth.js";
 
 // configfure environment variables
 dotenv.config({ path: ".env.auth" });
@@ -42,7 +42,7 @@ app.get("/api/users/all", getAllUsersController);
 
 app.post("/api/users/postUser", postUserController);
 
-app.get("/api/auth", passport.authenticate("microsoft"));
+app.get("/api/auth", authenticatePassport);
 
 app.get(
   "/api/auth/callback",
