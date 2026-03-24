@@ -1,19 +1,16 @@
 import path from "path";
-import { isLoggedIn } from "../utils/auth.js";
 const __dirname = import.meta.dirname;
 
-export function serveLanding(req, res) {
+export function serveLanding(req, res, next) {
   res.sendFile(path.join(__dirname, "../public/pages", "index.html"));
 }
 
-export function serveUserDashboard(req, res) {
-  isLoggedIn(req)
-    ? res.sendFile(
-        path.join(__dirname, "../public/pages/", "user_dashboard.html"),
-      )
-    : res.redirect("/");
+export function serveUserDashboard(req, res, next) {
+  res.sendFile(
+    path.join(__dirname, "../public/pages/", "user_dashboard.html")
+  )
 }
 
-export function redirectUserDashboard(req, res) {
+export function redirectUserDashboard(req, res, next) {
   res.redirect("/user-dashboard");
 }

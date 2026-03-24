@@ -1,11 +1,10 @@
-import { isLoggedIn, authenticatePassport } from "../utils/auth.js"
-import path from "path";
-const __dirname = import.meta.dirname;
+import passport from "passport";
 
-export function signInUserController(req, res) {
-    isLoggedIn(req)
-    ? res.sendFile(
-        path.join(__dirname, "../public/pages/", "user_dashboard.html"),
-    )
-    : authenticatePassport();
+export function checkIfLoggedIn(req, res, next) {
+    if (req.user && req.user.accessToken) next();
+    else res.redirect("/");
+}
+
+export function authenticatePassport() {
+    return passport.authenticate("microsoft", { failureRedirect: "/" });
 }

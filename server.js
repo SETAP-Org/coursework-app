@@ -14,12 +14,13 @@ import {
   postUserController,
 } from "./controllers/userControllers.js";
 import {
-  signInUserController
+  checkIfLoggedIn,
+  authenticatePassport
 } from "./controllers/authControllers.js";
 
 // util imports
 import createSession from "./utils/session.js";
-import { connectMicrosoft, authenticatePassport } from "./utils/auth.js";
+import setUpAuth from "./utils/auth.js";
 
 // configfure environment variables
 dotenv.config({ path: ".env.auth" });
@@ -33,21 +34,21 @@ const port = 3000;
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 createSession(app);
-connectMicrosoft(app);
+setUpAuth(app);
 
 // paths to navigate pages
 app.get("/", serveLanding);
 
-app.get("/user-dashboard", serveUserDashboard);
+app.get("/user-dashboard", checkIfLoggedIn, serveUserDashboard);
 
 // API routes
 app.get("/api/users/all", getAllUsersController);
 
 app.post("/api/users/postUser", postUserController);
 
-app.get("/api/auth", signInUserController);
+app.get("/api/auth", authenticatePassport());
 
-app.get("/api/auth/callback", authenticatePassport(), redirectUserDashboard);
+app.get("/api/auth/callback", redirectUserDashboard);
 
 app.listen(port, () => {
   console.log("Server running on http://localhost:3000/ :P");

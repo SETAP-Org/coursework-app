@@ -5,7 +5,7 @@ const __dirname = import.meta.dirname;
 
 dotenv.config({ path: ".env.auth" });
 
-export function connectMicrosoft(app) {
+export default function setUpAuth(app) {
   passport.use(
     new MicrosoftStrategy(
       {
@@ -39,12 +39,4 @@ export function connectMicrosoft(app) {
     console.log(obj);
     done(null, obj);
   });
-}
-
-export function isLoggedIn(req) {
-  return req.user && req.user.accessToken;
-}
-
-export function authenticatePassport() {
-  return passport.authenticate("microsoft", { failureRedirect: "/" });
 }
