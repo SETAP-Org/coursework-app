@@ -42,7 +42,7 @@ app.get("/api/users/all", getAllUsersController);
 
 app.post("/api/users/postUser", postUserController);
 
-app.get("/api/auth", authenticatePassport);
+app.get("/api/auth", authenticatePassport());
 
 app.get(
   "/api/auth/callback",

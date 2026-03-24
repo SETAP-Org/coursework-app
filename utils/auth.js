@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 import passport from "passport";
 import { Strategy as MicrosoftStrategy } from "passport-microsoft";
-import path from "path";
 const __dirname = import.meta.dirname;
 
 dotenv.config({ path: ".env.auth" });
@@ -43,7 +42,7 @@ export function connectMicrosoft(app) {
 }
 
 export function authenticatePassport() {
-  passport.authenticate("microsoft");
+    return passport.authenticate("microsoft");
 }
 
 export function isLoggedIn(req) {
