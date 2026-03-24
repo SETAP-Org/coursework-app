@@ -1,6 +1,5 @@
 import express from "express";
 import path from "path";
-import session from "express-session";
 import passport from "passport";
 import dotenv from "dotenv";
 import { Strategy as MicrosoftStrategy } from "passport-microsoft";
@@ -9,8 +8,9 @@ import {
   postUserController,
 } from "./controllers/userControllers.js";
 
+import createSession from "./utils/session.js";
+
 dotenv.config({ path: ".env.auth" });
-dotenv.config({ path: ".env.session-secret" });
 
 const __dirname = import.meta.dirname;
 const app = express();
@@ -19,21 +19,20 @@ const port = 3000;
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false
-}));
+createSession(app);
 
-passport.use(new MicrosoftStrategy({
-		clientID: process.env.CLIENT_ID,
-		clientSecret: process.env.CLIENT_SECRET,
-		callbackURL: "http://localhost:3000/api/auth/callback",
-		scope: ["User.Read"]
-	},
-	function(accessToken, refreshToken, profile, done) {
-		return done(null, {...profile, accessToken, refreshToken});
-	})
+passport.use(
+  new MicrosoftStrategy(
+    {
+      clientID: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+      callbackURL: "http://localhost:3000/api/auth/callback",
+      scope: ["User.Read"],
+    },
+    function (accessToken, refreshToken, profile, done) {
+      return done(null, { ...profile, accessToken, refreshToken });
+    },
+  ),
 );
 
 app.use(passport.initialize());
@@ -46,8 +45,8 @@ passport.serializeUser((user, done) => {
     lastName: user.name.familyName,
     email: user.emails[0].value,
     accessToken: user.accessToken,
-    refreshToken: user.refreshToken
-  }
+    refreshToken: user.refreshToken,
+  };
   done(null, filteredUser);
 });
 
