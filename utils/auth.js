@@ -41,10 +41,10 @@ export function connectMicrosoft(app) {
   });
 }
 
-export function authenticatePassport() {
-  return passport.authenticate("microsoft", { failureRedirect: "/" });
-}
-
 export function isLoggedIn(req) {
   return req.user && req.user.accessToken;
+}
+
+export function authenticatePassport() {
+  return passport.authenticate("microsoft", { failureRedirect: "/" });
 }

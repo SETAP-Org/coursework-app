@@ -13,6 +13,9 @@ import {
   getAllUsersController,
   postUserController,
 } from "./controllers/userControllers.js";
+import {
+  signInUserController
+} from "./controllers/authControllers.js";
 
 // util imports
 import createSession from "./utils/session.js";
@@ -42,7 +45,7 @@ app.get("/api/users/all", getAllUsersController);
 
 app.post("/api/users/postUser", postUserController);
 
-app.get("/api/auth", authenticatePassport());
+app.get("/api/auth", signInUserController);
 
 app.get("/api/auth/callback", authenticatePassport(), redirectUserDashboard);
 
