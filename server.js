@@ -1,6 +1,12 @@
 import express from "express";
 import path from "path";
 import dotenv from "dotenv";
+
+import {
+  serveLanding,
+  serveUserDashboard,
+} from "./controllers/serveControllers.js";
+
 import {
   getAllUsersController,
   postUserController,
@@ -9,7 +15,6 @@ import createSession from "./utils/session.js";
 import { connectMicrosoft } from "./utils/auth.js";
 
 import passport from "passport";
-import { Strategy as MicrosoftStrategy } from "passport-microsoft";
 
 dotenv.config({ path: ".env.auth" });
 
@@ -24,17 +29,9 @@ createSession(app);
 connectMicrosoft(app);
 
 // paths to navigate pages
-app.get("/", async (req, res) => {
-  res.sendFile(path.join(__dirname, "public/pages", "index.html"));
-});
+app.get("/", serveLanding);
 
-app.get("/user-dashboard", (req, res) => {
-  if (req.user && req.user.accessToken) {
-    res.sendFile(path.join(__dirname, "public/pages", "user_dashboard.html"));
-  } else {
-    res.redirect("/");
-  }
-});
+app.get("/user-dashboard", serveUserDashboard);
 
 // API routes
 app.get("/api/users/all", getAllUsersController);
