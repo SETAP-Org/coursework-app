@@ -13,3 +13,7 @@ export function serveUserDashboard(req, res) {
       )
     : res.redirect("/");
 }
+
+export function redirectUserDashboard(req, res) {
+  res.redirect("/user-dashboard");
+}

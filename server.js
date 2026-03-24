@@ -2,12 +2,12 @@
 import express from "express";
 import path from "path";
 import dotenv from "dotenv";
-import passport from "passport";
 
 // controller imports
 import {
   serveLanding,
   serveUserDashboard,
+  redirectUserDashboard,
 } from "./controllers/serveControllers.js";
 import {
   getAllUsersController,
@@ -44,9 +44,7 @@ app.post("/api/users/postUser", postUserController);
 
 app.get("/api/auth", authenticatePassport());
 
-app.get("/api/auth/callback", authenticatePassport(), (req, res) => {
-  res.redirect("/user-dashboard");
-});
+app.get("/api/auth/callback", authenticatePassport(), redirectUserDashboard);
 
 app.listen(port, () => {
   console.log("Server running on http://localhost:3000/ :P");
