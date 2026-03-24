@@ -1,14 +1,15 @@
 import express from "express";
 import path from "path";
-import passport from "passport";
 import dotenv from "dotenv";
-import { Strategy as MicrosoftStrategy } from "passport-microsoft";
 import {
   getAllUsersController,
   postUserController,
 } from "./controllers/userControllers.js";
-
 import createSession from "./utils/session.js";
+import { connectMicrosoft } from "./utils/auth.js";
+
+import passport from "passport";
+import { Strategy as MicrosoftStrategy } from "passport-microsoft";
 
 dotenv.config({ path: ".env.auth" });
 
@@ -20,40 +21,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
 createSession(app);
-
-passport.use(
-  new MicrosoftStrategy(
-    {
-      clientID: process.env.CLIENT_ID,
-      clientSecret: process.env.CLIENT_SECRET,
-      callbackURL: "http://localhost:3000/api/auth/callback",
-      scope: ["User.Read"],
-    },
-    function (accessToken, refreshToken, profile, done) {
-      return done(null, { ...profile, accessToken, refreshToken });
-    },
-  ),
-);
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-passport.serializeUser((user, done) => {
-  const filteredUser = {
-    microsoftId: user.id,
-    firstName: user.name.givenName,
-    lastName: user.name.familyName,
-    email: user.emails[0].value,
-    accessToken: user.accessToken,
-    refreshToken: user.refreshToken,
-  };
-  done(null, filteredUser);
-});
-
-passport.deserializeUser((obj, done) => {
-  console.log(obj);
-  done(null, obj);
-});
+connectMicrosoft(app);
 
 // paths to navigate pages
 app.get("/", async (req, res) => {
