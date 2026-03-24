@@ -42,7 +42,7 @@ export function connectMicrosoft(app) {
 }
 
 export function authenticatePassport() {
-    return passport.authenticate("microsoft");
+  return passport.authenticate("microsoft", { failureRedirect: "/" });
 }
 
 export function isLoggedIn(req) {

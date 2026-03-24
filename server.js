@@ -44,15 +44,9 @@ app.post("/api/users/postUser", postUserController);
 
 app.get("/api/auth", authenticatePassport());
 
-app.get(
-  "/api/auth/callback",
-  passport.authenticate("microsoft", {
-    failureRedirect: "/",
-  }),
-  (req, res) => {
-    res.redirect("/user-dashboard");
-  },
-);
+app.get("/api/auth/callback", authenticatePassport(), (req, res) => {
+  res.redirect("/user-dashboard");
+});
 
 app.listen(port, () => {
   console.log("Server running on http://localhost:3000/ :P");
