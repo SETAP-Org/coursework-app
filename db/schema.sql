@@ -19,7 +19,7 @@ DROP TABLE IF EXISTS PROJECTS CASCADE;
 DROP TABLE IF EXISTS USERS CASCADE;
 
 CREATE TABLE USERS(
-    user_id SERIAL PRIMARY KEY,
+    user_id UUID PRIMARY KEY,
     user_first_name VARCHAR(50) NOT NULL,
     user_last_name VARCHAR(50) NOT NULL,
     user_email VARCHAR(100) NOT NULL UNIQUE,
@@ -29,7 +29,7 @@ CREATE TABLE USERS(
 );
 
 CREATE TABLE PROJECTS(
-    project_id SERIAL PRIMARY KEY,
+    project_id UUID PRIMARY KEY,
     team_leader_id INT NOT NULL,
     project_name VARCHAR(50) NOT NULL,
     project_deadline DATE NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE USER_PROJECTS(
 CREATE TYPE task_status AS ENUM ('To Do', 'In Progress', 'Completed');
 
 CREATE TABLE TASKS(
-    task_id SERIAL PRIMARY KEY,
+    task_id UUID PRIMARY KEY,
     project_id INT NOT NULL,
     task_title VARCHAR(100) NOT NULL,
     task_description TEXT,
@@ -64,7 +64,7 @@ CREATE TABLE TASKS(
 CREATE TYPE notification_type AS ENUM ('Task Assigned', 'Task Updated', 'Project Deadline Approaching', 'Message Received');
 
 CREATE TABLE NOTIFICATIONS(
-    notification_id SERIAL PRIMARY KEY,
+    notification_id UUID PRIMARY KEY,
     user_id INT NOT NULL,
     project_id INT NOT NULL,
     task_id INT,
@@ -78,7 +78,7 @@ CREATE TABLE NOTIFICATIONS(
 );
 
 CREATE TABLE MESSAGES(
-    message_id SERIAL PRIMARY KEY,
+    message_id UUID PRIMARY KEY,
     sender_id INT NOT NULL,
     project_id INT NOT NULL,
     message_content TEXT NOT NULL,
@@ -90,7 +90,7 @@ CREATE TABLE MESSAGES(
 CREATE TYPE meeting_location AS ENUM('Virtual', 'Presential');
 
 CREATE TABLE MEETINGS(
-    meeting_id SERIAL PRIMARY KEY,
+    meeting_id UUID PRIMARY KEY,
     team_leader_id INT NOT NULL,
     project_id INT NOT NULL,
     scheduled_time TIMESTAMP NOT NULL,
@@ -104,7 +104,7 @@ CREATE TABLE MEETINGS(
 CREATE TYPE attendance_status AS ENUM('Present', 'Not Present');
 
 CREATE TABLE MEETING_ATTENDANCES(
-    attendance_id SERIAL PRIMARY KEY,
+    attendance_id UUID PRIMARY KEY,
     user_id INT NOT NULL,
     meeting_id INT NOT NULL,
     attendance_status attendance_status,
@@ -114,7 +114,7 @@ CREATE TABLE MEETING_ATTENDANCES(
 );
 
 CREATE TABLE WIDGETS(
-    widget_id SERIAL PRIMARY KEY,
+    widget_id UUID PRIMARY KEY,
     project_id INT NOT NULL,
     widget_x DECIMAL NOT NULL,
     widget_y DECIMAL NOT NULL,
