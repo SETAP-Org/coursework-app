@@ -1,3 +1,4 @@
+// ===== imports =====
 // package imports
 import express from "express";
 import path from "path";
@@ -15,7 +16,7 @@ import {
 } from "./controllers/userControllers.js";
 import {
   checkIfLoggedIn,
-  authenticatePassport
+  authenticatePassport,
 } from "./controllers/authControllers.js";
 
 // util imports
@@ -25,6 +26,7 @@ import setUpAuth from "./utils/auth.js";
 // configfure environment variables
 dotenv.config({ path: ".env.auth" });
 
+// ===== code =====
 // server configuration
 const __dirname = import.meta.dirname;
 const app = express();
