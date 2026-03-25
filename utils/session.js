@@ -9,11 +9,11 @@ export default function createSession(app) {
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
-      cookie: function(req) {
-        return {
-          maxAge: 60000 * 60 * 24
-        }
-      }
+      // cookie: function(req) {
+      //   return {
+      //     maxAge: 60000 * 60 * 24
+      //   }
+      // }
     }),
   );
 }

@@ -21,8 +21,13 @@ export function serveProjectDash(req, res, next){
 
 export function redirectUserDashboard(req, res, next) {
   res.redirect("/user-dashboard");
+  next();
 }
 
 export function redirectProjectDashboard(req, res, next) {
   res.redirect("/project-dash");
+}
+
+export function redirectAddUser(req, res, next) {
+  res.redirect("/api/users/addUser")
 }
