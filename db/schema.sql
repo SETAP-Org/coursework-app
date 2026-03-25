@@ -25,7 +25,7 @@ CREATE TABLE USERS(
     user_email VARCHAR(100) NOT NULL UNIQUE,
     microsoft_id TEXT NOT NULL UNIQUE,
     date_created TIMESTAMP,
-    last_login TIMESTAMP,
+    last_login TIMESTAMP
 );
 
 CREATE TABLE PROJECTS(
