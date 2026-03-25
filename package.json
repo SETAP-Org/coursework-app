@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env NODE_ENV=development node server.js --watch",
     "prod": "cross-env NODE_ENV=production node server.js --watch",
-    "install_db": "node shell_scripts/install_db.js"
+    "install_db": "node node_scripts/install_db.js"
   },
   "repository": {
     "type": "git",
