@@ -24,7 +24,6 @@ export default function setUpAuth(app) {
   app.use(passport.session());
 
   passport.serializeUser((user, done) => {
-    console.log('we are getting here...')
     const filteredUser = {
       microsoftId: user.id,
       firstName: user.name.givenName,
@@ -37,7 +36,6 @@ export default function setUpAuth(app) {
   });
 
   passport.deserializeUser((obj, done) => {
-    console.log(obj);
     done(null, obj);
   });
 }
