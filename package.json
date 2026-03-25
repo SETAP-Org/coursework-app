@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env NODE_ENV=development node server.js --watch",
     "prod": "cross-env NODE_ENV=production node server.js --watch",
-    "install_db": "node shell_scripts/install_db.js"
+    "install_db": "node node_scripts/install_db.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
+    "konva": "^10.2.3",
     "passport": "^0.7.0",
     "passport-microsoft": "^2.1.0",
     "pg": "^8.19.0"

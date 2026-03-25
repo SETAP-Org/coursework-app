@@ -135,8 +135,8 @@ body{
 .card.small-box{
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center;
+  align-items: flex-start;
   padding: 12px 16px;         
   height: 100%; 
 }
@@ -145,6 +145,7 @@ body{
 .Dashboard-text {
   font-size: 1rem;
   color: var(--muted);
+  
 }
 .Dashboard-text:hover {
   color: var(--text);
@@ -153,7 +154,7 @@ body{
 
 .Dashboard-content {
   display: grid;
-  grid-template-columns: minmax(280px, 1fr) minmax(260px, 380px);
+  grid-template-columns: minmax(200px, 1000px) minmax(260px, 500px);
   gap: 24px;
   align-items: stretch;
 }
@@ -165,7 +166,7 @@ body{
 
 .Dashboard-right {
   display: grid;
-  grid-template-rows: repeat(3, minmax(110px, 1fr));
+  grid-template-rows: repeat(2, minmax(110px, 1fr)); /*alter for number of items in the grid*/
   gap: 24px;
   width: 100%;           
 }
