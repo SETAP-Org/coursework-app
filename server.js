@@ -6,7 +6,8 @@ import dotenv from "dotenv";
 // controller imports
 import {
   serveLanding,
-  serveUserDashboard,
+  serveUserDashboard,  
+  serveProjectDash,
   redirectUserDashboard,
 } from "./controllers/serveControllers.js";
 import {
@@ -40,6 +41,8 @@ setUpAuth(app);
 app.get("/", serveLanding);
 
 app.get("/user-dashboard", checkIfLoggedIn, serveUserDashboard);
+
+app.get("/project-dash", checkIfLoggedIn, serveProjectDash);
 
 // API routes
 app.get("/api/users/all", getAllUsersController);

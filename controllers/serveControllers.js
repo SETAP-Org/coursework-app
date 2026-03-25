@@ -11,6 +11,18 @@ export function serveUserDashboard(req, res, next) {
   )
 }
 
+export function serveProjectDash(req, res, next){
+  res.sendFile(
+    path.join(__dirname, "../public/pages/", "project_dash.html")
+  )
+}
+
+
+
 export function redirectUserDashboard(req, res, next) {
   res.redirect("/user-dashboard");
+}
+
+export function redirectProjectDashboard(req, res, next) {
+  res.redirect("/project-dash");
 }
