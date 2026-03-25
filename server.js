@@ -3,8 +3,6 @@
 import express from "express";
 import path from "path";
 import dotenv from "dotenv";
-import { initKonva } from './konvaCanvas.js';
-
 
 // controller imports
 import {

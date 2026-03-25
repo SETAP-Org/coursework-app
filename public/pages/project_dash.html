@@ -2,13 +2,16 @@
 
   <!doctype html>
   <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../CSS/project-dash.css" />
-    <script src="Javascript/functions.js" defer></script>
-    <title>Coursework Dashboard</title>
-  </head>
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../css/project-dash.css" />
+  <link rel="stylesheet" href="../css/Konva.css" />
+  <script src="../scripts/header.js" defer></script>
+  <script src="https://unpkg.com/konva@9/konva.min.js"></script>
+  <script src="../scripts/dash-konva.js" defer></script>
+  <title>Coursework Dashboard</title>
+</head>
   <body>
     <div class="Dashboard">
   <!-- Include the header component -->
@@ -19,9 +22,9 @@
           <div class="card">
             <h1 class="Dashboard-title">Main Content Area</h1>
             <p class="Dashboard-text">UNI type shit</p>
-
-            <div id="Konva-container" class="konva-wrapper"></div> 
           </div>
+          <button id="add-note-btn">Add Note</button>
+          <div id="Konva-container" class="konva-wrapper"></div> 
         </section>
 
         <aside class="Dashboard-right" >
