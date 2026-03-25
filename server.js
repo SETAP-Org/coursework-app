@@ -48,7 +48,7 @@ app.post("/api/users/postUser", postUserController);
 
 app.get("/api/auth", authenticatePassport());
 
-app.get("/api/auth/callback", redirectUserDashboard);
+app.get("/api/auth/callback", authenticatePassport(), redirectUserDashboard);
 
 app.listen(port, () => {
   console.log("Server running on http://localhost:3000/ :P");

@@ -5,6 +5,6 @@ export function checkIfLoggedIn(req, res, next) {
     else res.redirect("/");
 }
 
-export function authenticatePassport() {
+export function authenticatePassport(req, res, next) {
     return passport.authenticate("microsoft", { failureRedirect: "/" });
 }
