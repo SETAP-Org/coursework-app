@@ -16,6 +16,7 @@ import {
 } from "./controllers/userControllers.js";
 import {
   checkIfLoggedIn,
+  checkIfLoggedInRedirect,
   authenticatePassport,
 } from "./controllers/authControllers.js";
 
@@ -41,14 +42,14 @@ setUpAuth(app);
 // paths to navigate pages
 app.get("/", serveLanding);
 
-app.get("/user-dashboard", checkIfLoggedIn, serveUserDashboard);
+app.get("/user-dashboard", checkIfLoggedInRedirect, serveUserDashboard);
 
 // API routes
 app.get("/api/users/all", getAllUsersController);
 
 app.post("/api/users/postUser", postUserController);
 
-app.get("/api/auth", authenticatePassport());
+app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
 
 app.get("/api/auth/callback", authenticatePassport(), redirectUserDashboard);
 
