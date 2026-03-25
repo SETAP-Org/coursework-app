@@ -1,77 +1,51 @@
-<!--python -m http.server then localhost:8000-->
 
-<!doctype html>
-<html lang="en">
-<head>
+
+  <!doctype html>
+  <html lang="en">
+ <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="../CSS/project-dash.css" />
-  <script src="Javascript/functions.js" defer></script>
+  <link rel="stylesheet" href="../css/project-dash.css" />
+  <link rel="stylesheet" href="../css/Konva.css" />
+  <script src="../scripts/header.js" defer></script>
+  <script src="https://unpkg.com/konva@9/konva.min.js"></script>
+  <script src="../scripts/dash-konva.js" defer></script>
   <title>Coursework Dashboard</title>
 </head>
-<body>
-  <div class="Dashboard">
-<!-- Include the header component -->
-  <header id="site-header"></header>
+  <body>
+    <div class="Dashboard">
+  <!-- Include the header component -->
+    <header id="site-header"></header>
 
-    <main class="Dashboard-content">
-      <section class="Dashboard-container">
-        <div class="card">
-          <h1 class="Dashboard-title">Main Content Area</h1>
-          <p class="Dashboard-text">UNI type shit</p>
-        </div>
-
-        <div class="card-inner">
-
-        <div class = "inner-left-column">
-          <div class = "box"></div>
-          <div class = "box"></div>
-        </div>
-
-        <div class = "inner-right-column">
-          <div class = "box"></div>
-        </div>
-      </section>
-
-      <aside class="Dashboard-right" >
-        <section class="card small-box">
-          <h2 class="Dashboard-text">Box 1</h2>
+      <main class="Dashboard-content">
+        <section class="Dashboard-container">
+          <div class="card">
+            <h1 class="Dashboard-title">Main Content Area</h1>
+            <p class="Dashboard-text">UNI type shit</p>
+          </div>
+          <button id="add-note-btn">Add Note</button>
+          <div id="Konva-container" class="konva-wrapper"></div> 
         </section>
 
-        <section class="card small-box">
-          <h2 class="Dashboard-text">Box 2</h2>
-        </section>
+        <aside class="Dashboard-right" >
+          <section class="card small-box">
+            <h2 class="Dashboard-text">Deadline</h2>
+          </section>
 
-        <section class="card small-box">
-          <h2 class="Dashboard-text">Box 3</h2>
-        </section>
-        <!--Add more stuff herfe if you want too-->
-      </aside>
+          <section class="card small-box">
+            <h2 class="Dashboard-text">Calandar </h2>
+          </section>
 
-      </main>
+          <!--Add more stuff herfe if you want too-->
+        </aside>
 
-      <aside class ="Dashboard-bottom">
-        <section class="card small-box">
-          <h2 class="Dashboard-text">Box 4</h2>
-        </section>
-
-        <section class="card small-box">
-          <h2 class="Dashboard-text">Box 5</h2>
-        </section>
-
-        <section class="card small-box">
-          <h2 class="Dashboard-text">Box 6</h2>
-        </section>
-
-      <!--Add more stuff here if you want too-->
-      </aside>
-
-      <footer class="Dashboard-footer">
-        <div class="card">
-          <h2 class="Dashboard-text">Footer Content</h2>
-        </div>
-      <!--Add more stuff here if you want too-->
-      </footer>
-  </div>
-</body>
-</html>
+        </main>
+        <footer class="Dashboard-footer">
+          <div class="card">
+            <h2 class="Dashboard-text">Footer Content</h2>
+          </div>
+        <!--Add more stuff here if you want too-->
+        </footer>
+    </div>
+  </body>
+  </html>
