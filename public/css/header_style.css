@@ -9,10 +9,14 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #4267b2;
     padding: 0 24px;
     height: 60px;
     width: 100%;
+    background:
+    radial-gradient(900px 500px at 10% 10%, rgba(124, 92, 255, .25), transparent 60%),
+    radial-gradient(700px 450px at 85% 20%, rgba(61, 220, 151, .18), transparent 60%),
+    radial-gradient(900px 600px at 60% 90%, rgba(255, 92, 122, .12), transparent 60%),
+    var(--bg);
 }
 
 header article {
