@@ -1,9 +1,11 @@
 const container = document.getElementById('Konva-container');
 const addNoteBtn = document.getElementById('add-note-btn');
+const removeNote = document.getElementById('remove-note');
 
 if (container && addNoteBtn) {
   const stage = new Konva.Stage({
     container: 'Konva-container',
+
     width: container.clientWidth,
     height: 500,
   });
@@ -14,7 +16,7 @@ if (container && addNoteBtn) {
   const transformer = new Konva.Transformer();
   layer.add(transformer);
 
-  const MAX_NOTES = 20;
+  const MAX_NOTES = 10;
   let noteCount = 0;
 
   function makeSelectable(node) {
@@ -26,7 +28,7 @@ if (container && addNoteBtn) {
 
   function createNote() {
     if (noteCount >= MAX_NOTES) {
-      alert('Maximum of 20 notes reached.');
+      alert('Maximum of 10 notes reached.');
       return;
     }
 
@@ -42,7 +44,7 @@ if (container && addNoteBtn) {
       fill: '#ffffff',
       stroke: '#333333',
       strokeWidth: 1,
-      cornerRadius: 8,
+      cornerRadius: 20,
       shadowBlur: 4,
       shadowColor: 'rgba(0,0,0,0.2)',
     });
@@ -64,12 +66,33 @@ if (container && addNoteBtn) {
       editText(text, group);
     });
 
-    layer.add(group);
-    layer.draw();
+    group.on('backspace', () => {
+      removeNoteHandler(text, group);
+    });
 
-    noteCount++;
+  layer.add(group);
+  layer.draw();
+
+  noteCount++;
+}
+
+function removeNoteHandler() {
+  //check note exists 
+  //add bin element or button
+  //remove elemnt from database
+  //reduce note count
+  if (noteCount <= 0) {
+    console.log('no note exist');
+  } else {
+    document.getElementById('remove-note').addEventListener('click', () => {
+      const tr = layer.find('Transformer')[0];
+      if (tr) {
+        tr.destroy();
+      }
+      layer.draw();
+    });
   }
-
+}
   function editText(textNode, group) {
     transformer.hide();
     layer.draw();

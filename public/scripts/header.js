@@ -1,5 +1,5 @@
 async function getHeader() {
-  const response = await fetch("./Components/Header.html"); // use / for root-relative
+  const response = await fetch("/Components/Header.html"); // use / for root-relative
   if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
   return await response.text();
 }
@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     el.innerHTML = await getHeader();
   } catch (err) {
     console.error(err);
-    el.innerHTML = "<p>Check header link in functions.js</p>";
+    el.innerHTML = "<p>Check header link in functions.js</p>";  
   }
 });
 
