@@ -1,45 +1,57 @@
 async function getCookies() {
     const response = await fetch("/Components/Cookies.html");
-    if (!response.ok) throw new Error (`HTTP error status: ${response.status}`);
+    if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
     return await response.text();
 }
 
+function setCookie(name, value, days) {
+    const maxAge = days * 24 * 60 * 60;
+    document.cookie = `${name}=${value}; path=/; max-age=${maxAge}; SameSite=Lax`;
+}
+
+function getCookie(name) {
+    const cookies = document.cookie ? document.cookie.split("; ") : [];
+    for (const cookie of cookies){
+        const [key, value] = cookies.split("=");
+        if (key == name) return value;
+    }
+    return null;
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
     const el = document.getElementById("cookie-container");
-    if (!el) return;
 
-    try {
-        el.innerHTML = await getCookies();
-    } catch (err) {
-        console.log(err)
-        el.innerHTML = "<p>check the link for the cookies</p>"
+    if (el) {
+        try {
+            el.innerHTML = await getCookies();
+        } catch (err) {
+            console.error("this file is in the same place as my sanity", err);
+            el.innerHTML = "<p>check the link for the cookies</p>";
+            return;
+        }
     }
-})
 
-
-document.addEventListener("DOMContentLoaded", function() {
     const banner = document.getElementById("cookie-banner");
-    const acceptAllBtn = document.getElementById("accept-all");  
-    const acceptEssentialBtn = document.getElementById("accept-essential")
+    const acceptAllBtn = document.getElementById("accept-all");
+    const acceptEssentialBtn = document.getElementById("accept-essentials");
 
-    const consent = localStorage.getItem('cookieConsent');
+    if (!banner) return;
 
-    if (consent == null){
-        banner.style.display = "block";
+    const consent = getCookie("cookieConsent");
+
+    banner.style.display = consent ? "none" : "block";
+
+    if (acceptAllBtn) {
+        acceptAllBtn.addEventListener("click", () => {
+            setCookie("cookieConsent", "all", 365)
+            banner.style.display = "none";
+        });
     }
 
-    if (!consent) {
-        banner.style.display = "block";
+    if (acceptEssentialBtn) {
+        acceptEssentialBtn.addEventListener("click", () => {
+            setCookie("cookieConsent", "essential", 365)
+            banner.style.display = "none";
+        });
     }
-
-    acceptAllBtn.addEventListner("click", function(){
-        localStorage.setItem("cookieConsent", "all");
-        banner.style.display = "none";
-    });
-
-    acceptEssentialOnly.addEventListner("click", function() {
-        localStorage.setItem("cookieConsent", "essential");
-        banner.style.display = "none";
-    });
-})
+});
