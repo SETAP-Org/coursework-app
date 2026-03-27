@@ -3,16 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
 
-    <script type="module" src="../scripts/index.js"></script>
+    <link rel="stylesheet" href="../css/project-dash.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/header_style.css">
+    <link rel="stylesheet" href="../css/cookie.css">
+
+    <script src="../scripts/header.js" defer></script>
+    <script src="../scripts/cookies.js" defer></script>
+    <script src="../scripts/footer.js" defer></script>
+    <script type="module" src="../scripts/index.js" defer></script>
+
+
+    <title>Document</title>
 </head>
 <body>
-	<section>
-		<a href="http://localhost:3000/api/auth">Sign in with Microsoft</a>
+    <header id="site-header"></header>
+    <section class="central-container">
+        <h1 class="cookie-header">Sign in to GCMS</h1>
+       <!-- <img src="/assets/microsoft.png" alt="mircosoft logo">-->
+        <div>
+		    <br><a href="http://localhost:3000/api/auth" class="link-style">Sign In With Microsoft</a>
+        </div>
 	</section>
 
-    <ul id="myUl"></ul>
-    <button id="clickMe">Add new user</button>
+    </section>
+
+    <div id="cookie-container"></div>
+    <footer id="site-footer"></footer>
 </body>
 </html>
+
+
+

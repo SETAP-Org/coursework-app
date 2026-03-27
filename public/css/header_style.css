@@ -2,59 +2,70 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "poppins", sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
-header {
+.Dashboard-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 24px;
-    height: 60px;
+    min-height: 60px;
     width: 100%;
     background:
-    radial-gradient(900px 500px at 10% 10%, rgba(124, 92, 255, .25), transparent 60%),
-    radial-gradient(700px 450px at 85% 20%, rgba(61, 220, 151, .18), transparent 60%),
-    radial-gradient(900px 600px at 60% 90%, rgba(255, 92, 122, .12), transparent 60%),
-    var(--bg);
+      radial-gradient(900px 500px at 10% 10%, rgba(124, 92, 255, .25), transparent 60%),
+      radial-gradient(700px 450px at 85% 20%, rgba(61, 220, 151, .18), transparent 60%),
+      radial-gradient(900px 600px at 60% 90%, rgba(255, 92, 122, .12), transparent 60%),
+      #111;
+    border: 2px solid white;
+    border-radius: 20px;
 }
 
-header article {
+.card {
     display: flex;
     align-items: center;
+    gap: 20px;
 }
 
-#logo {
+.Dashboard-text {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.Dashboard-links {
     color: white;
-    font-size: 1.4rem;
-    letter-spacing: 2px;
+    text-decoration: none;
 }
 
-#button_group {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-#button_group button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: none;
+.icon {
+    display: none;
     color: white;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
+    font-size: 28px;
+    text-decoration: none;
     cursor: pointer;
-    transition: background-color 0.2s ease;
 }
 
-#button_group button:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-}
+/* Mobile */
+@media screen and (max-width: 768px) {
+    .Dashboard-header {
+        flex-wrap: wrap;
+        padding: 12px 24px;
+    }
 
-#button_group button svg {
-    width: 20px;
-    height: 20px;
+    .nav-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 10px;
+        gap: 10px;
+    }
+
+    .icon {
+        display: block;
+    }
+
+    .Dashboard-header.responsive .nav-links {
+        display: flex;
+    }
 }

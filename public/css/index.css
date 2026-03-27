@@ -1,0 +1,27 @@
+.central-container{
+    width: 60%;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    text-align: center;
+    border: 2px solid black;
+    padding: 30px;
+    background: white;
+    font-size: 1.2em;
+    border-radius: 10px;
+    justify-self: center;
+}
+
+.link-style {
+    text-decoration: none;
+    font-size: 1.3em;
+    color: black;
+    padding: 20px;
+}
+
+.link-style :hover{
+    transition: 0.5s;
+    color: lightblue;
+}

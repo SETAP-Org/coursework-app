@@ -5,17 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>My Dashboard</title>
 
-        <link rel="stylesheet" href="/css/styles.css" />
-        <link rel="stylesheet" href="/css/user_dashboard.css" />
-
+        <link rel="stylesheet" href="../css/project-dash.css"/>
+        <link rel="stylesheet" href="../css/styles.css" />
+        <link rel="stylesheet" href="../css/user_dashboard.css"/>
+        <link rel="stylesheet" href="../css/header_style.css"/>
+        
         <script type="module" src="/scripts/user_dashboard.js"></script>
+        <script src="../scripts/header.js"></script>
+        <script src="../scripts/footer.js"></script>
+
     </head>
     <body>
-        <nav class="temp-navbar">This is a temporary navbar</nav>
+    <header id="site-header"></header>
 
         <div class="title">
             <h1 class="welcome">Welcome, user!</h1>
-            <button class="button-primary create-new-button"><a href="../pages/project_dash.html">Create New</a></button>
+            <!--<button class="button-primary create-new-button"><a href="#">Create New</a></button>-->
         </div>
 
         <section class="projects-outer-container">
@@ -40,5 +45,6 @@
                 </ul>
             </div>
         </section>
+        <footer id="site-footer"></footer>
     </body>
 </html>

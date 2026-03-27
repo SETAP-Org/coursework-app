@@ -76,23 +76,19 @@ if (container && addNoteBtn) {
   noteCount++;
 }
 
-function removeNoteHandler() {
-  //check note exists 
-  //add bin element or button
-  //remove elemnt from database
-  //reduce note count
-  if (noteCount <= 0) {
-    console.log('no note exist');
-  } else {
-    document.getElementById('remove-note').addEventListener('click', () => {
-      const tr = layer.find('Transformer')[0];
-      if (tr) {
-        tr.destroy();
-      }
-      layer.draw();
-    });
-  }
-}
+  removeNote.addEventListener('click', () => {
+    const selectedNodes = transformer.nodes();
+
+    if (selectedNodes == 0){
+      return;
+    }
+
+    selectedNodes[0].destroy();
+    transformer.nodes([]);
+    layer.draw();
+    noteCount--;
+  });
+
   function editText(textNode, group) {
     transformer.hide();
     layer.draw();
