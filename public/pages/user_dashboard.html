@@ -20,7 +20,23 @@
     <header id="site-header"></header>
 
         <div class="title">
-        <h1>Welcome, <span id="user-name">Loading...</span></h1>
+        <h1>Welcome, 
+            <script>
+                async function loadUsers() {
+                const res = await fetch('/api/users');
+                const users = await res.json();
+
+                const list = document.getElementById('user-list');
+                users.forEach(user => {
+                    const li = document.createElement('li');
+                    li.textContent = `${user.user_first_name} ${user.user_last_name}`;
+                    list.appendChild(li);
+                });
+                }
+
+                loadUsers();
+            </script>
+        </h1>
             <!--<button class="button-primary create-new-button"><a href="#">Create New</a></button>-->
         </div>
 
