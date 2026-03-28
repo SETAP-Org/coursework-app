@@ -15,7 +15,7 @@ export default function setUpAuth(app) {
         scope: ["User.Read"],
       },
       function (accessToken, refreshToken, profile, done) {
-        return done(null, { ...profile, accessToken, refreshToken });
+        return done(null, { accessToken, refreshToken, ...profile });
       },
     ),
   );
@@ -24,6 +24,7 @@ export default function setUpAuth(app) {
   app.use(passport.session());
 
   passport.serializeUser((user, done) => {
+  
     const filteredUser = {
       microsoftId: user.id,
       firstName: user.name.givenName,
@@ -36,6 +37,7 @@ export default function setUpAuth(app) {
   });
 
   passport.deserializeUser((obj, done) => {
+    console.log('deserialised.........')
     done(null, obj);
   });
 }

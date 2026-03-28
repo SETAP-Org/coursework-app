@@ -3,6 +3,7 @@
 import express from "express";
 import path from "path";
 import dotenv from "dotenv";
+import passport from "passport";
 
 // controller imports
 import {
@@ -10,10 +11,11 @@ import {
   serveUserDashboard,  
   serveProjectDash,
   redirectUserDashboard,
+  redirectAddUser
 } from "./controllers/serveControllers.js";
 import {
   getAllUsersController,
-  postUserController,
+  addUserController,
 } from "./controllers/userControllers.js";
 import {
   checkIfLoggedIn,
@@ -53,11 +55,11 @@ app.get("/api/me", checkIfLoggedInRedirect, getCurrentUser)
 // API routes
 app.get("/api/users/all", getAllUsersController);
 
-app.post("/api/users/postUser", postUserController);
+app.get("/api/auth", checkIfLoggedIn, passport.authenticate("microsoft", { failureRedirect: "/" }));
 
-app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
+app.get("/api/auth/callback", passport.authenticate("microsoft", { failureRedirect: "/" }), redirectAddUser);
 
-app.get("/api/auth/callback", authenticatePassport(), redirectUserDashboard);
+app.get("/api/users/addUser", addUserController, redirectUserDashboard);
 
 app.listen(port, () => {
   console.log("Server running on http://localhost:3000/ :P");
