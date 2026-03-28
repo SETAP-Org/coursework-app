@@ -1,10 +1,21 @@
-import { execSync } from 'child_process';
+import fs from "fs";
+import sql from '../db/connection.js';
 
-try {
-    execSync('psql -v ON_ERROR_STOP=1 -f ./db/index.sql', { stdio: 'inherit' });
-    execSync('psql -v ON_ERROR_STOP=1 -d gcms -f ./db/schema.sql', { stdio: 'inherit' });
-    execSync('psql -v ON_ERROR_STOP=1 -d gcms -f ./db/seed_dev.sql', { stdio: 'inherit' });
-} catch (err) {
-    console.error('Database setup failed:', err);
-    process.exit(1);
+async function main() {
+    try{
+        const schema = fs.readFileSync('./db/schema.sql', 'utf8');
+        const seed = fs.readFileSync('./db/seed_dev.sql', 'utf8');
+
+        await sql.unsafe(schema);
+        await sql.unsafe(seed);
+
+        console.log("datbase done");
+    } catch (err) {
+        console.log("Databse is busted: ", err);
+        process.exit(1);
+    } finally {
+        await sql.end();
+    }
 }
+
+main();

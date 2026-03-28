@@ -29,6 +29,7 @@
     "konva": "^10.2.3",
     "passport": "^0.7.0",
     "passport-microsoft": "^2.1.0",
-    "pg": "^8.19.0"
+    "pg": "^8.19.0",
+    "postgres": "^3.4.8"
   }
 }

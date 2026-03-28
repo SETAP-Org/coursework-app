@@ -1,20 +1,16 @@
-import { Pool } from "pg";
 import dotenv from "dotenv";
+import postgres from "postgres";
 
-dotenv.config({
-  path: `.env.${process.env.NODE_ENV}`,
-});
+dotenv.config({ path: './.env.development' });
 
-const pool = new Pool({
-  connectionString: process.env.DB_URL,
-  ssl: { rejectUnauthorized: false }
-});
+const connectionString = process.env.DB_URL
 
-async function query(text, params) {
-  const client = await pool.connect();
-  const response = await client.query(text, params);
-  client.release();
-  return response;
+if (!connectionString){
+  throw new Error ("shits broke")
 }
 
-export { pool, query };
+const sql = postgres(connectionString, {
+  ssl: 'require'
+});
+
+export default sql;
