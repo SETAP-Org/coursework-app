@@ -13,3 +13,15 @@ export function checkIfLoggedIn(req, res, next) {
 export function authenticatePassport(req, res, next) {
     return passport.authenticate("microsoft", { failureRedirect: "/" });
 }
+
+export function getCurrentUser(req, res){
+       if (!req.user){
+        return res.status(401).json({loggedIn: false });
+    }
+
+    return res.json({
+        loggedIn: true,
+        name: req.user.displayName,
+        email: req.user.emails?.[0]?.value||null
+    })
+}
