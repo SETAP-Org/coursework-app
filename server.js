@@ -43,11 +43,11 @@ createSession(app);
 setUpAuth(app);
 
 // paths to navigate pages
-app.get("/", serveLanding);
+app.get("/",checkIfLoggedIn, serveLanding);
 
 app.get("/user-dashboard", checkIfLoggedInRedirect, serveUserDashboard);
 
-app.get("/project-dash", checkIfLoggedIn, serveProjectDash);
+app.get("/project-dash", checkIfLoggedInRedirect, serveProjectDash);
 
 // API routes
 app.get("/api/users/all", getAllUsersController);

@@ -1,16 +1,40 @@
 .konva-wrapper {
-  width: 100%;
-  height: 490px;
+  width: 98%;
+  height: 80%;
   background: #497097;
   border: 4px solid #000000;
   margin-top: 1px;
   border-radius: 20px;
   justify-items: self-start;
   text-align: center;
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+}
+
+.button_bar {
+  position: absolute;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 98%;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
 }
 
 .remove_button {
-  background-color: #000000;
-  color: whitesmoke;
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
   font-size: 12px;
+  width: 40%;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+@media screen and (max-width:900) {
+  .konva-wrapper{
+    width: 94%;
+  }
 }
