@@ -161,8 +161,9 @@ body{
 }
 
 .Dashboard-container {
-  min-height: 420px;        
+  min-height: 600px;        
   height: auto;
+  position: relative;
 }
 
 .Dashboard-right {
@@ -203,6 +204,10 @@ body{
 }
 
 @media (max-width: 900px) {
+  body {
+    overflow: scroll;
+  }
+
   .Dashboard-header .card:nth-child(2) {
     display: none;
   }

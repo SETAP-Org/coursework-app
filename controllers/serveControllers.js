@@ -17,8 +17,6 @@ export function serveProjectDash(req, res, next){
   )
 }
 
-
-
 export function redirectUserDashboard(req, res, next) {
   res.redirect("/user-dashboard");
 }

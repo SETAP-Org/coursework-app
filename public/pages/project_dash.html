@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="../css/header_style.css" />
 
   <script src="../scripts/header.js" defer></script>
-  <script src="../scripts/header.js" defer></script>
   <script src="https://unpkg.com/konva@9/konva.min.js"></script>
   <script src="../scripts/dash-konva.js" defer></script>
   <title>Coursework Dashboard</title>
@@ -26,8 +25,10 @@
             <h1 class="Dashboard-title">Main Content Area</h1>
             <p class="Dashboard-text">UNI type shit</p>
           </div>
-          <button id="add-note-btn">Add Note</button>
-          <button id="remove-note">remove </button>
+          <div class="button_bar">
+          <button class="remove_button" id="add-note-btn">Add Note</button>
+          <button class="remove_button" id="remove-note">remove </button>
+          </div> 
           <div id="Konva-container" class="konva-wrapper"></div> 
         </section>
 
