@@ -53,7 +53,7 @@ app.get("/project-dash", checkIfLoggedInRedirect, serveProjectDash);
 app.get("/api/me", checkIfLoggedInRedirect, getCurrentUser)
 
 // API routes
-app.get("/api/users/all", getAllUsersController);
+app.get("/api/users", getAllUsersController);
 
 app.get("/api/auth", checkIfLoggedIn, passport.authenticate("microsoft", { failureRedirect: "/" }));
 

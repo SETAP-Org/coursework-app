@@ -1,67 +1,60 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>My Dashboard</title>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Dashboard</title>
 
-        <link rel="stylesheet" href="../css/project-dash.css"/>
-        <link rel="stylesheet" href="../css/styles.css" />
-        <link rel="stylesheet" href="../css/user_dashboard.css"/>
-        <link rel="stylesheet" href="../css/header_style.css"/>
-        
-        <script type="module" src="/scripts/user_dashboard.js"></script>
-        <script src="../scripts/header.js"></script>
-        <script src="../scripts/footer.js"></script>
-        <script src="../scripts/get-name.js"></script>
+    <link rel="stylesheet" href="../css/project-dash.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="../css/user_dashboard.css" />
+    <link rel="stylesheet" href="../css/header_style.css" />
 
-    </head>
-    <body>
+    <script type="module" src="/scripts/user_dashboard.js"></script>
+    <script src="../scripts/header.js"></script>
+    <script src="../scripts/footer.js"></script>
+</head>
+<body>
     <header id="site-header"></header>
 
-        <div class="title">
-        <h1>Welcome, 
-            <script>
-                async function loadUsers() {
-                const res = await fetch('/api/users');
-                const users = await res.json();
+    <div class="title">
+        <h1>Welcome, <span id="user-name">Loading...</span></h1>
+    </div>
 
-                const list = document.getElementById('user-list');
-                users.forEach(user => {
-                    const li = document.createElement('li');
-                    li.textContent = `${user.user_first_name} ${user.user_last_name}`;
-                    list.appendChild(li);
-                });
+    <section class="projects-outer-container">
+        <div class="projects-inner-container">
+            <ul class="projects-list">
+                <li class="project-list-item">This is a list item</li>
+            </ul>
+        </div>
+    </section>
+
+    <footer id="site-footer"></footer>
+
+    <script>
+        async function loadUsers() {
+            try {
+                const res = await fetch('/api/users/all');
+
+                if (!res.ok) {
+                    throw new Error(`HTTP error ${res.status}`);
                 }
 
-                loadUsers();
-            </script>
-        </h1>
-            <!--<button class="button-primary create-new-button"><a href="#">Create New</a></button>-->
-        </div>
+                const users = await res.json();
+                const nameEl = document.getElementById('user-name');
 
-        <section class="projects-outer-container">
-            <div class="projects-inner-container">
-                <ul class="projects-list">
-                    <li class="project-list-item">This is a list item</li>
-                    <li class="project-list-item">This is a list item</li>
-                    <li class="project-list-item">This is a list item</li>
-                    <li class="project-list-item">This is a list item</li>
-                    <li class="project-list-item">This is a list item</li>
-                    <li class="project-list-item">This is a list item</li>
-                    <li class="project-list-item">This is a list item</li>
-                    <li class="project-list-item">This is a list item</li>
-                    <li class="project-list-item">This is a list item</li>
-                    <li class="project-list-item">This is a list item</li>
-                    <li class="project-list-item">This is a list item</li>
-                    <li class="project-list-item">This is a list item</li>
-                    <li class="project-list-item">This is a list item</li>
-                    <li class="project-list-item">This is a list item</li>
-                    <li class="project-list-item">This is a list item</li>
-                    <li class="project-list-item">This is a list item</li>
-                </ul>
-            </div>
-        </section>
-        <footer id="site-footer"></footer>
-    </body>
+                if (users.length > 0) {
+                    nameEl.textContent = `${users[0].user_first_name} ${users[0].user_last_name}`;
+                } else {
+                    nameEl.textContent = 'User';
+                }
+            } catch (err) {
+                console.error('Failed to load user:', err);
+                document.getElementById('user-name').textContent = 'User';
+            }
+        }
+
+        loadUsers();
+    </script>
+</body>
 </html>
