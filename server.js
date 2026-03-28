@@ -21,6 +21,7 @@ import {
   checkIfLoggedIn,
   checkIfLoggedInRedirect,
   authenticatePassport,
+  getCurrentUser
 } from "./controllers/authControllers.js";
 
 // util imports
@@ -48,6 +49,8 @@ app.get("/",checkIfLoggedIn, serveLanding);
 app.get("/user-dashboard", checkIfLoggedInRedirect, serveUserDashboard);
 
 app.get("/project-dash", checkIfLoggedInRedirect, serveProjectDash);
+
+app.get("/api/me", checkIfLoggedInRedirect, getCurrentUser)
 
 // API routes
 app.get("/api/users/all", getAllUsersController);
