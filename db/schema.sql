@@ -1,6 +1,9 @@
 /*
 CREATE TABLES FOR GROUP COURSEWORK PROJECT MANAGEMENT SYSTEM
+\pset pager off
 */
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 -- Make sure we start with a clean slate
 DROP TYPE IF EXISTS attendance_status CASCADE;
@@ -19,7 +22,7 @@ DROP TABLE IF EXISTS PROJECTS CASCADE;
 DROP TABLE IF EXISTS USERS CASCADE;
 
 CREATE TABLE USERS(
-    user_id UUID PRIMARY KEY,
+    user_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_first_name VARCHAR(50) NOT NULL,
     user_last_name VARCHAR(50) NOT NULL,
     user_email VARCHAR(100) NOT NULL UNIQUE,
@@ -29,8 +32,8 @@ CREATE TABLE USERS(
 );
 
 CREATE TABLE PROJECTS(
-    project_id UUID PRIMARY KEY,
-    team_leader_id INT NOT NULL,
+    project_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    team_leader_id UUID NOT NULL,
     project_name VARCHAR(50) NOT NULL,
     project_deadline DATE NOT NULL,
     p_date_created TIMESTAMP,
@@ -39,8 +42,8 @@ CREATE TABLE PROJECTS(
 );
 
 CREATE TABLE USER_PROJECTS(
-    user_id INT NOT NULL,
-    project_id INT NOT NULL,
+    user_id UUID NOT NULL,
+    project_id UUID NOT NULL,
     PRIMARY KEY (user_id, project_id),
     FOREIGN KEY (user_id) REFERENCES USERS(user_id),
     FOREIGN KEY (project_id) REFERENCES PROJECTS(project_id)
@@ -49,8 +52,8 @@ CREATE TABLE USER_PROJECTS(
 CREATE TYPE task_status AS ENUM ('To Do', 'In Progress', 'Completed');
 
 CREATE TABLE TASKS(
-    task_id UUID PRIMARY KEY,
-    project_id INT NOT NULL,
+    task_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    project_id UUID NOT NULL,
     task_title VARCHAR(100) NOT NULL,
     task_description TEXT,
     task_weight DECIMAL NOT NULL,
@@ -64,10 +67,10 @@ CREATE TABLE TASKS(
 CREATE TYPE notification_type AS ENUM ('Task Assigned', 'Task Updated', 'Project Deadline Approaching', 'Message Received');
 
 CREATE TABLE NOTIFICATIONS(
-    notification_id UUID PRIMARY KEY,
-    user_id INT NOT NULL,
-    project_id INT NOT NULL,
-    task_id INT,
+    notification_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL,
+    project_id UUID NOT NULL,
+    task_id UUID,
     notification_type notification_type NOT NULL,
     notification_message TEXT,
     is_read BOOLEAN DEFAULT FALSE,
@@ -78,9 +81,9 @@ CREATE TABLE NOTIFICATIONS(
 );
 
 CREATE TABLE MESSAGES(
-    message_id UUID PRIMARY KEY,
-    sender_id INT NOT NULL,
-    project_id INT NOT NULL,
+    message_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    sender_id UUID NOT NULL,
+    project_id UUID NOT NULL,
     message_content TEXT NOT NULL,
     m_date_sent TIMESTAMP,
     FOREIGN KEY (sender_id) REFERENCES USERS(user_id),
@@ -90,9 +93,9 @@ CREATE TABLE MESSAGES(
 CREATE TYPE meeting_location AS ENUM('Virtual', 'Presential');
 
 CREATE TABLE MEETINGS(
-    meeting_id UUID PRIMARY KEY,
-    team_leader_id INT NOT NULL,
-    project_id INT NOT NULL,
+    meeting_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    team_leader_id UUID NOT NULL,
+    project_id UUID NOT NULL,
     scheduled_time TIMESTAMP NOT NULL,
     meeting_duration INT NOT NULL,
     meeting_location meeting_location,
@@ -104,9 +107,9 @@ CREATE TABLE MEETINGS(
 CREATE TYPE attendance_status AS ENUM('Present', 'Not Present');
 
 CREATE TABLE MEETING_ATTENDANCES(
-    attendance_id UUID PRIMARY KEY,
-    user_id INT NOT NULL,
-    meeting_id INT NOT NULL,
+    attendance_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL,
+    meeting_id UUID NOT NULL,
     attendance_status attendance_status,
     check_in_time TIMESTAMP NOT NULL,
     FOREIGN KEY (user_id) REFERENCES USERS(user_id),
@@ -114,8 +117,8 @@ CREATE TABLE MEETING_ATTENDANCES(
 );
 
 CREATE TABLE WIDGETS(
-    widget_id UUID PRIMARY KEY,
-    project_id INT NOT NULL,
+    widget_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    project_id UUID NOT NULL,
     widget_x DECIMAL NOT NULL,
     widget_y DECIMAL NOT NULL,
     widget_text VARCHAR(200),
