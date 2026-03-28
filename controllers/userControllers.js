@@ -1,4 +1,4 @@
-import { getAllUsersModel, postUserModel } from "../models/userModels.js";
+import { postUserModel } from "../models/userModels.js";
 
 export async function getAllUsersController(req, res) {
     try {
@@ -8,11 +8,21 @@ export async function getAllUsersController(req, res) {
     }
 }
 
-export async function postUserController(req, res) {
+// export async function postUserController(req, res) {
+//     try {
+//         const result = await postUserModel();
+//         res.json(result);
+//     } catch (err) {
+//         res.status(500).json({ error: err.message });
+//     }
+// }
+
+export async function addUserController(req, res, next) {
     try {
-        const result = await postUserModel();
-        res.json(result);
+        const { microsoftId, firstName, lastName, email } = req.user;
+        await postUserModel(microsoftId, firstName, lastName, email);
+        next();
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.log(err, 'this is the error!');
     }
 }
