@@ -1,0 +1,125 @@
+.profile-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 20px;
+    color: black;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 20px
+}
+
+.profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #007BFF;
+    background-color: #ddd;
+}
+
+.user-info h1 {
+    font-size: 1em;
+    color: black;
+    margin-bottom: 5px;
+}
+
+.user-info p {
+    color: #000000;
+    font-size: 1em;
+}
+
+.profile-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+    color: black;
+}
+
+
+.profile-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+    color: black;
+
+}
+
+.profile-card:hover{
+    transform: translateY(-5px);
+}
+
+.profile-card h3 {
+    color: black;
+}
+
+.profile-progress-item{
+    margin-bottom: 15px;
+}
+
+.profile-progress-item label {
+    display: block;
+    margin-bottom: 5px;
+    color: #000000;
+    font-size: 1em;
+}
+
+.profile-progress-bar {
+    height: 8px;
+    background-color: #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.profile-progress-fill {
+    height: 100%;
+    background-color: #007BFF;
+    border-radius: 4px;
+}
+
+.profile-deadline-list {
+    list-style: none;
+    color: black;
+}
+
+.profile-deadline-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+    color: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1em;
+}
+
+.profiled-deadline-item:last-child {
+    border-bottom: none;
+}
+
+.profile-date {
+    color: #000000;
+    background-color: rgb(255, 255, 255);
+    padding: 5px  10px;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.profile-span {
+    color: #000000;
+    font-size: 1em;
+}
