@@ -21,7 +21,11 @@
     padding: 20px;
 }
 
-.link-style :hover{
-    transition: 0.5s;
+.link-style:hover{
     color: lightblue;
+}
+
+.microsoft-logo {
+    width: 20%;
+    height: 10%;
 }
