@@ -66,19 +66,8 @@ if (container && addNoteBtn) {
 
     const noteDisplay = document.createElement('div');
     noteDisplay.className = 'note-display';
-    noteDisplay.style.display='none';
-    noteDisplay.style.position='absolute';
-    noteDisplay.style.top='32%';
-    noteDisplay.style.left='42%';
-    noteDisplay.style.padding='5px';
-    noteDisplay.style.border='2px solid black';
-    noteDisplay.style.backgroundColor='white';
-    noteDisplay.style.borderRadius='20px';
-    noteDisplay.style.height="15%";
-    noteDisplay.style.width="15%";
     noteDisplay.textContent = "i'll make it so you can change font size and color later";
-    noteDisplay.style.color = 'black';
-
+    
     document.body.appendChild(noteDisplay);
     group.noteDisplay=noteDisplay;
 
