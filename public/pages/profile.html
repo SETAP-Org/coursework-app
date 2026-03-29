@@ -10,14 +10,54 @@
 
     <script src="../scripts/header.js" defer></script>
     <script src="../scripts/footer.js" defer></script>
-    <script src="../scripts/check-login.js" defer></script>
-    <script src="../scripts/testQuery.js"></script>
 
     <title>Profile</title>
 </head>
 <body>
     <header id="site-header"></header>
-    <div id="cookie-container"></div>
+
+    <main class="profile-container">
+    <h1>Profile</h1>
+    <div class="profile-container">
+        <img src="#" alt="User Profile" class="profile-pic" />
+        <div class="user-info">
+            <h2>John Batman</h2>
+        </div>
+    </div>
+
+    <div class="profile-cards">
+        <div class="profile-card">
+            <h3>Projects</h3><br>
+            <h3>Make a good disney star wars film</h3>
+            <div clas ="profile-progress-item">
+                <label style="color: #000000;">1/10</label>
+                <div class="profile-progress-bar">
+                    <div class="profile-progress-fill" style="width: 12%;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="profile-card">
+            <h3>Tasks</h3><br>
+            <div class="profile-progress-item">
+                <label>12/20</label>
+                <div class="profile-progress-bar">
+                    <div class="profile-progress-fill" style="width: 60%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-card">
+        <h3>Deadlines</h3>
+        <ul class="profile-deadline-list">
+            <li class= "profile-deadline-item">
+                <span class="profile-span"> Design Homepage</span>
+                <span class="profile-date">Due: 2024-07-15</span>
+            </li>
+        </ul>
+    </div>
+
+
     <footer id="site-footer"></footer>
 </body>
 </html>
