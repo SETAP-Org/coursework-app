@@ -203,6 +203,21 @@ body{
   justify-items: center;  
 }
 
+.note-display {
+    display: none;
+    position: absolute;
+    top: 32%;
+    left: 42%;
+    padding: 5px;
+    border: 2px solid black;
+    background-color: white;
+    border-radius: 20px;
+    height: 15%;
+    width: 15%;
+    color: black;
+}
+
+
 @media (max-width: 900px) {
   body {
     overflow: scroll;
@@ -266,6 +281,15 @@ body{
   .inner-left-column, .inner-right-column {
     width: 95%;
   }
+
+  .note-display {
+    width: 60%;
+    height: auto;
+    left: 20%;
+    top: 25%;
+    font-size: 1.1em;
+    padding: 10px;
+}
 }
 
 @media (max-width: 520px) {
