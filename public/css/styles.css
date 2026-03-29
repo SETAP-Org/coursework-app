@@ -7,6 +7,7 @@
     --button-disabled: #e2e2e2; 
     --button-active: #4267B2;
     --shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    --scrollbar-color: #4267B2;
 }
 
 *, *::before, *::after {
@@ -19,6 +20,7 @@
 
 body {
     background-color: var(--bg);
+    scrollbar-color: #4267B2;
 }
 
 .button-primary {

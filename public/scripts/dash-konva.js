@@ -1,11 +1,11 @@
 const container = document.getElementById('Konva-container');
 const addNoteBtn = document.getElementById('add-note-btn');
 const removeNote = document.getElementById('remove-note');
+const noteTrigger = document.getElementById('note-trigger');
 
 if (container && addNoteBtn) {
   const stage = new Konva.Stage({
     container: 'Konva-container',
-
     width: container.clientWidth,
     height: 500,
   });
@@ -18,10 +18,12 @@ if (container && addNoteBtn) {
 
   const MAX_NOTES = 10;
   let noteCount = 0;
+  let lastSelectedNote = null 
 
   function makeSelectable(node) {
     node.on('click tap', () => {
       transformer.nodes([node]);
+      lastSelectedNote = node;
       layer.draw();
     });
   }
@@ -62,12 +64,26 @@ if (container && addNoteBtn) {
     group.add(text);
     makeSelectable(group);
 
+    const noteDisplay = document.createElement('div');
+    noteDisplay.className = 'note-display';
+    noteDisplay.style.display='none';
+    noteDisplay.style.position='absolute';
+    noteDisplay.style.top='32%';
+    noteDisplay.style.left='42%';
+    noteDisplay.style.padding='5px';
+    noteDisplay.style.border='2px solid black';
+    noteDisplay.style.backgroundColor='white';
+    noteDisplay.style.borderRadius='20px';
+    noteDisplay.style.height="15%";
+    noteDisplay.style.width="15%";
+    noteDisplay.textContent = "i'll make it so you can change font size and color later";
+    noteDisplay.style.color = 'black';
+
+    document.body.appendChild(noteDisplay);
+    group.noteDisplay=noteDisplay;
+
     group.on('dblclick dbltap', () => {
       editText(text, group);
-    });
-
-    group.on('backspace', () => {
-      removeNoteHandler(text, group);
     });
 
   layer.add(group);
@@ -79,8 +95,18 @@ if (container && addNoteBtn) {
   removeNote.addEventListener('click', () => {
     const selectedNodes = transformer.nodes();
 
-    if (selectedNodes == 0){
+    if (selectedNodes.length === 0){
       return;
+    }
+
+    const node = selectedNodes[0];
+
+    if (node.noteDisplay){
+      node.noteDisplay.remove();
+    }
+
+    if (lastSelectedNote === node){
+      lastSelectedNote = null;
     }
 
     selectedNodes[0].destroy();
@@ -152,7 +178,22 @@ if (container && addNoteBtn) {
     });
   }
 
+  function showNote(noteDisplay) {
+    if (noteDisplay.style.display === 'none' || noteDisplay.style.display === ''){
+      noteDisplay.style.display= 'flex';
+    } else {
+      noteDisplay.style.display = 'none';
+    }
+  }
+
   addNoteBtn.addEventListener('click', createNote);
+
+  noteTrigger.addEventListener('click', () =>{
+    if(!lastSelectedNote || !lastSelectedNote.noteDisplay){
+      return;
+    }
+    showNote(lastSelectedNote.noteDisplay);
+  })
 
   window.addEventListener('resize', () => {
     stage.width(container.clientWidth);
