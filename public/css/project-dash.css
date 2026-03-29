@@ -273,4 +273,8 @@ body{
   .Dashboard { gap: 16px; }
   .Dashboard-content { gap: 16px; }
   .Dashboard-right { gap: 16px; }
+
+  .Dashboard-container{
+    height: auto;
+  }
 }
