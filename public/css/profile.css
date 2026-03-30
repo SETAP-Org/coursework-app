@@ -34,12 +34,12 @@
 
 .user-info h2 {
     font-size: 1.4em;
-    color: rgb(255, 255, 255);
+    color: var(--text);
     margin-bottom: 5px;
 }
 
 .user-info p {
-    color: #000000;
+    color: var(--text);
     font-size: 1em;
 }
 
@@ -48,18 +48,18 @@
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
     margin-bottom: 30px;
-    color: black;
+    color: var(--text);
 }
 
 
 .profile-card {
     background-color: #fff;
-    border: 1px solid #ddd;
+    border: var(--border);
     border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow);
     transition: transform 0.2s ease;
-    color: black;
+    color: var(--text);
 
 }
 
@@ -68,7 +68,7 @@
 }
 
 .profile-card h3 {
-    color: black;
+    color: rgb(0, 0, 0);
 }
 
 .profile-progress-item{
@@ -78,7 +78,7 @@
 .profile-progress-item label {
     display: block;
     margin-bottom: 5px;
-    color: #000000;
+    color: var(--text-2);
     font-size: 1em;
 }
 
@@ -97,14 +97,14 @@
 
 .profile-deadline-list {
     list-style: none;
-    color: black;
+    color: var(--text);
     padding-left: 0;
 }
 
 .profile-deadline-item {
     padding: 12px 0;
-    border-bottom: 1px solid #eee;
-    color: black;
+    border-bottom: var(--border);
+    color: var(--text);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -118,7 +118,7 @@
 }
 
 .profile-date {
-    color: #000000;
+    color: var(--text);
     background-color: rgb(255, 255, 255);
     padding: 5px  10px;
     border-radius: 5px;
@@ -126,7 +126,7 @@
 }
 
 .profile-span {
-    color: #000000;
+    color: var(--text-2);
     font-size: 1em;
 }
 

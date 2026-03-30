@@ -20,7 +20,7 @@
     radial-gradient(900px 600px at 60% 90%, rgba(255, 92, 122, 0.12), transparent 60%),
     var(--bg);
   border-radius: var(--radius);
-  border: 2px solid white;
+  border: var(--border);
 }
 
 .Dashboard-header .card {
