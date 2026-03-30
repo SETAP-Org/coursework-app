@@ -4,9 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link id="theme-stylesheet" rel="stylesheet" href="../css/root-dark.css" />
+    <script src="../scripts/L&D-mode.js"></script>
+    <script>
+    if(!getCookie('theme')) {
+        setCookie('theme', 'dark');
+    }
+    setTheme();
+    </script>
+
     <link rel="stylesheet" href="../css/profile.css">
     <link rel="stylesheet" href="../css/root.css">
-
 
     <script src="../scripts/header.js" defer></script>
     <script src="../scripts/footer.js" defer></script>
@@ -26,6 +34,7 @@
         <div class="user-info">
             <h2 id="profile-name">Loading...</h2> <!----name here-->
         </div>
+        <p><button onclick="changeTheme()">Toggle Theme</button></p>
     </div>
 
     <div class="profile-cards">
@@ -33,7 +42,7 @@
             <h3>Projects</h3><br>
             <h3>Make a good disney star wars film</h3>
             <div class ="profile-progress-item">
-                <label style="color: #000000;">1/10</label>
+                <label class="profile-span">1/10</label>
                 <div class="profile-progress-bar">
                     <div class="profile-progress-fill" style="width: 12%;"></div>
                 </div>
@@ -42,7 +51,7 @@
         <div class="profile-card">
             <h3>Tasks</h3><br>
             <div class="profile-progress-item">
-                <label>12/20</label>
+                <label class="profile-span">12/20</label>
                 <div class="profile-progress-bar">
                     <div class="profile-progress-fill" style="width: 60%;"></div>
                 </div>

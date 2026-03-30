@@ -8,6 +8,15 @@
     <link rel="stylesheet" href="../css/cookie.css">
     <link rel="stylesheet" href="../css/root.css">
 
+    <link id="theme-stylesheet" rel="stylesheet" href="../css/root-dark.css" />
+    <script src="../scripts/L&D-mode.js"></script>
+    <script>
+    if(!getCookie('theme')) {
+        setCookie('theme', 'dark');
+    }
+    setTheme();
+    </script>
+
     <script src="../scripts/header.js" defer></script>
     <script src="../scripts/cookies.js" defer></script>
     <script src="../scripts/footer.js" defer></script>

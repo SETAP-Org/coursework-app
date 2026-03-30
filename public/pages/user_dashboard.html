@@ -6,6 +6,15 @@
         <title>GCMS | User Dashboard</title>
 
         <link rel="stylesheet" href="../css/user_dashboard.css"/>
+
+        <link id="theme-stylesheet" rel="stylesheet" href="../css/root-dark.css" />
+        <script src="../scripts/L&D-mode.js"></script>
+        <script>
+        if(!getCookie('theme')) {
+            setCookie('theme', 'dark');
+        }
+        setTheme();
+        </script>
         
         <script src="../scripts/header.js"></script>
         <script src="../scripts/footer.js"></script>

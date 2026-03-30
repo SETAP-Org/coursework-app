@@ -39,6 +39,7 @@ body {
     border-radius: 20px;
     background-color: white;
     padding: 20px 0;
+    border: var(--border);
 }
 
 .projects-list {
