@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root {
+  --font: 'Poppins', sans-serif;
+
+  --bg: #0b1220;
+  --card: rgba(255, 255, 255, 0.08);
+  --card2: rgba(255, 255, 255, 0.12);
+  --card3: rgba(47, 113, 226, 0.381);
+
+  --text: #e9eefc;
+  --muted: rgb(32, 133, 228);
+  --accent: #7c5cff;
+  --good: #3ddc97;
+  --bad: #ff5c7a;
+
+  --button-disabled: #e2e2e2;
+  --button-active: #4267B2;
+
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+  --scrollbar-color: #4267B2;
+
+  --radius: 18px;
+}
+
+* { box-sizing: border-box; }
+
+body{
+  margin: 0;
+  min-height: 100vh;
+  padding: 16px;
+  display: grid;     
+  gap: 24px;       
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  background:
+    radial-gradient(900px 500px at 10% 10%, rgba(124, 92, 255, .25), transparent 60%),
+    radial-gradient(700px 450px at 85% 20%, rgba(61, 220, 151, .18), transparent 60%),
+    radial-gradient(900px 600px at 60% 90%, rgba(255, 92, 122, .12), transparent 60%),
+    var(--bg);
+  color: var(--text);
+  overflow-y: scroll;
+}

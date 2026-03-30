@@ -10,8 +10,10 @@ import {
   serveLanding,
   serveUserDashboard,  
   serveProjectDash,
+  serveProfile,
   redirectUserDashboard,
-  redirectAddUser
+  redirectAddUser,
+  redirectProfile
 } from "./controllers/serveControllers.js";
 import {
   getAllUsersController,
@@ -49,6 +51,8 @@ app.get("/",checkIfLoggedIn, serveLanding);
 app.get("/user-dashboard", checkIfLoggedInRedirect, serveUserDashboard);
 
 app.get("/project-dash", checkIfLoggedInRedirect, serveProjectDash);
+
+app.get("/profile", checkIfLoggedInRedirect, serveProfile);
 
 app.get("/api/me", checkIfLoggedInRedirect, getCurrentUser)
 

@@ -1,20 +1,20 @@
-import fs from "fs";
-import sql from '../db/connection.js';
+import { readFile } from "fs/promises";
+import pool, { query } from '../db/connection.js';
 
 async function main() {
     try{
-        const schema = fs.readFileSync('./db/schema.sql', 'utf8');
-        const seed = fs.readFileSync('./db/seed_dev.sql', 'utf8');
+        const schema = await readFile('./db/schema.sql', 'utf8');
+        const seed = await readFile('./db/seed_dev.sql', 'utf8');
 
-        await sql.unsafe(schema);
-        await sql.unsafe(seed);
+        await query(schema);
+        await query(seed);
 
         console.log("datbase done");
     } catch (err) {
         console.log("Databse is busted: ", err);
         process.exit(1);
     } finally {
-        await sql.end();
+        await pool.end();
     }
 }
 

@@ -1,71 +1,133 @@
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
 .Dashboard-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 24px;
-    min-height: 60px;
-    width: 100%;
-    background:
-      radial-gradient(900px 500px at 10% 10%, rgba(124, 92, 255, .25), transparent 60%),
-      radial-gradient(700px 450px at 85% 20%, rgba(61, 220, 151, .18), transparent 60%),
-      radial-gradient(900px 600px at 60% 90%, rgba(255, 92, 122, .12), transparent 60%),
-      #111;
-    border: 2px solid white;
-    border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+  min-height: 60px;
+  padding: 10px 24px;
+  background:
+    radial-gradient(900px 500px at 10% 10%, rgba(124, 92, 255, 0.25), transparent 60%),
+    radial-gradient(700px 450px at 85% 20%, rgba(61, 220, 151, 0.18), transparent 60%),
+    radial-gradient(900px 600px at 60% 90%, rgba(255, 92, 122, 0.12), transparent 60%),
+    var(--bg);
+  border-radius: var(--radius);
+  border: 2px solid white;
 }
 
-.card {
-    display: flex;
-    align-items: center;
-    gap: 20px;
+.Dashboard-header .card {
+  width: auto;
+  background: none;
+  padding: 0;
+}
+
+.Dashboard-header .card:nth-child(2) h2 {
+  margin-left: 10px;
+}
+
+.logo-card {
+  width: auto;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .Dashboard-text {
-    margin: 0;
-    font-size: 1rem;
+  margin: 0;
+  font-size: 1rem;
+  color: var(--muted);
 }
 
 .Dashboard-links {
-    color: white;
-    text-decoration: none;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 1rem;
+  padding: 8px 12px;
+  transition: color 0.3s ease;
+}
+
+.Dashboard-links:hover {
+  color: var(--accent);
 }
 
 .icon {
-    display: none;
-    color: white;
-    font-size: 28px;
-    text-decoration: none;
-    cursor: pointer;
+  display: none;
+  color: var(--text);
+  font-size: 28px;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 /* Mobile */
-@media screen and (max-width: 768px) {
-    .Dashboard-header {
-        flex-wrap: wrap;
-        padding: 12px 24px;
-    }
+@media screen and (max-width: 900px) {
+  .Dashboard-header {
+    flex-wrap: wrap;
+    padding: 12px 24px;
+  }
 
-    .nav-links {
-        display: none;
-        width: 100%;
-        flex-direction: column;
-        align-items: flex-start;
-        margin-top: 10px;
-        gap: 10px;
-    }
+  .nav-links {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 10px;
+    gap: 10px;
+  }
 
-    .icon {
-        display: block;
-    }
+  .icon {
+    display: block;
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 
-    .Dashboard-header.responsive .nav-links {
-        display: flex;
-    }
+  .Dashboard-header.responsive .nav-links {
+    display: flex;
+  }
+
+  .Dashboard-header .card:nth-child(2) {
+    display: none;
+  }
+
+  .Dashboard-header .icon {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .Dashboard-header.responsive {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .Dashboard-header.responsive .card:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-top: 15px;
+  }
+
+  .Dashboard-header.responsive .card h1,
+  .Dashboard-header.responsive .card h2 {
+    padding: 8px 0;
+    width: 100%;
+  }
+
+  .Dashboard-header.responsive .icon {
+    right: 24px;
+    top: 12px;
+    transform: none;
+  }
 }
