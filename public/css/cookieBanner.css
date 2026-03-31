@@ -27,6 +27,10 @@
 
 .cookie-banner{
     display: none;
+    position: absolute;
+    z-index: 100;
+    right: 100px;
+    bottom: 100px;
 }
 
 .cookie-buttons {
