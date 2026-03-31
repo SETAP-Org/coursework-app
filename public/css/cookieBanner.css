@@ -21,12 +21,11 @@
     text-decoration: none;
 }
 
-.cookie-header{
+.cookie-header {
     color: black;
 }
 
-.cookie-banner{
-    display: none;
+.cookie-banner {
     position: absolute;
     z-index: 100;
     right: 100px;
@@ -37,7 +36,7 @@
     margin-top: 10px;
 }
 
-.cookie-buttons :hover{
+.cookie-buttons :hover {
     opacity: 70%;
 }
 
