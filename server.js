@@ -16,7 +16,6 @@ import {
   redirectProfile
 } from "./controllers/serveControllers.js";
 import {
-  getAllUsersController,
   addUserController,
 } from "./controllers/userControllers.js";
 import {
@@ -56,9 +55,9 @@ app.get("/profile", checkIfLoggedInRedirect, serveProfile);
 app.get("/api/me", checkIfLoggedInRedirect, getCurrentUser)
 
 // API routes
-app.get("/api/auth", checkIfLoggedIn, passport.authenticate("microsoft", { failureRedirect: "/" }));
+app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
 
-app.get("/api/auth/callback", passport.authenticate("microsoft", { failureRedirect: "/" }), redirectAddUser);
+app.get("/api/auth/callback", authenticatePassport(), redirectAddUser);
 
 app.get("/api/users/addUser", addUserController, redirectUserDashboard);
 

@@ -1,3 +1,4 @@
+// function 
 async function loadProfile() {
   try {
     const response = await fetch("/api/me");

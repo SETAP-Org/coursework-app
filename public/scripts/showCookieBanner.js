@@ -1,31 +1,16 @@
 // cookie management functions
 
+import { getCookie, setCookie } from "../../utils/cookies";
+
 // function that gets all the html code??
-async function getCookies() {
-    const response = await fetch("/Components/Cookies.html");
-    if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
-    return await response.text();
-}
-
-// function that creates a cookie
-function setCookie(name, value, days) {
-    const maxAge = days * 24 * 60 * 60;
-    document.cookie = `${name}=${value}; path=/; max-age=${maxAge}; SameSite=Lax`;
-}
-
-// function that returns the data of a specific cookie, otherwise null
-function getCookie(name) {
-    const cookies = document.cookie ? document.cookie.split("; ") : [];
-    for (const cookie of cookies){
-        const [key, value] = cookie.split("=");
-        if (key == name) return value;
-    }
-    return null;
-}
+// async function getCookies() {
+//     const response = await fetch("/Components/Cookies.html");
+//     if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
+//     return await response.text();
+// }
 
 // when dom loads, shows or hides the consent banner based on whether the accept cookie is present or not
 document.addEventListener('DOMContentLoaded', async () => {
-    // gets an element that is not in the file
     const el = document.getElementById("cookie-container");
 
     // will not run
