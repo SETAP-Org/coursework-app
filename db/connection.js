@@ -1,10 +1,9 @@
 import dotenv from "dotenv";
-import postgres from "postgres";
-import pg from "pg";
+import { Pool } from "pg";
 
-const { Pool } = pg;
-
-dotenv.config({ path: './.env.development' });
+dotenv.config({
+  path: `.env.${process.env.NODE_ENV}`,
+});
 
 // creates connection to database depending on mode of app
 const pool = new Pool({
@@ -13,15 +12,11 @@ const pool = new Pool({
 });
 
 // function to make queries to the database
-export async function query(text, params) {
+async function query(text, params) {
   const client = await pool.connect();
-
-  try {
-    const response = await client.query(text, params);
-    return response;
-  } finally {
-    client.release();
-  }
+  const response = await client.query(text, params);
+  client.release();
+  return response;
 }
 
-export default pool;
+export { pool, query };
