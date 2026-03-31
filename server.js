@@ -33,8 +33,7 @@ import setUpAuth from "./utils/auth.js";
 // configfure environment variables
 dotenv.config({ path: ".env.auth" });
 
-// ===== code =====
-// server configuration
+// configuration data for server
 const __dirname = import.meta.dirname;
 const app = express();
 const port = 3000;
@@ -57,14 +56,13 @@ app.get("/profile", checkIfLoggedInRedirect, serveProfile);
 app.get("/api/me", checkIfLoggedInRedirect, getCurrentUser)
 
 // API routes
-app.get("/api/users/all", getAllUsersController);
-
 app.get("/api/auth", checkIfLoggedIn, passport.authenticate("microsoft", { failureRedirect: "/" }));
 
 app.get("/api/auth/callback", passport.authenticate("microsoft", { failureRedirect: "/" }), redirectAddUser);
 
 app.get("/api/users/addUser", addUserController, redirectUserDashboard);
 
+// assigning the server to a port so that requests can be made
 app.listen(port, () => {
   console.log("Server running on http://localhost:3000/ :P");
 });

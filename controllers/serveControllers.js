@@ -1,8 +1,11 @@
 import path from "path";
 const __dirname = import.meta.dirname;
 
+// serve files (added to navigation stack)
 export function serveLanding(req, res, next) {
-  res.sendFile(path.join(__dirname, "../public/pages", "index.html"));
+  res.sendFile(
+    path.join(__dirname, "../public/pages", "index.html")
+  );
 }
 
 export function serveUserDashboard(req, res, next) {
@@ -23,6 +26,7 @@ export function serveProfile(req, res, next){
   )
 }
 
+// redirects (not added to stack) (for when access to pages is unauthorised)
 export function redirectUserDashboard(req, res, next) {
   res.redirect("/user-dashboard");
   next();

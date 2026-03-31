@@ -11,7 +11,8 @@ function getCookie(name) {
             return value;
         }
     }
-     return null;
+    
+    return null;
 }
 
 function changeTheme() {
