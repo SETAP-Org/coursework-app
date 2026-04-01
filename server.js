@@ -52,14 +52,14 @@ app.get("/project-dash", checkIfLoggedInRedirect, serveProjectDash);
 
 app.get("/profile", checkIfLoggedInRedirect, serveProfile);
 
-app.get("/api/me", checkIfLoggedInRedirect, getCurrentUser)
-
 // API routes
 app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
 
 app.get("/api/auth/callback", authenticatePassport(), redirectAddUser);
 
 app.get("/api/users/addUser", addUserController, redirectUserDashboard);
+
+app.get("/api/me", checkIfLoggedInRedirect, getCurrentUser)
 
 // assigning the server to a port so that requests can be made
 app.listen(port, () => {
