@@ -5,6 +5,7 @@ const __dirname = import.meta.dirname;
 
 dotenv.config({ path: ".env.auth" });
 
+// function to set up passport package for microsoft sign in
 export default function setUpAuth(app) {
   passport.use(
     new MicrosoftStrategy(
@@ -21,10 +22,12 @@ export default function setUpAuth(app) {
   );
 
   app.use(passport.initialize());
+
+  // links passport to the browser session
   app.use(passport.session());
 
+  // assigns user info to session after successful authentication
   passport.serializeUser((user, done) => {
-  
     const filteredUser = {
       microsoftId: user.id,
       firstName: user.name.givenName,
@@ -36,6 +39,7 @@ export default function setUpAuth(app) {
     done(null, filteredUser);
   });
 
+  // when a request is made, req.user becomes the user data stored in the session
   passport.deserializeUser((obj, done) => {
     console.log('deserialised.........')
     done(null, obj);

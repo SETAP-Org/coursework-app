@@ -5,22 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="../css/index.css">
-    <link rel="stylesheet" href="../css/cookie.css">
+    <link rel="stylesheet" href="../css/cookieBanner.css">
     <link rel="stylesheet" href="../css/root.css">
-
     <link id="theme-stylesheet" rel="stylesheet" href="../css/root-dark.css" />
+
     <script src="../scripts/L&D-mode.js"></script>
     <script>
-    if(!getCookie('theme')) {
-        setCookie('theme', 'dark');
-    }
-    setTheme();
+        if(!getCookie('theme')) {
+            setCookie('theme', 'dark');
+        }
+        setTheme();
     </script>
 
     <script src="../scripts/header.js" defer></script>
-    <script src="../scripts/cookies.js" defer></script>
+    <script src="../scripts/showCookieBanner.js" defer></script>
     <script src="../scripts/footer.js" defer></script>
-    <script type="module" src="../scripts/index.js" defer></script>
 
     <link rel="icon" href="../assets/favicon.png" type="image/png">
 
@@ -31,13 +30,13 @@
     <section class="central-container">
         <h1 class="cookie-header">Sign in to GCMS</h1>
         <div>
-		    <a href="api/auth" class="link-style">Sign In With Microsoft</a>
+            <a href="api/auth" class="link-style">Sign In With Microsoft</a>
         </div>
 	</section>
 
     </section>
 
-    <div id="cookie-container"></div>
+    <!-- <div id="cookie-container"></div> -->
     <footer id="site-footer"></footer>
 </body>
 </html>
