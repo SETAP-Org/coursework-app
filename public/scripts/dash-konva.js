@@ -1,13 +1,12 @@
 const container = document.getElementById('Konva-container');
 const addNoteBtn = document.getElementById('add-note-btn');
-const removeNote = document.getElementById('remove-note');
 const noteTrigger = document.getElementById('note-trigger');
 
 if (container && addNoteBtn) {
   const stage = new Konva.Stage({
     container: 'Konva-container',
     width: container.clientWidth,
-    height: 500,
+    height: container.clientHeight,
   });
 
   const layer = new Konva.Layer();
@@ -19,6 +18,19 @@ if (container && addNoteBtn) {
   const MAX_NOTES = 10;
   let noteCount = 0;
   let lastSelectedNote = null 
+
+  function deleteNote(node) {
+    if (node.noteDisplay){
+      node.noteDisplay.remove();
+    } 
+    if (lastSelectedNote === node) {
+      lastSelectedNote = null;
+    }
+    node.destroy();
+    transformer.nodes([]);
+    layer.draw();
+    noteCount--;
+  }
 
   function makeSelectable(node) {
     node.on('click tap', () => {
@@ -64,6 +76,15 @@ if (container && addNoteBtn) {
     group.add(text);
     makeSelectable(group);
 
+    group.on('dragend', () => {
+      const pos = group.position();
+      console.log('pos:', pos.x, pos.y, 'zone:', stage.width() - 200, stage.height() - 200);
+      if (pos.x > stage.width() - 200 && pos.y > stage.height() - 200) {
+        deleteNote(group);
+      }
+    });
+
+
     const noteDisplay = document.createElement('div');
     noteDisplay.className = 'note-display';
     noteDisplay.textContent = "i'll make it so you can change font size and color later";
@@ -80,29 +101,6 @@ if (container && addNoteBtn) {
 
   noteCount++;
 }
-
-  removeNote.addEventListener('click', () => {
-    const selectedNodes = transformer.nodes();
-
-    if (selectedNodes.length === 0){
-      return;
-    }
-
-    const node = selectedNodes[0];
-
-    if (node.noteDisplay){
-      node.noteDisplay.remove();
-    }
-
-    if (lastSelectedNote === node){
-      lastSelectedNote = null;
-    }
-
-    selectedNodes[0].destroy();
-    transformer.nodes([]);
-    layer.draw();
-    noteCount--;
-  });
 
   function editText(textNode, group) {
     transformer.hide();

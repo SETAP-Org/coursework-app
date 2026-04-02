@@ -94,7 +94,7 @@
 
 .Dashboard-content {
   display: grid;
-  grid-template-columns: minmax(200px, 1000px) minmax(260px, 500px);
+  grid-template-columns: minmax(65%, 100%) minmax(30%, 100%);
   gap: 24px;
   align-items: stretch;
 }
