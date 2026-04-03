@@ -10,7 +10,7 @@ export function serveLanding(req, res, next) {
 
 export function serveUserDashboard(req, res, next) {
   res.sendFile(
-    path.join(__dirname, "../public/pages/", "user_dashboard.html")
+    path.join(__dirname, "../public/pages/", "user_dash.html")
   )
 }
 
