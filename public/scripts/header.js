@@ -1,5 +1,5 @@
 async function getHeader() {
-  const response = await fetch("/Components/Header.html"); // use / for root-relative
+  const response = await fetch("/components/header.html"); // use / for root-relative
   if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
   return await response.text();
 }
@@ -16,6 +16,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
+const projectsBtn = document.querySelector("#projects-button");
+const profileBtn = document.querySelector("#profile-button");
+
+projectsBtn.addEventListener("click", async () => {
+  await fetch();
+});
+
+profileBtn.addEventListener("click", async () => {
+  await fetch();
+});
 
 async function navFunction() {
     var x = document.getElementById("MyHeader");
