@@ -1,78 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link id="theme-stylesheet" rel="stylesheet" href="../css/root-dark.css" />
-    <script src="../scripts/L&D-mode.js"></script>
-    <script>
-    if(!getCookie('theme')) {
-        setCookie('theme', 'dark');
-    }
-    setTheme();
-    </script>
+        <link id="theme-stylesheet" rel="stylesheet" href="../css/root-dark.css" />
+        <link rel="stylesheet" href="../css/profile.css">
+        <link rel="icon" href="../assets/favicon.png" type="image/png">
 
-    <link rel="stylesheet" href="../css/profile.css">
+        <script src="../scripts/L&D-mode.js"></script>
+        <script src="../scripts/injectHeader.js" defer></script>
+        <script src="../scripts/injectFooter.js" defer></script>
+        <script src="../scripts/profile.js" defer></script>
 
-    <script src="../scripts/header.js" defer></script>
-    <script src="../scripts/footer.js" defer></script>
-    <script src="../scripts/profile.js" defer></script>
+        <title>GCMS | Profile</title>
+    </head>
+    <body>
+        <header id="site-header"></header>
 
+        <main class="profile-container">
+            <div class="profile-container">
+                <div class="user-info">
+                    <h2 id="profile-name">Loading...</h2>
+                </div>
 
-    <link rel="icon" href="../assets/favicon.png" type="image/png">
+                <p><button onclick="changeTheme()">Toggle Theme</button></p>
+            </div>
 
-    <title>GCMS | Profile</title>
-</head>
-<body>
-    <header id="site-header"></header>
+            <div class="profile-cards">
+                <div class="profile-card">
+                    <h3>Projects</h3><br>
+                    <h3>Make a good disney star wars film</h3>
+                    <div class ="profile-progress-item">
+                        <label class="profile-span">1/10</label>
 
-    <main class="profile-container">
+                        <div class="profile-progress-bar">
+                            <div class="profile-progress-fill" style="width: 12%;"></div>
+                        </div>
+                    </div>
+                </div>
 
-    <div class="profile-container">
-        <div class="user-info">
-            <h2 id="profile-name">Loading...</h2> <!----name here-->
-        </div>
-        <p><button onclick="changeTheme()">Toggle Theme</button></p>
-    </div>
+                <div class="profile-card">
+                    <h3>Tasks</h3>
+                    
+                    <br>
 
-    <div class="profile-cards">
-        <div class="profile-card">
-            <h3>Projects</h3><br>
-            <h3>Make a good disney star wars film</h3>
-            <div class ="profile-progress-item">
-                <label class="profile-span">1/10</label>
-                <div class="profile-progress-bar">
-                    <div class="profile-progress-fill" style="width: 12%;"></div>
+                    <div class="profile-progress-item">
+                        <label class="profile-span">12/20</label>
+
+                        <div class="profile-progress-bar">
+                            <div class="profile-progress-fill" style="width: 60%;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="profile-card">
-            <h3>Tasks</h3><br>
-            <div class="profile-progress-item">
-                <label class="profile-span">12/20</label>
-                <div class="profile-progress-bar">
-                    <div class="profile-progress-fill" style="width: 60%;"></div>
-                </div>
+
+            <div class="profile-card">
+                <h3>Deadlines</h3>
+                
+                <ul class="profile-deadline-list">
+                    <li class= "profile-deadline-item">
+                        <span class="profile-span"> Design Homepage</span>
+                        <span class="profile-date">Due: 2024-07-15</span>
+                    </li>
+                </ul>
             </div>
-        </div>
-    </div>
 
-    <div class="profile-card">
-        <h3>Deadlines</h3>
-        <ul class="profile-deadline-list">
-            <li class= "profile-deadline-item">
-                <span class="profile-span"> Design Homepage</span>
-                <span class="profile-date">Due: 2024-07-15</span>
-            </li>
-        </ul>
-    </div>
+            <a id="sign-out-button" href="/api/auth/signout">Sign Out</a>
+        </main>
 
-    <a id="sign-out-button" href="/api/auth/signout">Sign Out</a>
-
-    </main>
-    <footer id="site-footer"></footer>
-</body>
+        <footer id="site-footer"></footer>
+    </body>
 </html>
 
 
