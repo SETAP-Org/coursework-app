@@ -19,6 +19,7 @@ import {
 import {
   checkIfLoggedIn,
   checkIfLoggedInRedirect,
+  signOut,
   authenticatePassport,
   getCurrentUser,
 } from "./controllers/authControllers.js";
@@ -42,7 +43,7 @@ createSession(app);
 setUpAuth(app);
 
 // paths to navigate pages
-app.get("/",checkIfLoggedIn, serveLanding);
+app.get("/", checkIfLoggedIn, serveLanding);
 
 app.get("/user-dashboard", checkIfLoggedInRedirect, serveUserDash);
 
@@ -55,9 +56,11 @@ app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
 
 app.get("/api/auth/callback", authenticatePassport(), redirectAddUser);
 
+app.get("/api/auth/signout", signOut, checkIfLoggedInRedirect);
+
 app.get("/api/users/addUser", addUserController, redirectUserDashboard);
 
-app.get("/api/me", checkIfLoggedInRedirect, getCurrentUser)
+app.get("/api/me", checkIfLoggedInRedirect, getCurrentUser);
 
 // assigning the server to a port so that requests can be made
 app.listen(port, () => {

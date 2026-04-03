@@ -12,6 +12,11 @@ export function checkIfLoggedIn(req, res, next) {
     else return next()
 }
 
+// function to sign out user on request
+export function signOut(req, res, next) {
+    req.logout(next);
+}
+
 // hands control to microsoft for authentication (renavigates, etc.)
 export function authenticatePassport(req, res, next) {
     return passport.authenticate("microsoft", { failureRedirect: "/" });
