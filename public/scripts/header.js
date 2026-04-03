@@ -16,17 +16,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-const projectsBtn = document.querySelector("#projects-button");
-const profileBtn = document.querySelector("#profile-button");
-
-projectsBtn.addEventListener("click", async () => {
-  await fetch();
-});
-
-profileBtn.addEventListener("click", async () => {
-  await fetch();
-});
-
 async function navFunction() {
     var x = document.getElementById("MyHeader");
     if (x.className === "Dashboard-header") {
