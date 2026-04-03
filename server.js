@@ -45,11 +45,11 @@ setUpAuth(app);
 // paths to navigate pages
 app.get("/", checkIfLoggedIn, serveLanding);
 
-app.get("/user-dashboard", checkIfLoggedInRedirect, serveUserDash);
+app.get("/:username", checkIfLoggedInRedirect, serveUserDash);
 
-app.get("/project-dash", checkIfLoggedInRedirect, serveProjectDash);
+app.get("/:username/projects", checkIfLoggedInRedirect, serveProjectDash);
 
-app.get("/profile", checkIfLoggedInRedirect, serveProfile);
+app.get("/:username/profile", checkIfLoggedInRedirect, serveProfile);
 
 // API routes
 app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
@@ -60,7 +60,7 @@ app.get("/api/auth/signout", signOut, checkIfLoggedInRedirect);
 
 app.get("/api/users/addUser", addUserController, redirectUserDashboard);
 
-app.get("/api/me", checkIfLoggedInRedirect, getCurrentUser);
+app.get("/api/me", getCurrentUser);
 
 // assigning the server to a port so that requests can be made
 app.listen(port, () => {

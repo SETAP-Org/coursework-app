@@ -28,7 +28,7 @@ export function serveProfile(req, res, next){
 
 // redirects (not added to stack) (for when access to pages is unauthorised)
 export function redirectUserDashboard(req, res, next) {
-  res.redirect("/user-dashboard");
+  res.redirect(`/${req.user.microsoftId}`);
   next();
 }
 
