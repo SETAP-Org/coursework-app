@@ -2,8 +2,7 @@ import passport from "passport";
 
 // function to redirect user to landing if not signed in
 export function checkIfLoggedInRedirect(req, res, next) {
-    console.log(req.params, 'these are the params...');
-    if (req.user && req.user.accessToken) next();
+    if (req.user && req.user.accessToken && req.user.microsoftId == req.params.username) next();
     else res.redirect("/");
 }
 
