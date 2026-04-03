@@ -5,19 +5,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>GCMS | User Dashboard</title>
 
-        <link rel="stylesheet" href="../css/user_dashboard.css"/>
+        <link rel="stylesheet" href="../css/user_dash.css"/>
 
         <link id="theme-stylesheet" rel="stylesheet" href="../css/root-dark.css" />
-        <script src="../scripts/L&D-mode.js"></script>
-        <script>
+        <script src="../scripts/L&D-mode.js" defer></script>
+        <script defer>
         if(!getCookie('theme')) {
             setCookie('theme', 'dark');
         }
         setTheme();
         </script>
         
-        <script src="../scripts/header.js"></script>
-        <script src="../scripts/footer.js"></script>
+        <script src="../scripts/header.js" defer></script>
+        <script src="../scripts/footer.js" defer></script>
 
         <link rel="icon" href="../assets/favicon.png" type="image/png">
 
@@ -33,7 +33,7 @@
         <section class="projects-outer-container">
             <div class="projects-inner-container">
                 <ul class="projects-list">
-                    <script>
+                    <script defer>
                     for (let i = 0; i < 5; i++) {
                         document.write(`<li class="project-list-item">Project ${i + 1}</li>`);
                     }

@@ -1,5 +1,5 @@
 async function getHeader() {
-  const response = await fetch("/Components/Header.html"); // use / for root-relative
+  const response = await fetch("/components/header.html"); // use / for root-relative
   if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
   return await response.text();
 }
@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     el.innerHTML = "<p>Check header link in functions.js</p>";  
   }
 });
-
 
 async function navFunction() {
     var x = document.getElementById("MyHeader");

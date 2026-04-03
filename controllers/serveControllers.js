@@ -8,15 +8,15 @@ export function serveLanding(req, res, next) {
   );
 }
 
-export function serveUserDashboard(req, res, next) {
+export function serveUserDash(req, res, next) {
   res.sendFile(
-    path.join(__dirname, "../public/pages/", "user_dashboard.html")
+    path.join(__dirname, "../public/pages/", "user_dash.html")
   )
 }
 
 export function serveProjectDash(req, res, next){
   res.sendFile(
-    path.join(__dirname, "../public/pages/", "project_dash.html")
+    path.join(__dirname, "../public/pages/", "projects_dash.html")
   )
 }
 
@@ -32,13 +32,13 @@ export function redirectUserDashboard(req, res, next) {
   next();
 }
 
-export function redirectProjectDashboard(req, res, next) {
-  res.redirect("/project-dash");
-}
+// export function redirectProjectDashboard(req, res, next) {
+//   res.redirect("/project-dash");
+// }
 
-export function redirectProfile(req, res, next) {
-  res.redirect("/profile");
-}
+// export function redirectProfile(req, res, next) {
+//   res.redirect("/profile");
+// }
 
 export function redirectAddUser(req, res, next) {
   res.redirect("/api/users/addUser")

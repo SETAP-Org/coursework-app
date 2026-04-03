@@ -3,17 +3,15 @@
 import express from "express";
 import path from "path";
 import dotenv from "dotenv";
-import passport from "passport";
 
 // controller imports
 import {
   serveLanding,
-  serveUserDashboard,  
+  serveUserDash,  
   serveProjectDash,
   serveProfile,
   redirectUserDashboard,
   redirectAddUser,
-  redirectProfile
 } from "./controllers/serveControllers.js";
 import {
   addUserController,
@@ -22,7 +20,7 @@ import {
   checkIfLoggedIn,
   checkIfLoggedInRedirect,
   authenticatePassport,
-  getCurrentUser
+  getCurrentUser,
 } from "./controllers/authControllers.js";
 
 // util imports
@@ -46,7 +44,7 @@ setUpAuth(app);
 // paths to navigate pages
 app.get("/",checkIfLoggedIn, serveLanding);
 
-app.get("/user-dashboard", checkIfLoggedInRedirect, serveUserDashboard);
+app.get("/user-dashboard", checkIfLoggedInRedirect, serveUserDash);
 
 app.get("/project-dash", checkIfLoggedInRedirect, serveProjectDash);
 

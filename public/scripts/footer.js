@@ -1,5 +1,5 @@
 async function getfooter() {
-    const response = await fetch("/Components/Footer.html");
+    const response = await fetch("/components/footer.html");
     if (!response.ok) throw new Error (`HTTP error status: ${response.status}`);
     return await response.text();
 }
