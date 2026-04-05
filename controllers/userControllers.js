@@ -4,7 +4,7 @@ import { postUserModel } from "../models/userModels.js";
 export async function addUserController(req, res, next) {
     try {
         const { microsoftId, firstName, lastName, email } = req.user;
-        await postUserModel(microsoftId, firstName, lastName, email);
+        await postUserModel(microsoftId, firstName, lastName, email, microsoftId);
         next();
     } catch (err) {
         console.log(err, 'this is the error!');
