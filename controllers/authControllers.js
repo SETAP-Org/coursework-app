@@ -8,7 +8,7 @@ export function checkIfLoggedInRedirect(req, res, next) {
 
 // function to navigate to user dashboard if user already signed in
 export function checkIfLoggedIn(req, res, next) {
-    if (req.user && req.user.accessToken) return res.redirect(`/${req.user.microsoftId}`);
+    if (req.user && req.user.accessToken) return res.redirect(`/${req.user.username}`);
     else next();
 }
 
