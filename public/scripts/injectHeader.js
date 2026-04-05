@@ -19,12 +19,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   // assign the links
   const userDataJson = await fetch("/api/me");
   const userData = await userDataJson.json();
+  const dbUserData = userData.dbUser;
 
   const projectsBtn = document.querySelector("#projects-button");
   const profileBtn = document.querySelector("#profile-button");
 
-  projectsBtn.href = `/${userData.microsoftId}/projects`;
-  profileBtn.href = `/${userData.microsoftId}/profile`;
+  projectsBtn.href = `/${dbUserData.username}/projects`;
+  profileBtn.href = `/${dbUserData.username}/profile`;
 });
 
 async function navFunction() {
