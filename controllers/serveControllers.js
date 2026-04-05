@@ -14,15 +14,21 @@ export function serveUserDash(req, res, next) {
   )
 }
 
-export function serveProjectDash(req, res, next){
+export function serveProjectDash(req, res, next) {
   res.sendFile(
     path.join(__dirname, "../public/pages/", "projects_dash.html")
   )
 }
 
-export function serveProfile(req, res, next){
+export function serveProfile(req, res, next) {
   res.sendFile(
     path.join(__dirname, "../public/pages/", "profile.html")
+  )
+}
+
+export function serveProjects(req, res, next) {
+  res.sendFile(
+    path.join(__dirname, "../public/pages", "projects.html")
   )
 }
 

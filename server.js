@@ -10,6 +10,7 @@ import {
   serveUserDash,  
   serveProjectDash,
   serveProfile,
+  serveProjects,
   redirectUserDashboard,
   redirectAddUser,
 } from "./controllers/serveControllers.js";
