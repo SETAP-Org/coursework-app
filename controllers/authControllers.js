@@ -2,8 +2,11 @@ import passport from "passport";
 import { getUserModel } from "../models/authModels.js";
 
 // function to redirect user to landing if not signed in
-export function checkIfLoggedInRedirect(req, res, next) {
-    if (req.user && req.user.accessToken && req.user.microsoftId == req.params.username) next();
+export async function checkIfLoggedInRedirect(req, res, next) {
+    const dbUserResult = await getUserModel(req.user.microsoftId);
+    const dbUser = await dbUserResult.rows[0];
+
+    if (req.user && req.user.accessToken && dbUser.username == req.params.username) next();
     else res.redirect("/");
 }
 
@@ -28,12 +31,12 @@ export async function getCurrentUser(req, res, next){
     if (req.user) {
         const dbUserResult = await getUserModel(req.user.microsoftId);
         const dbUser = await dbUserResult.rows[0];
-        console.log(dbUser, 'this is the db user');
+
         const userObj = {
             sessionUser: req.user,
             dbUser: dbUser
         }
-        console.log(userObj, 'this is the final obj')
+
         res.json(userObj);
     } else {
         res.status(401).json({loggedIn: false })
