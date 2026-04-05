@@ -3,8 +3,6 @@ async function addLink() {
     const userData = await userDataJson.json();
     const dbUserData = userData.dbUser;
 
-    console.log(dbUserData, 'this is the user data');
-
     const redirectLink = document.querySelector("#project-link");
 
     redirectLink.href = `/${dbUserData.username}/projects/dummy`

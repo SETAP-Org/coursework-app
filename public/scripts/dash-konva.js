@@ -175,12 +175,12 @@ if (container && addNoteBtn) {
 
   addNoteBtn.addEventListener('click', createNote);
 
-  noteTrigger.addEventListener('click', () =>{
-    if(!lastSelectedNote || !lastSelectedNote.noteDisplay){
-      return;
-    }
-    showNote(lastSelectedNote.noteDisplay);
-  })
+  // noteTrigger.addEventListener('click', () =>{
+  //   if(!lastSelectedNote || !lastSelectedNote.noteDisplay){
+  //     return;
+  //   }
+  //   showNote(lastSelectedNote.noteDisplay);
+  // })
 
   window.addEventListener('resize', () => {
     stage.width(container.clientWidth);
