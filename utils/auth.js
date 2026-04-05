@@ -41,7 +41,6 @@ export default function setUpAuth(app) {
 
   // when a request is made, req.user becomes the user data stored in the session
   passport.deserializeUser((obj, done) => {
-    console.log('deserialised.........')
     done(null, obj);
   });
 }

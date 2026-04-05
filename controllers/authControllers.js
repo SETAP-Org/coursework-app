@@ -1,4 +1,5 @@
 import passport from "passport";
+import { getUserModel } from "../models/authModels.js";
 
 // function to redirect user to landing if not signed in
 export function checkIfLoggedInRedirect(req, res, next) {
@@ -23,6 +24,18 @@ export function authenticatePassport(req, res, next) {
 }
 
 // function to return user info (might not be needed as part of req.user)
-export function getCurrentUser(req, res){
-    req.user ? res.json(req.user) : res.status(401).json({loggedIn: false })
+export async function getCurrentUser(req, res, next){
+    if (req.user) {
+        const dbUserResult = await getUserModel(req.user.microsoftId);
+        const dbUser = await dbUserResult.rows[0];
+        console.log(dbUser, 'this is the db user');
+        const userObj = {
+            sessionUser: req.user,
+            dbUser: dbUser
+        }
+        console.log(userObj, 'this is the final obj')
+        res.json(userObj);
+    } else {
+        res.status(401).json({loggedIn: false })
+    }
 }
