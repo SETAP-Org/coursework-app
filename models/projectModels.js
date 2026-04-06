@@ -3,12 +3,12 @@ import { getUserModel } from "./authModels.js";
 
 // Add new project to db - if project by same user with same project_name exists, do nothing
 export async function postProjectModel(
-  microsoftId,
+  microsoft_id,
   project_name,
   project_deadline,
 ) {
   // created_by & team_leader_id must be UUID, so get proper user_id from db
-  const userResult = await getUserModel(microsoftId);
+  const userResult = await getUserModel(microsoft_id);
   const user = userResult.rows[0];
 
   if (!user) {
@@ -27,6 +27,28 @@ export async function postProjectModel(
         RETURNING *;
         `,
     [team_leader_id, project_name, project_deadline],
+  );
+}
+
+export async function postUserProjectModel(microsoft_id, project_id) {
+  const userResult = await getUserModel(microsoft_id);
+  const user = userResult.rows[0];
+
+  if (!user) {
+    return null;
+  }
+
+  const user_id = user.user_id;
+
+  return await query(
+    `
+        INSERT INTO user-projects (user_id, project_id)
+        VALUES ($1, $2)
+        ON CONFLICT (user_id, project_id)
+        DO NOTHING
+        RETURNING *;
+        `,
+    [user_id, project_id],
   );
 }
 

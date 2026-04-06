@@ -4,11 +4,11 @@ import { postProjectModel } from "../models/projectModels.js";
 export async function addProjectController(req, res, next) {
   try {
     const microsoftId = req.user["microsoftId"];
-    console.log(microsoftId);
-    const { project_name, project_deadline } = 0;
+    const { project_name, project_deadline } = req.query;
     await postProjectModel(microsoftId, project_name, project_deadline);
-    next();
+    res.json({ success: true });
   } catch (err) {
-    console.log(err, "Error adding new project in model!");
+    console.error(err);
+    res.status(500).json({ success: false, error: err.message });
   }
 }
