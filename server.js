@@ -7,16 +7,15 @@ import dotenv from "dotenv";
 // controller imports
 import {
   serveLanding,
-  serveUserDash,  
+  serveUserDash,
   serveProjectDash,
   serveProfile,
   serveProjects,
   redirectUserDashboard,
   redirectAddUser,
 } from "./controllers/serveControllers.js";
-import {
-  addUserController,
-} from "./controllers/userControllers.js";
+import { addUserController } from "./controllers/userControllers.js";
+import { addProjectController } from "./controllers/projectControllers.js";
 import {
   checkIfLoggedIn,
   checkIfLoggedInRedirect,
@@ -50,7 +49,7 @@ app.get("/:username", checkIfLoggedInRedirect, serveUserDash);
 
 app.get("/:username/projects", checkIfLoggedInRedirect, serveProjects);
 
-app.get("/:username/projects/dummy", checkIfLoggedInRedirect, serveProjectDash) // will later have to have checkIfValidProject middleware
+app.get("/:username/projects/dummy", checkIfLoggedInRedirect, serveProjectDash); // will later have to have checkIfValidProject middleware
 
 app.get("/:username/profile", checkIfLoggedInRedirect, serveProfile);
 
@@ -62,6 +61,8 @@ app.get("/api/auth/callback", authenticatePassport(), redirectAddUser);
 app.get("/api/auth/signout", signOut, checkIfLoggedInRedirect);
 
 app.get("/api/users/addUser", addUserController, redirectUserDashboard);
+
+app.get("/api/projects/addProject", addProjectController);
 
 app.get("/api/me", getCurrentUser);
 
