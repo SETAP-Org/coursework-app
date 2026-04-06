@@ -7,6 +7,7 @@ async function loadProfile() {
     const usernameBtn = document.querySelector(".username-save-button");
     const usernameInput = document.querySelector(".username-input");
     const usernameMsg = document.querySelector(".username-message");
+    const usernameForm = document.querySelector(".username-form");
     let usernameValue = "";
     const regex = /^(?!^[0-9]+$)[a-zA-Z0-9]+$/;
 
@@ -31,8 +32,16 @@ async function loadProfile() {
       }
     })
 
-    usernameBtn.addEventListener("click", (e) => {
-      console.log('we have clicked!')
+    usernameForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const data = await fetch('/api/users/changeUsername', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usernameValue })
+      });
+
+      // console.log(data);
     })
 
     document.getElementById("profile-name").textContent = data.name || "Unknown User";

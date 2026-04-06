@@ -26,7 +26,7 @@ export async function getUserByUsernameModel(username) {
 }
 
 // model to update username
-export async function putUsernameById(microsoftId, username) {
+export async function putUsernameByIdModel(microsoftId, username) {
     return await query(
         `
         UPDATE users
