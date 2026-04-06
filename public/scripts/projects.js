@@ -38,9 +38,15 @@ document
     );
 
     if (res.ok) {
-      document.getElementById("create-project-dialog").close();
-      form.reset();
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById("create-project-dialog").close();
+        form.reset();
+      } else {
+        alert(data.error);
+      }
     } else {
-      alert("Failed to create project.");
+      const data = await res.json();
+      alert(data.error || "Failed to create project.");
     }
   });
