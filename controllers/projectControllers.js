@@ -52,6 +52,9 @@ export async function getProjectDetails(req, res, next) {
         .status(400)
         .json({ success: false, error: "Missing project_id" });
 
+    // fetch the project
+    const projectResult = await getProjectByIdModel(project_id);
+
     if (!projectResult || projectResult.rows.length === 0) {
       return res
         .status(404)
@@ -59,6 +62,7 @@ export async function getProjectDetails(req, res, next) {
     }
     const project = projectResult.rows[0];
 
+    // ensure user is member of the project
     const userProjectsResult = await getUserProjectsModel(req.user.microsoftId);
     const isMember = userProjectsResult.rows.some(
       (p) => String(p.project_id) === String(project_id),

@@ -68,7 +68,7 @@ app.get("/api/me", getCurrentUser);
 
 app.get("/api/me/projects", getUserProjects);
 
-app.get("/api/projects/:project_id", checkIfLoggedIn, getProjectDetails);
+app.get("/api/projects/:project_id", getProjectDetails);
 
 app.get(
   "/:username/projects/:project_id",

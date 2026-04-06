@@ -3,16 +3,29 @@ import { getUserModel } from "../models/authModels.js";
 
 // function to redirect user to landing if not signed in
 export async function checkIfLoggedInRedirect(req, res, next) {
-  const dbUserResult = await getUserModel(req.user.microsoftId);
-  const dbUser = await dbUserResult.rows[0];
+  // ensure user exists first
+  if (!req.user || !req.user.microsoftId) {
+    return res.redirect("/");
+  }
 
-  if (
-    req.user &&
-    req.user.accessToken &&
-    dbUser.username == req.params.username
-  )
-    next();
-  else res.redirect("/");
+  try {
+    const dbUserResult = await getUserModel(req.user.microsoftId);
+    const dbUser = dbUserResult?.rows?.[0];
+
+    if (
+      req.user &&
+      req.user.accessToken &&
+      dbUser &&
+      dbUser.username == req.params.username
+    ) {
+      return next();
+    } else {
+      return res.redirect("/");
+    }
+  } catch (err) {
+    console.error("checkIfLoggedInRedirect error:", err);
+    return res.redirect("/");
+  }
 }
 
 // function to navigate to user dashboard if user already signed in
@@ -36,7 +49,8 @@ export function authenticatePassport(req, res, next) {
 export async function getCurrentUser(req, res, next) {
   if (req.user) {
     const dbUserResult = await getUserModel(req.user.microsoftId);
-    const dbUser = await dbUserResult.rows[0];
+    const dbUser = dbUserResult.rows[0];
+    await d;
 
     const userObj = {
       sessionUser: req.user,
