@@ -10,4 +10,13 @@ async function addLink() {
 
 // addLink();
 
-async function newProject() {}
+function toggleNewProjectForm() {
+  const dialog = document.getElementById("create-project-dialog");
+  dialog.open ? dialog.close() : dialog.showModal();
+}
+
+document
+  .getElementById("create-project-dialog")
+  .addEventListener("click", function (e) {
+    if (e.target === this) this.close();
+  });
