@@ -12,22 +12,18 @@
     min-width: 320px;
     box-shadow: var(--shadow);
 }
-
 #create-project-dialog::backdrop {
     background: rgba(0, 0, 0, 0.6);
 }
-
 #create-project-dialog h1 {
     margin: 0 0 0.5rem 0;
     font-size: 1.5rem;
 }
-
 #create-project-dialog form {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
-
 #create-project-dialog label {
     display: flex;
     flex-direction: column;
@@ -35,7 +31,6 @@
     font-size: 0.875rem;
     opacity: 0.8;
 }
-
 #create-project-dialog input {
     background: var(--card2);
     color: var(--text);
@@ -46,16 +41,13 @@
     font-size: 1rem;
     width: 100%;
 }
-
 #create-project-dialog input::placeholder {
     color: rgba(233, 238, 252, 0.4);
 }
-
 #create-project-dialog input:focus {
     outline: none;
     border-color: var(--accent);
 }
-
 #create-project-dialog button[type="submit"] {
     background: var(--accent);
     color: var(--text);
@@ -67,11 +59,9 @@
     cursor: pointer;
     transition: opacity 0.2s;
 }
-
 #create-project-dialog button[type="submit"]:hover {
     opacity: 0.85;
 }
-
 .modal-close {
     position: absolute;
     top: 1rem;
@@ -84,11 +74,9 @@
     opacity: 0.6;
     transition: opacity 0.2s;
 }
-
 .modal-close:hover {
     opacity: 1;
 }
-
 #page-content {
     display: flex;
     flex-direction: column;
@@ -96,10 +84,35 @@
     margin: 0 auto;
     padding: 32px 0;
 }
-
 #projects-header {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+}
+.projects-list {
+    list-style: none;
+    width: 100%;
+    padding: 16px 0;
+    margin: 1rem 0 0 0;
+    overflow: auto;
+}
+.project-list-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.user-dash-project-card-individual {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+.project-date {
+    margin-left: 10px;
+    opacity: 0.7;
+    font-size: 0.9rem;
 }
