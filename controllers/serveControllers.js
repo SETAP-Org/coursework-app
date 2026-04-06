@@ -30,7 +30,6 @@ export async function redirectUserDashboard(req, res, next) {
   const dbUser = await dbUserResult.rows[0];
 
   res.redirect(`/${dbUser.username}`);
-  next();
 }
 
 export function redirectAddUser(req, res, next) {
