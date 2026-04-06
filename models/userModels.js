@@ -24,3 +24,16 @@ export async function getUserByUsernameModel(username) {
         [username]
     )
 }
+
+// model to update username
+export async function putUsernameById(microsoftId, username) {
+    return await query(
+        `
+        UPDATE users
+        SET username = $2
+        WHERE microsoft_id = $1
+        RETURNING *;
+        `,
+        [microsoftId]
+    )
+}
