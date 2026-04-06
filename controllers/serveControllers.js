@@ -27,7 +27,7 @@ export function serveProjectDash(req, res, next) {
 // redirects (not added to stack) (for when access to pages is unauthorised)
 export async function redirectUserDashboard(req, res, next) {
   const dbUserResult = await getUserModel(req.user.microsoftId);
-  const dbUser = await dbUserResult.rows[0];
+  const dbUser = dbUserResult.rows[0];
 
   res.redirect(`/${dbUser.username}`);
 }
