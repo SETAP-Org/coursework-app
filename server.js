@@ -59,9 +59,11 @@ app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
 
 app.get("/api/auth/callback", authenticatePassport(), redirectAddUser);
 
+app.get("/api/users/addUser", addUserController, redirectUserDashboard);
+
 app.get("/api/auth/signout", signOut, checkIfLoggedInRedirect);
 
-app.get("/api/users/addUser", addUserController, redirectUserDashboard);
+app.put("/api/users/changeUsername");
 
 app.get("/api/me", getCurrentUser);
 

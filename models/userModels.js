@@ -13,3 +13,14 @@ export async function postUserModel(microsoftId, firstName, lastName, email, use
         [microsoftId, firstName, lastName, email, username]
     );
 }
+
+// model to check valid username
+export async function getUserByUsernameModel(username) {
+    return await query(
+        `
+        SELECT * FROM users
+        WHERE username = $1;
+        `,
+        [username]
+    )
+}
