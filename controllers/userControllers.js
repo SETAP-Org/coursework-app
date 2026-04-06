@@ -27,7 +27,6 @@ export async function checkValidUsernameController(req, res, next) {
         }
 
         // check if anyone else has that username
-        console.log(typeof req.body.usernameValue, 'this is the type of username...');
         const fetchedUser = await getUserByUsernameModel(req.body.usernameValue);
         
         if (fetchedUser.rows.length != 0) {
@@ -41,5 +40,21 @@ export async function checkValidUsernameController(req, res, next) {
         next()
     } catch(err) {
         console.log(err, "this is the error!");
+    }
+}
+
+// controller to update usernames
+export async function updateUsernameController(req, res, next) {
+    try {
+        const userId = req.user.microsoftId;
+        const data = await putUsernameByIdModel(userId, req.body.usernameValue);
+        if (data.rows[0].username == req.body.usernameValue) {
+            return res.status(200).json({
+                success: true,
+                message: "Your username has been changed :)"
+            })
+        }
+    } catch(err) {
+        console.log(err, 'this is the error!');
     }
 }

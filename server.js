@@ -16,7 +16,8 @@ import {
 } from "./controllers/serveControllers.js";
 import {
   addUserController,
-  checkValidUsernameController
+  checkValidUsernameController,
+  updateUsernameController
 } from "./controllers/userControllers.js";
 import {
   checkIfLoggedIn,
@@ -64,7 +65,7 @@ app.get("/api/users/addUser", addUserController, redirectUserDashboard);
 
 app.get("/api/auth/signout", signOut, checkIfLoggedInRedirect);
 
-app.put("/api/users/changeUsername", checkValidUsernameController);
+app.put("/api/users/changeUsername", checkValidUsernameController, updateUsernameController);
 
 app.get("/api/me", getCurrentUser);
 

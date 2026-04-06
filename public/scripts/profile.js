@@ -35,13 +35,17 @@ async function loadProfile() {
     usernameForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const data = await fetch('/api/users/changeUsername', {
+      const response = await fetch('/api/users/changeUsername', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ usernameValue })
       });
 
-      // console.log(data);
+      const result = await response.json();
+
+      usernameMsg.innerText = result.message;
+
+      usernameInput.value = "";
     })
 
     document.getElementById("profile-name").textContent = data.name || "Unknown User";

@@ -34,6 +34,6 @@ export async function putUsernameByIdModel(microsoftId, username) {
         WHERE microsoft_id = $1
         RETURNING *;
         `,
-        [microsoftId]
+        [microsoftId, username]
     )
 }
