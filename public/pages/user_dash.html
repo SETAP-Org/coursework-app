@@ -5,13 +5,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>GCMS | User Dashboard</title>
 
-        <link rel="stylesheet" href="/css/user_dash.css"/>
-        <link id="theme-stylesheet" rel="stylesheet" href="/css/root-dark.css"/>
-        <link rel="icon" href="/assets/favicon.png" type="image/png">
+        <link rel="stylesheet" href="/css/user_dash.css" />
+        <link
+            id="theme-stylesheet"
+            rel="stylesheet"
+            href="/css/root-dark.css"
+        />
+        <link rel="icon" href="/assets/favicon.png" type="image/png" />
 
         <script src="/scripts/L&D-mode.js" defer></script>
         <script src="/scripts/injectHeader.js" defer></script>
         <script src="/scripts/injectFooter.js" defer></script>
+        <script src="/scripts/userDash.js" defer></script>
     </head>
     <body>
         <header id="site-header"></header>
@@ -20,15 +25,16 @@
             <h1>Welcome, <span id="user-name">Loading...</span></h1>
         </div>
 
+        <template id="project-template">
+            <section class="user-dash-project-card-individual">
+                <b>[project-name]</b>
+                <a href="" class="project-dash-button">Go to project</a>
+            </section>
+        </template>
+
         <section class="projects-outer-container">
             <div class="projects-inner-container">
-                <ul class="projects-list">
-                    <script defer>
-                    for (let i = 0; i < 5; i++) {
-                        document.write(`<li class="project-list-item">Project ${i + 1}</li>`);
-                    }
-                    </script>
-                </ul>
+                <ul class="projects-list"></ul>
             </div>
         </section>
 

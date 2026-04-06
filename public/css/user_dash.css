@@ -11,7 +11,7 @@ body {
     align-items: center;
 }
 
-.welcome{
+.welcome {
     justify-content: center;
     text-align: center;
     font-size: 1.5em;
@@ -55,4 +55,12 @@ body {
     justify-content: center;
     align-items: center;
     color: black;
+}
+
+.user-dash-project-card-individual {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
