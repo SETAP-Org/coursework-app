@@ -1,5 +1,4 @@
 import { query } from "../db/connection.js";
-import { getUserModel } from "./authModels.js";
 import { getUserIdFromMicrosoftId } from "../utils/user_id.js";
 
 // Add new project to db - if project by same user with same project_name exists, do nothing
