@@ -15,7 +15,10 @@ import {
   redirectAddUser,
 } from "./controllers/serveControllers.js";
 import { addUserController } from "./controllers/userControllers.js";
-import { addProjectController } from "./controllers/projectControllers.js";
+import {
+  addProjectController,
+  getUserProjects,
+} from "./controllers/projectControllers.js";
 import {
   checkIfLoggedIn,
   checkIfLoggedInRedirect,
@@ -63,6 +66,8 @@ app.get("/api/auth/signout", signOut, checkIfLoggedInRedirect);
 app.get("/api/users/addUser", addUserController, redirectUserDashboard);
 
 app.get("/api/me", getCurrentUser);
+
+app.get("/api/me/projects", getUserProjects);
 
 // Post means it can get data from form
 app.post("/api/projects/addProject", addProjectController);
