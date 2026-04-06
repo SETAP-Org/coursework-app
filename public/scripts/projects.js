@@ -1,26 +1,36 @@
-async function addLink() {
-  const userDataJson = await fetch("/api/me");
-  const userData = await userDataJson.json();
-  const dbUserData = userData.dbUser;
+// async function addLink() {
+//   const userDataJson = await fetch("/api/me");
+//   const userData = await userDataJson.json();
+//   const dbUserData = userData.dbUser;
 
-  const redirectLink = document.querySelector("#project-link");
+//   const redirectLink = document.querySelector("#project-link");
 
-  redirectLink.href = `/${dbUserData.username}/projects/dummy`;
-}
-
-// addLink();
+//   redirectLink.href = `/${dbUserData.username}/projects/dummy`;
+// }
 
 function toggleNewProjectForm() {
   const dialog = document.getElementById("create-project-dialog");
   dialog.open ? dialog.close() : dialog.showModal();
 }
 
+document.addEventListener("DOMContentLoaded", async () => {
+  const page_title = document.querySelector("#page-title");
+  try {
+    const user_info_fetch = await fetch("/api/me");
+    const user_info = await user_info_fetch.json();
+
+    const user_first_name = user_info?.dbUser.user_first_name;
+
+    page_title.textContent = `${user_first_name}'s Projects`;
+  } catch {}
+});
+
 document
   .querySelector("#create-project-button")
   .addEventListener("click", toggleNewProjectForm);
 
 document
-  .getElementById("create-project-dialog")
+  .querySelector("#create-project-dialog")
   .addEventListener("click", function (e) {
     if (e.target === this) this.close();
   });
