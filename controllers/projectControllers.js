@@ -1,4 +1,5 @@
 import { postProjectModel } from "../models/projectModels.js";
+import { getUserProjectsModel } from "../models/projectModels.js";
 
 // Function to add a project to the database
 export async function addProjectController(req, res, next) {
@@ -21,4 +22,11 @@ export async function addProjectController(req, res, next) {
   }
 }
 
-export async function getUserProjects() {}
+export async function getUserProjects(req, res, next) {
+  if (req.user) {
+    const dbResult = await getUserProjectsModel(req.user["microsoftId"]);
+    res.json({ success: true, projects: dbResult.rows });
+  } else {
+    res.status(401).json({ loggedIn: false });
+  }
+}

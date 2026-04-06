@@ -1,5 +1,6 @@
 import { query } from "../db/connection.js";
 import { getUserModel } from "./authModels.js";
+import { getUserIdFromMicrosoftId } from "../utils/user_id.js";
 
 // Add new project to db - if project by same user with same project_name exists, do nothing
 export async function postProjectModel(
@@ -8,15 +9,7 @@ export async function postProjectModel(
   project_deadline,
 ) {
   // created_by & team_leader_id must be UUID, so get proper user_id from db
-  const userResult = await getUserModel(microsoft_id);
-  const user = userResult.rows[0];
-
-  if (!user) {
-    // Null if no user found
-    return null;
-  }
-
-  const team_leader_id = user.user_id;
+  const team_leader_id = await getUserIdFromMicrosoftId(microsoft_id);
 
   return await query(
     `
@@ -31,14 +24,7 @@ export async function postProjectModel(
 }
 
 export async function postUserProjectModel(microsoft_id, project_id) {
-  const userResult = await getUserModel(microsoft_id);
-  const user = userResult.rows[0];
-
-  if (!user) {
-    return null;
-  }
-
-  const user_id = user.user_id;
+  const user_id = await getUserIdFromMicrosoftId(microsoft_id);
 
   return await query(
     `
@@ -70,5 +56,15 @@ export async function getProjectByLeaderAndNameModel(
     SELECT project_id, team_leader_id, project_name, project_deadline FROM projects WHERE team_leader_id = $1 AND project_name = $2;
     `,
     [team_leader_id, project_name],
+  );
+}
+
+export async function getUserProjectsModel(microsoft_id) {
+  const user_id = await getUserIdFromMicrosoftId(microsoft_id);
+  return await query(
+    `
+    SELECT * FROM projects p JOIN user_projects up ON p.created_by = up.user_id WHERE user_id = $1;
+    `,
+    [user_id],
   );
 }
