@@ -7,7 +7,7 @@ async function loadProfile() {
     document.getElementById("profile-name").textContent = data.name || "Unknown User";
   } catch (error) {
     console.error("Error loading profile:", error);
-    document.getElementById("profile-name").textContent = "Unknown User";
+    document.getElementById("profile-name").textContent = "Error in user";
   }
 }
 

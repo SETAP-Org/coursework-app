@@ -10,6 +10,7 @@ import {
   serveUserDash,  
   serveProjectDash,
   serveProfile,
+  serveProjects,
   redirectUserDashboard,
   redirectAddUser,
 } from "./controllers/serveControllers.js";
@@ -47,7 +48,9 @@ app.get("/", checkIfLoggedIn, serveLanding);
 
 app.get("/:username", checkIfLoggedInRedirect, serveUserDash);
 
-app.get("/:username/projects", checkIfLoggedInRedirect, serveProjectDash);
+app.get("/:username/projects", checkIfLoggedInRedirect, serveProjects);
+
+app.get("/:username/projects/dummy", checkIfLoggedInRedirect, serveProjectDash) // will later have to have checkIfValidProject middleware
 
 app.get("/:username/profile", checkIfLoggedInRedirect, serveProfile);
 
