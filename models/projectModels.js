@@ -1,6 +1,8 @@
 import { query } from "../db/connection.js";
 import { getUserIdFromMicrosoftId } from "../utils/user_id.js";
 
+// POST
+// Table: projects
 // Add new project to db - if project by same user with same project_name exists, do nothing
 export async function postProjectModel(
   microsoft_id,
@@ -22,12 +24,13 @@ export async function postProjectModel(
   );
 }
 
+// Table: user_projects
 export async function postUserProjectModel(microsoft_id, project_id) {
   const user_id = await getUserIdFromMicrosoftId(microsoft_id);
 
   return await query(
     `
-        INSERT INTO user-projects (user_id, project_id)
+        INSERT INTO user_projects (user_id, project_id)
         VALUES ($1, $2)
         ON CONFLICT (user_id, project_id)
         DO NOTHING
@@ -37,6 +40,9 @@ export async function postUserProjectModel(microsoft_id, project_id) {
   );
 }
 
+// -------------------------------------------------
+// GET
+// Table: projects
 export async function getProjectByIdModel(project_id) {
   return await query(
     `
@@ -58,11 +64,12 @@ export async function getProjectByLeaderAndNameModel(
   );
 }
 
+// Table: user_projects
 export async function getUserProjectsModel(microsoft_id) {
   const user_id = await getUserIdFromMicrosoftId(microsoft_id);
   return await query(
     `
-    SELECT * FROM projects p JOIN user_projects up ON p.created_by = up.user_id WHERE user_id = $1;
+    SELECT * FROM projects p JOIN user_projects up ON p.project_id = up.project_id WHERE up.user_id = $1;
     `,
     [user_id],
   );

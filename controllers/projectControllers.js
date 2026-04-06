@@ -1,5 +1,8 @@
-import { postProjectModel } from "../models/projectModels.js";
-import { getUserProjectsModel } from "../models/projectModels.js";
+import {
+  postProjectModel,
+  postUserProjectModel,
+  getUserProjectsModel,
+} from "../models/projectModels.js";
 
 // Function to add a project to the database
 export async function addProjectController(req, res, next) {
@@ -12,7 +15,13 @@ export async function addProjectController(req, res, next) {
       project_deadline,
     );
     if (result.rows.length > 0) {
-      res.json({ success: true });
+      const project_id = result.rows[0]["project_id"];
+      const result2 = await postUserProjectModel(microsoftId, project_id);
+      if (result2.rows.length > 0) {
+        res.json({ success: true });
+      } else {
+        throw new Error("Error adding user link in user_projects");
+      }
     } else {
       throw new Error("Cannot create duplicate projects!");
     }
