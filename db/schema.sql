@@ -33,12 +33,14 @@ CREATE TABLE USERS(
 
 CREATE TABLE PROJECTS(
     project_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    created_by UUI NOT NULL,
     team_leader_id UUID NOT NULL,
     project_name VARCHAR(50) NOT NULL,
     project_deadline DATE NOT NULL,
     p_date_created TIMESTAMP,
     p_time_updated TIMESTAMP,
-    FOREIGN KEY (team_leader_id) REFERENCES USERS(user_id)
+    FOREIGN KEY (team_leader_id) REFERENCES USERS(user_id),
+    UNIQUE (created_by, project_name)
 );
 
 CREATE TABLE USER_PROJECTS(

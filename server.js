@@ -7,14 +7,19 @@ import dotenv from "dotenv";
 // controller imports
 import {
   serveLanding,
-  serveUserDash,  
+  serveUserDash,
   serveProjectDash,
   serveProfile,
   serveProjects,
   redirectUserDashboard,
   redirectAddUser,
 } from "./controllers/serveControllers.js";
+import { addUserController } from "./controllers/userControllers.js";
 import {
+  addProjectController,
+  getUserProjects,
+  getProjectDetails,
+} from "./controllers/projectControllers.js";
   addUserController,
   checkValidUsernameController,
   updateUsernameController
@@ -52,8 +57,6 @@ app.get("/:username", checkIfLoggedInRedirect, serveUserDash);
 
 app.get("/:username/projects", checkIfLoggedInRedirect, serveProjects);
 
-app.get("/:username/projects/dummy", checkIfLoggedInRedirect, serveProjectDash) // will later have to have checkIfValidProject middleware
-
 app.get("/:username/profile", checkIfLoggedInRedirect, serveProfile);
 
 // API routes
@@ -68,6 +71,19 @@ app.get("/api/auth/signout", signOut, checkIfLoggedInRedirect);
 app.put("/api/users/changeUsername", checkValidUsernameController, updateUsernameController);
 
 app.get("/api/me", getCurrentUser);
+
+app.get("/api/me/projects", getUserProjects);
+
+app.get("/api/projects/:project_id", getProjectDetails);
+
+app.get(
+  "/:username/projects/:project_id",
+  checkIfLoggedInRedirect,
+  serveProjectDash,
+);
+
+// Post means it can get data from form
+app.post("/api/projects/addProject", addProjectController);
 
 // assigning the server to a port so that requests can be made
 app.listen(port, () => {

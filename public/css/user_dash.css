@@ -4,55 +4,55 @@ body {
     flex-direction: column;
     overflow: hidden;
 }
-
 .title {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 32px 0 0 0;
 }
-
-.welcome{
-    justify-content: center;
-    text-align: center;
-    font-size: 1.5em;
-}
-
-.create-new-button {
-    font-size: 1.5em;
-}
-
 .projects-outer-container {
     display: flex;
     flex: 1;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    padding: 24px 0;
     min-height: 0;
-    color: black;
 }
-
 .projects-inner-container {
     width: 80%;
-    height: 90%;
+    height: 500px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    border-radius: 20px;
-    background-color: white;
-    padding: 20px 0;
-    border: var(--border);
+    border-radius: var(--radius);
+    background: var(--card);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 20px 40px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
 }
-
 .projects-list {
     list-style: none;
-    width: 90%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
     overflow: auto;
 }
-
 .project-list-item {
-    border-bottom: solid 1px black;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     height: 70px;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: black;
+}
+.user-dash-project-card-individual {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+.project-date {
+    margin-left: 10px;
+    opacity: 0.7;
+    font-size: 0.9rem;
 }

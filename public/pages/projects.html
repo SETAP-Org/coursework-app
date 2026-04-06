@@ -1,28 +1,69 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            id="theme-stylesheet"
+            rel="stylesheet"
+            href="/css/root-dark.css"
+        />
+        <link rel="stylesheet" href="/css/projects.css" />
+        <link rel="stylesheet" href="/css/profile.css" />
+        <link rel="icon" href="/assets/favicon.png" type="image/png" />
+        <script src="/scripts/L&D-mode.js" defer></script>
+        <script src="/scripts/injectHeader.js" defer></script>
+        <script src="/scripts/injectFooter.js" defer></script>
+        <script src="/scripts/projects.js" defer></script>
+        <title>Projects</title>
+    </head>
+    <body>
+        <header id="site-header"></header>
+        <section id="page-content">
+            <section id="projects-header">
+                <h1 id="page-title">Projects</h1>
 
-    <link id="theme-stylesheet" rel="stylesheet" href="/css/root-dark.css" />
-    <link rel="stylesheet" href="/css/profile.css">
-    <link rel="icon" href="/assets/favicon.png" type="image/png">
+                <button id="create-project-button">New Project</button>
+            </section>
+            <section id="projects-list-section">
+                <ul class="projects-list"></ul>
+            </section>
+        </section>
 
-    <script src="/scripts/L&D-mode.js" defer></script>
-    <script src="/scripts/injectHeader.js" defer></script>
-    <script src="/scripts/injectFooter.js" defer></script>
-    <script src="/scripts/projects.js" defer></script>
+        <template id="project-template">
+            <section class="user-dash-project-card-individual">
+                <div id="project-info">
+                    <b class="project-name"></b>
+                    <span class="project-date"></span>
+                </div>
+                <a href="" class="project-dash-button">Go to project</a>
+            </section>
+        </template>
 
-    <title>Projects</title>
-</head>
-<body>
-    <header id="site-header"></header>
+        <!-- Popup for creating new project -->
+        <dialog id="create-project-dialog">
+            <button class="modal-close" onclick="toggleNewProjectForm()">
+                X
+            </button>
+            <form method="dialog">
+                <h1>Create Project</h1>
+                <label>
+                    Project Name
+                    <input
+                        type="text"
+                        placeholder="e.g. My Project"
+                        name="project-name"
+                        required
+                    />
+                </label>
+                <label>
+                    Deadline
+                    <input type="date" name="project-deadline" required />
+                </label>
+                <button type="submit">Create Project</button>
+            </form>
+        </dialog>
 
-    <h1>This is the dummy projects page</h1>
-
-    <a id="project-link">Go to dummy project</a>
-    <button>Dummy create new project button</button>
-
-    <footer id="site-footer"></footer>
-</body>
+        <footer id="site-footer"></footer>
+    </body>
 </html>
