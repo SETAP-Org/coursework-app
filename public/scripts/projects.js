@@ -16,6 +16,10 @@ function toggleNewProjectForm() {
 }
 
 document
+  .querySelector("#create-project-button")
+  .addEventListener("click", toggleNewProjectForm);
+
+document
   .getElementById("create-project-dialog")
   .addEventListener("click", function (e) {
     if (e.target === this) this.close();
