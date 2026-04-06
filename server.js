@@ -20,6 +20,10 @@ import {
   getUserProjects,
   getProjectDetails,
 } from "./controllers/projectControllers.js";
+  addUserController,
+  checkValidUsernameController,
+  updateUsernameController
+} from "./controllers/userControllers.js";
 import {
   checkIfLoggedIn,
   checkIfLoggedInRedirect,
@@ -60,9 +64,11 @@ app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
 
 app.get("/api/auth/callback", authenticatePassport(), redirectAddUser);
 
+app.get("/api/users/addUser", addUserController, redirectUserDashboard);
+
 app.get("/api/auth/signout", signOut, checkIfLoggedInRedirect);
 
-app.get("/api/users/addUser", addUserController, redirectUserDashboard);
+app.put("/api/users/changeUsername", checkValidUsernameController, updateUsernameController);
 
 app.get("/api/me", getCurrentUser);
 

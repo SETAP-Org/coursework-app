@@ -13,3 +13,27 @@ export async function postUserModel(microsoftId, firstName, lastName, email, use
         [microsoftId, firstName, lastName, email, username]
     );
 }
+
+// model to check valid username
+export async function getUserByUsernameModel(username) {
+    return await query(
+        `
+        SELECT * FROM users
+        WHERE username = $1;
+        `,
+        [username]
+    )
+}
+
+// model to update username
+export async function putUsernameByIdModel(microsoftId, username) {
+    return await query(
+        `
+        UPDATE users
+        SET username = $2
+        WHERE microsoft_id = $1
+        RETURNING *;
+        `,
+        [microsoftId, username]
+    )
+}
