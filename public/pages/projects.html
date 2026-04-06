@@ -25,7 +25,18 @@
 
                 <button id="create-project-button">New Project</button>
             </section>
+            <section id="projects-list"></section>
         </section>
+
+        <template id="project-template">
+            <section class="user-dash-project-card-individual">
+                <div id="project-info">
+                    <b class="project-name"></b>
+                    <span class="project-date"></span>
+                </div>
+                <a href="" class="project-dash-button">Go to project</a>
+            </section>
+        </template>
 
         <!-- Popup for creating new project -->
         <dialog id="create-project-dialog">

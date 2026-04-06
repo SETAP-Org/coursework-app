@@ -4,36 +4,32 @@ body {
     flex-direction: column;
     overflow: hidden;
 }
-
 .title {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-
 .welcome {
     justify-content: center;
     text-align: center;
     font-size: 1.5em;
 }
-
 .create-new-button {
     font-size: 1.5em;
 }
-
 .projects-outer-container {
     display: flex;
     flex: 1;
     justify-content: center;
-    align-items: center;
+    align-items: stretch;
+    padding: 0 0 24px 0;
     min-height: 0;
     color: black;
 }
-
 .projects-inner-container {
     width: 80%;
-    height: 90%;
     display: flex;
+    height: 500px;
     flex-direction: column;
     align-items: center;
     border-radius: 20px;
@@ -41,13 +37,11 @@ body {
     padding: 20px 0;
     border: var(--border);
 }
-
 .projects-list {
     list-style: none;
     width: 90%;
     overflow: auto;
 }
-
 .project-list-item {
     border-bottom: solid 1px black;
     height: 70px;
@@ -56,7 +50,6 @@ body {
     align-items: center;
     color: black;
 }
-
 .user-dash-project-card-individual {
     display: flex;
     flex-direction: row;
@@ -64,7 +57,6 @@ body {
     justify-content: space-between;
     width: 100%;
 }
-
 .project-date {
     margin-left: 10px;
 }
