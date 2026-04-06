@@ -33,6 +33,7 @@ CREATE TABLE USERS(
 
 CREATE TABLE PROJECTS(
     project_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    created_by UUI NOT NULL,
     team_leader_id UUID NOT NULL,
     project_name VARCHAR(50) NOT NULL,
     project_deadline DATE NOT NULL,
