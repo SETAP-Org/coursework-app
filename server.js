@@ -53,8 +53,6 @@ app.get("/:username", checkIfLoggedInRedirect, serveUserDash);
 
 app.get("/:username/projects", checkIfLoggedInRedirect, serveProjects);
 
-// app.get("/:username/projects/dummy", checkIfLoggedInRedirect, serveProjectDash); // will later have to have checkIfValidProject middleware
-
 app.get("/:username/profile", checkIfLoggedInRedirect, serveProfile);
 
 // API routes
