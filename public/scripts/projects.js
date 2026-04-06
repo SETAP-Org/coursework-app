@@ -1,11 +1,13 @@
 async function addLink() {
-    const userDataJson = await fetch("/api/me");
-    const userData = await userDataJson.json();
-    const dbUserData = userData.dbUser;
+  const userDataJson = await fetch("/api/me");
+  const userData = await userDataJson.json();
+  const dbUserData = userData.dbUser;
 
-    const redirectLink = document.querySelector("#project-link");
+  const redirectLink = document.querySelector("#project-link");
 
-    redirectLink.href = `/${dbUserData.username}/projects/dummy`
+  redirectLink.href = `/${dbUserData.username}/projects/dummy`;
 }
 
-addLink();
+// addLink();
+
+async function newProject() {}
