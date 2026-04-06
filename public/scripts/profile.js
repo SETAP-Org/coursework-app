@@ -13,11 +13,22 @@ async function loadProfile() {
     usernameInput.addEventListener("input", (e) => {
       usernameValue = e.target.value;
       
-      if (usernameValue.length == 0) usernameMsg.innerText = ""
-      else if (usernameValue.length < 3) usernameMsg.innerText = "Username must be at least 3 characters long"
-      else if (usernameValue.length > 20) usernameMsg.innerText = "Username must be less than 20 characters long"
-      else if (!regex.test(usernameValue)) usernameMsg.innerText = "Username must contain letters and numbers only"
-      else usernameMsg.innerText = "I like this username :)"
+      if (usernameValue.length == 0) {
+        usernameMsg.innerText = "";
+        usernameBtn.disabled = true;
+      } else if (usernameValue.length < 3) {
+        usernameMsg.innerText = "Username must be at least 3 characters long";
+        usernameBtn.disabled = true;
+      } else if (usernameValue.length > 20) {
+        usernameMsg.innerText = "Username must be less than 20 characters long";
+        usernameBtn.disabled = true;
+      } else if (!regex.test(usernameValue)) {
+        usernameMsg.innerText = "Username must contain letters and numbers only";
+        usernameBtn.disabled = true;
+      } else {
+        usernameMsg.innerText = "I like this username :)";
+        usernameBtn.disabled = false;
+      }
     })
 
     usernameBtn.addEventListener("click", (e) => {
