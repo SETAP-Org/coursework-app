@@ -50,7 +50,6 @@ export async function getCurrentUser(req, res, next) {
   if (req.user) {
     const dbUserResult = await getUserModel(req.user.microsoftId);
     const dbUser = dbUserResult.rows[0];
-    await d;
 
     const userObj = {
       sessionUser: req.user,
