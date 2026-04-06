@@ -62,9 +62,10 @@ app.get("/api/auth/signout", signOut, checkIfLoggedInRedirect);
 
 app.get("/api/users/addUser", addUserController, redirectUserDashboard);
 
-app.get("/api/projects/addProject", addProjectController);
-
 app.get("/api/me", getCurrentUser);
+
+// Post means it can get data from form
+app.post("/api/projects/addProject", addProjectController);
 
 // assigning the server to a port so that requests can be made
 app.listen(port, () => {
