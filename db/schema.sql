@@ -39,7 +39,8 @@ CREATE TABLE PROJECTS(
     project_deadline DATE NOT NULL,
     p_date_created TIMESTAMP,
     p_time_updated TIMESTAMP,
-    FOREIGN KEY (team_leader_id) REFERENCES USERS(user_id)
+    FOREIGN KEY (team_leader_id) REFERENCES USERS(user_id),
+    UNIQUE (created_by, project_name)
 );
 
 CREATE TABLE USER_PROJECTS(
