@@ -52,15 +52,15 @@ export async function getProjectByIdModel(project_id) {
   );
 }
 
-export async function getProjectByLeaderAndNameModel(
-  team_leader_id,
+export async function getProjectByCreatorAndNameModel(
+  project_creator_id,
   project_name,
 ) {
   return await query(
     `
-    SELECT project_id, team_leader_id, project_name, project_deadline FROM projects WHERE team_leader_id = $1 AND project_name = $2;
+    SELECT project_id, team_leader_id, project_name, project_deadline FROM projects WHERE created_by = $1 AND project_name = $2;
     `,
-    [team_leader_id, project_name],
+    [project_creator_id, project_name],
   );
 }
 

@@ -37,16 +37,22 @@ document.addEventListener("DOMContentLoaded", async () => {
       const node = template.content.cloneNode(true);
       const section = node.querySelector(".user-dash-project-card-individual");
       if (section) {
-        const titleEl = section.querySelector("b");
+        const titleEl = section.querySelector(".project-name");
+        const dateEl = section.querySelector(".project-date");
         const linkEl = section.querySelector("a.project-dash-button");
 
-        if (titleEl) titleEl.textContent = project.project_name || "Untitled";
-        if (linkEl) {
-          linkEl.href = `/${encodeURIComponent(username)}/projects/${encodeURIComponent(
-            project.project_id,
-          )}`;
-          linkEl.textContent = "Go to project";
-        }
+        const due_date = new Date(project.project_deadline);
+        const formatted_due_date = due_date.toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+
+        titleEl.textContent = project.project_name;
+        dateEl.textContent = formatted_due_date;
+
+        linkEl.href = `/${encodeURIComponent(username)}/projects/${encodeURIComponent(project.project_id)}`;
+        linkEl.textContent = "Go to project";
 
         const li = document.createElement("li");
         li.className = "project-list-item";

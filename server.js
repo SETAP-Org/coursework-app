@@ -18,6 +18,7 @@ import { addUserController } from "./controllers/userControllers.js";
 import {
   addProjectController,
   getUserProjects,
+  getProjectDetails,
 } from "./controllers/projectControllers.js";
 import {
   checkIfLoggedIn,
@@ -52,7 +53,7 @@ app.get("/:username", checkIfLoggedInRedirect, serveUserDash);
 
 app.get("/:username/projects", checkIfLoggedInRedirect, serveProjects);
 
-app.get("/:username/projects/dummy", checkIfLoggedInRedirect, serveProjectDash); // will later have to have checkIfValidProject middleware
+// app.get("/:username/projects/dummy", checkIfLoggedInRedirect, serveProjectDash); // will later have to have checkIfValidProject middleware
 
 app.get("/:username/profile", checkIfLoggedInRedirect, serveProfile);
 
@@ -68,6 +69,14 @@ app.get("/api/users/addUser", addUserController, redirectUserDashboard);
 app.get("/api/me", getCurrentUser);
 
 app.get("/api/me/projects", getUserProjects);
+
+app.get("/api/projects/:project_id", checkIfLoggedIn, getProjectDetails);
+
+app.get(
+  "/:username/projects/:project_id",
+  checkIfLoggedInRedirect,
+  serveProjectDash,
+);
 
 // Post means it can get data from form
 app.post("/api/projects/addProject", addProjectController);

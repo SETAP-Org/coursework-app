@@ -2,6 +2,7 @@ import {
   postProjectModel,
   postUserProjectModel,
   getUserProjectsModel,
+  getProjectByIdModel,
 } from "../models/projectModels.js";
 
 // Function to add a project to the database
@@ -37,5 +38,38 @@ export async function getUserProjects(req, res, next) {
     res.json({ success: true, projects: dbResult.rows });
   } else {
     res.status(401).json({ loggedIn: false });
+  }
+}
+
+export async function getProjectDetails(req, res, next) {
+  try {
+    if (!req.user)
+      return res.status(401).json({ success: false, error: "Not logged in" });
+
+    const { project_id } = req.params;
+    if (!project_id)
+      return res
+        .status(400)
+        .json({ success: false, error: "Missing project_id" });
+
+    if (!projectResult || projectResult.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, error: "Project not found" });
+    }
+    const project = projectResult.rows[0];
+
+    const userProjectsResult = await getUserProjectsModel(req.user.microsoftId);
+    const isMember = userProjectsResult.rows.some(
+      (p) => String(p.project_id) === String(project_id),
+    );
+    if (!isMember) {
+      return res.status(403).json({ success: false, error: "Access denied" });
+    }
+
+    res.json({ success: true, project });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: err.message });
   }
 }
