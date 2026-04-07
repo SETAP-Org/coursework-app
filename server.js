@@ -14,16 +14,19 @@ import {
   redirectUserDashboard,
   redirectAddUser,
 } from "./controllers/serveControllers.js";
-import { addUserController } from "./controllers/userControllers.js";
+
 import {
   addProjectController,
   getUserProjects,
   getProjectDetails,
 } from "./controllers/projectControllers.js";
+
+import {
   addUserController,
   checkValidUsernameController,
   updateUsernameController
 } from "./controllers/userControllers.js";
+
 import {
   checkIfLoggedIn,
   checkIfLoggedInRedirect,

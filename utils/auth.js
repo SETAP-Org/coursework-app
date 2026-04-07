@@ -35,7 +35,6 @@ export default function setUpAuth(app) {
       email: user.emails[0].value,
       accessToken: user.accessToken,
       refreshToken: user.refreshToken,
-      username: user.id,
     };
     done(null, filteredUser);
   });
