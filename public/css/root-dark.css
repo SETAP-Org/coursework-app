@@ -15,7 +15,7 @@
     --button-active: #4267b2;
     --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
     --scrollbar-color: #4267b2;
-    --border: 2px solid #ffffff;
+    --border: 0.5px solid rgba(255, 255, 255, 0.15);
     --radius: 18px;
 }
 * {
