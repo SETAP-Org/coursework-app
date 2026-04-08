@@ -62,31 +62,37 @@ app.get("/:username/projects", checkIfLoggedInRedirect, serveProjects);
 
 app.get("/:username/profile", checkIfLoggedInRedirect, serveProfile);
 
-// API routes
-app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
-
-app.get("/api/auth/callback", authenticatePassport(), redirectAddUser);
-
-app.get("/api/users/addUser", addUser, redirectUserDashboard);
-
-app.get("/api/auth/signout", signOut, checkIfLoggedInRedirect);
-
-app.put("/api/users/changeUsername", checkValidUsername, updateUsername);
-
-app.get("/api/me", getCurrentUser);
-
-app.get("/api/me/projects", getUserProjects);
-
-app.get("/api/projects/:project_id", getProjectDetails);
-
 app.get(
   "/:username/projects/:project_id",
   checkIfLoggedInRedirect,
   serveProjectDash,
 );
 
-// Post means it can get data from form
+// API routes
+// ---- CREATE ----
 app.post("/api/projects/addProject", addProject);
+
+app.get("/api/users/addUser", addUser, redirectUserDashboard);
+
+// ---- READ ----
+// auth
+app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
+
+app.get("/api/auth/callback", authenticatePassport(), redirectAddUser);
+
+app.get("/api/auth/signout", signOut, checkIfLoggedInRedirect);
+
+// other
+app.get("/api/me", getCurrentUser);
+
+app.get("/api/me/projects", getUserProjects);
+
+app.get("/api/projects/:project_id", getProjectDetails);
+
+// ---- UPDATE ----
+app.put("/api/users/changeUsername", checkValidUsername, updateUsername);
+
+// ---- DELETE ----
 
 // assigning the server to a port so that requests can be made
 app.listen(port, () => {
