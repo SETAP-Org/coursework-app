@@ -4,17 +4,21 @@ import {
   getUserProjectsModel,
   getProjectByIdModel,
 } from "../models/projectModels.js";
+import { getUserByMicrosoftIdModel } from "../models/userModels.js";
 
-// Function to add a project to the database
-export async function addProjectController(req, res, next) {
+// function to add a project to the database
+export async function addProject(req, res, next) {
   try {
-    const microsoftId = req.user["microsoftId"];
+    const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+    const dbUser = dbUserResult?.rows?.[0];
+    const userId = dbUser.user_id
     const { project_name, project_deadline } = req.query;
     const result = await postProjectModel(
-      microsoftId,
+      userId,
       project_name,
       project_deadline,
     );
+
     if (result.rows.length > 0) {
       const project_id = result.rows[0]["project_id"];
       const result2 = await postUserProjectModel(microsoftId, project_id);
@@ -32,21 +36,33 @@ export async function addProjectController(req, res, next) {
   }
 }
 
+// function to get all projects related to a user
 export async function getUserProjects(req, res, next) {
-  if (req.user) {
-    const dbResult = await getUserProjectsModel(req.user["microsoftId"]);
+  try {
+    const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+    const dbUser = dbUserResult?.rows?.[0];
+    const userId = dbUser.user_id;
+
+    const dbResult = await getUserProjectsModel(userId);
     res.json({ success: true, projects: dbResult.rows });
-  } else {
+  } catch(err) {
+    console.log(err, 'this is the error!');
     res.status(401).json({ loggedIn: false });
   }
+
+  // if (req.user) {
+  //   const dbResult = await getUserProjectsModel(req.user.microsoftId);
+  //   res.json({ success: true, projects: dbResult.rows });
+  // } else {
+  //   res.status(401).json({ loggedIn: false });
+  // }
 }
 
+// function to get details about a specific project
 export async function getProjectDetails(req, res, next) {
   try {
-    if (!req.user)
-      return res.status(401).json({ success: false, error: "Not logged in" });
-
     const { project_id } = req.params;
+
     if (!project_id)
       return res
         .status(400)
@@ -60,10 +76,15 @@ export async function getProjectDetails(req, res, next) {
         .status(404)
         .json({ success: false, error: "Project not found" });
     }
+    
     const project = projectResult.rows[0];
 
     // ensure user is member of the project
-    const userProjectsResult = await getUserProjectsModel(req.user.microsoftId);
+    const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+    const dbUser = dbUserResult?.rows?.[0];
+    const userId = dbUser.user_id;
+
+    const userProjectsResult = await getUserProjectsModel(userId);
     const isMember = userProjectsResult.rows.some(
       (p) => String(p.project_id) === String(project_id),
     );

@@ -1,5 +1,5 @@
 import path from "path";
-import { getUserModel } from "../models/authModels.js";
+import { getUserByMicrosoftIdModel } from "../models/userModels.js";
 
 const __dirname = import.meta.dirname;
 
@@ -26,7 +26,7 @@ export function serveProjectDash(req, res, next) {
 
 // redirects (not added to stack) (for when access to pages is unauthorised)
 export async function redirectUserDashboard(req, res, next) {
-  const dbUserResult = await getUserModel(req.user.microsoftId);
+  const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
   const dbUser = dbUserResult.rows[0];
 
   res.redirect(`/${dbUser.username}`);

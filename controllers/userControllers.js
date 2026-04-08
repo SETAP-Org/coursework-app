@@ -1,8 +1,12 @@
-import { postUserModel, getUserByUsernameModel, putUsernameByIdModel } from "../models/userModels.js";
-import { getUserModel } from "../models/authModels.js";
+import {
+    postUserModel,
+    getUserByUsernameModel,
+    getUserByMicrosoftIdModel,
+    putUsernameByIdModel
+} from "../models/userModels.js";
 
 // function to add a user to the database
-export async function addUserController(req, res, next) {
+export async function addUser(req, res, next) {
     try {
         const { microsoftId, firstName, lastName, email } = req.user;
         await postUserModel(microsoftId, firstName, lastName, email, microsoftId);
@@ -13,9 +17,9 @@ export async function addUserController(req, res, next) {
 }
 
 // function to get a user by username
-export async function checkValidUsernameController(req, res, next) {
+export async function checkValidUsername(req, res, next) {
     try {
-        const dbUserResult = await getUserModel(req.user.microsoftId);
+        const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
         const dbUser = await dbUserResult.rows[0];
 
         // check if user already has that username
@@ -44,10 +48,11 @@ export async function checkValidUsernameController(req, res, next) {
 }
 
 // controller to update usernames
-export async function updateUsernameController(req, res, next) {
+export async function updateUsername(req, res, next) {
     try {
         const userId = req.user.microsoftId;
         const data = await putUsernameByIdModel(userId, req.body.usernameValue);
+        
         if (data.rows[0].username == req.body.usernameValue) {
             return res.status(200).json({
                 success: true,
@@ -56,5 +61,22 @@ export async function updateUsernameController(req, res, next) {
         }
     } catch(err) {
         console.log(err, 'this is the error!');
+    }
+}
+
+// function to return user info (might not be needed as part of req.user)
+export async function getCurrentUser(req, res, next) {
+    if (req.user) {
+        const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+        const dbUser = dbUserResult.rows[0];
+
+        const userObj = {
+            sessionUser: req.user,
+            dbUser: dbUser,
+        };
+
+        res.json(userObj);
+    } else {
+        res.status(401).json({ loggedIn: false });
     }
 }
