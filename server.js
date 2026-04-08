@@ -16,15 +16,16 @@ import {
 } from "./controllers/serveControllers.js";
 
 import {
-  addProjectController,
+  addProject,
   getUserProjects,
   getProjectDetails,
 } from "./controllers/projectControllers.js";
 
 import {
-  addUserController,
-  checkValidUsernameController,
-  updateUsernameController
+  addUser,
+  checkValidUsername,
+  updateUsername,
+  getCurrentUser
 } from "./controllers/userControllers.js";
 
 import {
@@ -32,7 +33,6 @@ import {
   checkIfLoggedInRedirect,
   signOut,
   authenticatePassport,
-  getCurrentUser,
 } from "./controllers/authControllers.js";
 
 // util imports
@@ -67,11 +67,11 @@ app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
 
 app.get("/api/auth/callback", authenticatePassport(), redirectAddUser);
 
-app.get("/api/users/addUser", addUserController, redirectUserDashboard);
+app.get("/api/users/addUser", addUser, redirectUserDashboard);
 
 app.get("/api/auth/signout", signOut, checkIfLoggedInRedirect);
 
-app.put("/api/users/changeUsername", checkValidUsernameController, updateUsernameController);
+app.put("/api/users/changeUsername", checkValidUsername, updateUsername);
 
 app.get("/api/me", getCurrentUser);
 
@@ -86,7 +86,7 @@ app.get(
 );
 
 // Post means it can get data from form
-app.post("/api/projects/addProject", addProjectController);
+app.post("/api/projects/addProject", addProject);
 
 // assigning the server to a port so that requests can be made
 app.listen(port, () => {
