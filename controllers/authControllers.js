@@ -54,6 +54,6 @@ export function setJustAuthenticatedFlag(req, res, next) {
 
 // function to get the justAuthenticated value
 export function getJustAuthenticatedFlag(req, res, next) {
-  console.log('we are getting here also...')
-  res.json(req.session.justAuthenticated);
+  if (req.session.justAuthenticated) res.json(req.session.justAuthenticated);
+  else res.json({ justAuthenticated: false });
 }

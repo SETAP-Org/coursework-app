@@ -10,12 +10,13 @@ async function welcomeUser() {
     // get data needed for this function
     const authenticationFlagResponse = await fetch("/api/auth/justAuthenticated");
     const authenticationFlagData = await authenticationFlagResponse.json();
+    console.log(authenticationFlagData, 'this is the authentication flag data...')
     const userResponse = await fetch("/api/me");
     const userData = await userResponse.json();
     console.log(userData, 'this is the user data...')
     
     // if justAuthenticated flag is false, then user is trying to navigate via url, and should be redirected
-    if (!authenticationFlagData) {
+    if (!authenticationFlagData.justAuthenticated) {
         if (userData.sessionUser) return window.location.replace(`/${userData.dbUser.username}`)
         else return window.location.replace("/");
     }
