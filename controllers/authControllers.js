@@ -45,3 +45,15 @@ export function signOut(req, res, next) {
 export function authenticatePassport(req, res, next) {
   return passport.authenticate("microsoft", { failureRedirect: "/" });
 }
+
+// middleware function to change justAuthenticated value in session
+export function setJustAuthenticatedFlag(req, res, next) {
+  req.session.justAuthenticated = !req.session.justAuthenticated;
+  next();
+}
+
+// function to get the justAuthenticated value
+export function getJustAuthenticatedFlag(req, res, next) {
+  console.log('we are getting here also...')
+  res.json(req.session.justAuthenticated);
+}

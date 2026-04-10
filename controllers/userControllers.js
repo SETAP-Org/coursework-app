@@ -10,9 +10,15 @@ export async function addUser(req, res, next) {
     try {
         const { microsoftId, firstName, lastName, email } = req.user;
         await postUserModel(microsoftId, firstName, lastName, email, microsoftId);
-        next();
+        res.status(200).json({
+            success: true,
+            message: "User added successfully!"
+        })
     } catch (err) {
-        console.log(err, 'this is the error!');
+        res.status(400).json({
+            success: false,
+            message: err
+        })
     }
 }
 
@@ -52,7 +58,7 @@ export async function updateUsername(req, res, next) {
     try {
         const userId = req.user.microsoftId;
         const data = await putUsernameByIdModel(userId, req.body.usernameValue);
-        
+
         if (data.rows[0].username == req.body.usernameValue) {
             return res.status(200).json({
                 success: true,

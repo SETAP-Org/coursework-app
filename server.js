@@ -7,12 +7,13 @@ import dotenv from "dotenv";
 // controller imports
 import {
   serveLanding,
+  serveWelcome,
   serveUserDash,
   serveProjectDash,
   serveProfile,
   serveProjects,
-  redirectUserDashboard,
-  redirectAddUser,
+  redirectWelcome,
+  redirectUserDash,
 } from "./controllers/serveControllers.js";
 
 import {
@@ -33,6 +34,8 @@ import {
   checkIfLoggedInRedirect,
   signOut,
   authenticatePassport,
+  setJustAuthenticatedFlag,
+  getJustAuthenticatedFlag
 } from "./controllers/authControllers.js";
 
 // util imports
@@ -56,6 +59,8 @@ setUpAuth(app);
 // paths to navigate pages
 app.get("/", checkIfLoggedIn, serveLanding);
 
+app.get("/welcome", serveWelcome);
+
 app.get("/:username", checkIfLoggedInRedirect, serveUserDash);
 
 app.get("/:username/projects", checkIfLoggedInRedirect, serveProjects);
@@ -72,17 +77,17 @@ app.get(
 // ---- CREATE ----
 app.post("/api/projects/addProject", addProject);
 
-app.get("/api/users/addUser", addUser, redirectUserDashboard);
+app.post("/api/users/addUser", setJustAuthenticatedFlag, addUser, redirectUserDash);
 
 // ---- READ ----
-// auth
 app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
 
-app.get("/api/auth/callback", authenticatePassport(), redirectAddUser);
+app.get("/api/auth/callback", authenticatePassport(), setJustAuthenticatedFlag, redirectWelcome);
 
 app.get("/api/auth/signout", signOut, checkIfLoggedInRedirect);
 
-// other
+app.get("/api/auth/justAuthenticated", getJustAuthenticatedFlag)
+
 app.get("/api/me", getCurrentUser);
 
 app.get("/api/me/projects", getUserProjects);
