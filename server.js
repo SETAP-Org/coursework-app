@@ -77,7 +77,7 @@ app.get(
 // ---- CREATE ----
 app.post("/api/projects/addProject", addProject);
 
-app.post("/api/users/addUser", setJustAuthenticatedFlag, addUser, redirectUserDash);
+app.post("/api/users/addUser", setJustAuthenticatedFlag, addUser);
 
 // ---- READ ----
 app.get("/api/auth", checkIfLoggedIn, authenticatePassport());

@@ -49,7 +49,11 @@ export async function checkValidUsername(req, res, next) {
         // if not, then move to the next middleware
         next()
     } catch(err) {
-        console.log(err, "this is the error!");
+        console.error("checkValidUsername error:", err);
+        return res.status(400).json({
+            success: false,
+            message: "There was an error. Check console logs for more information."
+        })
     }
 }
 
@@ -66,7 +70,11 @@ export async function updateUsername(req, res, next) {
             })
         }
     } catch(err) {
-        console.log(err, 'this is the error!');
+        console.error("updateUsername error:", err)
+        res.status(400).json({
+            success: false,
+            message: "Error updating username, see console logs for more information."
+        })
     }
 }
 

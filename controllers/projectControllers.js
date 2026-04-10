@@ -31,7 +31,7 @@ export async function addProject(req, res, next) {
       throw new Error("Cannot create duplicate projects!");
     }
   } catch (err) {
-    console.error(err);
+    console.error("addProject error:", err);
     res.status(500).json({ success: false, error: err.message });
   }
 }
@@ -46,7 +46,7 @@ export async function getUserProjects(req, res, next) {
     const dbResult = await getUserProjectsModel(userId);
     res.json({ success: true, projects: dbResult.rows });
   } catch(err) {
-    console.log(err, 'this is the error!');
+    console.error("getUserProjects error:", err);
     res.status(401).json({ loggedIn: false });
   }
 
