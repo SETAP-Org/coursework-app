@@ -1,11 +1,15 @@
 import path from "path";
-import { getUserModel } from "../models/authModels.js";
+import { getUserByMicrosoftIdModel } from "../models/userModels.js";
 
 const __dirname = import.meta.dirname;
 
 // serve files (added to navigation stack)
 export function serveLanding(req, res, next) {
   res.sendFile(path.join(__dirname, "../public/pages", "index.html"));
+}
+
+export function serveWelcome(req, res, next) {
+  res.sendFile(path.join(__dirname, "../public/pages", "welcome.html"));
 }
 
 export function serveUserDash(req, res, next) {
@@ -25,13 +29,13 @@ export function serveProjectDash(req, res, next) {
 }
 
 // redirects (not added to stack) (for when access to pages is unauthorised)
-export async function redirectUserDashboard(req, res, next) {
-  const dbUserResult = await getUserModel(req.user.microsoftId);
+export async function redirectUserDash(req, res, next) {
+  const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
   const dbUser = dbUserResult.rows[0];
 
   res.redirect(`/${dbUser.username}`);
 }
 
-export function redirectAddUser(req, res, next) {
-  res.redirect("/api/users/addUser");
+export async function redirectWelcome(req, res, next) {
+  res.redirect('/welcome');
 }

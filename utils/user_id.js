@@ -1,4 +1,4 @@
-import { getUserModel } from "../models/authModels.js";
+import { getUserModel } from "../models/userModels.js";
 
 export async function getUserIdFromMicrosoftId(microsoft_id) {
   const userResult = await getUserModel(microsoft_id);

@@ -1,6 +1,7 @@
 import { query } from "../db/connection.js";
 
-// model to add user to database if user not already registered, and return the user
+// ---- CREATE ----
+// creates a new user if possible
 export async function postUserModel(microsoftId, firstName, lastName, email, username) {
     return await query(
         `
@@ -14,7 +15,21 @@ export async function postUserModel(microsoftId, firstName, lastName, email, use
     );
 }
 
-// model to check valid username
+// ---- READ ----
+// read a user via their microsoft ID
+export async function getUserByMicrosoftIdModel(microsoftId) {
+    return await query(
+        `
+        SELECT * FROM users
+        WHERE microsoft_id = $1;
+        `,
+        [microsoftId]
+    )
+}
+
+// read a user via their username
+// (mainly used for change username functionality)
+// (users needed for other tasks should be retrieved via their microsoft ID)
 export async function getUserByUsernameModel(username) {
     return await query(
         `
@@ -25,7 +40,8 @@ export async function getUserByUsernameModel(username) {
     )
 }
 
-// model to update username
+// ---- UPDATE ----
+// update a users username
 export async function putUsernameByIdModel(microsoftId, username) {
     return await query(
         `
@@ -37,3 +53,5 @@ export async function putUsernameByIdModel(microsoftId, username) {
         [microsoftId, username]
     )
 }
+
+// ---- DELETE ----

@@ -7,24 +7,26 @@ import dotenv from "dotenv";
 // controller imports
 import {
   serveLanding,
+  serveWelcome,
   serveUserDash,
   serveProjectDash,
   serveProfile,
   serveProjects,
-  redirectUserDashboard,
-  redirectAddUser,
+  redirectWelcome,
+  redirectUserDash,
 } from "./controllers/serveControllers.js";
 
 import {
-  addProjectController,
+  addProject,
   getUserProjects,
   getProjectDetails,
 } from "./controllers/projectControllers.js";
 
 import {
-  addUserController,
-  checkValidUsernameController,
-  updateUsernameController
+  addUser,
+  checkValidUsername,
+  updateUsername,
+  getCurrentUser
 } from "./controllers/userControllers.js";
 
 import {
@@ -32,7 +34,8 @@ import {
   checkIfLoggedInRedirect,
   signOut,
   authenticatePassport,
-  getCurrentUser,
+  setJustAuthenticatedFlag,
+  getJustAuthenticatedFlag
 } from "./controllers/authControllers.js";
 
 // util imports
@@ -56,28 +59,13 @@ setUpAuth(app);
 // paths to navigate pages
 app.get("/", checkIfLoggedIn, serveLanding);
 
+app.get("/welcome", serveWelcome);
+
 app.get("/:username", checkIfLoggedInRedirect, serveUserDash);
 
 app.get("/:username/projects", checkIfLoggedInRedirect, serveProjects);
 
 app.get("/:username/profile", checkIfLoggedInRedirect, serveProfile);
-
-// API routes
-app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
-
-app.get("/api/auth/callback", authenticatePassport(), redirectAddUser);
-
-app.get("/api/users/addUser", addUserController, redirectUserDashboard);
-
-app.get("/api/auth/signout", signOut, checkIfLoggedInRedirect);
-
-app.put("/api/users/changeUsername", checkValidUsernameController, updateUsernameController);
-
-app.get("/api/me", getCurrentUser);
-
-app.get("/api/me/projects", getUserProjects);
-
-app.get("/api/projects/:project_id", getProjectDetails);
 
 app.get(
   "/:username/projects/:project_id",
@@ -85,8 +73,31 @@ app.get(
   serveProjectDash,
 );
 
-// Post means it can get data from form
-app.post("/api/projects/addProject", addProjectController);
+// API routes
+// ---- CREATE ----
+app.post("/api/projects/addProject", addProject);
+
+app.post("/api/users/addUser", setJustAuthenticatedFlag, addUser);
+
+// ---- READ ----
+app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
+
+app.get("/api/auth/callback", authenticatePassport(), setJustAuthenticatedFlag, redirectWelcome);
+
+app.get("/api/auth/signout", signOut, checkIfLoggedInRedirect);
+
+app.get("/api/auth/justAuthenticated", getJustAuthenticatedFlag)
+
+app.get("/api/me", getCurrentUser);
+
+app.get("/api/me/projects", getUserProjects);
+
+app.get("/api/projects/:project_id", getProjectDetails);
+
+// ---- UPDATE ----
+app.put("/api/users/changeUsername", checkValidUsername, updateUsername);
+
+// ---- DELETE ----
 
 // assigning the server to a port so that requests can be made
 app.listen(port, () => {
