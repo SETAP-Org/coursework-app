@@ -3,12 +3,7 @@ import { getUserByMicrosoftIdModel } from "../models/userModels.js";
 
 const __dirname = import.meta.dirname;
 
-// serve files (added to navigation stack)
-// export function serveLanding(req, res, next) {
-//   res.sendFile(path.join(__dirname, "../public/pages", "index.html"));
-// }
-
-export async function serveLanding(req, res, next) {
+export function serveLanding(req, res, next) {
   const cookieConsent = req.cookies.cookieConsent ? true : false
 
   res.render('landing', {
@@ -17,11 +12,13 @@ export async function serveLanding(req, res, next) {
 }
 
 export function serveWelcome(req, res, next) {
-  res.sendFile(path.join(__dirname, "../public/pages", "welcome.html"));
+  res.render('welcome');
 }
 
 export function serveUserDash(req, res, next) {
-  res.sendFile(path.join(__dirname, "../public/pages/", "user_dash.html"));
+  res.render('userDash', {
+    name: req.user.firstName
+  });
 }
 
 export async function serveProfile(req, res, next) {
@@ -33,12 +30,14 @@ export async function serveProfile(req, res, next) {
   })
 }
 
-export function serveProjects(req, res, next) {
-  res.sendFile(path.join(__dirname, "../public/pages", "projects.html"));
+export async function serveProjects(req, res, next) {
+  res.render('projects', {
+    name: req.user.firstName,
+  });
 }
 
-export function serveProjectDash(req, res, next) {
-  res.sendFile(path.join(__dirname, "../public/pages/", "project_dash.html"));
+export async function serveProjectDash(req, res, next) {
+  res.render('projectDash');
 }
 
 // redirects (not added to stack) (for when access to pages is unauthorised)

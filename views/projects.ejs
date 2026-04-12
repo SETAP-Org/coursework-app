@@ -3,25 +3,26 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
         <link
             id="theme-stylesheet"
             rel="stylesheet"
             href="/css/root-dark.css"
         />
         <link rel="stylesheet" href="/css/projects.css" />
-        <link rel="stylesheet" href="/css/profile.css" />
         <link rel="icon" href="/assets/favicon.png" type="image/png" />
+
         <script src="/scripts/L&D-mode.js" defer></script>
-        <script src="/scripts/injectHeader.js" defer></script>
-        <script src="/scripts/injectFooter.js" defer></script>
         <script src="/scripts/projects.js" defer></script>
+
         <title>Projects</title>
     </head>
     <body>
-        <header id="site-header"></header>
+        <%- include('partials/userNav') %>
+
         <section id="page-content">
             <section id="projects-header">
-                <h1 id="page-title">Projects</h1>
+                <h1 id="page-title"><%= name %>'s Projects</h1>
 
                 <button id="create-project-button">New Project</button>
             </section>
@@ -64,6 +65,6 @@
             </form>
         </dialog>
 
-        <footer id="site-footer"></footer>
+        <%- include('partials/footer') %>
     </body>
 </html>
