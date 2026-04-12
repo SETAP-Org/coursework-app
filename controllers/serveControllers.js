@@ -16,8 +16,17 @@ export function serveUserDash(req, res, next) {
   res.sendFile(path.join(__dirname, "../public/pages/", "user_dash.html"));
 }
 
-export function serveProfile(req, res, next) {
-  res.sendFile(path.join(__dirname, "../public/pages/", "profile.html"));
+// export function serveProfile(req, res, next) {
+//   res.sendFile(path.join(__dirname, "../public/pages/", "profile.html"));
+// }
+
+export async function serveProfile(req, res, next) {
+  const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+  const dbUser = dbUserResult.rows[0];
+
+  res.render('profile', {
+    name: dbUser.username,
+  })
 }
 
 export function serveProjects(req, res, next) {
