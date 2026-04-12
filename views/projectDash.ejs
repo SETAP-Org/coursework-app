@@ -10,8 +10,6 @@
         <link rel="icon" href="/assets/favicon.png" type="image/png" />
 
         <script src="/scripts/L&D-mode.js" defer></script>
-        <script src="/scripts/injectHeader.js" defer></script>
-        <script src="/scripts/injectFooter.js" defer></script>
         <script src="https://unpkg.com/konva@9/konva.min.js" defer></script>
         <script src="/scripts/dash-konva.js" defer></script>
 
@@ -19,7 +17,7 @@
     </head>
     <body>
         <div class="Dashboard">
-            <header id="site-header"></header>
+            <%- include('partials/userNav') %>
 
             <main class="Dashboard-content">
                 <section class="Dashboard-container">
@@ -50,7 +48,7 @@
                 </aside>
             </main>
 
-            <footer id="site-footer"></footer>
+            <%- include('partials/footer') %>
         </div>
     </body>
 </html>

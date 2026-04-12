@@ -9,19 +9,17 @@
         <link rel="icon" href="/assets/favicon.png" type="image/png">
 
         <script src="/scripts/L&D-mode.js" defer></script>
-        <script src="/scripts/injectHeader.js" defer></script>
-        <script src="/scripts/injectFooter.js" defer></script>
         <script src="/scripts/profile.js" defer></script>
 
         <title>GCMS | Profile</title>
     </head>
     <body>
-        <header id="site-header"></header>
+        <%- include('partials/userNav') %>
 
         <main class="profile-container">
             <div class="profile-container">
                 <div class="user-info">
-                    <h2 id="profile-name">Loading...</h2>
+                    <%= name %>
                 </div>
 
                 <p><button onclick="changeTheme()">Toggle Theme</button></p>
@@ -75,9 +73,11 @@
             </form>
         </main>
 
-        <footer id="site-footer"></footer>
+        <dialog class="username-dialog">
+            <p class="username-dialog-message">You have successfully changed your username, you will now be redirected.</p>
+            <button class="username-dialog-button">Go to Home</button>
+        </dialog>
+
+        <%- include('partials/footer') %>
     </body>
 </html>
-
-
-

@@ -4,20 +4,15 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link rel="stylesheet" href="/css/index.css">
-        <link rel="stylesheet" href="/css/cookieBanner.css">
+        <link rel="stylesheet" href="/css/landing.css">
         <link id="theme-stylesheet" rel="stylesheet" href="/css/root-dark.css" />
         <link rel="icon" href="/assets/favicon.png" type="image/png">
 
         <script src="/scripts/L&D-mode.js" defer></script>
-        <script src="/scripts/showCookieBanner.js" defer></script>
-        <script src="/scripts/injectFooter.js" defer></script>
 
         <title>GCMS | Landing Page</title>
     </head>
     <body>
-        <header id="site-header"></header>
-
         <section class="central-container">
             <h1 class="cookie-header">Sign in to GCMS</h1>
 
@@ -26,9 +21,10 @@
             </div>
         </section>
 
-        <footer id="site-footer"></footer>
+        <%- include('partials/footer') %>
+
+        <% if (!cookieConsent) { %>
+            <%- include('partials/cookieBanner') %>
+        <% } %>
     </body>
 </html>
-
-
-

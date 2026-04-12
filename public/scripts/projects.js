@@ -4,7 +4,6 @@ function toggleNewProjectForm() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const page_title = document.querySelector("#page-title");
   const projectsList = document.querySelector(".projects-list");
   const template = document.querySelector("#project-template");
 
@@ -13,7 +12,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const user_info = await user_info_fetch.json();
     const user_first_name = user_info?.dbUser.user_first_name;
     const username = user_info?.dbUser.username;
-    page_title.textContent = `${user_first_name}'s Projects`;
 
     if (projectsList && template) {
       const res = await fetch("/api/me/projects");

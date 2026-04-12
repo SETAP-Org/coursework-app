@@ -3,6 +3,7 @@
 import express from "express";
 import path from "path";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 
 // controller imports
 import {
@@ -51,8 +52,10 @@ const app = express();
 const port = 3000;
 
 // middleware
+app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
+app.use(cookieParser());
 createSession(app);
 setUpAuth(app);
 
