@@ -81,8 +81,7 @@
     cursor: pointer;
 }
 
-/* Explicit burger styling to avoid global button rules */
-.nav-burger {
+.nav-icon {
     display: inline-flex; /* use flex so glyph centers reliably */
     align-items: center;
     justify-content: center;
