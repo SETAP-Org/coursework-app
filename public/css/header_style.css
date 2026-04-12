@@ -54,6 +54,7 @@
     gap: 20px;
 }
 
+/* Ensure dashboard text styling still applies */
 .Dashboard-text {
     margin: 0;
     font-size: 1rem;
@@ -77,6 +78,23 @@
     color: var(--text);
     font-size: 28px;
     text-decoration: none;
+    cursor: pointer;
+}
+
+/* Explicit burger styling to avoid global button rules */
+.nav-burger {
+    display: inline-flex; /* use flex so glyph centers reliably */
+    align-items: center;
+    justify-content: center;
+    line-height: 1; /* avoid vertical shifts caused by line-height */
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    font-size: 1.25rem; /* tweak size as needed */
+    width: 40px; /* square hit area */
+    height: 40px; /* explicit height to center visually */
+    border: none; /* override any global button border */
+    color: var(--text);
     cursor: pointer;
 }
 
