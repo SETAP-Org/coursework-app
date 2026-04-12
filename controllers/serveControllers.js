@@ -1,23 +1,27 @@
 import path from "path";
 import { getUserByMicrosoftIdModel } from "../models/userModels.js";
+import {
+  getProjectByIdModel,
+  getUserProjectsModel,
+} from "../models/projectModels.js";
 
 const __dirname = import.meta.dirname;
 
 export function serveLanding(req, res, next) {
-  const cookieConsent = req.cookies.cookieConsent ? true : false
+  const cookieConsent = req.cookies.cookieConsent ? true : false;
 
-  res.render('landing', {
+  res.render("landing", {
     cookieConsent: cookieConsent,
-  })
+  });
 }
 
 export function serveWelcome(req, res, next) {
-  res.render('welcome');
+  res.render("welcome");
 }
 
 export function serveUserDash(req, res, next) {
-  res.render('userDash', {
-    name: req.user.firstName
+  res.render("userDash", {
+    name: req.user.firstName,
   });
 }
 
@@ -25,19 +29,23 @@ export async function serveProfile(req, res, next) {
   const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
   const dbUser = dbUserResult.rows[0];
 
-  res.render('profile', {
+  res.render("profile", {
     name: dbUser.username,
-  })
+  });
 }
 
 export async function serveProjects(req, res, next) {
-  res.render('projects', {
+  res.render("projects", {
     name: req.user.firstName,
   });
 }
 
 export async function serveProjectDash(req, res, next) {
-  res.render('projectDash');
+  res.render("projectDash", {
+    name: req.user.firstName,
+    project: req.project,
+    project_name: req.project.project_name,
+  });
 }
 
 // redirects (not added to stack) (for when access to pages is unauthorised)
@@ -49,5 +57,5 @@ export async function redirectUserDash(req, res, next) {
 }
 
 export async function redirectWelcome(req, res, next) {
-  res.redirect('/welcome');
+  res.redirect("/welcome");
 }
