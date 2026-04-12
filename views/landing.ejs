@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="/css/landing.css">
+        <link id="theme-stylesheet" rel="stylesheet" href="/css/root-dark.css" />
+        <link rel="icon" href="/assets/favicon.png" type="image/png">
+
+        <script src="/scripts/L&D-mode.js" defer></script>
+        <!-- <script src="/scripts/showCookieBanner.js" defer></script> -->
+
+        <title>GCMS | Landing Page</title>
+    </head>
+    <body>
+        <section class="central-container">
+            <h1 class="cookie-header">Sign in to GCMS</h1>
+
+            <div>
+                <a href="api/auth" class="link-style">Sign In With Microsoft</a>
+            </div>
+        </section>
+
+        <%- include('partials/footer') %>
+
+        <% if (!cookieConsent) { %>
+            <%- include('partials/cookieBanner') %>
+        <% } %>
+    </body>
+</html>

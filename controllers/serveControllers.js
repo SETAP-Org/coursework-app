@@ -4,8 +4,16 @@ import { getUserByMicrosoftIdModel } from "../models/userModels.js";
 const __dirname = import.meta.dirname;
 
 // serve files (added to navigation stack)
-export function serveLanding(req, res, next) {
-  res.sendFile(path.join(__dirname, "../public/pages", "index.html"));
+// export function serveLanding(req, res, next) {
+//   res.sendFile(path.join(__dirname, "../public/pages", "index.html"));
+// }
+
+export async function serveLanding(req, res, next) {
+  const cookieConsent = req.cookies.cookieConsent ? true : false
+
+  res.render('landing', {
+    cookieConsent: cookieConsent,
+  })
 }
 
 export function serveWelcome(req, res, next) {
@@ -15,10 +23,6 @@ export function serveWelcome(req, res, next) {
 export function serveUserDash(req, res, next) {
   res.sendFile(path.join(__dirname, "../public/pages/", "user_dash.html"));
 }
-
-// export function serveProfile(req, res, next) {
-//   res.sendFile(path.join(__dirname, "../public/pages/", "profile.html"));
-// }
 
 export async function serveProfile(req, res, next) {
   const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
