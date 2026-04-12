@@ -11,7 +11,7 @@ export async function addProject(req, res, next) {
   try {
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult?.rows?.[0];
-    const userId = dbUser.user_id
+    const userId = dbUser.user_id;
     const { project_name, project_deadline } = req.query;
     const result = await postProjectModel(
       userId,
@@ -45,17 +45,10 @@ export async function getUserProjects(req, res, next) {
 
     const dbResult = await getUserProjectsModel(userId);
     res.json({ success: true, projects: dbResult.rows });
-  } catch(err) {
+  } catch (err) {
     console.error("getUserProjects error:", err);
     res.status(401).json({ loggedIn: false });
   }
-
-  // if (req.user) {
-  //   const dbResult = await getUserProjectsModel(req.user.microsoftId);
-  //   res.json({ success: true, projects: dbResult.rows });
-  // } else {
-  //   res.status(401).json({ loggedIn: false });
-  // }
 }
 
 // function to get details about a specific project
@@ -76,7 +69,7 @@ export async function getProjectDetails(req, res, next) {
         .status(404)
         .json({ success: false, error: "Project not found" });
     }
-    
+
     const project = projectResult.rows[0];
 
     // ensure user is member of the project
@@ -96,5 +89,45 @@ export async function getProjectDetails(req, res, next) {
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, error: err.message });
+  }
+}
+
+// Middleware
+export async function loadProject(req, res, next) {
+  try {
+    const { project_id } = req.params;
+    if (!project_id) return res.status(400).send("`project_id` not found");
+
+    const projectResult = await getProjectByIdModel(project_id);
+    if (!projectResult || projectResult.rows.length === 0) {
+      return res.status(404).send("Project not found");
+    }
+
+    req.project = projectResult.rows[0];
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function checkMembership(req, res, next) {
+  try {
+    if (!req.project) return res.status(500).send("Project not loaded");
+
+    const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+    const dbUser = dbUserResult?.rows?.[0];
+    if (!dbUser) return res.status(401).send("User not found");
+
+    const userProjectsResult = await getUserProjectsModel(dbUser.user_id);
+    const isMember = userProjectsResult.rows.some(
+      (p) => String(p.project_id) === String(req.project.project_id),
+    );
+
+    if (!isMember) return res.status(403).send("Access denied");
+
+    req.isProjectMember = true;
+    next();
+  } catch (err) {
+    next(err);
   }
 }
