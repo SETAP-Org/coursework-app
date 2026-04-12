@@ -9,14 +9,12 @@
         <link rel="icon" href="/assets/favicon.png" type="image/png">
 
         <script src="/scripts/L&D-mode.js" defer></script>
-        <script src="/scripts/injectHeader.js" defer></script>
-        <!-- <script src="/scripts/injectFooter.js" defer></script> -->
         <script src="/scripts/profile.js" defer></script>
 
         <title>GCMS | Profile</title>
     </head>
     <body>
-        <header id="site-header"></header>
+        <%- include('partials/userNav') %>
 
         <main class="profile-container">
             <div class="profile-container">
@@ -80,7 +78,6 @@
             <button class="username-dialog-button">Go to Home</button>
         </dialog>
 
-        <!-- <footer id="site-footer"></footer> -->
         <%- include('partials/footer') %>
     </body>
 </html>
