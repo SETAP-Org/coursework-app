@@ -3,6 +3,7 @@ import {
   postUserProjectModel,
   getUserProjectsModel,
   getProjectByIdModel,
+  isUserMemberOfProjectModel,
 } from "../models/projectModels.js";
 import { getUserByMicrosoftIdModel } from "../models/userModels.js";
 
@@ -115,13 +116,14 @@ export async function checkMembership(req, res, next) {
     if (!req.project) return res.status(500).send("Project not loaded");
 
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
-    const dbUser = dbUserResult?.rows?.[0];
+    const dbUser = dbUserResult.rows[0];
     if (!dbUser) return res.status(401).send("User not found");
 
-    const userProjectsResult = await getUserProjectsModel(dbUser.user_id);
-    const isMember = userProjectsResult.rows.some(
-      (p) => String(p.project_id) === String(req.project.project_id),
+    const membershipResult = await isUserMemberOfProjectModel(
+      dbUser.user_id,
+      req.project.project_id,
     );
+    const isMember = membershipResult.rows[0].is_member;
 
     if (!isMember) return res.status(403).send("Access denied");
 
