@@ -206,4 +206,8 @@
         top: 12px;
         transform: none;
     }
+
+    .nav-menu {
+        left: 0;
+    }
 }
