@@ -1,9 +1,4 @@
-import path from "path";
 import { getUserByMicrosoftIdModel } from "../models/userModels.js";
-import {
-  getProjectByIdModel,
-  getUserProjectsModel,
-} from "../models/projectModels.js";
 
 const __dirname = import.meta.dirname;
 
@@ -43,10 +38,20 @@ export async function serveProjects(req, res, next) {
 export async function serveProjectDash(req, res, next) {
   res.render("projectDash", {
     name: req.user.firstName,
-    username: req.user.username,
+    username: req.params.username,
     project: req.project,
     project_name: req.project.project_name,
     project_id: req.project.project_id,
+    overview_link: `/${req.params.username}/projects/${req.project.project_id}/overview`,
+  });
+}
+
+export async function serveProjectOverview(req, res, next) {
+  res.render("projectOverview", {
+    username: req.params.username,
+    project_id: req.project.project_id,
+    project_name: req.project.project_name,
+    overview_link: `/${req.params.username}/projects/${req.project.project_id}/overview`,
   });
 }
 

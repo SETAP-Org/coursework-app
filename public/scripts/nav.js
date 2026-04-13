@@ -14,6 +14,15 @@ async function userNav() {
   }
 }
 
+async function projectNav() {
+  const userDataJson = await fetch("/api/me");
+  const userData = await userDataJson.json();
+
+  const overviewBtn = document.querySelector("#overview-button");
+  if (overviewBtn) {
+  }
+}
+
 // Close nav-mobile when clicking outside menu
 document.addEventListener("click", (e) => {
   const check = document.getElementById("check");
@@ -55,3 +64,4 @@ document.addEventListener("click", (e) => {
 })();
 
 userNav();
+projectNav();

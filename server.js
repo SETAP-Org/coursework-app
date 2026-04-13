@@ -13,8 +13,8 @@ import {
   serveProjectDash,
   serveProfile,
   serveProjects,
+  serveProjectOverview,
   redirectWelcome,
-  redirectUserDash,
 } from "./controllers/serveControllers.js";
 
 import {
@@ -78,6 +78,14 @@ app.get(
   loadProject, //Adds project details to req
   checkMembership, //Ensures user is member of the project
   serveProjectDash,
+);
+
+app.get(
+  "/:username/projects/:project_id/overview",
+  checkIfLoggedInRedirect,
+  loadProject,
+  checkMembership,
+  serveProjectOverview,
 );
 
 // API routes

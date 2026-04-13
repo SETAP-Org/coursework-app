@@ -97,12 +97,6 @@
     padding: 32px 0;
 }
 
-#projects-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
 .projects-list {
     list-style: none;
     width: 100%;
