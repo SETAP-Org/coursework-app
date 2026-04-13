@@ -43,8 +43,10 @@ export async function serveProjects(req, res, next) {
 export async function serveProjectDash(req, res, next) {
   res.render("projectDash", {
     name: req.user.firstName,
+    username: req.user.username,
     project: req.project,
     project_name: req.project.project_name,
+    project_id: req.project.project_id,
   });
 }
 
