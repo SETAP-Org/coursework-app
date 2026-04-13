@@ -153,6 +153,14 @@
     color: black;
 }
 
+#page-content {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin: 0 auto;
+    padding: 32px 0;
+}
+
 @media (max-width: 900px) {
     body {
         overflow: scroll;
