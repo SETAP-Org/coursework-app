@@ -1,25 +1,17 @@
-async function userNav() {
+async function navInit() {
   const userDataJson = await fetch("/api/me");
   const userData = await userDataJson.json();
   const dbUserData = userData.dbUser;
 
   const projectsBtn = document.querySelector("#projects-button");
   const profileBtn = document.querySelector("#profile-button");
+  const projectNameButton = document.querySelector("#project-name-button");
 
   if (projectsBtn) {
     projectsBtn.href = `/${dbUserData.username}/projects`;
   }
   if (profileBtn) {
     profileBtn.href = `/${dbUserData.username}/profile`;
-  }
-}
-
-async function projectNav() {
-  const userDataJson = await fetch("/api/me");
-  const userData = await userDataJson.json();
-
-  const overviewBtn = document.querySelector("#overview-button");
-  if (overviewBtn) {
   }
 }
 
@@ -63,5 +55,4 @@ document.addEventListener("click", (e) => {
   });
 })();
 
-userNav();
-projectNav();
+navInit();
