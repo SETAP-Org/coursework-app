@@ -5,7 +5,6 @@ async function navInit() {
 
   const projectsBtn = document.querySelector("#projects-button");
   const profileBtn = document.querySelector("#profile-button");
-  const projectNameButton = document.querySelector("#project-name-button");
 
   if (projectsBtn) {
     projectsBtn.href = `/${dbUserData.username}/projects`;

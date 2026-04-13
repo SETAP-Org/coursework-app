@@ -44,8 +44,33 @@
     margin-left: 10px;
 }
 
-.logo-card {
+.project-header .logo-card {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     width: auto;
+    max-width: calc(100% - 240px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    z-index: 20;
+    text-align: center;
+}
+
+.project-header .logo-card #nav-project-name {
+    pointer-events: auto;
+    display: inline-block;
+    color: var(--text);
+    font-size: 1.5em;
+    font-weight: bold;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    padding: 0 8px;
 }
 
 .nav-links {
@@ -143,6 +168,14 @@
 
 .nav-mobile a:hover {
     color: var(--button-active);
+}
+
+#nav-project-name {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: left;
+    color: var(--text);
+    text-decoration: none;
 }
 
 /* Mobile */

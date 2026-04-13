@@ -1,15 +1,15 @@
 <link rel="stylesheet" href="/css/header_style.css">
 <script src="/scripts/nav.js" defer></script>
 
-<nav class="Dashboard-header" id="MyHeader">
+<nav class="Dashboard-header project-header" id="MyHeader">
     <div class="card nav-links">
         <a class="Dashboard-text Dashboard-links" id="projects-button">All Projects</a>
     </div>
 
     <div class="card logo-card">
-        <h2 id="project-name-button">
+        <a id="nav-project-name" href="/<%= username %>/projects/<%= project_id %>">
           <%= project_name %>
-        </h2>
+        </a>
     </div>
 
     <div>
