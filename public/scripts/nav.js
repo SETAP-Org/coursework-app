@@ -40,8 +40,6 @@ document.addEventListener("click", (e) => {
   check.checked = false;
 });
 
-userNav();
-
 // Close nav when a menu link is clicked
 (function attachNavLinkCloser() {
   const check = document.getElementById("check");
@@ -55,3 +53,5 @@ userNav();
     }
   });
 })();
+
+userNav();
