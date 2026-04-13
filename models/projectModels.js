@@ -2,11 +2,7 @@ import { query } from "../db/connection.js";
 
 // ---- CREATE ----
 // create project if project name not already taken by user
-export async function postProjectModel(
-  userId,
-  projectName,
-  projectDeadline
-) {
+export async function postProjectModel(userId, projectName, projectDeadline) {
   return await query(
     `
     INSERT INTO projects (created_by, team_leader_id, project_name, project_deadline, p_date_created, p_time_updated)
@@ -17,7 +13,7 @@ export async function postProjectModel(
     `,
     [userId, projectName, projectDeadline],
   );
-};
+}
 
 // create entry in intersection table between users and projects
 export async function postUserProjectModel(userId, projectId) {
@@ -72,6 +68,22 @@ export async function getUserProjectsModel(userId) {
     WHERE up.user_id = $1;
     `,
     [userId],
+  );
+}
+
+export async function isUserMemberOfProjectModel(userId, projectId) {
+  return await query(
+    `
+    SELECT
+      (EXISTS (
+        SELECT 1 FROM user_projects up
+        WHERE up.user_id = $1 AND up.project_id = $2)
+      OR EXISTS (
+        SELECT 1 FROM projects p
+        WHERE p.project_id = $2 AND (p.created_by = $1 OR p.team_leader_id = $1)
+      )) AS is_member;
+    `,
+    [userId, projectId],
   );
 }
 

@@ -13,21 +13,27 @@ import {
   serveProjectDash,
   serveProfile,
   serveProjects,
+  serveProjectOverview,
+  serveProjectTasks,
+  serveProjectCalendar,
+  serveProjectChat,
+  serveProjectContributions,
   redirectWelcome,
-  redirectUserDash,
 } from "./controllers/serveControllers.js";
 
 import {
   addProject,
   getUserProjects,
   getProjectDetails,
+  loadProject,
+  checkMembership,
 } from "./controllers/projectControllers.js";
 
 import {
   addUser,
   checkValidUsername,
   updateUsername,
-  getCurrentUser
+  getCurrentUser,
 } from "./controllers/userControllers.js";
 
 import {
@@ -36,7 +42,7 @@ import {
   signOut,
   authenticatePassport,
   setJustAuthenticatedFlag,
-  getJustAuthenticatedFlag
+  getJustAuthenticatedFlag,
 } from "./controllers/authControllers.js";
 
 // util imports
@@ -52,7 +58,7 @@ const app = express();
 const port = 3000;
 
 // middleware
-app.set('view engine', 'ejs');
+app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(cookieParser());
@@ -73,7 +79,49 @@ app.get("/:username/profile", checkIfLoggedInRedirect, serveProfile);
 app.get(
   "/:username/projects/:project_id",
   checkIfLoggedInRedirect,
+  loadProject, //Adds project details to req
+  checkMembership, //Ensures user is member of the project
   serveProjectDash,
+);
+
+app.get(
+  "/:username/projects/:project_id/overview",
+  checkIfLoggedInRedirect,
+  loadProject,
+  checkMembership,
+  serveProjectOverview,
+);
+
+app.get(
+  "/:username/projects/:project_id/tasks",
+  checkIfLoggedInRedirect,
+  loadProject,
+  checkMembership,
+  serveProjectTasks,
+);
+
+app.get(
+  "/:username/projects/:project_id/calendar",
+  checkIfLoggedInRedirect,
+  loadProject,
+  checkMembership,
+  serveProjectCalendar,
+);
+
+app.get(
+  "/:username/projects/:project_id/chat",
+  checkIfLoggedInRedirect,
+  loadProject,
+  checkMembership,
+  serveProjectChat,
+);
+
+app.get(
+  "/:username/projects/:project_id/contributions",
+  checkIfLoggedInRedirect,
+  loadProject,
+  checkMembership,
+  serveProjectContributions,
 );
 
 // API routes
@@ -85,11 +133,16 @@ app.post("/api/users/addUser", setJustAuthenticatedFlag, addUser);
 // ---- READ ----
 app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
 
-app.get("/api/auth/callback", authenticatePassport(), setJustAuthenticatedFlag, redirectWelcome);
+app.get(
+  "/api/auth/callback",
+  authenticatePassport(),
+  setJustAuthenticatedFlag,
+  redirectWelcome,
+);
 
 app.get("/api/auth/signout", signOut, checkIfLoggedInRedirect);
 
-app.get("/api/auth/justAuthenticated", getJustAuthenticatedFlag)
+app.get("/api/auth/justAuthenticated", getJustAuthenticatedFlag);
 
 app.get("/api/me", getCurrentUser);
 
