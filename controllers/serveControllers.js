@@ -42,7 +42,6 @@ export async function serveProjectDash(req, res, next) {
     project: req.project,
     project_name: req.project.project_name,
     project_id: req.project.project_id,
-    overview_link: `/${req.params.username}/projects/${req.project.project_id}/overview`,
   });
 }
 
@@ -51,7 +50,38 @@ export async function serveProjectOverview(req, res, next) {
     username: req.params.username,
     project_id: req.project.project_id,
     project_name: req.project.project_name,
-    overview_link: `/${req.params.username}/projects/${req.project.project_id}/overview`,
+  });
+}
+
+export async function serveProjectTasks(req, res, next) {
+  res.render("projectTasks", {
+    username: req.params.username,
+    project_id: req.project.project_id,
+    project_name: req.project.project_name,
+  });
+}
+
+export async function serveProjectCalendar(req, res, next) {
+  res.render("projectCalendar", {
+    username: req.params.username,
+    project_id: req.project.project_id,
+    project_name: req.project.project_name,
+  });
+}
+
+export async function serveProjectChat(req, res, next) {
+  res.render("projectChat", {
+    username: req.params.username,
+    project_id: req.project.project_id,
+    project_name: req.project.project_name,
+  });
+}
+
+export async function serveProjectContributions(req, res, next) {
+  res.render("projectContributions", {
+    username: req.params.username,
+    project_id: req.project.project_id,
+    project_name: req.project.project_name,
   });
 }
 

@@ -14,6 +14,10 @@ import {
   serveProfile,
   serveProjects,
   serveProjectOverview,
+  serveProjectTasks,
+  serveProjectCalendar,
+  serveProjectChat,
+  serveProjectContributions,
   redirectWelcome,
 } from "./controllers/serveControllers.js";
 
@@ -86,6 +90,38 @@ app.get(
   loadProject,
   checkMembership,
   serveProjectOverview,
+);
+
+app.get(
+  "/:username/projects/:project_id/tasks",
+  checkIfLoggedInRedirect,
+  loadProject,
+  checkMembership,
+  serveProjectTasks,
+);
+
+app.get(
+  "/:username/projects/:project_id/calendar",
+  checkIfLoggedInRedirect,
+  loadProject,
+  checkMembership,
+  serveProjectCalendar,
+);
+
+app.get(
+  "/:username/projects/:project_id/chat",
+  checkIfLoggedInRedirect,
+  loadProject,
+  checkMembership,
+  serveProjectChat,
+);
+
+app.get(
+  "/:username/projects/:project_id/contributions",
+  checkIfLoggedInRedirect,
+  loadProject,
+  checkMembership,
+  serveProjectContributions,
 );
 
 // API routes
