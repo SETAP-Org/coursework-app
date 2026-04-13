@@ -2,6 +2,7 @@
 :root {
     --font: "Poppins", sans-serif;
     --bg: #0b1220;
+    --nav-bg: rgba(11, 18, 32, 0.8);
     --card: rgba(255, 255, 255, 0.08);
     --card2: rgba(255, 255, 255, 0.12);
     --card3: rgba(47, 113, 226, 0.381);

@@ -97,6 +97,54 @@
     cursor: pointer;
 }
 
+/* Hamburger */
+#check {
+    display: none;
+}
+
+.checkbtn {
+    font-size: 1.5rem;
+    color: white;
+    cursor: pointer;
+}
+
+.nav-mobile {
+    display: none;
+}
+
+#check:checked ~ .nav-mobile {
+    display: block;
+}
+
+.nav-mobile {
+    position: absolute;
+    top: 4.5rem;
+    right: 0;
+    background: var(--nav-bg);
+    border-radius: var(--radius);
+    border: var(--border);
+    z-index: 1;
+    width: 200px;
+}
+.nav-mobile a {
+    color: #fff;
+    padding: 1rem 1rem 0 1rem;
+    display: block;
+    text-decoration: none;
+    text-align: center;
+}
+
+.nav-mobile a:last-child {
+    color: var(--button-disabled);
+    padding: 1rem;
+    display: block;
+    text-decoration: none;
+}
+
+.nav-mobile a:hover {
+    color: var(--button-active);
+}
+
 /* Mobile */
 @media screen and (max-width: 900px) {
     .Dashboard-header {
