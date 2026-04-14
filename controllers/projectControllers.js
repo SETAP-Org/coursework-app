@@ -22,9 +22,9 @@ export async function addProject(req, res, next) {
 
     if (result.rows.length > 0) {
       const project_id = result.rows[0]["project_id"];
-      const result2 = await postUserProjectModel(microsoftId, project_id);
+      const result2 = await postUserProjectModel(userId, project_id);
       if (result2.rows.length > 0) {
-        res.json({ success: true });
+        res.json({ success: true, project: result2.rows[0] });
       } else {
         throw new Error("Error adding user link in user_projects");
       }

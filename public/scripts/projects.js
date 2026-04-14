@@ -79,6 +79,11 @@ document
     const form = e.target;
     const name = form["project-name"].value;
     const deadline = form["project-deadline"].value;
+
+    const user_info_fetch = await fetch("/api/me");
+    const user_info = await user_info_fetch.json();
+    const username = user_info.dbUser.username;
+
     const res = await fetch(
       `/api/projects/addProject?project_name=${encodeURIComponent(name)}&project_deadline=${encodeURIComponent(deadline)}`,
       { method: "POST" },
@@ -88,6 +93,9 @@ document
       if (data.success) {
         document.getElementById("create-project-dialog").close();
         form.reset();
+        window.location.replace(
+          `/${username}/projects/${data.project.project_id}`,
+        );
       } else {
         alert(data.error);
       }
