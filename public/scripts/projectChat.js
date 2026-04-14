@@ -4,14 +4,21 @@ async function projectChat() {
     const messageFieldSet = document.querySelector(".chat-fieldset");
     const messageBox = document.querySelector(".chat-input");
     const sendBtn = document.querySelector(".chat-send");
+    let messageContent = "";
 
     // form event listener
-    messageForm.addEventListener("submit", (e) => {
+    messageForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-    })
 
-    // message box event listener
-    let messageContent = "";
+        const response = await fetch("/api/chat/addMessage", {
+            method: "post",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ messageContent }),
+        });
+
+        const data = await response.json();
+        console.log(data.message);
+    })
     
     messageBox.addEventListener("input", (e) => {
         messageContent = e.target.value;
@@ -21,7 +28,7 @@ async function projectChat() {
 
     // send button event listener
     sendBtn.addEventListener("click", () => {
-        console.log("we are getting here!");
+
     })
 
 }

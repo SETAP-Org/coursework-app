@@ -45,6 +45,8 @@ import {
   getJustAuthenticatedFlag,
 } from "./controllers/authControllers.js";
 
+import { addMessage } from "./controllers/chatControllers.js";
+
 // util imports
 import createSession from "./utils/session.js";
 import setUpAuth from "./utils/auth.js";
@@ -79,7 +81,7 @@ app.get("/:username/profile", checkIfLoggedInRedirect, serveProfile);
 app.get(
   "/:username/projects/:project_id",
   checkIfLoggedInRedirect,
-  loadProject, //Adds project details to req
+  loadProject, //Adds project details to req.session
   checkMembership, //Ensures user is member of the project
   serveProjectDash,
 );
@@ -129,6 +131,8 @@ app.get(
 app.post("/api/projects/addProject", addProject);
 
 app.post("/api/users/addUser", setJustAuthenticatedFlag, addUser);
+
+app.post("/api/chat/addMessage", addMessage);
 
 // ---- READ ----
 app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
