@@ -4,9 +4,9 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <link rel="stylesheet" href="/css/root-dark.css"
-        />
+        <link rel="stylesheet" href="/css/root-dark.css"/>
         <link rel="stylesheet" href="/css/project_dash.css" />
+        <link rel="stylesheet" href="/css/project_chat.css" />
         <link rel="icon" href="/assets/favicon.png" type="image/png" />
 
         <script src="/scripts/L&D-mode.js" defer></script>
@@ -17,10 +17,20 @@
     <body>
         <%- include('partials/projectNav') %>
 
-        <section id="page-content">
+        <section class="chat-page">
             <section class="page-header">
                 <h1 id="page-title">Chat</h1>
             </section>
+            <div class="chat-container">
+                <div class="chat-messages">
+                    <!-- messages -->
+                </div>
+
+                <form action="" class="chat-form">
+                    <input type="text" name="" id="" placeholder="Write Message Here" class="chat-input">
+                    <button class="chat-send">Send</button>
+                </form>
+            </div>
         </section>
 
         <%- include('partials/footer') %>
