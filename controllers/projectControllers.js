@@ -1,3 +1,4 @@
+// model imports
 import {
   postProjectModel,
   postUserProjectModel,
@@ -91,11 +92,6 @@ export async function getProjectDetails(req, res, next) {
     console.error(err);
     res.status(500).json({ success: false, error: err.message });
   }
-}
-
-// function to get details about current project
-export async function getCurrentProject(req, res, next) {
-  return req.session.project
 }
 
 // Middleware
