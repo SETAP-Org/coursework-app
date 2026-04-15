@@ -34,7 +34,6 @@
     border: var(--border);
 }
 
-/* Ensure footer text size is consistent even on pages that don't load header/project CSS */
 .Dashboard-text {
     margin: 0;
     font-size: 1rem;
