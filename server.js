@@ -45,7 +45,10 @@ import {
   getJustAuthenticatedFlag,
 } from "./controllers/authControllers.js";
 
-import { addMessage } from "./controllers/chatControllers.js";
+import {
+  addMessage,
+  getMessages,
+} from "./controllers/chatControllers.js";
 
 // util imports
 import createSession from "./utils/session.js";
@@ -153,6 +156,8 @@ app.get("/api/me", getCurrentUser);
 app.get("/api/me/projects", getUserProjects);
 
 app.get("/api/projects/:project_id", getProjectDetails);
+
+app.get("/api/chat", getMessages);
 
 // ---- UPDATE ----
 app.put("/api/users/changeUsername", checkValidUsername, updateUsername);

@@ -1,9 +1,14 @@
 async function projectChat() {
+    // loading the messages
+    const response = await fetch("/api/chat");
+    const { messages } = await response.json();
+
     // get a hold of the elements that you are trying to access
     const messageForm = document.querySelector(".chat-form");
     const messageFieldSet = document.querySelector(".chat-fieldset");
     const messageBox = document.querySelector(".chat-input");
     const sendBtn = document.querySelector(".chat-send");
+    const messagesContainer = document.querySelector(".chat-messages");
     let messageContent = "";
 
     // form event listener

@@ -19,6 +19,7 @@ export async function getMessagesByProjectIdModel(projectId) {
         SELECT sender_id, message_content, m_date_sent
         FROM messages
         WHERE project_id = $1
+        ORDER BY m_date_sent ASC
         `,
         [projectId],
     );

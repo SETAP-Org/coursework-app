@@ -13,8 +13,6 @@ export async function addMessage(req, res, next) {
             req.body.messageContent,
         );
 
-        console.log(data, "here is the data!!!!");
-
         res.status(200).json({
             success:true,
             message: "message was added successfully!",
@@ -24,6 +22,23 @@ export async function addMessage(req, res, next) {
         res.status(400).json({
             success: false,
             message: err
+        })
+    }
+}
+
+export async function getMessages(req, res, next) {
+    try {
+        const data = await getMessagesByProjectIdModel(req.session.project.project_id);
+        
+        res.status(200).json({
+            success: true,
+            messages: data.rows,
+        })
+    } catch (err) {
+        console.error("Error with getMessages:", err);
+        res.status(400).json({
+            success: false,
+            message: "Failed to load messages"
         })
     }
 }
