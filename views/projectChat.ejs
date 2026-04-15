@@ -9,7 +9,14 @@
         <link rel="stylesheet" href="/css/project_chat.css" />
         <link rel="icon" href="/assets/favicon.png" type="image/png" />
 
+        <script>
+            window.scriptData = {
+                userId: "<%= user_id %>",
+                projectId: "<%= project_id %>",
+            };
+        </script>
         <script src="/scripts/L&D-mode.js" defer></script>
+        <script src="/socket.io/socket.io.js" defer></script>
         <script src="/scripts/projectChat.js" defer></script>
 
         <title>GCMS | <%= project_name %> Chat</title>

@@ -70,8 +70,12 @@ export async function serveProjectCalendar(req, res, next) {
 }
 
 export async function serveProjectChat(req, res, next) {
+  const userResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+  const user = userResult.rows[0];
+
   res.render("projectChat", {
     username: req.params.username,
+    user_id: user.user_id,
     project_id: req.session.project.project_id,
     project_name: req.session.project.project_name,
   });
