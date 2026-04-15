@@ -71,6 +71,8 @@ async function projectChat() {
 
         // adding the message to message container
         messagesContainer.appendChild(container);
+
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
     // form event listener
