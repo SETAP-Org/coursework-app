@@ -39,49 +39,49 @@ export async function serveProjectDash(req, res, next) {
   res.render("projectDash", {
     name: req.user.firstName,
     username: req.params.username,
-    project: req.project,
-    project_name: req.project.project_name,
-    project_id: req.project.project_id,
+    project: req.session.project,
+    project_name: req.session.project.project_name,
+    project_id: req.session.project.project_id,
   });
 }
 
 export async function serveProjectOverview(req, res, next) {
   res.render("projectOverview", {
     username: req.params.username,
-    project_id: req.project.project_id,
-    project_name: req.project.project_name,
+    project_id: req.session.project.project_id,
+    project_name: req.session.project.project_name,
   });
 }
 
 export async function serveProjectTasks(req, res, next) {
   res.render("projectTasks", {
     username: req.params.username,
-    project_id: req.project.project_id,
-    project_name: req.project.project_name,
+    project_id: req.session.project.project_id,
+    project_name: req.session.project.project_name,
   });
 }
 
 export async function serveProjectCalendar(req, res, next) {
   res.render("projectCalendar", {
     username: req.params.username,
-    project_id: req.project.project_id,
-    project_name: req.project.project_name,
+    project_id: req.session.project.project_id,
+    project_name: req.session.project.project_name,
   });
 }
 
 export async function serveProjectChat(req, res, next) {
   res.render("projectChat", {
     username: req.params.username,
-    project_id: req.project.project_id,
-    project_name: req.project.project_name,
+    project_id: req.session.project.project_id,
+    project_name: req.session.project.project_name,
   });
 }
 
 export async function serveProjectContributions(req, res, next) {
   res.render("projectContributions", {
     username: req.params.username,
-    project_id: req.project.project_id,
-    project_name: req.project.project_name,
+    project_id: req.session.project.project_id,
+    project_name: req.session.project.project_name,
   });
 }
 
