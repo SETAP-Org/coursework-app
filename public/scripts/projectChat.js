@@ -120,6 +120,8 @@ async function projectChat() {
     // handling messages incoming from socket io
     socket.on('chat', (message) => {
         if (message.project_id == projectId) {
+            console.log('this is the message!!!', message.message_content);
+            
             // creating the elements
             const container = document.createElement("div");
             const infoTop = document.createElement("p");
