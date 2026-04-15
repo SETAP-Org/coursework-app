@@ -93,6 +93,11 @@ export async function getProjectDetails(req, res, next) {
   }
 }
 
+// function to get details about current project
+export async function getCurrentProject(req, res, next) {
+  return req.session.project
+}
+
 // Middleware
 export async function loadProject(req, res, next) {
   try {
