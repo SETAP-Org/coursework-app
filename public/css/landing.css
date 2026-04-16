@@ -1,26 +1,30 @@
-.central-container{
-    width: 60%;
-    height: auto;
-    margin: 2rem auto 0 auto;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    text-align: center;
-    border: 2px solid black;
-    padding: 5px;
-    background: white;
-    font-size: 1.2em;
-    border-radius: 10px;
-    justify-self: center;
-    color: var(--text-2);
-}
-
 .link-style {
     text-decoration: none;
     font-size: 1.3em;
     color: black;
 }
 
-.link-style:hover{
+.link-style:hover {
     color: lightblue;
+}
+
+.landing-card {
+    border: var(--border);
+    border-radius: var(--radius);
+}
+
+#content-body {
+    display: flex;
+    flex-direction: center;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+#strapline {
+    font-size: 3em;
+    font-style: italic;
+    font-weight: 800;
 }
 
 @media (max-width: 768px) {

@@ -13,12 +13,10 @@
         <title>GCMS | Landing Page</title>
     </head>
     <body>
-        <section class="central-container">
-            <h1 class="cookie-header">Sign in to GCMS</h1>
+        <%- include("partials/landingNav") %>
 
-            <div>
-                <a href="api/auth" class="link-style">Sign In With Microsoft</a>
-            </div>
+        <section id="content-body">
+                <h1 id="strapline">Working as a group has never been easier.</h1>
         </section>
 
         <%- include('partials/footer') %>
