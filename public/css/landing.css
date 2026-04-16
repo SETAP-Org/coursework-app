@@ -8,6 +8,24 @@
     color: lightblue;
 }
 
+.landing-card {
+    border: var(--border);
+    border-radius: var(--radius);
+}
+
+#content-body {
+    display: flex;
+    flex-direction: center;
+    align-items: center;
+    justify-content: center;
+}
+
+#strapline {
+    font-size: 3em;
+    font-style: italic;
+    font-weight: 800;
+}
+
 @media (max-width: 768px) {
     .central-container {
         width: 90%;
