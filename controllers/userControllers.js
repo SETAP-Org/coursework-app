@@ -84,6 +84,13 @@ export async function getCurrentUser(req, res, next) {
         const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
         const dbUser = dbUserResult.rows[0];
 
+        if (!dbUser) {
+            return res.status(200).json({
+                sessionUser: req.user,
+                dbUser: null
+            });
+        }
+
         res.status(200).json({
             sessionUser: req.user,
             dbUser: dbUser,
