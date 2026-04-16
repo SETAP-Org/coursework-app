@@ -3,13 +3,20 @@ async function welcomeUser() {
     const authenticationFlagResponse = await fetch("/api/auth/justAuthenticated");
     const authenticationFlagData = await authenticationFlagResponse.json();
 
-    const userResponse = await fetch("/api/me");
-    const userData = await userResponse.json();
+    let userData;
+
+    try {
+        const userResponse = await fetch("/api/me");
+        userData = await userResponse.json();
+    } catch(err) {
+        console.log("User doesn't exist!")
+        userData = null;
+    }
     
     // if justAuthenticated flag is false, then user is trying to navigate via url, and should be redirected
     if (!authenticationFlagData.justAuthenticated) {
-        if (userData.sessionUser) return window.location.replace(`/${userData.dbUser.username}`)
-        else return window.location.replace("/");
+        if (!userData.sessionUser) return window.location.replace("/");
+        else return window.location.replace(`/${userData.dbUser.username}`)
     }
 
     // otherwise, they have just logged in, therefore user should be signed in
