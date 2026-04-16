@@ -88,11 +88,12 @@ button:hover {
     border: var(--border);
     background-color: var(--card);
     text-decoration: none;
-    width: 275px;
+    width: 250px;
     padding: 10px 0;
     margin: 0;
     font-family: "Segoe UI", var(--font);
     font-weight: 600;
+    border-radius: var(--radius);
 }
 
 #ms-logo {
