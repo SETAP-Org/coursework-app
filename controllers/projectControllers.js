@@ -1,3 +1,4 @@
+// model imports
 import {
   postProjectModel,
   postUserProjectModel,
@@ -104,7 +105,7 @@ export async function loadProject(req, res, next) {
       return res.status(404).send("Project not found");
     }
 
-    req.project = projectResult.rows[0];
+    req.session.project = projectResult.rows[0];
     next();
   } catch (err) {
     next(err);
@@ -113,7 +114,7 @@ export async function loadProject(req, res, next) {
 
 export async function checkMembership(req, res, next) {
   try {
-    if (!req.project) return res.status(500).send("Project not loaded");
+    if (!req.session.project) return res.status(500).send("Project not loaded");
 
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult.rows[0];
@@ -121,7 +122,7 @@ export async function checkMembership(req, res, next) {
 
     const membershipResult = await isUserMemberOfProjectModel(
       dbUser.user_id,
-      req.project.project_id,
+      req.session.project.project_id,
     );
     const isMember = membershipResult.rows[0].is_member;
 
