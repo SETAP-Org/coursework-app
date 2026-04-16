@@ -40,19 +40,7 @@ export default function setUpAuth(app) {
   });
 
   // when a request is made, req.user becomes the user data stored in the session
-  import { getUserByMicrosoftIdModel } from "../models/userModels.js";
-  passport.deserializeUser(async (obj, done) => {
-    try {
-      const dbUserResult = await getUserByMicrosoftIdModel(obj.microsoftId);
-      const dbUser = dbUserResult?.rows?.[0];
-      if (!dbUser) {
-        // User no longer exists in DB, destroy session
-        return done(null, false);
-      }
-      // Optionally, you can merge session info with latest DB info here
-      done(null, obj);
-    } catch (err) {
-      done(err);
-    }
+  passport.deserializeUser((obj, done) => {
+    done(null, obj);
   });
 }
