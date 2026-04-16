@@ -14,4 +14,11 @@
     left: 0;
     justify-items: center;
     border: var(--border);
+    color: var(--text);
+}
+
+
+.footer-text {
+    font-size: 0.875rem;
+    color: var(--text);
 }

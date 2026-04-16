@@ -6,22 +6,22 @@
     height: auto;
     margin: 0;
     text-align: center;
-    border: 2px solid black;
+    border: var(--border);
     padding: 10px;
     background: white;
     font-size: 1.2em;
     box-shadow: rgb(0, 0, 0) 10px 15px 15px;
     border-radius: 20px;
-    color: #000000;
+    color:black;
 }
 
 
 .cookie-content a {
-    color: #000000;
+    color: black;
     text-decoration: none;
 }
 
-.cookie-header {
+.cookie-header h1 {
     color: black;
 }
 
@@ -51,7 +51,7 @@
 
 #accept-all{
     background-color: #4caf50;
-    color: rgb(0, 0, 0);
+    color: var(--text-2);
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px
 }
 
