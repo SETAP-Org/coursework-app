@@ -19,11 +19,21 @@
         <section id="page-content">
             <section class="page-header">
                 <h1 id="page-title">Tasks</h1>
+                <button id="new-task-button">New Task</button>
             </section>
             <section id="task-panel" class="">
 
             </section>
         </section>
+
+        <template id="task-template">
+            <section class="task-card-individual">
+                <div id="task-info">
+                    <b class="task-name"></b>
+                    <span class="task-date"></span>
+                </div>
+            </section>
+        </template>
 
         <%- include('partials/footer') %>
     </body>
