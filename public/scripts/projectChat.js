@@ -2,14 +2,19 @@ const socket = io();
 
 // function to format time given from message in database
 function formatTime(timestamp) {
-    const splitDate = timestamp.split("T")[0].split("-");
-    const splitTime = timestamp.split("T")[1].split(":");
+    const date = new Date(timestamp);
+    const localDate = date.toLocaleString("en-UK", {
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+    });
 
-    const formattedDate = `${splitDate[2]}/${splitDate[1]}/${splitDate[0]}`;
+    console.log(localDate, 'this is the time')
+
+    const splitDate = localDate.split(", ")[0];
+    const splitTime = localDate.split(", ")[1].split(":");
     const formattedTime = `${splitTime[0]}:${splitTime[1]}`;
 
     return {
-        date: formattedDate,
+        date: splitDate,
         time: formattedTime,
     }
 }
@@ -30,7 +35,7 @@ async function projectChat() {
     const meResponse = await fetch("/api/me");
     const { dbUser } = await meResponse.json();
 
-    const { userId, projectId } = window.scriptData;
+    const { userId, projectId, username } = window.scriptData;
 
     // get a hold of the elements that you are trying to access
     const messageForm = document.querySelector(".chat-form");
@@ -53,7 +58,7 @@ async function projectChat() {
         content.innerText = message.message_content
 
         if (message.sender_id != dbUser.user_id) {
-            infoTop.innerText = `Sent by ${message.sender_id}`
+            infoTop.innerText = `Sent by ${username}`
             container.className = "message-container-left";
             infoTop.className = "message-info-left";
             infoBottom.className = "message-info-left";
@@ -89,6 +94,8 @@ async function projectChat() {
     messageForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
+        messageFieldSet.disabled = true;
+
         // const response = await fetch("/api/chat/addMessage", {
         //     method: "post",
         //     headers: {'Content-Type': 'application/json'},
@@ -103,6 +110,9 @@ async function projectChat() {
             projectId: projectId,
             message: messageContent,
         })
+
+        messageFieldSet.disabled = false;
+        messageBox.value = "";
     })
     
     // input box event listener
@@ -120,8 +130,6 @@ async function projectChat() {
     // handling messages incoming from socket io
     socket.on('chat', (message) => {
         if (message.project_id == projectId) {
-            console.log('this is the message!!!', message.message_content);
-            
             // creating the elements
             const container = document.createElement("div");
             const infoTop = document.createElement("p");
