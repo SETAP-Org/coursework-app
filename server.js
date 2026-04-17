@@ -176,12 +176,12 @@ app.post("/api/users/addUser", setJustAuthenticatedFlag, addUser);
 app.post("/api/chat/addMessage", addMessage);
 
 //api routes for konva specifc stuff 
-app.post("/api/notes/saveNote", checkIfLoggedIn, loadProject, saveNote);
+app.post("/api/notes/:projectId/saveNote", checkIfLoggedIn, loadProject, saveNote);
 
-app.post("/api/notes/deleteNote", checkIfLoggedIn, loadProject, deleteNote);
+app.post("/api/notes/:projectId/deleteNote", checkIfLoggedIn, loadProject, deleteNote);
 
 // ---- READ ----
-app.get("/api/notes/getNotes", checkIfLoggedIn, loadProject, getNotes);
+app.get("/api/notes/:projectId/getNotes", checkIfLoggedIn, loadProject, getNotes);
 
 app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
 

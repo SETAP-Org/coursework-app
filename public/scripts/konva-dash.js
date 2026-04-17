@@ -1,6 +1,24 @@
-import { saveNotesToDB, deleteNoteFromDB, getNotesFromDB } from "/scripts/konva-func.js";
+export async function saveNotesToDB(projectId, text, x, y) {
+    await fetch(`/api/notes/${projectId}/saveNote`, {
+        method: "POST",
+        headers: {'content-type': "application/json"},
+        body: JSON.stringify({ text, x, y }) // Ensure these keys match your Controller
+    });
+}
 
-console.log("If this logs, modules are working!");
+export async function deleteNoteFromDB(projectId, text, x, y) {
+    await fetch(`/api/notes/${projectId}/deleteNote`, {
+        method: "POST",
+        headers: {'content-type': "application/json"},
+        body: JSON.stringify({ text, x, y })
+    });
+}
+
+export async function getNotesFromDB(projectId) {
+    const response = await fetch(`/api/notes/${projectId}/getNotes`);
+    const data = await response.json();
+    return data.notes;
+}
 
 const pathSegments = window.location.pathname.split('/');
 const projectIndex = pathSegments.indexOf('projects');
@@ -33,44 +51,50 @@ if (container && addNoteBtn) {
   }
   init(); //create existing notes whent he page loads up 
 
-  function createNote() {
-    if (noteCount >= MAX_NOTES) return alert('Maximum of 10 notes reached.');
+  // Update parameters to accept optional initial data
+  function createNote(initialText = 'Double-click to edit', x = 50 + noteCount * 10, y = 50 + noteCount * 10) {
+      if (noteCount >= MAX_NOTES) return alert('Maximum of 10 notes reached.');
 
-    const group = new Konva.Group({
-      x: 50 + noteCount * 10, y: 50 + noteCount * 10, draggable: true,
-    });
+      const group = new Konva.Group({
+        x: x, 
+        y: y, 
+        draggable: true,
+      });
 
-    group.setAttrs({dbX: group.x(), dbY: group.y()});
+      group.setAttrs({ dbX: x, dbY: y });
 
-    const rect = new Konva.Rect({
-      width: 180, height: 100, fill: '#ffffff',
-      stroke: '#333333', cornerRadius: 20, shadowBlur: 4,
-    });
+      const rect = new Konva.Rect({
+        width: 180, height: 100, fill: '#ffffff',
+        stroke: '#333333', cornerRadius: 20, shadowBlur: 4,
+      });
 
-    const text = new Konva.Text({
-      x: 10, y: 10, width: 160, text: 'Double-click to edit',
-      fontSize: 18, fill: '#000000',
-    });
+      const text = new Konva.Text({
+        x: 10, y: 10, width: 160, text: initialText, // Use the parameter
+        fontSize: 18, fill: '#000000',
+      });
 
-    group.add(rect, text).on('click', () => transformer.nodes([group]));
+      group.add(rect, text).on('click', () => transformer.nodes([group]));
 
-    group.on('dragend', async () => {
-      const { x: newX, y: newY } = group.position();
+      group.on('dragend', async () => {
+        const { x: newX, y: newY } = group.position();
+        
+        // Checking for the delete zone
+        if (newX > stage.width() - 200 && newY > stage.height() - 200) {
+          // Use group.attrs.dbX/dbY because that is where the note was originally
+          await deleteNoteFromDB(projectId, text.text(), group.attrs.dbX, group.attrs.dbY);
+          group.destroy(); 
+          layer.draw(); 
+          noteCount--; 
+        } else {
+          await saveNotesToDB(projectId, text.text(), newX, newY);
+          group.setAttrs({ dbX: newX, dbY: newY });
+        }
+      });
 
-
-      if (newX > stage.width() - 200 && newY > stage.height() - 200) {
-        await deleteNoteFromDB(projectId, text.text(), group.attrs.dbX, group.attrs.dbY);
-        group.destroy(); layer.draw(); noteCount--; 
-      }else {
-        await saveNotesToDB(projectId, text.text(), newX, newY);
-        group.setAttrs({dbX: newX, dbY: newY});
-      }
-    });
-
-    group.on('dblclick dbltap', () =>  editText(text, group));
-    layer.add(group).draw();
-    noteCount++;
-}
+      group.on('dblclick dbltap', () => editText(text, group));
+      layer.add(group).draw();
+      noteCount++;
+  }
 
   function editText(textNode, group) {
     transformer.hide();

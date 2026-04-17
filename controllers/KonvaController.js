@@ -1,46 +1,31 @@
 import {saveNoteToDB, deleteNoteFromDB, getNotesByProjectId} from '../models/konvaModels.js';
 
 export async function saveNote(req, res, next) {
+    const { text, x, y } = req.body; 
+    const projectId = req.session.project.project_id; 
+
     try {
-        const notes = await saveNoteToDB(req.session.project.project_id, req.body.noteText, req.body.x, req.body.y);
-        
-        res.status(200).json({
-            success: true,
-            message: "Note was saved successfully!",
-            note: notes.rows[0],
-        })
-    }catch (err) {        
-        console.error("Error with saveNote:", err);
-        res.status(400).json({
-            success: false,
-            message: "Failed to save note"
-        })
+        const notes = await saveNoteToDB(projectId, text, x, y);
+        res.status(200).json({ success: true, note: notes.rows[0] });
+    } catch (err) {
+        console.error("Database error:", err);
+        res.status(400).json({ success: false, message: "DB Error" });
     }
 }
 
 export async function deleteNote(req, res, next) {
+    const { text, x, y } = req.body;
     try {
-        const notes = await deleteNoteFromDB(req.session.project.project_id, req.body.noteText, req.body.x, req.body.y);
-
-        res.status(200).json({
-            success: true,
-            message: "Note was deleted successfully!",
-            note: notes.rows[0],
-        })
+        const notes = await deleteNoteFromDB(req.session.project.project_id, text, x, y);
+        res.status(200).json({ success: true, note: notes.rows[0] });
     } catch (err) {
-        console.error("Error with deleteNote:", err);
-        res.status(400).json({
-            success: false,
-            message: "Failed to delete note"
-        })
+        res.status(400).json({ success: false, message: "Failed to delete" });
     }
 }
 
 export async function getNotes(req, res, next) {
     try {
-
         const projectId = req.session.project.project_id;
-        console.log("Getting notes for project ID:", projectId);
         const notes = await getNotesByProjectId(projectId);
 
         res.status(200).json({
@@ -49,9 +34,6 @@ export async function getNotes(req, res, next) {
         })
     } catch (err) {
         console.error("Error with getNotes:", err);
-        res.status(400).json({
-            success: false,
-            message: "Failed to load notes"
-        })
+        res.status(400).json({ success: false, message: "Failed to load notes" })
     }
 }
