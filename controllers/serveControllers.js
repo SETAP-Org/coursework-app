@@ -1,6 +1,7 @@
 import { getUserByMicrosoftIdModel } from "../models/userModels.js";
 import { getProjectByIdModel } from "../models/projectModels.js";
 import { getMessagesByProjectIdModel } from "../models/chatModels.js";
+import { getUsersByProjectId } from "../models/userProjectModels.js";
 
 const __dirname = import.meta.dirname;
 
@@ -83,12 +84,17 @@ export async function serveProjectChat(req, res, next) {
   const messagesResponse = await getMessagesByProjectIdModel(req.params.project_id);
   const messagesData = messagesResponse.rows;
 
+  // get the usernames of the other members of the group
+  const groupUsersResponse = await getUsersByProjectId(req.params.project_id);
+  const groupUsersData = groupUsersResponse.rows;
+
   res.render("projectChat", {
     userId: dbUser.user_id,
     username: req.params.username,
     projectId: req.params.project_id,
     projectName: projectData.project_name,
     messages: messagesData,
+    groupUsers: groupUsersData
   });
 }
 
