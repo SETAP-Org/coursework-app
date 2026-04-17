@@ -18,7 +18,7 @@ import {
   serveProjectDash,
   serveProfile,
   serveProjects,
-  serveProjectOverview,
+  serveProjectInformation,
   serveProjectTasks,
   serveProjectCalendar,
   serveProjectChat,
@@ -119,11 +119,11 @@ app.get(
 );
 
 app.get(
-  "/:username/projects/:project_id/overview",
+  "/:username/projects/:project_id/information",
   checkIfLoggedInRedirect,
   loadProject,
   checkMembership,
-  serveProjectOverview,
+  serveProjectInformation,
 );
 
 app.get(

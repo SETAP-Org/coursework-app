@@ -47,8 +47,8 @@ export async function serveProjectDash(req, res, next) {
   });
 }
 
-export async function serveProjectOverview(req, res, next) {
-  res.render("projectOverview", {
+export async function serveProjectInformation(req, res, next) {
+  res.render("projectInformation", {
     username: req.params.username,
     projectId: req.session.project.project_id,
     projectName: req.session.project.project_name,
