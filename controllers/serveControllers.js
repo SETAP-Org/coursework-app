@@ -22,11 +22,9 @@ export function serveUserDash(req, res, next) {
 }
 
 export async function serveProfile(req, res, next) {
-  const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
-  const dbUser = dbUserResult.rows[0];
-
   res.render("profile", {
-    username: dbUser.username,
+    userFirstName: req.user.firstName,
+    username: req.params.username,
   });
 }
 
@@ -71,13 +69,13 @@ export async function serveProjectCalendar(req, res, next) {
 }
 
 export async function serveProjectChat(req, res, next) {
-  const userResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
-  const user = userResult.rows[0];
+  const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+  const dbUser = userResult.rows[0];
 
   res.render("projectChat", {
     username: req.params.username,
-    user_id: user.user_id,
-    project_id: req.session.project.project_id,
+    user_id: dbUser.user_id,
+    project_id: req.params.project_id,
     project_name: req.session.project.project_name,
   });
 }

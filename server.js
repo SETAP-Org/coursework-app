@@ -186,8 +186,6 @@ app.get("/api/me/projects", getUserProjects);
 
 app.get("/api/projects/:project_id", getProjectDetails);
 
-// app.get("/api/projects/current", getCurrentProject);
-
 app.get("/api/chat", getMessages);
 
 // ---- UPDATE ----

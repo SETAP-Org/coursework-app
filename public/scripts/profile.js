@@ -10,8 +10,8 @@ async function loadProfile() {
   const usernameForm = document.querySelector(".username-form");
   const usernameDialog = document.querySelector(".username-dialog");
   const usernameDialogBtn = document.querySelector(".username-dialog-button");
-  let usernameValue = "";
   const regex = /^(?!^[0-9]+$)[a-zA-Z0-9]+$/;
+  let usernameValue = "";
 
   // event listerer for input box
   usernameInput.addEventListener("input", (e) => {
