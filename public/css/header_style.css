@@ -1,8 +1,5 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
+body{ 
+    display: block;
 }
 
 .Dashboard-header {
@@ -32,6 +29,7 @@
         var(--bg);
     border-radius: var(--radius);
     border: var(--border);
+    height: 10vh;
 }
 
 .Dashboard-header .card {
