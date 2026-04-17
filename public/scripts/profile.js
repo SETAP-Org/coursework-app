@@ -1,5 +1,8 @@
 // function 
 async function loadProfile() {
+  // ejs variables
+  const { user } = window.scriptData;
+
   const usernameBtn = document.querySelector(".username-save-button");
   const usernameInput = document.querySelector(".username-input");
   const usernameMsg = document.querySelector(".username-message");
