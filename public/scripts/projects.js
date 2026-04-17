@@ -1,69 +1,77 @@
 async function projects() {
-  const projectsList = document.querySelector(".projects-list");
-  const template = document.querySelector("#project-template");
-  const dialog = document.getElementById("create-project-dialog");
-
   try {
+    // get user info (can be done via ejs)
     const user_info_fetch = await fetch("/api/me");
     const user_info = await user_info_fetch.json();
-    const user_first_name = user_info?.dbUser.user_first_name;
     const username = user_info?.dbUser.username;
 
-    if (projectsList && template) {
-      const res = await fetch("/api/me/projects");
-      if (!res.ok) {
-        projectsList.innerHTML = "<li>Error loading projects.</li>";
-        return;
-      }
-      const data = await res.json();
-      if (
-        !data.success ||
-        !Array.isArray(data.projects) ||
-        data.projects.length === 0
-      ) {
-        projectsList.innerHTML = "<li>No projects found.</li>";
-        return;
-      }
-      projectsList.innerHTML = "";
-      data.projects.forEach((project) => {
-        const node = template.content.cloneNode(true);
-        const section = node.querySelector(
-          ".user-dash-project-card-individual",
-        );
-        if (section) {
-          const titleEl = section.querySelector(".project-name");
-          const dateEl = section.querySelector(".project-date");
-          const linkEl = section.querySelector("a.project-dash-button");
-          const due_date = new Date(project.project_deadline);
-          const formatted_due_date = due_date.toLocaleDateString("en-GB", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          });
-          titleEl.textContent = project.project_name;
-          dateEl.textContent = formatted_due_date;
-          linkEl.href = `/${encodeURIComponent(username)}/projects/${encodeURIComponent(project.project_id)}`;
-          linkEl.textContent = "Go to project";
-          const li = document.createElement("li");
-          li.className = "project-list-item";
-          li.appendChild(section);
-          projectsList.appendChild(li);
-        }
-      });
+    // get the projects (can be done via ejs)
+    const res = await fetch("/api/me/projects");
+    if (!res.ok) {
+      projectsList.innerHTML = "<li>Error loading projects.</li>";
+      return;
+    }
+    const data = await res.json();
+
+    // get the relevant dom elements
+    const projectsList = document.querySelector(".projects-list");
+    const template = document.querySelector("#project-template");
+    const dialog = document.getElementById("create-project-dialog");
+
+    // if failed controller or no data in array, show that
+    if (
+      !data.success ||
+      !Array.isArray(data.projects) ||
+      data.projects.length === 0
+    ) {
+      projectsList.innerHTML = "<li>No projects found.</li>";
+      return;
     }
 
+    projectsList.innerHTML = "";
+
+    // loop over the projects and clone the template to populate the list
+    data.projects.forEach((project) => {
+      const node = template.content.cloneNode(true);
+      const section = node.querySelector(
+        ".user-dash-project-card-individual",
+      );
+      if (section) {
+        const titleEl = section.querySelector(".project-name");
+        const dateEl = section.querySelector(".project-date");
+        const linkEl = section.querySelector("a.project-dash-button");
+        const due_date = new Date(project.project_deadline);
+        const formatted_due_date = due_date.toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+        titleEl.textContent = project.project_name;
+        dateEl.textContent = formatted_due_date;
+        linkEl.href = `/${encodeURIComponent(username)}/projects/${encodeURIComponent(project.project_id)}`;
+        linkEl.textContent = "Go to project";
+        const li = document.createElement("li");
+        li.className = "project-list-item";
+        li.appendChild(section);
+        projectsList.appendChild(li);
+      }
+    });
+
+    // event to open dialog when user clicks 'create new project'
     document
       .querySelector("#create-project-button")
       .addEventListener("click", () => {
         dialog.open ? dialog.close() : dialog.showModal();
       });
 
+    // event to close dialog box when clicking anywhere outside the form
     document
       .querySelector("#create-project-dialog")
       .addEventListener("click", function (e) {
         if (e.target === this) this.close();
       });
 
+    // event listener to add project (no need for encoding, just pass data in the post body)
     document
       .querySelector("#create-project-dialog form")
       .addEventListener("submit", async (e) => {
@@ -71,10 +79,6 @@ async function projects() {
         const form = e.target;
         const name = form["project-name"].value;
         const deadline = form["project-deadline"].value;
-
-        const user_info_fetch = await fetch("/api/me");
-        const user_info = await user_info_fetch.json();
-        const username = user_info.dbUser.username;
 
         const res = await fetch(
           `/api/projects/addProject?project_name=${encodeURIComponent(name)}&project_deadline=${encodeURIComponent(deadline)}`,
