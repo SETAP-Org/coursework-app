@@ -10,7 +10,7 @@
 
         <script>
             window.scriptData = {
-                user: "<%= user %>",
+                username: "<%= username %>",
             };
         </script>
         <script src="/scripts/L&D-mode.js" defer></script>
@@ -24,7 +24,7 @@
         <main class="profile-container">
             <div class="profile-container">
                 <div class="user-info">
-                    <%= user.dbUser.username %>
+                    <h1>Hey, <%= username %></h1>
                 </div>
 
                 <p><button onclick="changeTheme()">Toggle Theme</button></p>

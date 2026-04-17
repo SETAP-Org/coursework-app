@@ -1,8 +1,9 @@
 // function 
 async function loadProfile() {
   // ejs variables
-  const { user } = window.scriptData;
+  const { username } = window.scriptData;
 
+  // DOM elements
   const usernameBtn = document.querySelector(".username-save-button");
   const usernameInput = document.querySelector(".username-input");
   const usernameMsg = document.querySelector(".username-message");
@@ -38,7 +39,7 @@ async function loadProfile() {
   usernameForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    if (usernameValue === user.dbUser.username) {
+    if (usernameValue === username) {
       usernameMsg.innerText = "You already have that username!";
     } else {
       const response = await fetch('/api/users/changeUsername', {

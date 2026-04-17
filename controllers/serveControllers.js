@@ -24,13 +24,9 @@ export function serveUserDash(req, res, next) {
 export async function serveProfile(req, res, next) {
   const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
   const dbUser = dbUserResult.rows[0];
-  const user = {
-    dbUser: dbUser,
-    sessionUser: req.user,
-  }
 
   res.render("profile", {
-    user: user,
+    username: dbUser.username,
   });
 }
 
