@@ -81,6 +81,14 @@ export async function serveProjectChat(req, res, next) {
   });
 }
 
+export async function serveProjectNotes(req, res, next) {
+  res.render("projectNotes", {
+    username: req.params.username,
+    project_id: req.session.project.project_id,
+    project_name: req.session.project.project_name,
+  });
+}
+
 export async function serveProjectContributions(req, res, next) {
   res.render("projectContributions", {
     username: req.params.username,
