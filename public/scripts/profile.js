@@ -38,16 +38,18 @@ async function loadProfile() {
   usernameForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const response = await fetch('/api/users/changeUsername', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ usernameValue })
-    });
-    const data = await response.json();
+    if (usernameValue === user.dbUser.username) {
+      usernameMsg.innerText = "You already have that username!";
+    } else {
+      const response = await fetch('/api/users/changeUsername', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usernameValue })
+      });
+      const data = await response.json();
 
-    console.log(data)
-
-    usernameMsg.innerText = data.message;
+      usernameMsg.innerText = data.message;
+    }
 
     usernameInput.value = "";
 
