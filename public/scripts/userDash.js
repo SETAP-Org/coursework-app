@@ -1,7 +1,6 @@
-document.addEventListener("DOMContentLoaded", async () => {
+async function userDash() {
   const projectsList = document.querySelector(".projects-list");
   const template = document.querySelector("#project-template");
-  const name_span = document.querySelector("#user-name");
 
   if (!projectsList || !template) return;
 
@@ -11,8 +10,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const username = user_info?.dbUser?.username;
     const user_first_name = user_info?.dbUser.user_first_name;
-
-    name_span.textContent = user_first_name;
 
     const res = await fetch("/api/me/projects");
     if (!res.ok) {
@@ -65,4 +62,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     projectsList.innerHTML =
       '<li class="project-list-item">Error loading projects.</li>';
   }
-});
+};
+
+userDash();

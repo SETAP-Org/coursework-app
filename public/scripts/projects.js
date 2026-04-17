@@ -1,11 +1,7 @@
-function toggleNewProjectForm() {
-  const dialog = document.getElementById("create-project-dialog");
-  dialog.open ? dialog.close() : dialog.showModal();
-}
-
-document.addEventListener("DOMContentLoaded", async () => {
+async function projects() {
   const projectsList = document.querySelector(".projects-list");
   const template = document.querySelector("#project-template");
+  const dialog = document.getElementById("create-project-dialog");
 
   try {
     const user_info_fetch = await fetch("/api/me");
@@ -55,52 +51,56 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       });
     }
+
+    document
+      .querySelector("#create-project-button")
+      .addEventListener("click", () => {
+        dialog.open ? dialog.close() : dialog.showModal();
+      });
+
+    document
+      .querySelector("#create-project-dialog")
+      .addEventListener("click", function (e) {
+        if (e.target === this) this.close();
+      });
+
+    document
+      .querySelector("#create-project-dialog form")
+      .addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const name = form["project-name"].value;
+        const deadline = form["project-deadline"].value;
+
+        const user_info_fetch = await fetch("/api/me");
+        const user_info = await user_info_fetch.json();
+        const username = user_info.dbUser.username;
+
+        const res = await fetch(
+          `/api/projects/addProject?project_name=${encodeURIComponent(name)}&project_deadline=${encodeURIComponent(deadline)}`,
+          { method: "POST" },
+        );
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success) {
+            document.getElementById("create-project-dialog").close();
+            form.reset();
+            window.location.replace(
+              `/${username}/projects/${data.project.project_id}`,
+            );
+          } else {
+            alert(data.error);
+          }
+        } else {
+          const data = await res.json();
+          alert(data.error || "Failed to create project.");
+        }
+      });
   } catch (err) {
     console.error("Error loading projects page:", err);
     if (projectsList)
       projectsList.innerHTML = "<li>Error loading projects.</li>";
   }
-});
+}
 
-document
-  .querySelector("#create-project-button")
-  .addEventListener("click", toggleNewProjectForm);
-
-document
-  .querySelector("#create-project-dialog")
-  .addEventListener("click", function (e) {
-    if (e.target === this) this.close();
-  });
-
-document
-  .querySelector("#create-project-dialog form")
-  .addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const name = form["project-name"].value;
-    const deadline = form["project-deadline"].value;
-
-    const user_info_fetch = await fetch("/api/me");
-    const user_info = await user_info_fetch.json();
-    const username = user_info.dbUser.username;
-
-    const res = await fetch(
-      `/api/projects/addProject?project_name=${encodeURIComponent(name)}&project_deadline=${encodeURIComponent(deadline)}`,
-      { method: "POST" },
-    );
-    if (res.ok) {
-      const data = await res.json();
-      if (data.success) {
-        document.getElementById("create-project-dialog").close();
-        form.reset();
-        window.location.replace(
-          `/${username}/projects/${data.project.project_id}`,
-        );
-      } else {
-        alert(data.error);
-      }
-    } else {
-      const data = await res.json();
-      alert(data.error || "Failed to create project.");
-    }
-  });
+projects();

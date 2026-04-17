@@ -1,4 +1,3 @@
-// function 
 async function loadProfile() {
   // ejs variables
   const { username } = window.scriptData;

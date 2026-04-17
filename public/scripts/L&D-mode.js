@@ -25,7 +25,6 @@ function changeTheme() {
     setTheme();
 }
 
-
 function setTheme (){
     const theme = getCookie("theme");
     const themeStyleSheet = document.getElementById("theme-stylesheet");
@@ -45,4 +44,5 @@ function setTheme (){
 if (!getCookie("theme")) {
     setCookie("theme", "dark");
 }
+
 setTheme();

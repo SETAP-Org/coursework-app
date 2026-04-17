@@ -19,6 +19,7 @@ export function serveWelcome(req, res, next) {
 export function serveUserDash(req, res, next) {
   res.render("userDash", {
     userFirstName: req.user.firstName,
+    username: req.params.username,
   });
 }
 
