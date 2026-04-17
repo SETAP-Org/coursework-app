@@ -19,23 +19,9 @@ function formatTime(timestamp) {
     }
 }
 
-// function createMessageComponent(message, side, sender) {
-//     const container = document.createElement("div");
-//     const infoTop = document.createElement("p");
-//     const bubble = document.createElement("div");
-//     const content = document.createElement("p");
-//     const infoBottom = document.createElement("p");
-// }
-
 async function projectChat() {
-    // load user info, project info, and relevant messages
-    const chatResponse = await fetch("/api/chat");
-    const { messages } = await chatResponse.json();
-
-    const meResponse = await fetch("/api/me");
-    const { dbUser } = await meResponse.json();
-
-    const { userId, projectId, username } = window.scriptData;
+    const { userId, projectId, projectName } = window.scriptData;
+    const messages = JSON.parse(window.scriptData.messages);
 
     // get a hold of the elements that you are trying to access
     const messageForm = document.querySelector(".chat-form");
