@@ -71,6 +71,7 @@ export async function getUserProjectsModel(userId) {
   );
 }
 
+// reads whether or not a memebr is a part of a project
 export async function isUserMemberOfProjectModel(userId, projectId) {
   return await query(
     `

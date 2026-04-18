@@ -1,4 +1,7 @@
 import { getUserByMicrosoftIdModel } from "../models/userModels.js";
+import { getProjectByIdModel, getUserProjectsModel } from "../models/projectModels.js";
+import { getMessagesByProjectIdModel } from "../models/chatModels.js";
+import { getUsersByProjectId } from "../models/userProjectModels.js";
 
 const __dirname = import.meta.dirname;
 
@@ -14,24 +17,42 @@ export function serveWelcome(req, res, next) {
   res.render("welcome");
 }
 
-export function serveUserDash(req, res, next) {
+export async function serveUserDash(req, res, next) {
+  // get the user details
+  const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+  const dbUser = dbUserResult.rows[0];
+
+  // get projects related to user
+  const projectsResponse = await getUserProjectsModel(dbUser.user_id);
+  const projectsData = projectsResponse.rows;
+
   res.render("userDash", {
-    name: req.user.firstName,
+    userFirstName: req.user.firstName,
+    username: req.params.username,
+    projects: projectsData,
   });
 }
 
 export async function serveProfile(req, res, next) {
-  const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
-  const dbUser = dbUserResult.rows[0];
-
   res.render("profile", {
-    name: dbUser.username,
+    userFirstName: req.user.firstName,
+    username: req.params.username,
   });
 }
 
 export async function serveProjects(req, res, next) {
+  // get the user details
+  const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+  const dbUser = dbUserResult.rows[0];
+
+  // get projects related to user
+  const projectsResponse = await getUserProjectsModel(dbUser.user_id);
+  const projectsData = projectsResponse.rows;
+
   res.render("projects", {
-    name: req.user.firstName,
+    userFirstName: req.user.firstName,
+    username: req.params.username,
+    projects: projectsData,
   });
 }
 
@@ -40,52 +61,67 @@ export async function serveProjectDash(req, res, next) {
     name: req.user.firstName,
     username: req.params.username,
     project: req.session.project,
-    project_name: req.session.project.project_name,
-    project_id: req.session.project.project_id,
+    projectName: req.session.project.project_name,
+    projectId: req.session.project.project_id,
   });
 }
 
-export async function serveProjectOverview(req, res, next) {
-  res.render("projectOverview", {
+export async function serveProjectInformation(req, res, next) {
+  res.render("projectInformation", {
     username: req.params.username,
-    project_id: req.session.project.project_id,
-    project_name: req.session.project.project_name,
+    projectId: req.session.project.project_id,
+    projectName: req.session.project.project_name,
   });
 }
 
 export async function serveProjectTasks(req, res, next) {
   res.render("projectTasks", {
     username: req.params.username,
-    project_id: req.session.project.project_id,
-    project_name: req.session.project.project_name,
+    projectId: req.session.project.project_id,
+    projectName: req.session.project.project_name,
   });
 }
 
 export async function serveProjectCalendar(req, res, next) {
   res.render("projectCalendar", {
     username: req.params.username,
-    project_id: req.session.project.project_id,
-    project_name: req.session.project.project_name,
+    projectId: req.session.project.project_id,
+    projectName: req.session.project.project_name,
   });
 }
 
 export async function serveProjectChat(req, res, next) {
-  const userResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
-  const user = userResult.rows[0];
+  // get the user details
+  const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+  const dbUser = dbUserResult.rows[0];
+
+  // get the project details
+  const projectResponse = await getProjectByIdModel(req.params.project_id);
+  const projectData = projectResponse.rows[0];
+
+  // get project messages
+  const messagesResponse = await getMessagesByProjectIdModel(req.params.project_id);
+  const messagesData = messagesResponse.rows;
+
+  // get the usernames of the other members of the group
+  const groupUsersResponse = await getUsersByProjectId(req.params.project_id);
+  const groupUsersData = groupUsersResponse.rows;
 
   res.render("projectChat", {
+    userId: dbUser.user_id,
     username: req.params.username,
-    user_id: user.user_id,
-    project_id: req.session.project.project_id,
-    project_name: req.session.project.project_name,
+    projectId: req.params.project_id,
+    projectName: projectData.project_name,
+    messages: messagesData,
+    groupUsers: groupUsersData
   });
 }
 
 export async function serveProjectContributions(req, res, next) {
   res.render("projectContributions", {
     username: req.params.username,
-    project_id: req.session.project.project_id,
-    project_name: req.session.project.project_name,
+    projectId: req.session.project.project_id,
+    projectName: req.session.project.project_name,
   });
 }
 

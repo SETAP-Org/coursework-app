@@ -1,35 +1,24 @@
-function toggleNewProjectForm() {
-  const dialog = document.getElementById("create-project-dialog");
-  dialog.open ? dialog.close() : dialog.showModal();
-}
+async function projects() {
+  // ejs data
+  const { username } = window.scriptData;
+  const projects = window.scriptData.projects;
 
-document.addEventListener("DOMContentLoaded", async () => {
+  // get the relevant dom elements
   const projectsList = document.querySelector(".projects-list");
   const template = document.querySelector("#project-template");
+  const dialog = document.getElementById("create-project-dialog");
+  const dialogForm = document.querySelector("#create-project-dialog form");
+  const createProjectBtn = document.querySelector("#create-project-button");
+  const closeCreateNewFormButton = document.querySelector(".modal-close");
 
   try {
-    const user_info_fetch = await fetch("/api/me");
-    const user_info = await user_info_fetch.json();
-    const user_first_name = user_info?.dbUser.user_first_name;
-    const username = user_info?.dbUser.username;
-
-    if (projectsList && template) {
-      const res = await fetch("/api/me/projects");
-      if (!res.ok) {
-        projectsList.innerHTML = "<li>Error loading projects.</li>";
-        return;
-      }
-      const data = await res.json();
-      if (
-        !data.success ||
-        !Array.isArray(data.projects) ||
-        data.projects.length === 0
-      ) {
-        projectsList.innerHTML = "<li>No projects found.</li>";
-        return;
-      }
-      projectsList.innerHTML = "";
-      data.projects.forEach((project) => {
+    // update ui based on list of projects
+    if (projects.length === 0) {
+      // if no projects in list...
+      projectsList.innerHTML = "<li>No projects found.</li>";
+    } else {
+      // otherwise, loop over the projects and clone the template to populate the list
+      projects.forEach((project) => {
         const node = template.content.cloneNode(true);
         const section = node.querySelector(
           ".user-dash-project-card-individual",
@@ -55,52 +44,61 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       });
     }
+
+    // event to open dialog when user clicks 'create new project'
+    createProjectBtn.addEventListener("click", () => {
+      dialog.showModal();
+    });
+
+    closeCreateNewFormButton.addEventListener("click", () => {
+      dialog.close();
+    });
+
+    // event to close dialog box when clicking anywhere outside the form
+    dialog.addEventListener("click", function (e) {
+      if (e.target === this) this.close();
+    });
+
+    // event listener to add project
+    dialogForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const form = e.target;
+      const name = form["project-name"].value;
+      const deadline = form["project-deadline"].value;
+
+      const res = await fetch("/api/projects/addProject", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          project_name: name,
+          project_deadline: deadline,
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById("create-project-dialog").close();
+          form.reset();
+          window.location.replace(
+            `/${username}/projects/${data.project.project_id}`,
+          );
+        } else {
+          alert(data.error);
+        }
+      } else {
+        const data = await res.json();
+        alert(data.error || "Failed to create project.");
+      }
+    });
   } catch (err) {
     console.error("Error loading projects page:", err);
     if (projectsList)
       projectsList.innerHTML = "<li>Error loading projects.</li>";
   }
-});
+}
 
-document
-  .querySelector("#create-project-button")
-  .addEventListener("click", toggleNewProjectForm);
-
-document
-  .querySelector("#create-project-dialog")
-  .addEventListener("click", function (e) {
-    if (e.target === this) this.close();
-  });
-
-document
-  .querySelector("#create-project-dialog form")
-  .addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const name = form["project-name"].value;
-    const deadline = form["project-deadline"].value;
-
-    const user_info_fetch = await fetch("/api/me");
-    const user_info = await user_info_fetch.json();
-    const username = user_info.dbUser.username;
-
-    const res = await fetch(
-      `/api/projects/addProject?project_name=${encodeURIComponent(name)}&project_deadline=${encodeURIComponent(deadline)}`,
-      { method: "POST" },
-    );
-    if (res.ok) {
-      const data = await res.json();
-      if (data.success) {
-        document.getElementById("create-project-dialog").close();
-        form.reset();
-        window.location.replace(
-          `/${username}/projects/${data.project.project_id}`,
-        );
-      } else {
-        alert(data.error);
-      }
-    } else {
-      const data = await res.json();
-      alert(data.error || "Failed to create project.");
-    }
-  });
+projects();

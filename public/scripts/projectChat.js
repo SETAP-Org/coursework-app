@@ -7,8 +7,6 @@ function formatTime(timestamp) {
         timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
     });
 
-    console.log(localDate, 'this is the time')
-
     const splitDate = localDate.split(", ")[0];
     const splitTime = localDate.split(", ")[1].split(":");
     const formattedTime = `${splitTime[0]}:${splitTime[1]}`;
@@ -19,23 +17,10 @@ function formatTime(timestamp) {
     }
 }
 
-// function createMessageComponent(message, side, sender) {
-//     const container = document.createElement("div");
-//     const infoTop = document.createElement("p");
-//     const bubble = document.createElement("div");
-//     const content = document.createElement("p");
-//     const infoBottom = document.createElement("p");
-// }
-
 async function projectChat() {
-    // load user info, project info, and relevant messages
-    const chatResponse = await fetch("/api/chat");
-    const { messages } = await chatResponse.json();
-
-    const meResponse = await fetch("/api/me");
-    const { dbUser } = await meResponse.json();
-
-    const { userId, projectId, username } = window.scriptData;
+    const { userId, projectId, projectName } = window.scriptData;
+    const messages = window.scriptData.messages;
+    const groupUsers = window.scriptData.groupUsers;
 
     // get a hold of the elements that you are trying to access
     const messageForm = document.querySelector(".chat-form");
@@ -57,8 +42,11 @@ async function projectChat() {
         // configuring the elements
         content.innerText = message.message_content
 
-        if (message.sender_id != dbUser.user_id) {
-            infoTop.innerText = `Sent by ${username}`
+        if (message.sender_id != userId) {
+            // getting the username of the sender
+            const senderUsername = groupUsers.find(u => u.user_id === message.sender_id).username;
+
+            infoTop.innerText = `Sent by ${senderUsername}`;
             container.className = "message-container-left";
             infoTop.className = "message-info-left";
             infoBottom.className = "message-info-left";
@@ -77,7 +65,7 @@ async function projectChat() {
         infoBottom.innerText = `${date} | ${time}`;
 
         // composing elements
-        if (message.sender_id != dbUser.user_id) {
+        if (message.sender_id != userId) {
             container.appendChild(infoTop);
         }
         container.appendChild(bubble);

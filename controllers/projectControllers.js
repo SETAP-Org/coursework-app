@@ -12,9 +12,11 @@ import { getUserByMicrosoftIdModel } from "../models/userModels.js";
 export async function addProject(req, res, next) {
   try {
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
-    const dbUser = dbUserResult?.rows?.[0];
+    const dbUser = dbUserResult.rows[0];
+
     const userId = dbUser.user_id;
-    const { project_name, project_deadline } = req.query;
+    const { project_name, project_deadline } = req.body;
+    
     const result = await postProjectModel(
       userId,
       project_name,
