@@ -17,10 +17,19 @@ export function serveWelcome(req, res, next) {
   res.render("welcome");
 }
 
-export function serveUserDash(req, res, next) {
+export async function serveUserDash(req, res, next) {
+  // get the user details
+  const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+  const dbUser = dbUserResult.rows[0];
+
+  // get projects related to user
+  const projectsResponse = await getUserProjectsModel(dbUser.user_id);
+  const projectsData = projectsResponse.rows;
+
   res.render("userDash", {
     userFirstName: req.user.firstName,
     username: req.params.username,
+    projects: projectsData,
   });
 }
 

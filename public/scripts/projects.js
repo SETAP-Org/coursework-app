@@ -1,16 +1,17 @@
 async function projects() {
+  // ejs data
+  const { username } = window.scriptData;
+  const projects = window.scriptData.projects;
+
+  // get the relevant dom elements
+  const projectsList = document.querySelector(".projects-list");
+  const template = document.querySelector("#project-template");
+  const dialog = document.getElementById("create-project-dialog");
+  const dialogForm = document.querySelector("#create-project-dialog form");
+  const createProjectBtn = document.querySelector("#create-project-button");
+  const closeCreateNewFormButton = document.querySelector(".modal-close");
+
   try {
-    // ejs data
-    const { username } = window.scriptData;
-    const projects = window.scriptData.projects;
-
-    // get the relevant dom elements
-    const projectsList = document.querySelector(".projects-list");
-    const template = document.querySelector("#project-template");
-    const dialog = document.getElementById("create-project-dialog");
-    const dialogForm = document.querySelector("#create-project-dialog form");
-    const createProjectBtn = document.querySelector("#create-project-button");
-
     // update ui based on list of projects
     if (projects.length === 0) {
       // if no projects in list...
@@ -46,7 +47,11 @@ async function projects() {
 
     // event to open dialog when user clicks 'create new project'
     createProjectBtn.addEventListener("click", () => {
-      dialog.open ? dialog.close() : dialog.showModal();
+      dialog.showModal();
+    });
+
+    closeCreateNewFormButton.addEventListener("click", () => {
+      dialog.close();
     });
 
     // event to close dialog box when clicking anywhere outside the form
