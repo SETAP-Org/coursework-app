@@ -1,22 +1,17 @@
 async function projects() {
   try {
+    // ejs data
     const { username } = window.scriptData;
     const projects = window.scriptData.projects;
-
-    // get the projects (can be done via ejs)
-    const res = await fetch("/api/me/projects");
-    if (!res.ok) {
-      projectsList.innerHTML = "<li>Error loading projects.</li>";
-      return;
-    }
-    const data = await res.json();
 
     // get the relevant dom elements
     const projectsList = document.querySelector(".projects-list");
     const template = document.querySelector("#project-template");
     const dialog = document.getElementById("create-project-dialog");
+    const dialogForm = document.querySelector("#create-project-dialog form");
+    const createProjectBtn = document.querySelector("#create-project-button");
 
-    // change ui based on list of projects
+    // update ui based on list of projects
     if (projects.length === 0) {
       // if no projects in list...
       projectsList.innerHTML = "<li>No projects found.</li>";
@@ -50,48 +45,50 @@ async function projects() {
     }
 
     // event to open dialog when user clicks 'create new project'
-    document
-      .querySelector("#create-project-button")
-      .addEventListener("click", () => {
-        dialog.open ? dialog.close() : dialog.showModal();
-      });
+    createProjectBtn.addEventListener("click", () => {
+      dialog.open ? dialog.close() : dialog.showModal();
+    });
 
     // event to close dialog box when clicking anywhere outside the form
-    document
-      .querySelector("#create-project-dialog")
-      .addEventListener("click", function (e) {
-        if (e.target === this) this.close();
+    dialog.addEventListener("click", function (e) {
+      if (e.target === this) this.close();
+    });
+
+    // event listener to add project
+    dialogForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const form = e.target;
+      const name = form["project-name"].value;
+      const deadline = form["project-deadline"].value;
+
+      const res = await fetch("/api/projects/addProject", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          project_name: name,
+          project_deadline: deadline,
+        })
       });
 
-    // event listener to add project (no need for encoding, just pass data in the post body)
-    document
-      .querySelector("#create-project-dialog form")
-      .addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const form = e.target;
-        const name = form["project-name"].value;
-        const deadline = form["project-deadline"].value;
-
-        const res = await fetch(
-          `/api/projects/addProject?project_name=${encodeURIComponent(name)}&project_deadline=${encodeURIComponent(deadline)}`,
-          { method: "POST" },
-        );
-        if (res.ok) {
-          const data = await res.json();
-          if (data.success) {
-            document.getElementById("create-project-dialog").close();
-            form.reset();
-            window.location.replace(
-              `/${username}/projects/${data.project.project_id}`,
-            );
-          } else {
-            alert(data.error);
-          }
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById("create-project-dialog").close();
+          form.reset();
+          window.location.replace(
+            `/${username}/projects/${data.project.project_id}`,
+          );
         } else {
-          const data = await res.json();
-          alert(data.error || "Failed to create project.");
+          alert(data.error);
         }
-      });
+      } else {
+        const data = await res.json();
+        alert(data.error || "Failed to create project.");
+      }
+    });
   } catch (err) {
     console.error("Error loading projects page:", err);
     if (projectsList)
