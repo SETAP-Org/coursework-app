@@ -12,6 +12,13 @@
         <link rel="stylesheet" href="/css/projects.css" />
         <link rel="icon" href="/assets/favicon.png" type="image/png" />
 
+        <script>
+            window.scriptData = {
+                userFirstName: "<%= userFirstName %>",
+                username: "<%= username %>",
+                projects: <%- JSON.stringify(projects) %>
+            };
+        </script>
         <script src="/scripts/L&D-mode.js" defer></script>
         <script src="/scripts/projects.js" defer></script>
 

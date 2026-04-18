@@ -1,5 +1,5 @@
 import { getUserByMicrosoftIdModel } from "../models/userModels.js";
-import { getProjectByIdModel } from "../models/projectModels.js";
+import { getProjectByIdModel, getUserProjectsModel } from "../models/projectModels.js";
 import { getMessagesByProjectIdModel } from "../models/chatModels.js";
 import { getUsersByProjectId } from "../models/userProjectModels.js";
 
@@ -32,8 +32,18 @@ export async function serveProfile(req, res, next) {
 }
 
 export async function serveProjects(req, res, next) {
+  // get the user details
+  const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+  const dbUser = dbUserResult.rows[0];
+
+  // get projects related to user
+  const projectsResponse = await getUserProjectsModel(dbUser.user_id);
+  const projectsData = projectsResponse.rows;
+
   res.render("projects", {
     userFirstName: req.user.firstName,
+    username: req.params.username,
+    projects: projectsData,
   });
 }
 
