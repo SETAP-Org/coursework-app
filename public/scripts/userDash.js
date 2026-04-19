@@ -1,4 +1,8 @@
 async function userDash() {
+  // show loading screen
+  const loading = document.querySelector(".loading");
+  loading.style.display = "flex";
+
   // ejs data
   const { username } = window.scriptData;
   const projects = window.scriptData.projects;
@@ -46,6 +50,9 @@ async function userDash() {
     projectsList.innerHTML =
       '<li class="project-list-item">Error loading projects.</li>';
   }
+
+  // hide loading screen
+  loading.style.display = "none";
 };
 
 userDash();

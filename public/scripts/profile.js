@@ -1,4 +1,8 @@
 async function loadProfile() {
+  // show loading screen
+  const loading = document.querySelector(".loading");
+  loading.style.display = "flex";
+
   // ejs variables
   const { username } = window.scriptData;
 
@@ -38,6 +42,8 @@ async function loadProfile() {
   usernameForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    loading.style.display = "flex";
+
     if (usernameValue === username) {
       usernameMsg.innerText = "You already have that username!";
     } else {
@@ -49,12 +55,14 @@ async function loadProfile() {
       const data = await response.json();
 
       usernameMsg.innerText = data.message;
-    }
-
-    usernameInput.value = "";
-
-    if (data.success) {
-      usernameDialog.showModal();
+      
+      usernameInput.value = "";
+  
+      loading.style.display = "none";
+      
+      if (data.success) {
+        usernameDialog.showModal();
+      };
     }
   })
 
@@ -62,6 +70,9 @@ async function loadProfile() {
   usernameDialogBtn.addEventListener("click", () => {
     window.location.replace("/");
   })
+
+  // hide loading screen
+  loading.style.display = "none";
 }
 
 loadProfile();

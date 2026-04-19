@@ -18,6 +18,11 @@ function formatTime(timestamp) {
 }
 
 async function projectChat() {
+    // show loading screen
+    const loading = document.querySelector(".loading");
+    loading.style.display = "flex";
+
+    // ejs variables
     const { userId, projectId, projectName } = window.scriptData;
     const messages = window.scriptData.messages;
     const groupUsers = window.scriptData.groupUsers;
@@ -82,16 +87,8 @@ async function projectChat() {
     messageForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
+        loading.style.display = "flex";
         messageFieldSet.disabled = true;
-
-        // const response = await fetch("/api/chat/addMessage", {
-        //     method: "post",
-        //     headers: {'Content-Type': 'application/json'},
-        //     body: JSON.stringify({ messageContent }),
-        // });
-
-        // const data = await response.json();
-        // console.log(data.message);
 
         socket.emit('chat', {
             senderId: userId,
@@ -101,6 +98,7 @@ async function projectChat() {
 
         messageFieldSet.disabled = false;
         messageBox.value = "";
+        loading.style.display = "none";
     })
     
     // input box event listener
@@ -118,6 +116,9 @@ async function projectChat() {
     // handling messages incoming from socket io
     socket.on('chat', (message) => {
         if (message.project_id == projectId) {
+            // show loading screen
+            loading.style.display = "flex";
+
             // creating the elements
             const container = document.createElement("div");
             const infoTop = document.createElement("p");
@@ -159,8 +160,14 @@ async function projectChat() {
             messagesContainer.appendChild(container);
 
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // hide loading screen
+            loading.style.display = "none";
         }
     })
+
+    // hide loading screen
+    loading.style.display = "none";
 }
 
 projectChat();

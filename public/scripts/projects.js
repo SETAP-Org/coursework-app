@@ -1,4 +1,8 @@
 async function projects() {
+  // show loading screen
+  const loading = document.querySelector(".loading");
+  loading.style.display = "flex";
+
   // ejs data
   const { username } = window.scriptData;
   const projects = window.scriptData.projects;
@@ -50,6 +54,7 @@ async function projects() {
       dialog.showModal();
     });
 
+    // event to close dialog when you click the "X" on the dialog
     closeCreateNewFormButton.addEventListener("click", () => {
       dialog.close();
     });
@@ -62,6 +67,8 @@ async function projects() {
     // event listener to add project
     dialogForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+
+      loading.style.display = "flex";
 
       const form = e.target;
       const name = form["project-name"].value;
@@ -93,12 +100,17 @@ async function projects() {
         const data = await res.json();
         alert(data.error || "Failed to create project.");
       }
+
+      loading.style.display = "none";
     });
   } catch (err) {
     console.error("Error loading projects page:", err);
     if (projectsList)
       projectsList.innerHTML = "<li>Error loading projects.</li>";
   }
+
+  // hide loading screen
+  loading.style.display = "none";
 }
 
 projects();
