@@ -1,4 +1,28 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
 h1 {
-    color: red;
     font-size: 3em;
+    text-align: center;
+    font-style: italic;
+}
+
+p {
+    font-size: 1.2em;
+    text-align: center;
+}
+
+button {
+    font-size: 1.2em;
 }
