@@ -18,6 +18,10 @@ function formatTime(timestamp) {
 }
 
 async function projectChat() {
+    // show loading screen
+    const loading = document.querySelector(".loading");
+    loading.style.display = "flex";
+
     // ejs variables
     const { userId, projectId, projectName } = window.scriptData;
     const messages = window.scriptData.messages;
@@ -29,11 +33,7 @@ async function projectChat() {
     const messageBox = document.querySelector(".chat-input");
     const sendBtn = document.querySelector(".chat-send");
     const messagesContainer = document.querySelector(".chat-messages");
-    const loading = document.querySelector(".loading");
     let messageContent = "";
-
-    // show loading screen
-    loading.style.display = "flex";
 
     // messages container population
     for (const message of messages) {

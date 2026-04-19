@@ -1,4 +1,8 @@
 async function projects() {
+  // show loading screen
+  const loading = document.querySelector(".loading");
+  loading.style.display = "flex";
+
   // ejs data
   const { username } = window.scriptData;
   const projects = window.scriptData.projects;
@@ -99,6 +103,9 @@ async function projects() {
     if (projectsList)
       projectsList.innerHTML = "<li>Error loading projects.</li>";
   }
+
+  // hide loading screen
+  loading.style.display = "none";
 }
 
 projects();

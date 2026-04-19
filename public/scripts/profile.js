@@ -1,4 +1,8 @@
 async function loadProfile() {
+  // show loading screen
+  const loading = document.querySelector(".loading");
+  loading.style.display = "flex";
+
   // ejs variables
   const { username } = window.scriptData;
 
@@ -62,6 +66,9 @@ async function loadProfile() {
   usernameDialogBtn.addEventListener("click", () => {
     window.location.replace("/");
   })
+
+  // hide loading screen
+  loading.style.display = "none";
 }
 
 loadProfile();

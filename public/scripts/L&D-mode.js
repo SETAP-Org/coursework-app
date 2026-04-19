@@ -1,3 +1,7 @@
+// show loading screen
+const loading = document.querySelector(".loading");
+loading.style.display = "flex";
+
 function setCookie(name, value) {
     if(!name || !value) return;
     document.cookie = name + "=" + value + "; path=/";
@@ -46,3 +50,6 @@ if (!getCookie("theme")) {
 }
 
 setTheme();
+
+// hide loading screen
+loading.style.display = "none";
