@@ -23,7 +23,7 @@ import {
   serveProjectCalendar,
   serveProjectChat,
   serveProjectContributions,
-  redirectWelcome,
+  redirectWelcome
 } from "./controllers/serveControllers.js";
 
 import {
@@ -32,7 +32,6 @@ import {
   getProjectDetails,
   loadProject,
   checkMembership,
-  // getCurrentProject,
 } from "./controllers/projectControllers.js";
 
 import {
