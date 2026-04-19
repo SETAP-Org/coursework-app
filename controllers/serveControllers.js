@@ -102,12 +102,29 @@ export async function serveProjectDash(req, res, next) {
   }
 }
 
-export async function serveProjectInformation(req, res, next) {
+export async function serveProjectInfo(req, res, next) {
   try {
-    res.render("projectInformation", {
+    // get the user details
+    const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+    const dbUser = dbUserResult.rows[0];
+  
+    // get the project details
+    const projectResponse = await getProjectByIdModel(req.params.project_id);
+    const projectData = projectResponse.rows[0];
+
+    // get the usernames of the other members of the group
+    const groupUsersResponse = await getUsersByProjectId(req.params.project_id);
+    const groupUsersData = groupUsersResponse.rows;
+
+    res.render("projectInfo", {
+      userId: dbUser.user_id,
       username: req.params.username,
-      projectId: req.session.project.project_id,
-      projectName: req.session.project.project_name,
+      projectId: req.params.project_id,
+      projectName: projectData.project_name,
+      creatorId: projectData.created_by,
+      teamLeaderId: projectData.team_leader_id,
+      projectDeadline: projectData.deadline,
+      projectMembers: groupUsersData,
     });
   } catch(err) {
     res.render("error", {
