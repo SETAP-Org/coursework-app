@@ -23,8 +23,7 @@ import {
   serveProjectCalendar,
   serveProjectChat,
   serveProjectContributions,
-  redirectWelcome,
-  serveError
+  redirectWelcome
 } from "./controllers/serveControllers.js";
 
 import {
@@ -33,7 +32,6 @@ import {
   getProjectDetails,
   loadProject,
   checkMembership,
-  // getCurrentProject,
 } from "./controllers/projectControllers.js";
 
 import {
@@ -102,8 +100,6 @@ io.on('connection', (socket) => {
 
 // paths to navigate pages
 app.get("/", checkIfLoggedIn, serveLanding);
-
-app.get("/error", serveError);
 
 app.get("/welcome", serveWelcome);
 
