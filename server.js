@@ -24,6 +24,7 @@ import {
   serveProjectChat,
   serveProjectContributions,
   redirectWelcome,
+  serveError
 } from "./controllers/serveControllers.js";
 
 import {
@@ -101,6 +102,8 @@ io.on('connection', (socket) => {
 
 // paths to navigate pages
 app.get("/", checkIfLoggedIn, serveLanding);
+
+app.get("/error", serveError);
 
 app.get("/welcome", serveWelcome);
 

@@ -13,6 +13,10 @@ export function serveLanding(req, res, next) {
   });
 }
 
+export function serveError(req, res, next) {
+  res.render("error");
+}
+
 export function serveWelcome(req, res, next) {
   res.render("welcome");
 }
