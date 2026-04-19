@@ -42,6 +42,8 @@ async function loadProfile() {
   usernameForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    loading.style.display = "flex";
+
     if (usernameValue === username) {
       usernameMsg.innerText = "You already have that username!";
     } else {
@@ -53,12 +55,14 @@ async function loadProfile() {
       const data = await response.json();
 
       usernameMsg.innerText = data.message;
-    }
-
-    usernameInput.value = "";
-
-    if (data.success) {
-      usernameDialog.showModal();
+      
+      usernameInput.value = "";
+  
+      loading.style.display = "none";
+      
+      if (data.success) {
+        usernameDialog.showModal();
+      };
     }
   })
 
