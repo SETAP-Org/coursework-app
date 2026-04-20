@@ -1,6 +1,6 @@
 import {
   postTaskModel,
-  getTaskssByProjectIdModel,
+  getTasksByProjectIdModel,
 } from "../models/taskModels.js";
 import { getUserByMicrosoftIdModel } from "../models/userModels.js";
 
