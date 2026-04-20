@@ -1,8 +1,8 @@
 // ===== imports =====
 // package imports
 import express from "express";
-import { createServer } from 'node:http';
-import { Server } from 'socket.io';
+import { createServer } from "node:http";
+import { Server } from "socket.io";
 import path from "path";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
@@ -50,10 +50,9 @@ import {
   getJustAuthenticatedFlag,
 } from "./controllers/authControllers.js";
 
-import {
-  addMessage,
-  getMessages,
-} from "./controllers/chatControllers.js";
+import { addMessage, getMessages } from "./controllers/chatControllers.js";
+
+import { addTask } from "./controllers/taskControllers.js";
 
 // util imports
 import createSession from "./utils/session.js";
@@ -78,23 +77,23 @@ createSession(app);
 setUpAuth(app);
 
 // socket io logic
-io.on('connection', (socket) => {
-  console.log('a user connected');
+io.on("connection", (socket) => {
+  console.log("a user connected");
 
-  socket.on('chat', async (msg) => {
+  socket.on("chat", async (msg) => {
     const data = await postMessageModel(
       msg.senderId,
       msg.projectId,
       msg.message,
     );
 
-    console.log(data, 'this is the data back.....')
-    
-    io.emit('chat', data.rows[0]);
-  })
+    console.log(data, "this is the data back.....");
 
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
+    io.emit("chat", data.rows[0]);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
   });
 });
 
@@ -164,6 +163,8 @@ app.post("/api/projects/addProject", addProject);
 app.post("/api/users/addUser", setJustAuthenticatedFlag, addUser);
 
 app.post("/api/chat/addMessage", addMessage);
+
+app.post("/api/tasks/addTask", addTask);
 
 // ---- READ ----
 app.get("/api/auth", checkIfLoggedIn, authenticatePassport());

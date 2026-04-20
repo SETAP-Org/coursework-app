@@ -6,11 +6,11 @@
 
         <link rel="stylesheet" href="/css/root-dark.css"
         />
-        <link rel="stylesheet" href="/css/project_dash.css" />
+        <link rel="stylesheet" href="/css/project_tasks.css" />
         <link rel="icon" href="/assets/favicon.png" type="image/png" />
 
         <script src="/scripts/L&D-mode.js" defer></script>
-        <script src="/scripts/projects.js" defer></script>
+        <script src="/scripts/projectTasks.js" defer></script>
 
         <title>GCMS | <%= projectName %> Tasks</title>
     </head>
@@ -20,8 +20,70 @@
         <section id="page-content">
             <section class="page-header">
                 <h1 id="page-title">Tasks</h1>
+                <button id="new-task-button">New Task</button>
+            </section>
+            <section id="task-panel">
+
             </section>
         </section>
+
+        <template id="task-template">
+            <section class="task-card-individual">
+                <div id="task-info">
+                    <b class="task-name"></b>
+                    <span class="task-date"></span>
+                </div>
+            </section>
+        </template>
+
+        <!-- Popup for creating new project -->
+        <dialog id="create-task-dialog">
+            <button class="modal-close" onclick="toggleNewTaskForm()">
+                X
+            </button>
+            <form method="dialog">
+                <h1>Create Task</h1>
+                <label>
+                    Title
+                    <input
+                        type="text"
+                        placeholder="e.g. My Task"
+                        name="taskTitle"
+                        required
+                    />
+                </label>
+                <label>
+                    Description
+                    <input
+                        type="text"
+                        placeholder="e.g. This is a task"
+                        name="taskDesc"
+                        required
+                    />
+                </label>
+                <label>
+                    Deadline
+                    <input type="date" name="taskDeadline" required />
+                </label>
+                <label>
+                    Weighting
+                    <div class="range-row">
+                    <input id="taskWeightRange" type="range" name="taskWeight" min=1 max=10 value=1 required />
+                    <output id="taskWeightValue" class="range-value" for="taskWeightRange">1</output>
+                    </div>
+                </label>
+                <label>
+                    Member
+                    <select
+                        name = "taskAssignee"
+                        required>
+                            <option value="member1">Member 1</option>
+                            <option value="member2">Member 2</option>
+                    </select>
+                </label>
+                <button type="submit">Create Task</button>
+            </form>
+        </dialog>
 
         <%- include('partials/footer') %>
 
