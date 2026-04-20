@@ -1,0 +1,86 @@
+body, .page-container * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.project-heading {
+    font-style: italic;
+    font-size: 2em;
+    margin-top: 50px;
+    margin-bottom: 10px;
+}
+
+.project-sub-heading {
+    color: rgb(180, 180, 180);
+    font-size: 1.3em;
+}
+
+.section-outer-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.section-inner-container {
+    border: solid rgb(180, 180, 180) 2px;
+    border-radius: 25px;
+    width: 50%;
+    padding: 30px;
+}
+
+.section-card {
+    padding: 10px;
+    margin: 10px;
+}
+
+.section-card:not(:last-child) {
+    border-bottom: solid rgb(180, 180, 180) 2px;
+}
+
+.section-heading {
+    margin-bottom: 10px;
+}
+
+.section-heading p {
+    font-size: 1.2em;
+}
+
+.section-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    justify-items: center;
+}
+
+.section-list-item {
+    width: 80%;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.35);
+    position: relative;
+    font-size: 1.3em;
+}
+
+.section-list-item .fa-user {
+    position: absolute;
+    left: 0;
+    font-size: 1.3em;
+    margin: 5px;
+}

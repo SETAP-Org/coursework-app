@@ -30,35 +30,54 @@
     <body>
         <%- include('partials/projectNav') %>
 
-        <h1 class="project-heading"><%= projectName %></h1>
-        <h2 class="project-sub-heading">Information & Settings</h2>
+        <section class="page-container">
+            <h1 class="project-heading"><%= projectName %></h1>
+            <h2 class="project-sub-heading">Information & Settings</h2>
+    
+            <section class="section-outer-container">
+                <div class="section-inner-container">
+                    <div class="section-card">
+                        <h2 class="section-heading">Project Name</h2>
+                        <p><%= projectName %></p>
+                    </div>
 
-        <section class="info-outer-container">
-            <div class="info-inner-container">
-                <h2 class="info-heading">Project Name</h2>
-                <p><%= projectName %></p>
+                    <div class="section-card">
+                        <h2 class="section-heading">Project Description</h2>
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quos, dicta. Neque ipsam tempora, id harum dolor reprehenderit aperiam asperiores. Rem, mollitia recusandae temporibus at sunt incidunt! Voluptates nobis rerum minima?</p>
+                    </div>
+    
 
-                <h2 class="info-heading">Project Description</h2>
-                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quos, dicta. Neque ipsam tempora, id harum dolor reprehenderit aperiam asperiores. Rem, mollitia recusandae temporibus at sunt incidunt! Voluptates nobis rerum minima?</p>
+                    <div class="section-card">
+                        <h2 class="section-heading">Project Deadline</h2>
+                        <p>Insert formatted deadline here...</p>
+                    </div>
+    
 
-                <h2 class="info-heading">Project Deadline</h2>
-                <p>Insert formatted deadline here...</p>
+                    <div class="section-card">
+                        <h2 class="section-heading">Team Leader</h2>
+                        <p>Insert leader here...</p>
+                    </div>
+    
 
-                <h2 class="info-heading">Team Leader</h2>
-                <p>Insert leader here...</p>
-
-                <h2 class="info-heading">Project Members</h2>
-                <ul>
-                    <li><i class="fa fa-user"></i>This is a user</li>
-                    <li><i class="fa fa-user"></i>This is a user</li>
-                    <li><i class="fa fa-user"></i>This is a user</li>
-                </ul>
-            </div>
+                    <div class="section-card">
+                        <h2 class="section-heading">Project Members</h2>
+                        <ul class="section-list">
+                            <li class="section-list-item"><i class="fa fa-user"></i>This is a user</li>
+                            <li class="section-list-item"><i class="fa fa-user"></i>This is a user</li>
+                            <li class="section-list-item"><i class="fa fa-user"></i>This is a user</li>
+                        </ul>
+                    </div>
+    
+                </div>
+            </section>
+    
+            <% if (userId == teamLeaderId) { %>
+                <section class="section-outer-container">
+                    <div class="section-inner-container"></div>
+                </section>
+            <% } %>
         </section>
 
-        <section class="settings-outer-container">
-            <div class="settings-inner-container"></div>
-        </section>
 
         <%- include('partials/footer') %>
         
