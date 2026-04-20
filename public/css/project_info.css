@@ -31,30 +31,31 @@ body, .page-container * {
 }
 
 .section-inner-container {
-    border: solid rgb(180, 180, 180) 2px;
+    border: solid rgba(180, 180, 180, 0.5) 2px;
     border-radius: 25px;
     width: 50%;
     padding: 30px;
+    margin-bottom: 50px;
 }
 
-.section-card {
-    padding: 10px;
+.info-section-card {
+    padding: 20px;
     margin: 10px;
 }
 
-.section-card:not(:last-child) {
-    border-bottom: solid rgb(180, 180, 180) 2px;
+.info-section-card:not(:last-child) {
+    border-bottom: solid rgba(180, 180, 180, 0.5) 2px;
 }
 
-.section-heading {
-    margin-bottom: 10px;
+.info-section-heading {
+    margin-bottom: 20px;
 }
 
-.section-heading p {
+.info-section-heading p {
     font-size: 1.2em;
 }
 
-.section-list {
+.info-section-list {
     list-style: none;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -65,7 +66,7 @@ body, .page-container * {
     justify-items: center;
 }
 
-.section-li {
+.info-section-li {
     width: 80%;
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -88,3 +89,29 @@ body, .page-container * {
 .team-leader {
     color: #d3af37;
 }
+
+.settings-section-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    margin: 10px;
+}
+
+.settings-section-card:not(:last-child) {
+    border-bottom: solid rgba(180, 180, 180, 0.5) 2px;
+}
+
+.settings-section-header {
+
+}
+
+.settings-section-button {
+    padding: 10px;
+}
+
+.danger-button {
+    background-color: #fa003f;
+    color: white;
+}
+

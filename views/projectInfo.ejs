@@ -32,40 +32,42 @@
 
         <section class="page-container">
             <h1 class="project-heading"><%= projectName %></h1>
-            <h2 class="project-sub-heading">Information & Settings</h2>
+
+            <!-- information -->
+            <h2 class="project-sub-heading">Information</h2>
     
             <section class="section-outer-container">
                 <div class="section-inner-container">
-                    <div class="section-card">
-                        <h2 class="section-heading">Project Name</h2>
+                    <div class="info-section-card">
+                        <h2 class="info-section-heading">Project Name</h2>
                         <p><%= projectName %></p>
                     </div>
 
-                    <div class="section-card">
-                        <h2 class="section-heading">Project Description</h2>
+                    <div class="info-section-card">
+                        <h2 class="info-section-heading">Project Description</h2>
                         <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quos, dicta. Neque ipsam tempora, id harum dolor reprehenderit aperiam asperiores. Rem, mollitia recusandae temporibus at sunt incidunt! Voluptates nobis rerum minima?</p>
                     </div>
     
 
-                    <div class="section-card">
-                        <h2 class="section-heading">Project Deadline</h2>
+                    <div class="info-section-card">
+                        <h2 class="info-section-heading">Project Deadline</h2>
                         <p>Insert formatted deadline here...</p>
                     </div>
     
 
-                    <div class="section-card">
-                        <h2 class="section-heading">Team Leader</h2>
-                        <p>Insert leader here...</p>
+                    <div class="info-section-card">
+                        <h2 class="info-section-heading">Team Leader</h2>
+                        <p class="info-section-team-leader"></p>
                     </div>
     
 
-                    <div class="section-card">
-                        <h2 class="section-heading">Project Members</h2>
-                        <ul class="section-list">
-                            <template class="section-li-template">
-                                <li class="section-li">
+                    <div class="info-section-card">
+                        <h2 class="info-section-heading">Project Members</h2>
+                        <ul class="info-section-list">
+                            <template class="info-section-li-template">
+                                <li class="info-section-li">
                                     <i class="fa fa-user"></i>
-                                    <p class="section-li-text"></p>
+                                    <p class="info-section-li-text"></p>
                                 </li>
                             </template>
                         </ul>
@@ -74,13 +76,93 @@
                 </div>
             </section>
     
-            <% if (userId == teamLeaderId) { %>
-                <section class="section-outer-container">
-                    <div class="section-inner-container"></div>
-                </section>
-            <% } %>
+            <!-- settings -->
+            <h2 class="project-sub-heading">Settings</h2>
+
+            <section class="section-outer-container">
+                <div class="section-inner-container">
+                    <!-- leave group -->
+                    <div class="settings-section-card">
+                        <h2 class="settings-section-header">Want to leave the project?</h2>
+                        <button class="settings-section-button leave-button">Click Me!</button>
+                    </div>
+                    
+                    <% if (userId == teamLeaderId) { %>
+                        <!-- add members -->
+                        <div class="settings-section-card">
+                            <h2 class="settings-section-header">Want to add a new member?</h2>
+                            <button class="settings-section-button new-member-button">Click Me!</button>
+                        </div>
+                        
+                        <!-- change team leader -->
+                        <div class="settings-section-card">
+                            <h2 class="settings-section-header">Want to change the team leader?</h2>
+                            <button class="settings-section-button change-leader-button">Click Me!</button>
+                        </div>
+
+                        <!-- delete the project -->
+                        <div class="settings-section-card">
+                            <h2 class="settings-section-header">Want to delete the project?</h2>
+                            <button class="settings-section-button danger-button">Click Me!</button>
+                        </div>
+                    <% } %>
+                </div>
+            </section>
         </section>
 
+        <!-- dialog for leaving -->
+        <dialog class="dialog" id="leave-dialog">
+            <div class="dialog-inner-container">
+                <h1>Are you sure want to leave the project?</h1>
+
+                <div class="dialog-buttons">
+                    <button class="settings-section-button">No</button>
+                    <button class="settings-section-button danger-button">Yes</button>
+                </div>
+            </div>
+        </dialog>
+
+        <!-- dialog for adding member -->
+        <dialog class="dialog" id="add-dialog">
+            <div class="dialog-inner-container">
+                <h1>Who would you like to add to the project?</h1>
+
+                <input type="text" class="dialog-text-input" id="add-member-input">
+
+                <div class="dialog-buttons">
+                    <button class="settings-section-button">Cancel</button>
+                    <button class="settings-section-button">Add Member</button>
+                </div>
+            </div>
+        </dialog>
+
+        <!-- dialog for changing team leader -->
+        <dialog class="dialog" id="team-leader-dialog">
+            <div class="dialog-inner-container">
+                <h1>Who do you want to make team leader?</h1>
+
+                <select class="dialog-select" id="dialog-team-leader select" required>
+                    <!-- populate with the members usernames (that arent me) -->
+                </select>
+
+                <div class="dialog-buttons">
+                    <button class="settings-section-button">Cancel</button>
+                    <button class="settings-section-button">Set Team Leader</button>
+                </div>
+            </div>
+        </dialog>
+
+        <!-- dialog for deleting group -->
+        <dialog class="dialog" id="delete-dialog">
+            <div class="dialog-inner-container">
+                <h1>Are you sure want to delete the project?</h1>
+                
+                <div class="dialog-buttons">
+                    <button class="settings-section-button">No</button>
+                    <button class="settings-section-button danger-button">Yes</button>
+                </div>
+            </div>
+        </dialog>
 
         <%- include('partials/footer') %>
         
