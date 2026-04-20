@@ -23,7 +23,7 @@
             };
         </script>
         <script src="/scripts/L&D-mode.js" defer></script>
-        <script src="/scripts/projects.js" defer></script>
+        <script src="/scripts/projectInfo.js" defer></script>
 
         <title>GCMS | <%= projectName %> Information</title>
     </head>
@@ -62,9 +62,12 @@
                     <div class="section-card">
                         <h2 class="section-heading">Project Members</h2>
                         <ul class="section-list">
-                            <li class="section-list-item"><i class="fa fa-user"></i>This is a user</li>
-                            <li class="section-list-item"><i class="fa fa-user"></i>This is a user</li>
-                            <li class="section-list-item"><i class="fa fa-user"></i>This is a user</li>
+                            <template class="section-li-template">
+                                <li class="section-li">
+                                    <i class="fa fa-user"></i>
+                                    <p class="section-li-text"></p>
+                                </li>
+                            </template>
                         </ul>
                     </div>
     

@@ -65,7 +65,7 @@ body, .page-container * {
     justify-items: center;
 }
 
-.section-list-item {
+.section-li {
     width: 80%;
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -78,9 +78,13 @@ body, .page-container * {
     font-size: 1.3em;
 }
 
-.section-list-item .fa-user {
+.fa {
     position: absolute;
     left: 0;
     font-size: 1.3em;
     margin: 5px;
+}
+
+.team-leader {
+    color: #d3af37;
 }

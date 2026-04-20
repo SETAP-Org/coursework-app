@@ -7,7 +7,8 @@ export async function getUsersByProjectId(projectId) {
         SELECT u.user_id, u.username
         FROM user_projects up
         JOIN users u ON up.user_id = u.user_id
-        WHERE up.project_id = $1;
+        WHERE up.project_id = $1
+        ORDER BY u.username ASC;
         `,
         [projectId]
     );
