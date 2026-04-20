@@ -132,7 +132,7 @@ export async function serveProjectTasks(req, res, next) {
     res.render("projectTasks", {
       userId: dbUser.user_id,
       username: req.params.username,
-      projectId: req.session.project.project_id,
+      projectId: req.params.project_id,
       projectName: req.session.project.project_name,
       groupUsers: groupUsersData,
     });

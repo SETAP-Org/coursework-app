@@ -9,6 +9,15 @@
         <link rel="stylesheet" href="/css/project_tasks.css" />
         <link rel="icon" href="/assets/favicon.png" type="image/png" />
 
+        <script>
+            window.scriptData = {
+                userId: "<%= userId %>",
+                username: "<%= username %>",
+                projectId: "<%= projectId %>",
+                projectName: "<%= projectName %>",
+                groupUsers: <%- JSON.stringify(groupUsers) %>
+            };
+        </script>
         <script src="/scripts/L&D-mode.js" defer></script>
         <script src="/scripts/projectTasks.js" defer></script>
 
