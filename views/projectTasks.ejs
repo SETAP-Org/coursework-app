@@ -74,11 +74,14 @@
                 </label>
                 <label>
                     Member
-                    <select
-                        name = "taskAssignee"
-                        required>
-                            <option value="member1">Member 1</option>
-                            <option value="member2">Member 2</option>
+                    <select name = "taskAssignee" required>
+                        <% if (groupUsers && groupUsers.length) { %>
+                                <% groupUsers.forEach(function(user) { %>
+                                <option value="<%= user.user_id %>"><%= user.username %></option>
+                                <% }) %>
+                            <% } else { %>
+                                <option disabled>No members in project</option>
+                        <% } %>
                     </select>
                 </label>
                 <button type="submit">Create Task</button>

@@ -28,18 +28,18 @@ export async function checkIfLoggedInRedirect(req, res, next) {
 
 // function to navigate to user dashboard if user already signed in
 export async function checkIfLoggedIn(req, res, next) {
-    if (req.user && req.user.accessToken) {
-        const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
-        const dbUser = dbUserResult.rows[0];
-        //console.log(dbUser , "this is the db user in check if logged in")
-        if (!dbUser){
-          next();
-        } else {
-            return res.redirect(`/${dbUser.username}`);
-        }
-      } else {
-        next();
-      }
+  if (req.user && req.user.accessToken) {
+    const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+    const dbUser = dbUserResult.rows[0];
+    //console.log(dbUser , "this is the db user in check if logged in")
+    if (!dbUser) {
+      next();
+    } else {
+      return res.redirect(`/${dbUser.username}`);
+    }
+  } else {
+    next();
+  }
 }
 
 // function to sign out user on request
