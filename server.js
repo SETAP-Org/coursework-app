@@ -23,7 +23,7 @@ import {
   serveProjectCalendar,
   serveProjectChat,
   serveProjectContributions,
-  redirectWelcome
+  redirectWelcome,
 } from "./controllers/serveControllers.js";
 
 import {
@@ -52,7 +52,7 @@ import {
 
 import { addMessage, getMessages } from "./controllers/chatControllers.js";
 
-import { addTask } from "./controllers/taskControllers.js";
+import { addTask, getProjectTasks } from "./controllers/taskControllers.js";
 
 // util imports
 import createSession from "./utils/session.js";
@@ -185,6 +185,8 @@ app.get("/api/me", getCurrentUser);
 app.get("/api/me/projects", getUserProjects);
 
 app.get("/api/projects/:project_id", getProjectDetails);
+
+app.get("/api/projects/:project_id/tasks", getProjectTasks);
 
 app.get("/api/chat", getMessages);
 

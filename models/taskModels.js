@@ -12,7 +12,7 @@ export async function postTaskModel(
   return await query(
     `
         INSERT INTO tasks(project_id, assignee_id, task_title, task_description, task_weight, task_status, task_deadline, t_date_created, t_time_updated)
-        VALUES ($1, $2, $3, $4, $5, "incomplete", $6, NOW(), NOW())
+        VALUES ($1, $2, $3, $4, $5, 'To Do', $6, NOW(), NOW())
         RETURNING *;
         `,
     [
@@ -30,7 +30,7 @@ export async function postTaskModel(
 export async function getTasksByProjectIdModel(projectId) {
   return await query(
     `
-        SELECT task_id, assignee_id, tast_title, task_description, task_weight, task_status, task_deadline
+        SELECT task_id, assignee_id, task_title, task_description, task_weight, task_status, task_deadline
         FROM tasks
         WHERE project_id = $1
         ORDER BY task_deadline ASC
