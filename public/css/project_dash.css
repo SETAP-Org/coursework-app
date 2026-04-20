@@ -200,6 +200,10 @@
         font-size: 1.1em;
         padding: 10px;
     }
+
+    .Dashboard-container{
+        display: none;
+    }
 }
 
 @media (max-width: 520px) {

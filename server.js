@@ -160,13 +160,6 @@ app.get( "/:username/projects/:project_id/contributions",
   serveProjectContributions,
 );
 
-app.get ( "/:username/projects/:project_id/notes",
-  checkIfLoggedInRedirect,
-  loadProject,
-  checkMembership,
-  serveProjectNotes,
-)
-
 // API routes
 // ---- CREATE ----
 app.post("/api/projects/addProject", addProject);
@@ -174,14 +167,20 @@ app.post("/api/projects/addProject", addProject);
 app.post("/api/users/addUser", setJustAuthenticatedFlag, addUser);
 
 app.post("/api/chat/addMessage", addMessage);
+// Routes
 
-//api routes for konva specifc stuff 
-app.post("/api/notes/:projectId/saveNote", checkIfLoggedIn, loadProject, saveNote);
+// ---- API ROUTES FOR NOTES ----
+app.post("/:username/projects/:project_id/save", checkIfLoggedInRedirect, loadProject, saveNote);
 
-app.post("/api/notes/:projectId/deleteNote", checkIfLoggedIn, loadProject, deleteNote);
+app.post("/:username/projects/:project_id/delete", checkIfLoggedInRedirect, loadProject, deleteNote);
 
-// ---- READ ----
-app.get("/api/notes/:projectId/getNotes", checkIfLoggedIn, loadProject, getNotes);
+app.get("/:username/projects/:project_id/notes", checkIfLoggedInRedirect, loadProject, getNotes);
+
+app.get("/:username/projects/:project_id/:page", checkMembership, serveProjectNotes);
+
+app.get("/:username/projects/:project_id", checkMembership, serveProjectDash);
+
+//---- READ ----
 
 app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
 
