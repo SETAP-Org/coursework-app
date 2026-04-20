@@ -64,6 +64,13 @@ import {
   getNotes,
 } from "./controllers/KonvaController.js";
 
+import {
+  getEvents,
+  addEvents,
+  addEvent,
+  removeEvent,
+} from './controllers/calandarController.js';
+
 // util imports
 import createSession from "./utils/session.js";
 import setUpAuth from "./utils/auth.js";
@@ -179,6 +186,12 @@ app.get("/:username/projects/:project_id/notes", checkIfLoggedInRedirect, loadPr
 app.get("/:username/projects/:project_id/:page", checkMembership, serveProjectNotes);
 
 app.get("/:username/projects/:project_id", checkMembership, serveProjectDash);
+
+
+// ---- API ROUTES FOR CALENDAR EVENTS ----
+app.get("/api/calandar/events", checkIfLoggedInRedirect, getEvents), 
+app.post("/api/calandar/events", checkIfLoggedInRedirect, addEvent),
+app.delete("/api/calandar/events/:eventId", checkIfLoggedInRedirect, removeEvent);
 
 //---- READ ----
 
