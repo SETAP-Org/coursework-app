@@ -25,9 +25,6 @@
   --border: 2px solid #000000;
 
   --radius: 18px;
-
-  --button-bg : rgb(142, 142, 142);
-  --button-text :white;
 }
 
 * { box-sizing: border-box; }
@@ -35,7 +32,7 @@
 body{
   margin: 0;
   min-height: 100vh;
-  padding: 16px 16px 14px 16px;
+  padding: 16px;
   display: grid;     
   gap: 24px;       
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
@@ -46,46 +43,4 @@ body{
     var(--bg);
   color: var(--text);
   overflow-y: scroll;
-}
-
-button {
-    background: var(--accent);
-    color: var(--text);
-    border: none;
-    border-radius: var(--radius);
-    padding: 0.75rem 1rem;
-    font-family: var(--font);
-    font-size: 1rem;
-    cursor: pointer;
-    transition: opacity 0.2s;
-}
-
-button:hover {
-    opacity: 0.85;
-}
-
-.page-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.ms-sign-in {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text);
-    border: var(--border);
-    background-color: var(--card);
-    text-decoration: none;
-    width: 250px;
-    padding: 10px 0;
-    margin: 0;
-    font-family: "Segoe UI", var(--font);
-    font-weight: 600;
-    border-radius: var(--radius);
-}
-
-#ms-logo {
-    margin-right: 12px;
 }
