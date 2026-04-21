@@ -6,6 +6,7 @@
     padding: 32px 0;
 }
 
+/* ---------------- Dialog / Create Task ---------------- */
 #create-task-dialog {
     position: fixed;
     top: 50%;
@@ -13,7 +14,7 @@
     translate: -50% -50%;
     font-family: var(--font);
     color: var(--text);
-    background: rgba(11, 18, 32, 0.25); /* more transparent = glass shows */
+    background: rgba(11, 18, 32, 0.25);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     backdrop-filter: blur(20px) saturate(180%);
     border: var(--border);
@@ -26,7 +27,7 @@
 #create-task-dialog::backdrop {
     background: rgba(0, 0, 0, 0.4);
     -webkit-backdrop-filter: blur(4px);
-    backdrop-filter: blur(4px); /* subtle page blur behind backdrop */
+    backdrop-filter: blur(4px);
 }
 
 #create-task-dialog h1 {
@@ -48,7 +49,7 @@
     opacity: 0.8;
 }
 
-/* Apply shared sizing and typography to inputs, selects and submit button */
+/* Shared sizing/typography for inputs/selects and submit */
 #create-task-dialog :is(input, select, button[type="submit"]) {
     width: 100%;
     padding: 0.75rem 1rem;
@@ -58,7 +59,6 @@
     color: var(--text);
 }
 
-/* Shared field appearance for inputs and select (minimal, non-invasive) */
 #create-task-dialog input,
 #create-task-dialog select {
     background: var(--card2);
@@ -66,15 +66,11 @@
     color: var(--text);
 }
 
-/* DO NOT remove native select appearance to preserve native dropdown rendering on platforms */
-
-/* Explicitly set option colors — may be ignored by some browsers (especially macOS Safari) */
 #create-task-dialog select option {
-    color: #000 !important; /* force black text for options */
-    background-color: #fff !important; /* force white background for options */
+    color: #000 !important;
+    background-color: #fff !important;
 }
 
-/* Add hover/active/selected styles for options (for browsers that honor them) */
 #create-task-dialog select option:hover,
 #create-task-dialog select option:focus,
 #create-task-dialog select option:checked,
@@ -83,25 +79,16 @@
     color: #000 !important;
 }
 
-/* Keep the select's default text color inside the closed control readable */
-#create-task-dialog select {
-    color: var(--text);
-    background: var(--card2);
-}
-
-/* Placeholder color for inputs (selects don't use ::placeholder) */
 #create-task-dialog input::placeholder {
     color: rgba(233, 238, 252, 0.4);
 }
 
-/* Focus state for inputs and select */
 #create-task-dialog input:focus,
 #create-task-dialog select:focus {
     outline: none;
     border-color: var(--accent);
 }
 
-/* Submit button styling */
 #create-task-dialog button[type="submit"] {
     background: var(--accent);
     border: none;
@@ -113,7 +100,6 @@
     opacity: 0.85;
 }
 
-/* Optional: styling for the close button inside the dialog */
 #create-task-dialog .modal-close {
     position: absolute;
     right: 0.7rem;
@@ -127,7 +113,6 @@
     font-weight: 600;
 }
 
-/* Small accessibility tweak: visible focus outline for keyboard users */
 #create-task-dialog .modal-close:focus,
 #create-task-dialog :is(input, select, button[type="submit"]):focus {
     box-shadow:
@@ -135,29 +120,24 @@
         0 0 0 4px rgba(0, 0, 0, 0.06);
 }
 
-/* Fallback: if browser doesn't support dialog, allow .open to control visibility */
 #create-task-dialog.open {
     display: block;
     position: fixed;
     z-index: 1000;
 }
 
-/* Slider + value layout inside the dialog */
 #create-task-dialog .range-row {
     display: flex;
     align-items: center;
     gap: 0.75rem;
 }
 
-/* Make the range fill available space, value box stays to the right */
 #create-task-dialog input[type="range"] {
     flex: 1 1 auto;
     min-width: 0;
-    /* optional styling to match input visual weight */
     height: 2.5rem;
 }
 
-/* Value display to the right */
 #create-task-dialog .range-value {
     min-width: 2.5rem;
     text-align: center;
@@ -169,4 +149,103 @@
     font-weight: 600;
     font-family: var(--font);
     font-size: 0.95rem;
+}
+
+/* ---------------- Task list / cards ---------------- */
+#task-list,
+.task-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--card-gap);
+    padding: 16px 0;
+    margin: 1rem 0 0;
+    align-items: stretch;
+}
+
+#task-list > li,
+.task-list > li {
+    list-style: none;
+    flex: 1 1 calc((100% - (var(--card-gap) * 4)) / 5);
+    max-width: calc((100% - (var(--card-gap) * 4)) / 5);
+    min-width: var(--card-min);
+    display: flex;
+    align-items: stretch;
+}
+
+/* Outer card container */
+.task-list-item,
+#task-list > li .task-card-individual,
+.task-list > li .task-card-individual {
+    border: var(--border);
+    border-radius: var(--radius);
+    background: var(--card);
+    overflow: hidden;
+}
+
+/* Inner card layout (single, unified rule) */
+.task-card-individual {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    padding: 1rem;
+    box-sizing: border-box;
+    justify-content: space-between;
+    height: 100%;
+}
+
+/* Top group — center contents so title & description align to the middle horizontally */
+.card-top {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    overflow: hidden;
+    align-items: center;
+    text-align: center;
+}
+
+/* Title */
+.task-name {
+    font-weight: 700;
+    line-height: 1.1;
+    word-break: break-word;
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+/* Description — limited lines, centered */
+.task-desc {
+    margin: 0;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.95rem;
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+/* Bottom group sticks to the bottom of the card */
+.card-bottom {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* Date & assignee */
+.task-date,
+.task-assignee {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.9;
+    text-align: center;
+}
+
+.task-date {
+    margin-bottom: 0.25rem;
 }

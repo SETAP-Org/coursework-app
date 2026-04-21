@@ -18,6 +18,8 @@
     --scrollbar-color: #4267b2;
     --border: 0.5px solid rgba(255, 255, 255, 0.15);
     --radius: 18px;
+    --card-gap: 1rem;
+    --card-min: 160px;
 }
 * {
     box-sizing: border-box;

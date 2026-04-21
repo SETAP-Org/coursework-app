@@ -11,11 +11,8 @@
 
         <script>
             window.scriptData = {
-                userId: "<%= userId %>",
-                username: "<%= username %>",
-                projectId: "<%= projectId %>",
-                projectName: "<%= projectName %>",
-                groupUsers: <%- JSON.stringify(groupUsers) %>
+                groupUsers: <%- JSON.stringify(groupUsers) %>,
+                tasks: <%- JSON.stringify(tasks) %>
             };
         </script>
         <script src="/scripts/L&D-mode.js" defer></script>
@@ -32,20 +29,27 @@
                 <button id="new-task-button">New Task</button>
             </section>
             <section id="task-panel">
-
+                <ul id="task-list"></ul>
             </section>
         </section>
 
         <template id="task-template">
             <section class="task-card-individual">
-                <div id="task-info">
+                <!-- Top group: title + description -->
+                <div class="card-top">
                     <b class="task-name"></b>
-                    <span class="task-date"></span>
+                    <p class="task-desc"></p>
+                </div>
+
+                <!-- Bottom group: date + assignee (sticky to bottom) -->
+                <div class="card-bottom">
+                    <em class="task-date"></em>
+                    <em class="task-assignee"></em>
                 </div>
             </section>
         </template>
 
-        <!-- Popup for creating new project -->
+        <!-- Popup for creating new task -->
         <dialog id="create-task-dialog">
             <button class="modal-close" onclick="toggleNewTaskForm()">
                 X

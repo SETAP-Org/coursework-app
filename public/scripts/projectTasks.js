@@ -75,11 +75,6 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.replace(
               `/${encodeURIComponent(username)}/projects/${encodeURIComponent(data.project.project_id)}/tasks`,
             );
-          } else if (data.project?.project_id) {
-            // Fallback: redirect without username
-            window.location.replace(
-              `/projects/${encodeURIComponent(data.project.project_id)}/tasks`,
-            );
           } else {
             // Otherwise just reload the page
             window.location.reload();
@@ -98,3 +93,47 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+function showTasks() {
+  const tasks = window.scriptData.tasks;
+  const groupUsers = window.scriptData.groupUsers;
+
+  const userMap = new Map(groupUsers.map((u) => [u.user_id, u.username]));
+
+  const main_list = document.querySelector("#task-list");
+  const template = document.querySelector("#task-template");
+
+  if (tasks.length === 0) {
+    main_list.innerHTML = "No tasks yet!";
+  } else {
+    tasks.forEach((task) => {
+      const node = template.content.cloneNode(true);
+      // find section within template that contains the dom content to alter
+      const section = node.querySelector(".task-card-individual");
+
+      const taskTitle = section.querySelector(".task-name");
+      const taskDescription = section.querySelector(".task-desc");
+      const taskDeadline = section.querySelector(".task-date");
+      const taskAssignee = section.querySelector(".task-assignee");
+
+      const deadline = new Date(task.task_deadline);
+      const formatted_deadline = deadline.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+
+      taskTitle.textContent = task.task_title;
+      taskDescription.textContent = task.task_description;
+      taskDeadline.textContent = formatted_deadline;
+      taskAssignee.textContent = userMap.get(task.assignee_id);
+
+      const li = document.createElement("li");
+      li.className = "task-list-item";
+      li.appendChild(section);
+      main_list.appendChild(li);
+    });
+  }
+}
+
+showTasks();

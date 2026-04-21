@@ -5,6 +5,7 @@ import {
 } from "../models/projectModels.js";
 import { getMessagesByProjectIdModel } from "../models/chatModels.js";
 import { getUsersByProjectId } from "../models/userProjectModels.js";
+import { getTasksByProjectIdModel } from "../models/taskModels.js";
 
 const __dirname = import.meta.dirname;
 
@@ -129,11 +130,16 @@ export async function serveProjectTasks(req, res, next) {
     const groupUsersResponse = await getUsersByProjectId(req.params.project_id);
     const groupUsersData = groupUsersResponse.rows;
 
+    // get all tasks for project
+    const tasksResponse = await getTasksByProjectIdModel(req.params.project_id);
+    const tasksData = tasksResponse.rows;
+
     res.render("projectTasks", {
       userId: dbUser.user_id,
       username: req.params.username,
       projectId: req.params.project_id,
       projectName: req.session.project.project_name,
+      tasks: tasksData,
       groupUsers: groupUsersData,
     });
   } catch (err) {
