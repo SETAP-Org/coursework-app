@@ -68,6 +68,8 @@ async function projects() {
     dialogForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
+      dialog.close();
+
       loading.style.display = "flex";
 
       const form = e.target;
