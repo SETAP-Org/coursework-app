@@ -3,7 +3,16 @@ const loading = document.querySelector(".loading");
 loading.style.display = "flex";
 
 // ejs variables
-const { projectMembers, teamLeaderId } = window.scriptData;
+const {
+    userId,
+    username,
+    projectId,
+    projectName,
+    creatorId,
+    teamLeaderId,
+    projectDeadline,
+    projectMembers
+} = window.scriptData;
 
 // getting dom elements
 const sectionList = document.querySelector(".info-section-list");
@@ -33,7 +42,7 @@ const deleteDialogYesBtn = document.querySelector("#delete-dialog-yes");
 const leaderUsername = projectMembers.find(u => u.user_id === teamLeaderId).username;
 teamLeader.textContent = leaderUsername;
 
-// members list
+// populate the members list
 for (const member of projectMembers) {
     // clone the template
     const clone = template.content.cloneNode(true);
@@ -101,21 +110,34 @@ deleteDialogNoBtn.addEventListener("click", () => {
     deleteDialog.close();
 });
 
-// event listeners when user confirms their choice
+// event listener to leave the project
 leaveDialogYesBtn.addEventListener("click", async () => {
-    // show loading
     leaveDialog.close();
-    loading.style.display = "flex";
 
-    // do the ting
-    const response = await fetch("/api/projects/remove_user", {
-        method: "DELETE",
-    });
+    if (teamLeaderId === userId) {
+        alert("You cannot be removed from the group as you are the team leader. Change the team leader and try again.");
+    } else {
+        // show loading
+        loading.style.display = "flex";
+    
+        // remove the user
+        const response = await fetch("/api/projects/remove_user", {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                user_id: 123,
+                project_id: 456
+            })
+        });
+    
+        // close loading
+        loading.style.display = "none";
+    
+        // show redirect dialog
+    }
 
-    // close loading
-    loading.style.display = "none";
-
-    // show redirect dialog
 })
 
 // hide loading screen
