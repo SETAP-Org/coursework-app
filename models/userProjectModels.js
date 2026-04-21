@@ -13,3 +13,14 @@ export async function getUsersByProjectId(projectId) {
         [projectId]
     );
 }
+
+// function to remove user from project
+export async function deleteUserFromProjectModel(user_id, project_id) {
+    return await query(
+        `
+        DELETE FROM user_projects
+        WHERE user_id = $1 AND project_id = $2;
+        `,
+        [user_id, project_id]
+    );
+}
