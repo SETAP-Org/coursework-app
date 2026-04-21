@@ -101,5 +101,22 @@ deleteDialogNoBtn.addEventListener("click", () => {
     deleteDialog.close();
 });
 
+// event listeners when user confirms their choice
+leaveDialogYesBtn.addEventListener("click", async () => {
+    // show loading
+    leaveDialog.close();
+    loading.style.display = "flex";
+
+    // do the ting
+    const response = await fetch("/api/projects/remove_user", {
+        method: "DELETE",
+    });
+
+    // close loading
+    loading.style.display = "none";
+
+    // show redirect dialog
+})
+
 // hide loading screen
 loading.style.display = "none";

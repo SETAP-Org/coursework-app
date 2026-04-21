@@ -55,6 +55,10 @@ import {
   getMessages,
 } from "./controllers/chatControllers.js";
 
+import {
+  removeUserFromProject,
+} from "./controllers/userProjectControllers.js";
+
 // util imports
 import createSession from "./utils/session.js";
 import setUpAuth from "./utils/auth.js";
@@ -191,6 +195,7 @@ app.get("/api/chat", getMessages);
 app.put("/api/users/changeUsername", checkValidUsername, updateUsername);
 
 // ---- DELETE ----
+app.delete("/api/projects/remove_user", removeUserFromProject);
 
 // assigning the server to a port so that requests can be made
 server.listen(port, () => {
