@@ -139,15 +139,18 @@ leaveDialogYesBtn.addEventListener("click", async () => {
 
         // change the message of the secondary dialog
         if (data.success) {
-
+            secondaryDialogHeading.textContent = "Success!";
+            secondaryDialogMsg.textContent = "Your request was processed successfully!";
         } else {
-
+            secondaryDialogHeading.textContent = "Error :(";
+            secondaryDialogMsg.textContent = "There was an error processing your request, please try again.";
         }
     
         // close loading
         loading.style.display = "none";
     
         // show redirect dialog
+        secondaryDialog.showModal();
     }
 });
 
