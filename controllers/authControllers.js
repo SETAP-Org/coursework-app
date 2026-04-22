@@ -17,9 +17,9 @@ export async function checkIfLoggedInRedirect(req, res, next) {
       req.user.accessToken &&
       dbUser &&
       dbUser.username == req.params.username
-    ) next();
+    )
+      next();
     else res.redirect("/");
-
   } catch (err) {
     console.error("checkIfLoggedInRedirect error:", err);
     res.redirect("/");

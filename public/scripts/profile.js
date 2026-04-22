@@ -1,13 +1,20 @@
-// function 
 async function loadProfile() {
+  // show loading screen
+  const loading = document.querySelector(".loading");
+  loading.style.display = "flex";
+
+  // ejs variables
+  const { username } = window.scriptData;
+
+  // DOM elements
   const usernameBtn = document.querySelector(".username-save-button");
   const usernameInput = document.querySelector(".username-input");
   const usernameMsg = document.querySelector(".username-message");
   const usernameForm = document.querySelector(".username-form");
   const usernameDialog = document.querySelector(".username-dialog");
   const usernameDialogBtn = document.querySelector(".username-dialog-button");
-  let usernameValue = "";
   const regex = /^(?!^[0-9]+$)[a-zA-Z0-9]+$/;
+  let usernameValue = "";
 
   // event listerer for input box
   usernameInput.addEventListener("input", (e) => {
@@ -35,21 +42,27 @@ async function loadProfile() {
   usernameForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const response = await fetch('/api/users/changeUsername', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ usernameValue })
-    });
-    const data = await response.json();
+    loading.style.display = "flex";
 
-    console.log(data)
+    if (usernameValue === username) {
+      usernameMsg.innerText = "You already have that username!";
+    } else {
+      const response = await fetch('/api/users/changeUsername', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usernameValue })
+      });
+      const data = await response.json();
 
-    usernameMsg.innerText = data.message;
-
-    usernameInput.value = "";
-
-    if (data.success) {
-      usernameDialog.showModal();
+      usernameMsg.innerText = data.message;
+      
+      usernameInput.value = "";
+  
+      loading.style.display = "none";
+      
+      if (data.success) {
+        usernameDialog.showModal();
+      };
     }
   })
 
@@ -57,6 +70,9 @@ async function loadProfile() {
   usernameDialogBtn.addEventListener("click", () => {
     window.location.replace("/");
   })
+
+  // hide loading screen
+  loading.style.display = "none";
 }
 
 loadProfile();
