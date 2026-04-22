@@ -14,15 +14,38 @@
         <title>GCMS | <%= projectName %> Calendar</title>
     </head>
     <body>
-        <%- include('partials/projectNav') %>
+    <%- include('partials/projectNav') %>
 
-        <section id="page-content">
-            <section class="page-header">
-                <h1 id="page-title">Calendar</h1>
-            </section>
-        </section>
+        <!-- Create Event Form -->
+        <div class="event-form">
+            <h2>Add Event</h2>
+            <form id="event-form">
+                <label for="event-subject">Subject</label>
+                <input type="text" id="event-subject" required placeholder="Meeting title">
+
+                <label for="event-start">Start</label>
+                <input type="datetime-local" id="event-start" required>
+
+                <label for="event-end">End</label>
+                <input type="datetime-local" id="event-end" required>
+
+                <label for="event-description">Description</label>
+                <textarea id="event-description" rows="3" placeholder="Optional description"></textarea>
+
+                <button type="submit">Create Event</button>
+            </form>
+        </div>
+
+        <!-- Events List -->
+        <h2>Your Events</h2>
+        <div id="events-list">
+            <p>Loading events...</p>
+        </div>
+
 
         <%- include('partials/footer') %>
 
         <%- include('partials/loading') %>
     </body>
+
+    <script src="/scripts/calendar.js"></script>

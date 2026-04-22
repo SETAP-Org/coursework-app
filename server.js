@@ -22,6 +22,7 @@ import {
   serveProjectTasks,
   serveProjectCalendar,
   serveProjectChat,
+  serveProjectNotes,
   serveProjectContributions,
   redirectWelcome
 } from "./controllers/serveControllers.js";
@@ -46,6 +47,7 @@ import {
 import {
   checkIfLoggedIn,
   checkIfLoggedInRedirect,
+  checkIfLoggedInCalendar,
   signOut,
   authenticatePassport,
   setJustAuthenticatedFlag,
@@ -61,6 +63,18 @@ import {
   removeUserFromProject,
   addUserToProject,
 } from "./controllers/userProjectControllers.js";
+//konva controllers support
+import {
+  saveNote,
+  deleteNote,
+  getNotes,
+} from "./controllers/KonvaController.js";
+
+import {
+  getEvent,
+  addEvent,
+  removeEvent,
+} from './controllers/calendarController.js';
 
 // util imports
 import createSession from "./utils/session.js";
@@ -116,8 +130,7 @@ app.get("/:username/projects", checkIfLoggedInRedirect, serveProjects);
 
 app.get("/:username/profile", checkIfLoggedInRedirect, serveProfile);
 
-app.get(
-  "/:username/projects/:project_id",
+app.get( "/:username/projects/:project_id",
   checkIfLoggedInRedirect,
   loadProject, //Adds project details to req.session
   checkMembership, //Ensures user is member of the project
@@ -132,32 +145,28 @@ app.get(
   serveProjectInfo,
 );
 
-app.get(
-  "/:username/projects/:project_id/tasks",
+app.get( "/:username/projects/:project_id/tasks",
   checkIfLoggedInRedirect,
   loadProject,
   checkMembership,
   serveProjectTasks,
 );
 
-app.get(
-  "/:username/projects/:project_id/calendar",
-  checkIfLoggedInRedirect,
+app.get( "/:username/projects/:project_id/calendar",
+  checkIfLoggedInCalendar,
   loadProject,
   checkMembership,
   serveProjectCalendar,
 );
 
-app.get(
-  "/:username/projects/:project_id/chat",
+app.get( "/:username/projects/:project_id/chat",
   checkIfLoggedInRedirect,
   loadProject,
   checkMembership,
   serveProjectChat,
 );
 
-app.get(
-  "/:username/projects/:project_id/contributions",
+app.get( "/:username/projects/:project_id/contributions",
   checkIfLoggedInRedirect,
   loadProject,
   checkMembership,
@@ -175,6 +184,27 @@ app.post("/api/chat/addMessage", addMessage);
 app.post("/api/projects/user", addUserToProject);
 
 // ---- READ ----
+// ---- API ROUTES FOR calandar EVENTS ----
+app.get("/api/calendar/events", checkIfLoggedInCalendar, getEvent);
+
+app.post("/api/calendar/events", checkIfLoggedInCalendar, addEvent);
+
+app.delete("/api/calendar/events/:eventId", checkIfLoggedInCalendar, removeEvent);
+
+// ---- API ROUTES FOR NOTES ----
+app.post("/:username/projects/:project_id/save", checkIfLoggedInRedirect, loadProject, saveNote);
+
+app.post("/:username/projects/:project_id/delete", checkIfLoggedInRedirect, loadProject, deleteNote);
+
+app.get("/:username/projects/:project_id/notes", checkIfLoggedInRedirect, loadProject, getNotes);
+
+app.get("/:username/projects/:project_id/:page", checkMembership, serveProjectNotes);
+
+app.get("/:username/projects/:project_id", checkMembership, serveProjectDash);
+
+
+//---- READ ----
+
 app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
 
 app.get(
