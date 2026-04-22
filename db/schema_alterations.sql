@@ -48,3 +48,5 @@ ALTER TABLE meeting_attendances
   ADD CONSTRAINT meeting_attendances_meeting_id_fkey
     FOREIGN KEY (meeting_id) REFERENCES meetings(meeting_id)
     ON DELETE CASCADE;
+
+-- Further ALterations here...
