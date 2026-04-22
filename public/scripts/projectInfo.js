@@ -28,6 +28,7 @@ const leaveDialog = document.querySelector("#leave-dialog");
 const addDialog = document.querySelector("#add-dialog");
 const teamLeaderDialog = document.querySelector("#team-leader-dialog");
 const deleteDialog = document.querySelector("#delete-dialog");
+const secondaryDialog = document.querySelector("#secondary-dialog");
 
 const leaveDialogNoBtn = document.querySelector("#leave-dialog-no");
 const leaveDialogYesBtn = document.querySelector("#leave-dialog-yes");
@@ -37,6 +38,9 @@ const teamLeaderDialogNoBtn = document.querySelector("#team-leader-dialog-no");
 const teamLeaderDialogYesBtn = document.querySelector("#team-leader-dialog-yes");
 const deleteDialogNoBtn = document.querySelector("#delete-dialog-no");
 const deleteDialogYesBtn = document.querySelector("#delete-dialog-yes");
+const secondaryDialogHeading = document.querySelector("#secondary-dialog-heading");
+const secondaryDialogMsg = document.querySelector("#secondary-dialog-message");
+const secondaryDialogBtn = document.querySelector("#secondary-dialog-button");
 
 // team leader
 const leaderUsername = projectMembers.find(u => u.user_id === teamLeaderId).username;
@@ -127,17 +131,29 @@ leaveDialogYesBtn.addEventListener("click", async () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                user_id: 123,
-                project_id: 456
+                user_id: userId,
+                project_id: projectId
             })
         });
+        const data = await response.json();
+
+        // change the message of the secondary dialog
+        if (data.success) {
+
+        } else {
+
+        }
     
         // close loading
         loading.style.display = "none";
     
         // show redirect dialog
     }
+});
 
+// event listener for secondary dialog
+secondaryDialogBtn.addEventListener("click", () => {
+    window.location.relocate("/");
 })
 
 // hide loading screen
