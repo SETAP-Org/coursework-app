@@ -1,3 +1,7 @@
+// show loading screen
+const loadingLD = document.querySelector(".loading");
+loadingLD.style.display = "flex";
+
 function setCookie(name, value) {
     if(!name || !value) return;
     document.cookie = name + "=" + value + "; path=/";
@@ -25,8 +29,7 @@ function changeTheme() {
     setTheme();
 }
 
-
-function setTheme (){
+function setTheme () {
     const theme = getCookie("theme");
     const themeStyleSheet = document.getElementById("theme-stylesheet");
 
@@ -45,4 +48,8 @@ function setTheme (){
 if (!getCookie("theme")) {
     setCookie("theme", "dark");
 }
+
 setTheme();
+
+// hide loading screen
+loadingLD.style.display = "none";

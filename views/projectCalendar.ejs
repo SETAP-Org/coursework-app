@@ -11,7 +11,7 @@
         <script src="/scripts/L&D-mode.js" defer></script>
         <script src="/scripts/projects.js" defer></script>
 
-        <title>GCMS | <%= project_name %> calendar</title>
+        <title>GCMS | <%= projectName %> Calendar</title>
     </head>
     <body>
     <%- include('partials/projectNav') %>
@@ -44,6 +44,8 @@
 
 
         <%- include('partials/footer') %>
+
+        <%- include('partials/loading') %>
     </body>
 
     <script src="/scripts/calendar.js"></script>

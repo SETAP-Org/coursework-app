@@ -5,6 +5,8 @@ import {
   getUserProjectsModel,
   getProjectByIdModel,
   isUserMemberOfProjectModel,
+  putTeamLeader,
+  deleteProjectByIdModel
 } from "../models/projectModels.js";
 import { getUserByMicrosoftIdModel } from "../models/userModels.js";
 
@@ -12,9 +14,11 @@ import { getUserByMicrosoftIdModel } from "../models/userModels.js";
 export async function addProject(req, res, next) {
   try {
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
-    const dbUser = dbUserResult?.rows?.[0];
+    const dbUser = dbUserResult.rows[0];
+
     const userId = dbUser.user_id;
-    const { project_name, project_deadline } = req.query;
+    const { project_name, project_deadline } = req.body;
+    
     const result = await postProjectModel(
       userId,
       project_name,
@@ -91,6 +95,59 @@ export async function getProjectDetails(req, res, next) {
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, error: err.message });
+  }
+}
+
+// function to change the team leader of a project
+export async function updateTeamLeader(req, res, next) {
+  try {
+    const { newLeaderId, projectId } = req.body;
+
+    const data = await putTeamLeader(newLeaderId, projectId);
+
+    if (data.rows.length > 0) {
+      res.status(200).json({
+        success: true,
+        message: "The team leader has been changed"
+      })
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "Something went wrong!"
+      })
+    }
+  } catch(err) {
+    console.error("Error with getUserProjects:", err);
+    res.status(400).json({
+      success: true,
+      message: err
+    })
+  }
+}
+
+// function to delete the project (should cascade to delete other parts)
+export async function removeProject(req, res, next) {
+  try {
+    const data = await deleteProjectByIdModel(req.params.project_id);
+
+    if (data.rows.length > 0) {
+      res.status(200).json({
+        success: true,
+        message: "The team leader has been changed"
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "Something went wrong!"
+      })
+    }
+  } catch(err) {
+    console.error("Error with removeProject", err);
+
+    res.status(400).json({
+      success: false,
+      message: err
+    })
   }
 }
 

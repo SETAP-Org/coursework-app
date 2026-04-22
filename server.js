@@ -18,13 +18,13 @@ import {
   serveProjectDash,
   serveProfile,
   serveProjects,
-  serveProjectOverview,
+  serveProjectInfo,
   serveProjectTasks,
   serveProjectCalendar,
   serveProjectChat,
   serveProjectNotes,
   serveProjectContributions,
-  redirectWelcome,
+  redirectWelcome
 } from "./controllers/serveControllers.js";
 
 import {
@@ -33,7 +33,8 @@ import {
   getProjectDetails,
   loadProject,
   checkMembership,
-  // getCurrentProject,
+  updateTeamLeader,
+  removeProject,
 } from "./controllers/projectControllers.js";
 
 import {
@@ -58,6 +59,10 @@ import {
   getMessages,
 } from "./controllers/chatControllers.js";
 
+import {
+  removeUserFromProject,
+  addUserToProject,
+} from "./controllers/userProjectControllers.js";
 //konva controllers support
 import {
   saveNote,
@@ -132,11 +137,12 @@ app.get( "/:username/projects/:project_id",
   serveProjectDash,
 );
 
-app.get( "/:username/projects/:project_id/overview",
+app.get(
+  "/:username/projects/:project_id/information",
   checkIfLoggedInRedirect,
   loadProject,
   checkMembership,
-  serveProjectOverview,
+  serveProjectInfo,
 );
 
 app.get( "/:username/projects/:project_id/tasks",
@@ -175,6 +181,9 @@ app.post("/api/users/addUser", setJustAuthenticatedFlag, addUser);
 
 app.post("/api/chat/addMessage", addMessage);
 
+app.post("/api/projects/user", addUserToProject);
+
+// ---- READ ----
 // ---- API ROUTES FOR calandar EVENTS ----
 app.get("/api/calendar/events", checkIfLoggedInCalendar, getEvent);
 
@@ -215,14 +224,17 @@ app.get("/api/me/projects", getUserProjects);
 
 app.get("/api/projects/:project_id", getProjectDetails);
 
-// app.get("/api/projects/current", getCurrentProject);
-
 app.get("/api/chat", getMessages);
 
 // ---- UPDATE ----
 app.put("/api/users/changeUsername", checkValidUsername, updateUsername);
 
+app.put("/api/projects/leader", updateTeamLeader);
+
 // ---- DELETE ----
+app.delete("/api/projects/user", removeUserFromProject);
+
+app.delete("/api/projects/:project_id", removeProject);
 
 // assigning the server to a port so that requests can be made
 server.listen(port, () => {

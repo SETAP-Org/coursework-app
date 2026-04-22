@@ -12,10 +12,11 @@
         <script src="https://unpkg.com/konva@9/konva.min.js"></script>
         <script type="module" src="/scripts/konva-dash.js"></script>
 
-        <title>GCMS | <%= project_name %></title>
+        <title>GCMS | <%= projectName %></title>
     </head>
     <body>
         <%- include('partials/projectNav') %>
+        
         <div class="Dashboard">
             <main class="Dashboard-content">
                 <section class="Dashboard-container">
@@ -46,7 +47,10 @@
                 </aside>
             </main>
 
-            <%- include('partials/footer') %>
         </div>
+
+        <%- include('partials/footer') %>
+
+        <%- include('partials/loading') %>
     </body>
 </html>

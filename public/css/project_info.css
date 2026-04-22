@@ -1,0 +1,149 @@
+body, .page-container * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.project-heading {
+    font-style: italic;
+    font-size: 2em;
+    margin-top: 50px;
+    margin-bottom: 10px;
+}
+
+.project-sub-heading {
+    color: rgb(180, 180, 180);
+    font-size: 1.3em;
+}
+
+.section-outer-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.section-inner-container {
+    border: solid rgba(180, 180, 180, 0.5) 2px;
+    border-radius: 25px;
+    width: 50%;
+    padding: 30px;
+    margin-bottom: 50px;
+}
+
+.info-section-card {
+    padding: 20px;
+    margin: 10px;
+}
+
+.info-section-card:not(:last-child) {
+    border-bottom: solid rgba(180, 180, 180, 0.5) 2px;
+}
+
+.info-section-heading {
+    margin-bottom: 20px;
+}
+
+.info-section-heading p {
+    font-size: 1.2em;
+}
+
+.info-section-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    justify-items: center;
+}
+
+.info-section-li {
+    width: 80%;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.35);
+    position: relative;
+    font-size: 1.3em;
+}
+
+.fa {
+    position: absolute;
+    left: 0;
+    font-size: 1.3em;
+    margin: 5px;
+}
+
+.team-leader {
+    color: #d3af37;
+}
+
+.settings-section-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    margin: 10px;
+}
+
+.settings-section-card:not(:last-child) {
+    border-bottom: solid rgba(180, 180, 180, 0.5) 2px;
+}
+
+.settings-section-button {
+    padding: 10px;
+}
+
+.danger-button {
+    background-color: #fa003f;
+    color: white;
+}
+
+dialog {
+    border-radius: 20px;
+    padding: 20px;
+}
+
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.dialog-inner-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.dialog-buttons {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.dialog-buttons .settings-section-button {
+    width: 200px;
+    margin: 20px;
+}
+
+.dialog-text-input {
+    border: 0;
+    outline: 0;
+    border-bottom: solid rgba(0, 0, 0, 0.5) 2px;
+    width: 40%;
+    margin: 20px;
+    font-size: 1.5em;
+    text-align: center;
+}

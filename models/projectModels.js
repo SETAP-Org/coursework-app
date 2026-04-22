@@ -71,6 +71,7 @@ export async function getUserProjectsModel(userId) {
   );
 }
 
+// reads whether or not a memebr is a part of a project
 export async function isUserMemberOfProjectModel(userId, projectId) {
   return await query(
     `
@@ -88,5 +89,28 @@ export async function isUserMemberOfProjectModel(userId, projectId) {
 }
 
 // ---- UPDATE ----
+// update the team leader of a project
+export async function putTeamLeader(newLeaderId, projectId) {
+  return await query(
+    `
+    UPDATE projects
+    SET team_leader_id = $1
+    WHERE project_id = $2
+    RETURNING *;
+    `,
+    [newLeaderId, projectId]
+  );
+}
 
 // ---- DELETE ----
+// delete a project by its ID (cascades if foreign keys are set to ON DELETE CASCADE)
+export async function deleteProjectByIdModel(projectId) {
+  return await query(
+    `
+    DELETE FROM projects
+    WHERE project_id = $1
+    RETURNING *;
+    `,
+    [projectId]
+  );
+}
