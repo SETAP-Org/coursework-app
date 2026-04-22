@@ -42,6 +42,14 @@ export async function checkIfLoggedIn(req, res, next) {
       }
 }
 
+export function checkIfLoggedInCalendar(req, res, next) {
+  console.log("it made it to the calandar redirect");
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.status(401).json({ error: "Not authenticated" });
+}
+
 // function to sign out user on request
 export function signOut(req, res, next) {
   req.logout(next);

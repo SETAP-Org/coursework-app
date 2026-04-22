@@ -46,6 +46,7 @@ import {
 import {
   checkIfLoggedIn,
   checkIfLoggedInRedirect,
+  checkIfLoggedInCalendar,
   signOut,
   authenticatePassport,
   setJustAuthenticatedFlag,
@@ -65,11 +66,10 @@ import {
 } from "./controllers/KonvaController.js";
 
 import {
-  getEvents,
-  addEvents,
+  getEvent,
   addEvent,
   removeEvent,
-} from './controllers/calandarController.js';
+} from './controllers/calendarController.js';
 
 // util imports
 import createSession from "./utils/session.js";
@@ -147,7 +147,7 @@ app.get( "/:username/projects/:project_id/tasks",
 );
 
 app.get( "/:username/projects/:project_id/calendar",
-  checkIfLoggedInRedirect,
+  checkIfLoggedInCalendar,
   loadProject,
   checkMembership,
   serveProjectCalendar,
@@ -174,7 +174,13 @@ app.post("/api/projects/addProject", addProject);
 app.post("/api/users/addUser", setJustAuthenticatedFlag, addUser);
 
 app.post("/api/chat/addMessage", addMessage);
-// Routes
+
+// ---- API ROUTES FOR calandar EVENTS ----
+app.get("/api/calendar/events", checkIfLoggedInCalendar, getEvent);
+
+app.post("/api/calendar/events", checkIfLoggedInCalendar, addEvent);
+
+app.delete("/api/calendar/events/:eventId", checkIfLoggedInCalendar, removeEvent);
 
 // ---- API ROUTES FOR NOTES ----
 app.post("/:username/projects/:project_id/save", checkIfLoggedInRedirect, loadProject, saveNote);
@@ -187,11 +193,6 @@ app.get("/:username/projects/:project_id/:page", checkMembership, serveProjectNo
 
 app.get("/:username/projects/:project_id", checkMembership, serveProjectDash);
 
-
-// ---- API ROUTES FOR CALENDAR EVENTS ----
-app.get("/api/calandar/events", checkIfLoggedInRedirect, getEvents), 
-app.post("/api/calandar/events", checkIfLoggedInRedirect, addEvent),
-app.delete("/api/calandar/events/:eventId", checkIfLoggedInRedirect, removeEvent);
 
 //---- READ ----
 

@@ -1,5 +1,4 @@
 import { saveNoteToDB, deleteNoteFromDB, getNotesByProjectId } from '../models/konvaModels.js';
-console.log("KonvaController.js loaded");
 
 
 export async function saveNote(req, res, next) {

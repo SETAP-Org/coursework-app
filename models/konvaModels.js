@@ -1,5 +1,4 @@
 import { query } from "../db/connection.js";
-console.log("konvaModels.js loaded");
 
 async function saveNoteToDB(projectId, text, x, y, widgetId) {
     console.log("MODEL:", { projectId, text, x: typeof x, y: typeof y, widgetId });
