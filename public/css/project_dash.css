@@ -145,12 +145,20 @@
     top: 32%;
     left: 42%;
     padding: 5px;
-    border: 2px solid black;
+    border: var(--border);
     background-color: white;
     border-radius: 20px;
     height: 15%;
     width: 15%;
-    color: black;
+    color: var(--text);
+}
+
+#page-content {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin: 0 auto;
+    padding: 32px 0;
 }
 
 @media (max-width: 900px) {

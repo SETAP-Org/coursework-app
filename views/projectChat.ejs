@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="stylesheet" href="/css/root-dark.css"/>
+        <link rel="stylesheet" href="/css/project_dash.css" />
+        <link rel="stylesheet" href="/css/project_chat.css" />
+        <link rel="icon" href="/assets/favicon.png" type="image/png" />
+
+        <script>
+            window.scriptData = {
+                userId: "<%= userId %>",
+                username: "<%= username %>",
+                projectId: "<%= projectId %>",
+                projectName: "<%= projectName %>",
+                messages: <%- JSON.stringify(messages) %>,
+                groupUsers: <%- JSON.stringify(groupUsers) %>
+            };
+        </script>
+        <script src="/scripts/L&D-mode.js" defer></script>
+        <script src="/socket.io/socket.io.js" defer></script>
+        <script src="/scripts/projectChat.js" defer></script>
+
+        <title>GCMS | <%= projectName %> Chat</title>
+    </head>
+    <body>
+        <%- include('partials/projectNav') %>
+
+        <section class="chat-page">
+            <h1 id="page-title">Chat</h1>
+            
+            <div class="chat-container">
+                <div class="chat-messages"></div>
+
+                <form action="" class="chat-form">
+                    <fieldset class="chat-fieldset">
+                        <input type="text" name="" id="" placeholder="Write Message Here" class="chat-input">
+                        <button class="chat-send" disabled>Send</button>
+                    </fieldset>
+                </form>
+            </div>
+        </section>
+
+        <%- include('partials/footer') %>
+
+        <%- include('partials/loading') %>
+    </body>

@@ -17,9 +17,9 @@ export async function checkIfLoggedInRedirect(req, res, next) {
       req.user.accessToken &&
       dbUser &&
       dbUser.username == req.params.username
-    ) next();
+    )
+      next();
     else res.redirect("/");
-
   } catch (err) {
     console.error("checkIfLoggedInRedirect error:", err);
     res.redirect("/");
@@ -31,9 +31,15 @@ export async function checkIfLoggedIn(req, res, next) {
     if (req.user && req.user.accessToken) {
         const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
         const dbUser = dbUserResult.rows[0];
-        return res.redirect(`/${dbUser.username}`);
-    }
-    else next();
+        //console.log(dbUser , "this is the db user in check if logged in")
+        if (!dbUser){
+          next();
+        } else {
+            return res.redirect(`/${dbUser.username}`);
+        }
+      } else {
+        next();
+      }
 }
 
 // function to sign out user on request

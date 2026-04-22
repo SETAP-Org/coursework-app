@@ -28,14 +28,6 @@ export async function checkValidUsername(req, res, next) {
         const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
         const dbUser = await dbUserResult.rows[0];
 
-        // check if user already has that username
-        if (dbUser.username == req.body.usernameValue) {
-            return res.status(400).json({
-                success: false,
-                message: "You already have that username!"
-            })
-        }
-
         // check if anyone else has that username
         const fetchedUser = await getUserByUsernameModel(req.body.usernameValue);
         
@@ -83,6 +75,13 @@ export async function getCurrentUser(req, res, next) {
     if (req.user) {
         const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
         const dbUser = dbUserResult.rows[0];
+
+        if (!dbUser) {
+            return res.status(200).json({
+                sessionUser: req.user,
+                dbUser: null
+            });
+        }
 
         res.status(200).json({
             sessionUser: req.user,

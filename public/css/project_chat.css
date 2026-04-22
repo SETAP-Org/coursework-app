@@ -1,0 +1,120 @@
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.chat-page {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: space-evenly;
+    min-height: 0;
+}
+
+.chat-container {
+    display: flex;
+    /* flex: 1 1 auto; */
+    flex-direction: column;
+    align-items: center;
+    background-color: #d9d9d9;
+    min-height: 0;
+    margin: 33px 0;
+    height: 52vh;
+    width: 50vw;
+    border-radius: 50px;
+    padding: 10px;
+}
+
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: flex-end; */
+    height: 90%;
+    width: 100%;
+    margin: 10px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.chat-messages::-webkit-scrollbar {
+    display: none;
+}
+
+.chat-form {
+    width: 90%;
+    height: 10%;
+    border-top: solid rgba(0, 0, 0, 0.33) 1px;
+}
+
+.chat-fieldset {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-style: none;
+}
+
+.chat-input {
+    width: 90%;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 10px;
+    font-size: 1.5rem;
+}
+
+.message-container-right {
+    align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    margin: 10px;
+}
+
+.message-bubble-right {
+    background-color: #39ff5a;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 100px;
+}
+
+.message-content-right {
+    color: black;
+    font-size: 1.1em;
+}
+
+.message-info-right {
+    color: black;
+    margin-right: 10px;
+}
+
+.message-container-left {
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 10px;
+}
+
+.message-bubble-left {
+    background-color: #218aff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 100px;
+}
+
+.message-content-left {
+    color: white;
+    font-size: 1.1em;
+}
+
+.message-info-left {
+    color: black;
+    margin-left: 10px;
+}
