@@ -22,6 +22,7 @@ import {
   serveProjectTasks,
   serveProjectCalendar,
   serveProjectChat,
+  serveProjectNotes,
   serveProjectContributions,
   redirectWelcome
 } from "./controllers/serveControllers.js";
@@ -53,6 +54,13 @@ import {
 import { addMessage, getMessages } from "./controllers/chatControllers.js";
 
 import { addTask } from "./controllers/taskControllers.js";
+
+//konva controllers support
+import {
+  saveNote,
+  deleteNote,
+  getNotes,
+} from "./controllers/KonvaController.js";
 
 // util imports
 import createSession from "./utils/session.js";
@@ -108,8 +116,7 @@ app.get("/:username/projects", checkIfLoggedInRedirect, serveProjects);
 
 app.get("/:username/profile", checkIfLoggedInRedirect, serveProfile);
 
-app.get(
-  "/:username/projects/:project_id",
+app.get( "/:username/projects/:project_id",
   checkIfLoggedInRedirect,
   loadProject, //Adds project details to req.session
   checkMembership, //Ensures user is member of the project
@@ -124,32 +131,28 @@ app.get(
   serveProjectInformation,
 );
 
-app.get(
-  "/:username/projects/:project_id/tasks",
+app.get( "/:username/projects/:project_id/tasks",
   checkIfLoggedInRedirect,
   loadProject,
   checkMembership,
   serveProjectTasks,
 );
 
-app.get(
-  "/:username/projects/:project_id/calendar",
+app.get( "/:username/projects/:project_id/calendar",
   checkIfLoggedInRedirect,
   loadProject,
   checkMembership,
   serveProjectCalendar,
 );
 
-app.get(
-  "/:username/projects/:project_id/chat",
+app.get( "/:username/projects/:project_id/chat",
   checkIfLoggedInRedirect,
   loadProject,
   checkMembership,
   serveProjectChat,
 );
 
-app.get(
-  "/:username/projects/:project_id/contributions",
+app.get( "/:username/projects/:project_id/contributions",
   checkIfLoggedInRedirect,
   loadProject,
   checkMembership,
@@ -163,6 +166,20 @@ app.post("/api/projects/addProject", addProject);
 app.post("/api/users/addUser", setJustAuthenticatedFlag, addUser);
 
 app.post("/api/chat/addMessage", addMessage);
+// Routes
+
+// ---- API ROUTES FOR NOTES ----
+app.post("/:username/projects/:project_id/save", checkIfLoggedInRedirect, loadProject, saveNote);
+
+app.post("/:username/projects/:project_id/delete", checkIfLoggedInRedirect, loadProject, deleteNote);
+
+app.get("/:username/projects/:project_id/notes", checkIfLoggedInRedirect, loadProject, getNotes);
+
+app.get("/:username/projects/:project_id/:page", checkMembership, serveProjectNotes);
+
+app.get("/:username/projects/:project_id", checkMembership, serveProjectDash);
+
+//---- READ ----
 
 app.post("/api/tasks/addTask", addTask);
 

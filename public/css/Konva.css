@@ -57,6 +57,19 @@
   color: #ffffff;
 }
 
+.note-editor {
+    position: absolute;
+    padding: 4px;
+    margin: 0;
+    resize: none;
+    outline: none;
+    background: #ffffff;
+    font-family: Arial;
+    border: 1px solid #ccc;
+    color: #000000;
+    z-index: 1000; /* Ensure it stays above everything */
+}
+
 @media screen and (max-width:900px) {
   .konva-wrapper{
     width: 94%;
