@@ -24,3 +24,15 @@ export async function deleteUserFromProjectModel(user_id, project_id) {
         [user_id, project_id]
     );
 }
+
+// function to add a new user to a project
+export async function postUserToProjectModel(user_id, project_id) {
+    return await query(
+        `
+        INSERT INTO user_projects (user_id, project_id)
+        VALUES ($1, $2)
+        RETURNING *;
+        `,
+        [user_id, project_id]
+    );
+}
