@@ -6,6 +6,7 @@ import {
   getProjectByIdModel,
   isUserMemberOfProjectModel,
   putTeamLeader,
+  deleteProjectByIdModel
 } from "../models/projectModels.js";
 import { getUserByMicrosoftIdModel } from "../models/userModels.js";
 
@@ -119,6 +120,32 @@ export async function updateTeamLeader(req, res, next) {
     console.error("Error with getUserProjects:", err);
     res.status(400).json({
       success: true,
+      message: err
+    })
+  }
+}
+
+// function to delete the project (should cascade to delete other parts)
+export async function removeProject(req, res, next) {
+  try {
+    const data = await deleteProjectByIdModel(req.params.project_id);
+
+    if (data.rows.length > 0) {
+      res.status(200).json({
+        success: true,
+        message: "The team leader has been changed"
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "Something went wrong!"
+      })
+    }
+  } catch(err) {
+    console.error("Error with removeProject", err);
+
+    res.status(400).json({
+      success: false,
       message: err
     })
   }

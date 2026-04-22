@@ -275,5 +275,31 @@ teamLeaderDialogYesBtn.addEventListener("click", async () => {
     secondaryDialog.showModal();
 })
 
+// event listener to delete the project
+deleteDialogYesBtn.addEventListener("click", async () => {
+    deleteDialog.close();
+
+    // show loading
+    loading.style.display = "flex";
+
+    // delete the project
+    const response = await fetch(`/api/projects/${projectId}`);
+    const data = await response.json();
+
+    if (data.success) {
+        secondaryDialogHeading.textContent = "Success!";
+        secondaryDialogMsg.textContent = data.message;
+    } else {
+        secondaryDialogHeading.textContent = "Error :(";
+        secondaryDialogMsg.textContent = data.message;
+    }
+
+    // hide loading
+    loading.style.display = "none";
+
+    // show redirect dialog
+    secondaryDialog.showModal();
+})
+
 // hide loading screen
 loading.style.display = "none";

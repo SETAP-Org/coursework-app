@@ -32,7 +32,8 @@ import {
   getProjectDetails,
   loadProject,
   checkMembership,
-  updateTeamLeader
+  updateTeamLeader,
+  removeProject,
 } from "./controllers/projectControllers.js";
 
 import {
@@ -202,6 +203,8 @@ app.put("/api/projects/leader", updateTeamLeader);
 
 // ---- DELETE ----
 app.delete("/api/projects/user", removeUserFromProject);
+
+app.delete("/api/projects/:project_id", removeProject);
 
 // assigning the server to a port so that requests can be made
 server.listen(port, () => {

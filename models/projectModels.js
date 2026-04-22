@@ -103,3 +103,14 @@ export async function putTeamLeader(newLeaderId, projectId) {
 }
 
 // ---- DELETE ----
+// delete a project by its ID (cascades if foreign keys are set to ON DELETE CASCADE)
+export async function deleteProjectByIdModel(projectId) {
+  return await query(
+    `
+    DELETE FROM projects
+    WHERE project_id = $1
+    RETURNING *;
+    `,
+    [projectId]
+  );
+}
