@@ -16,8 +16,12 @@ const {
 
 // getting dom elements
 const sectionList = document.querySelector(".info-section-list");
-const template = document.querySelector(".info-section-li-template");
+const liTemplate = document.querySelector(".info-section-li-template");
 const teamLeader = document.querySelector(".info-section-team-leader");
+
+const teamLeaderSelect = document.querySelector("#team-leader-select");
+const teamLeaderTemplate = document.querySelector(".team-leader-option-template");
+const teamLeaderOption = document.querySelector(".team-leder-option");
 
 const leaveButton = document.querySelector("#leave-button");
 const newMemberButton = document.querySelector("#new-member-button");
@@ -51,10 +55,25 @@ let addUserInputValue = "";
 const leaderUsername = projectMembers.find(u => u.user_id === teamLeaderId).username;
 teamLeader.textContent = leaderUsername;
 
+// populating team leader dropdown
+for (const member of projectMembers) {
+    if (member.user_id !== userId) {
+        // clone the template
+        const clone = teamLeaderTemplate.content.cloneNode(true);
+
+        // change the values in the clone
+        clone.querySelector(".team-leader-option").textContent = member.username;
+        clone.querySelector(".team-leader-option").value = member.user_id;
+
+        // add the clone to the select
+        teamLeaderSelect.appendChild(clone);
+    }
+}
+
 // populate the members list
 for (const member of projectMembers) {
     // clone the template
-    const clone = template.content.cloneNode(true);
+    const clone = liTemplate.content.cloneNode(true);
 
     // change the values in the clone
     clone.querySelector('.info-section-li-text').textContent = member.username;

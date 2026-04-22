@@ -141,8 +141,10 @@
             <div class="dialog-inner-container">
                 <h1>Who do you want to make team leader?</h1>
     
-                <select class="dialog-select" id="dialog-team-leader select" required>
-                    <!-- populate with the members usernames (that arent me) -->
+                <select class="dialog-select" id="team-leader-select" required>
+                    <template class="team-leader-option-template">
+                        <option class="team-leader-option"></option>
+                    </template>
                 </select>
     
                 <div class="dialog-buttons">
