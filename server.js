@@ -32,6 +32,7 @@ import {
   getProjectDetails,
   loadProject,
   checkMembership,
+  updateTeamLeader
 } from "./controllers/projectControllers.js";
 
 import {
@@ -196,6 +197,8 @@ app.get("/api/chat", getMessages);
 
 // ---- UPDATE ----
 app.put("/api/users/changeUsername", checkValidUsername, updateUsername);
+
+app.put("/api/projects/leader", updateTeamLeader);
 
 // ---- DELETE ----
 app.delete("/api/projects/user", removeUserFromProject);

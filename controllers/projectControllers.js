@@ -5,6 +5,7 @@ import {
   getUserProjectsModel,
   getProjectByIdModel,
   isUserMemberOfProjectModel,
+  putTeamLeader,
 } from "../models/projectModels.js";
 import { getUserByMicrosoftIdModel } from "../models/userModels.js";
 
@@ -93,6 +94,33 @@ export async function getProjectDetails(req, res, next) {
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, error: err.message });
+  }
+}
+
+// function to change the team leader of a project
+export async function updateTeamLeader(req, res, next) {
+  try {
+    const { newLeaderId, projectId } = req.body;
+
+    const data = await putTeamLeader(newLeaderId, projectId);
+
+    if (data.rows.length > 0) {
+      res.status(200).json({
+        success: true,
+        message: "The team leader has been changed"
+      })
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "Something went wrong!"
+      })
+    }
+  } catch(err) {
+    console.error("Error with getUserProjects:", err);
+    res.status(400).json({
+      success: true,
+      message: err
+    })
   }
 }
 

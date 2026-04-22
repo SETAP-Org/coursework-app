@@ -238,6 +238,41 @@ addDialogYesBtn.addEventListener("click", async () => {
         // show redirect dialog
         secondaryDialog.showModal();
     }
+});
+
+// event listener to change the team leader
+teamLeaderDialogYesBtn.addEventListener("click", async () => {
+    teamLeaderDialog.close();
+
+    // show loading
+    loading.style.display = "flex";
+
+    // change the leader
+    const response = await fetch("/api/projects/leader", {
+        method: "PUT",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            newLeaderId: teamLeaderSelect.value,
+            projectId: projectId
+        })
+    });
+    const data = await response.json();
+
+    if (data.success) {
+        secondaryDialogHeading.textContent = "Success!";
+        secondaryDialogMsg.textContent = data.message;
+    } else {
+        secondaryDialogHeading.textContent = "Error :(";
+        secondaryDialogMsg.textContent = data.message;
+    }
+
+    // hide loading
+    loading.style.display = "none";
+
+    // show redirect dialog
+    secondaryDialog.showModal();
 })
 
 // hide loading screen
