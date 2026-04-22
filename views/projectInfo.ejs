@@ -112,54 +112,65 @@
 
         <!-- dialog for leaving -->
         <dialog class="dialog" id="leave-dialog">
-            <h1>Are you sure want to leave the project?</h1>
-
-            <div class="dialog-buttons">
-                <button class="settings-section-button" id="leave-dialog-no">No</button>
-                <button class="settings-section-button danger-button" id="leave-dialog-yes">Yes</button>
+            <div class="dialog-inner-container">
+                <h1>Are you sure want to leave the project?</h1>
+    
+                <div class="dialog-buttons">
+                    <button class="settings-section-button" id="leave-dialog-no">No</button>
+                    <button class="settings-section-button danger-button" id="leave-dialog-yes">Yes</button>
+                </div>
             </div>
         </dialog>
 
         <!-- dialog for adding member -->
-        <dialog class="dialog" id="add-dialog">
-            <h1>Who would you like to add to the project?</h1>
-
-            <input type="text" class="dialog-text-input" id="add-member-input">
-
-            <div class="dialog-buttons">
-                <button class="settings-section-button" id="add-dialog-no">Cancel</button>
-                <button class="settings-section-button" id="add-dialog-yes">Add Member</button>
+        <dialog id="add-dialog">
+            <div class="dialog-inner-container">
+                <h1>Who would you like to add to the project?</h1>
+    
+                <input type="text" class="dialog-text-input" id="add-member-input">
+    
+                <div class="dialog-buttons">
+                    <button class="settings-section-button" id="add-dialog-no">Cancel</button>
+                    <button class="settings-section-button" id="add-dialog-yes">Add Member</button>
+                </div>
             </div>
         </dialog>
 
         <!-- dialog for changing team leader -->
         <dialog class="dialog" id="team-leader-dialog">
-            <h1>Who do you want to make team leader?</h1>
-
-            <select class="dialog-select" id="dialog-team-leader select" required>
-                <!-- populate with the members usernames (that arent me) -->
-            </select>
-
-            <div class="dialog-buttons">
-                <button class="settings-section-button" id="team-leader-dialog-no">Cancel</button>
-                <button class="settings-section-button" id="team-leader-dialog-yes">Set Team Leader</button>
+            <div class="dialog-inner-container">
+                <h1>Who do you want to make team leader?</h1>
+    
+                <select class="dialog-select" id="dialog-team-leader select" required>
+                    <!-- populate with the members usernames (that arent me) -->
+                </select>
+    
+                <div class="dialog-buttons">
+                    <button class="settings-section-button" id="team-leader-dialog-no">Cancel</button>
+                    <button class="settings-section-button" id="team-leader-dialog-yes">Set Team Leader</button>
+                </div>
             </div>
         </dialog>
 
         <!-- dialog for deleting group -->
         <dialog class="dialog" id="delete-dialog">
-            <h1>Are you sure want to delete the project?</h1>
-
-            <div class="dialog-buttons">
-                <button class="settings-section-button" id="delete-dialog-no">No</button>
-                <button class="settings-section-button danger-button" id="delete-dialog-yes">Yes</button>
+            <div class="dialog-inner-container">
+                <h1>Are you sure want to delete the project?</h1>
+    
+                <div class="dialog-buttons">
+                    <button class="settings-section-button" id="delete-dialog-no">No</button>
+                    <button class="settings-section-button danger-button" id="delete-dialog-yes">Yes</button>
+                </div>
             </div>
         </dialog>
 
+        <!-- secondary dialog that shows after the first ones -->
         <dialog class="dialog" id="secondary-dialog">
-            <h1 id="secondary-dialog-heading"></h1>
-            <p id="secondary-dialog-message"></p>
-            <button id="secondary-dialog-button">Go To Home</button>
+            <div class="dialog-inner-container">
+                <h1 id="secondary-dialog-heading"></h1>
+                <p id="secondary-dialog-message"></p>
+                <button id="secondary-dialog-button">Go To Home</button>
+            </div>
         </dialog>
 
         <%- include('partials/footer') %>

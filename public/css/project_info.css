@@ -111,8 +111,18 @@ body, .page-container * {
     color: white;
 }
 
-.dialog {
-    position: flex;
+dialog {
+    border-radius: 20px;
+    padding: 20px;
+}
+
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.dialog-inner-container {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -125,8 +135,15 @@ body, .page-container * {
 
 .dialog-buttons .settings-section-button {
     width: 200px;
+    margin: 20px;
 }
 
-dialog::backdrop {
-    background: rgba(0, 0, 0, 0.7);
+.dialog-text-input {
+    border: 0;
+    outline: 0;
+    border-bottom: solid rgba(0, 0, 0, 0.5) 2px;
+    width: 40%;
+    margin: 20px;
+    font-size: 1.5em;
+    text-align: center;
 }
