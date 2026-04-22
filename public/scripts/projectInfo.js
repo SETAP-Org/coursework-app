@@ -148,10 +148,10 @@ leaveDialogYesBtn.addEventListener("click", async () => {
         // change the message of the secondary dialog
         if (data.success) {
             secondaryDialogHeading.textContent = "Success!";
-            secondaryDialogMsg.textContent = "You have successfully left the group!";
+            secondaryDialogMsg.textContent = data.message;
         } else {
             secondaryDialogHeading.textContent = "Error :(";
-            secondaryDialogMsg.textContent = "There was an error processing your request, please try again.";
+            secondaryDialogMsg.textContent = data.message;
         }
     
         // close loading
@@ -179,8 +179,12 @@ addDialogYesBtn.addEventListener("click", async () => {
 
     const userAlreadyInProject = projectMembers.some(member => member.username === addUserInputValue);
 
-    if (userAlreadyInProject) {
+    if (addUserInputValue === username) {
+        alert("You cannot add yourself to the project!");
+        addMemberInput.value = "";
+    } else if (userAlreadyInProject) {
         alert(`${addUserInputValue} is already a part of the project!`);
+        addMemberInput.value = "";
     } else {
         // show loading
         loading.style.display = "flex";
@@ -192,7 +196,7 @@ addDialogYesBtn.addEventListener("click", async () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                userId: userId,
+                username: username,
                 projectId: projectId
             })
         });
@@ -204,8 +208,10 @@ addDialogYesBtn.addEventListener("click", async () => {
             secondaryDialogMsg.textContent = `${addUserInputValue} has been added to the group!`;
         } else {
             secondaryDialogHeading.textContent = "Error :(";
-            secondaryDialogMsg.textContent = "There was an error processing your request, please try again.";
+            secondaryDialogMsg.textContent = data.message;
         }
+
+        addMemberInput.value = "";
 
         // close loading
         loading.style.display = "none";

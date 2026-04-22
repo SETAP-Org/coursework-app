@@ -1,4 +1,5 @@
 import { deleteUserFromProjectModel } from "../models/userProjectModels.js";
+import { getUserByUsernameModel } from "../models/userModels.js";
 
 // function to remove a user from a project
 export async function removeUserFromProject(req, res, next) {
@@ -6,13 +7,15 @@ export async function removeUserFromProject(req, res, next) {
         const { userId, projectId } = req.body;
         const data = await deleteUserFromProjectModel(userId, projectId);
 
-        if (data.rows[0].length > 0) {
+        if (data.rows.length > 0) {
             res.status(200).json({
                 success: true,
+                message: "You have been removed from this project!"
             })
         } else {
-            res.status(404).json({
+            res.status(400).json({
                 success: false,
+                message: "Something went wrong!"
             })
         }
     } catch(err) {
@@ -20,6 +23,7 @@ export async function removeUserFromProject(req, res, next) {
 
         res.status(400).json({
             success: false,
+            message: err
         })
     }
 }
@@ -27,16 +31,29 @@ export async function removeUserFromProject(req, res, next) {
 // function to add a user to a project
 export async function addUserToProject(req, res, next) {
     try {
-        const { userId, projectId } = req.body;
+        const { username, projectId } = req.body;
+
+        // check if user actually existsf
+        const userData = await getUserByUsernameModel(username);
+
+        if (userData.rows.length === 0) {
+            res.status(400).json({
+                success: false,
+                message: "User does not exist!"
+            })
+        }
+
         const data = await postUserToProjectModel(userId, projectId);
 
         if (data.rows[0].length > 0) {
             res.status(200).json({
                 success: true,
+                message: "User successfully added to the project!"
             })
         } else {
             res.status(400).json({
                 success: false,
+                message: "Something went wrong!"
             })
         }
     } catch(err) {
@@ -44,6 +61,7 @@ export async function addUserToProject(req, res, next) {
         
         res.status(400).json({
             success: false,
+            message: err
         })
     }
 }
