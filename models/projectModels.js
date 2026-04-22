@@ -89,5 +89,17 @@ export async function isUserMemberOfProjectModel(userId, projectId) {
 }
 
 // ---- UPDATE ----
+// update the team leader of a project
+export async function putTeamLeader(newLeaderId, projectId) {
+  return await query(
+    `
+    UPDATE projects
+    SET team_leader_id = $1
+    WHERE project_id = $2
+    RETURNING *;
+    `,
+    [newLeaderId, projectId]
+  );
+}
 
 // ---- DELETE ----
