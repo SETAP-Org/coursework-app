@@ -30,6 +30,8 @@ const teamLeaderDialog = document.querySelector("#team-leader-dialog");
 const deleteDialog = document.querySelector("#delete-dialog");
 const secondaryDialog = document.querySelector("#secondary-dialog");
 
+const addMemberInput = document.querySelector("#add-member-input");
+
 const leaveDialogNoBtn = document.querySelector("#leave-dialog-no");
 const leaveDialogYesBtn = document.querySelector("#leave-dialog-yes");
 const addDialogNoBtn = document.querySelector("#add-dialog-no");
@@ -41,6 +43,9 @@ const deleteDialogYesBtn = document.querySelector("#delete-dialog-yes");
 const secondaryDialogHeading = document.querySelector("#secondary-dialog-heading");
 const secondaryDialogMsg = document.querySelector("#secondary-dialog-message");
 const secondaryDialogBtn = document.querySelector("#secondary-dialog-button");
+
+// other variables
+let addUserInputValue = "";
 
 // team leader
 const leaderUsername = projectMembers.find(u => u.user_id === teamLeaderId).username;
@@ -92,10 +97,12 @@ leaveDialogNoBtn.addEventListener("click", () => {
 
 addDialog.addEventListener("click", (e) => {
     if (e.target === addDialog) addDialog.close();
+    addMemberInput.value = "";
 });
 
 addDialogNoBtn.addEventListener("click", () => {
     addDialog.close();
+    addMemberInput.value = "";
 });
 
 teamLeaderDialog.addEventListener("click", (e) => {
@@ -157,7 +164,12 @@ leaveDialogYesBtn.addEventListener("click", async () => {
 // event listener for secondary dialog
 secondaryDialogBtn.addEventListener("click", () => {
     window.location.relocate("/");
-})
+});
+
+// event listener to track add member input
+addMemberInput.addEventListener("input", (e) => {
+    addUserInputValue = e.target.value;
+});
 
 // hide loading screen
 loading.style.display = "none";
