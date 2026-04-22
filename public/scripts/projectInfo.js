@@ -138,10 +138,11 @@ leaveDialogYesBtn.addEventListener("click", async () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                user_id: userId,
-                project_id: projectId
+                userId: userId,
+                projectId: projectId
             })
         });
+        
         const data = await response.json();
 
         // change the message of the secondary dialog

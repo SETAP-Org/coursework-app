@@ -15,24 +15,25 @@ export async function getUsersByProjectId(projectId) {
 }
 
 // function to remove user from project
-export async function deleteUserFromProjectModel(user_id, project_id) {
+export async function deleteUserFromProjectModel(userId, projectId) {
     return await query(
         `
         DELETE FROM user_projects
-        WHERE user_id = $1 AND project_id = $2;
+        WHERE user_id = $1 AND project_id = $2
+        RETURNING *;
         `,
-        [user_id, project_id]
+        [userId, projectId]
     );
 }
 
 // function to add a new user to a project
-export async function postUserToProjectModel(user_id, project_id) {
+export async function postUserToProjectModel(userId, projectId) {
     return await query(
         `
         INSERT INTO user_projects (user_id, project_id)
         VALUES ($1, $2)
         RETURNING *;
         `,
-        [user_id, project_id]
+        [userId, projectId]
     );
 }
