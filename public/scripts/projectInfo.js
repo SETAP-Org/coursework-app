@@ -132,7 +132,7 @@ leaveDialogYesBtn.addEventListener("click", async () => {
         loading.style.display = "flex";
     
         // remove the user
-        const response = await fetch("/api/projects/remove_user", {
+        const response = await fetch("/api/projects/user", {
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json'
@@ -142,13 +142,13 @@ leaveDialogYesBtn.addEventListener("click", async () => {
                 projectId: projectId
             })
         });
-        
+
         const data = await response.json();
 
         // change the message of the secondary dialog
         if (data.success) {
             secondaryDialogHeading.textContent = "Success!";
-            secondaryDialogMsg.textContent = "Your request was processed successfully!";
+            secondaryDialogMsg.textContent = "You have successfully left the group!";
         } else {
             secondaryDialogHeading.textContent = "Error :(";
             secondaryDialogMsg.textContent = "There was an error processing your request, please try again.";
@@ -170,7 +170,50 @@ secondaryDialogBtn.addEventListener("click", () => {
 // event listener to track add member input
 addMemberInput.addEventListener("input", (e) => {
     addUserInputValue = e.target.value;
+    e.target.value === "" ? addDialogYesBtn.disabled = true : addDialogYesBtn.disabled = false;
 });
+
+// event listener to add member to project
+addDialogYesBtn.addEventListener("click", async () => {
+    addDialog.close();
+
+    const userAlreadyInProject = projectMembers.some(member => member.username === addUserInputValue);
+
+    if (userAlreadyInProject) {
+        alert(`${addUserInputValue} is already a part of the project!`);
+    } else {
+        // show loading
+        loading.style.display = "flex";
+
+        // attempt to add the user to the group
+        const response = await fetch("/api/projects/user", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: userId,
+                projectId: projectId
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            secondaryDialogHeading.textContent = "Success!";
+            secondaryDialogMsg.textContent = `${addUserInputValue} has been added to the group!`;
+        } else {
+            secondaryDialogHeading.textContent = "Error :(";
+            secondaryDialogMsg.textContent = "There was an error processing your request, please try again.";
+        }
+
+        // close loading
+        loading.style.display = "none";
+    
+        // show redirect dialog
+        secondaryDialog.showModal();
+    }
+})
 
 // hide loading screen
 loading.style.display = "none";

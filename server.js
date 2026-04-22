@@ -57,6 +57,7 @@ import {
 
 import {
   removeUserFromProject,
+  addUserToProject,
 } from "./controllers/userProjectControllers.js";
 
 // util imports
@@ -169,6 +170,8 @@ app.post("/api/users/addUser", setJustAuthenticatedFlag, addUser);
 
 app.post("/api/chat/addMessage", addMessage);
 
+app.post("/api/projects/user", addUserToProject);
+
 // ---- READ ----
 app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
 
@@ -195,7 +198,7 @@ app.get("/api/chat", getMessages);
 app.put("/api/users/changeUsername", checkValidUsername, updateUsername);
 
 // ---- DELETE ----
-app.delete("/api/projects/remove_user", removeUserFromProject);
+app.delete("/api/projects/user", removeUserFromProject);
 
 // assigning the server to a port so that requests can be made
 server.listen(port, () => {
