@@ -97,11 +97,15 @@ document.addEventListener("DOMContentLoaded", () => {
 function showTasks() {
   const tasks = window.scriptData.tasks;
   const groupUsers = window.scriptData.groupUsers;
+  const user_id = window.scriptData.userId;
+  const project_id = window.scriptData.projectId;
 
   const userMap = new Map(groupUsers.map((u) => [u.user_id, u.username]));
 
   const main_list = document.querySelector("#task-list");
   const template = document.querySelector("#task-template");
+
+  main_list.innerHTML = "";
 
   if (tasks.length === 0) {
     main_list.innerHTML = "No tasks yet!";
@@ -115,6 +119,7 @@ function showTasks() {
       const taskDescription = section.querySelector(".task-desc");
       const taskDeadline = section.querySelector(".task-date");
       const taskAssignee = section.querySelector(".task-assignee");
+      const checkbox = section.querySelector(".task-complete-checkbox");
 
       const deadline = new Date(task.task_deadline);
       const formatted_deadline = deadline.toLocaleDateString("en-GB", {
@@ -128,6 +133,17 @@ function showTasks() {
       taskDeadline.textContent = formatted_deadline;
       taskAssignee.textContent = userMap.get(task.assignee_id);
 
+      if (task.assignee_id === user_id) {
+        checkbox.style.display = "inline-block";
+        checkbox.dataset.taskId = task.task_id;
+        checkbox.checked = task.task_status === "Completed";
+        checkbox.disabled = false;
+      } else {
+        // hide the checkbox for non-assignees
+        checkbox.style.display = "none";
+        checkbox.disabled = true;
+      }
+
       const li = document.createElement("li");
       li.className = "task-list-item";
       li.appendChild(section);
@@ -137,3 +153,55 @@ function showTasks() {
 }
 
 showTasks();
+
+document.querySelector("#task-list").addEventListener("change", async (e) => {
+  const cb = e.target.closest(".task-complete-checkbox");
+  if (!cb) return;
+
+  const taskId = cb.dataset.taskId;
+  const projectId = window.scriptData.projectId;
+  if (!taskId || !projectId) {
+    alert("Missing task or project id.");
+    return;
+  }
+
+  // Optimistic UI: disable while updating
+  cb.disabled = true;
+
+  // decide new status
+  const newStatus = cb.checked ? "Completed" : "To Do";
+
+  const url = `/api/projects/${encodeURIComponent(projectId)}/tasks/${encodeURIComponent(taskId)}/updateStatus`;
+  console.log("PUT", url, "payload:", { taskStatus: newStatus });
+
+  try {
+    const res = await fetch(
+      `/api/projects/${encodeURIComponent(projectId)}/tasks/${encodeURIComponent(taskId)}/updateStatus`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ taskStatus: newStatus }),
+      },
+    );
+
+    const data = await res.json().catch(() => ({}));
+
+    if (res.ok && data.success) {
+      // update status text in the same card
+      const card = cb.closest(".task-card-individual");
+      if (card) {
+        alert(`Task status set to ${newStatus}!`);
+      }
+    } else {
+      // server rejected; revert checkbox
+      cb.checked = !cb.checked;
+      alert(data.error || "Failed to update task status.");
+    }
+  } catch (err) {
+    console.error("Error updating status:", err);
+    cb.checked = !cb.checked;
+    alert("An unexpected error occurred updating the task status.");
+  } finally {
+    cb.disabled = false;
+  }
+});

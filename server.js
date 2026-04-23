@@ -198,7 +198,6 @@ app.get("/api/chat", getMessages);
 app.put("/api/users/changeUsername", checkValidUsername, updateUsername);
 app.put(
   "/api/projects/:project_id/tasks/:task_id/updateStatus",
-  checkIfLoggedIn,
   loadProject,
   checkMembership,
   updateTaskStatus,

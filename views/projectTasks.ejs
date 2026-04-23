@@ -11,6 +11,8 @@
 
         <script>
             window.scriptData = {
+                userId: "<%= userId %>",
+                projectId: "<%= projectId %>",
                 groupUsers: <%- JSON.stringify(groupUsers) %>,
                 tasks: <%- JSON.stringify(tasks) %>
             };
@@ -37,7 +39,10 @@
             <section class="task-card-individual">
                 <!-- Top group: title + description -->
                 <div class="card-top">
-                    <b class="task-name"></b>
+                    <label class="task-checkbox-label">
+                        <b class="task-name"></b>
+                        <input type="checkbox" class="task-complete-checkbox" />
+                    </label>
                     <p class="task-desc"></p>
                 </div>
 

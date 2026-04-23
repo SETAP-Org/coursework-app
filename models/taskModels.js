@@ -31,7 +31,7 @@ export async function updateTaskStatusModel(taskId, projectId, status) {
   return await query(
     `
     UPDATE tasks
-    SET tast_status = $3, t_time_updated = NOW()
+    SET task_status = $3, t_time_updated = NOW()
     WHERE task_id = $1 AND project_id = $2
     RETURNING *;
     `,

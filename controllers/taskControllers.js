@@ -84,8 +84,10 @@ export async function updateTaskStatus(req, res, next) {
       taskStatus,
     );
 
-    if (updated.rows && updated.rows[0]) {
-      return res.status(200).json({ success: true, task: updated.rows[0] });
+    if (updated_task.rows && updated_task.rows[0]) {
+      return res
+        .status(200)
+        .json({ success: true, task: updated_task.rows[0] });
     } else {
       return res
         .status(404)
