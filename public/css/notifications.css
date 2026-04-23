@@ -1,0 +1,18 @@
+.notif-container {
+    position: absolute;
+    right: 100px;
+    top: 100px;
+    padding: 50px;
+    border-radius: 20px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    display: none;
+}
+
+.notif-container p {
+    font-size: 2em;
+}
