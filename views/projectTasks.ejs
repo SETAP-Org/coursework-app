@@ -13,7 +13,8 @@
                 userId: "<%= userId %>",
                 projectId: "<%= projectId %>",
                 groupUsers: <%- JSON.stringify(groupUsers) %>,
-                tasks: <%- JSON.stringify(tasks) %>
+                tasks: <%- JSON.stringify(tasks) %>,
+                teamLeaderId: "<%= teamLeaderId %>"
             };
         </script>
         <script src="/scripts/L&D-mode.js" defer></script>
@@ -27,7 +28,9 @@
         <section id="page-content">
             <section class="page-header">
                 <h1 id="page-title">Tasks</h1>
-                <button id="new-task-button">New Task</button>
+                <% if (userId == teamLeaderId) { %>
+                    <button id="new-task-button">New Task</button>
+                <% } %>
             </section>
             <section id="task-panel">
                 <ul id="task-list"></ul>

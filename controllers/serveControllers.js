@@ -111,7 +111,7 @@ export async function serveProjectInfo(req, res, next) {
     // get the user details
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult.rows[0];
-  
+
     // get the project details
     const projectResponse = await getProjectByIdModel(req.params.project_id);
     const projectData = projectResponse.rows[0];
@@ -147,6 +147,10 @@ export async function serveProjectTasks(req, res, next) {
     const groupUsersResponse = await getUsersByProjectId(req.params.project_id);
     const groupUsersData = groupUsersResponse.rows;
 
+    // get the project details
+    const projectResponse = await getProjectByIdModel(req.params.project_id);
+    const projectData = projectResponse.rows[0];
+
     // get all tasks for project
     const tasksResponse = await getTasksByProjectIdModel(req.params.project_id);
     const tasksData = tasksResponse.rows;
@@ -155,6 +159,7 @@ export async function serveProjectTasks(req, res, next) {
       userId: dbUser.user_id,
       username: req.params.username,
       projectId: req.params.project_id,
+      teamLeaderId: projectData.team_leader_id,
       projectName: req.session.project.project_name,
       tasks: tasksData,
       groupUsers: groupUsersData,
@@ -216,13 +221,13 @@ export async function serveProjectChat(req, res, next) {
 }
 
 export async function serveProjectNotes(req, res, next) {
-    res.render("projectDash", {
-        name: req.user.firstName,
-        username: req.params.username,
-        project: req.session.project,
-        project_id: req.session.project.project_id,
-        project_name: req.session.project.project_name,
-    });
+  res.render("projectDash", {
+    name: req.user.firstName,
+    username: req.params.username,
+    project: req.session.project,
+    project_id: req.session.project.project_id,
+    project_name: req.session.project.project_name,
+  });
 }
 
 export async function serveProjectContributions(req, res, next) {

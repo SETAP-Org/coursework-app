@@ -93,9 +93,14 @@ function showTasks() {
   loading.style.display = "none";
 }
 
-document
-  .querySelector("#new-task-button")
-  .addEventListener("click", toggleNewTaskForm);
+const teamLeaderId = window.scriptData.teamLeaderId;
+const userId = window.scriptData.userId;
+
+if (teamLeaderId === userId) {
+  document
+    .querySelector("#new-task-button")
+    .addEventListener("click", toggleNewTaskForm);
+}
 
 document
   .querySelector("#create-task-dialog")
