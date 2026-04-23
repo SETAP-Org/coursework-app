@@ -4,6 +4,10 @@ function toggleNewTaskForm() {
 }
 
 function showTasks() {
+  // show loading screen
+  const loading = document.querySelector(".loading");
+  loading.style.display = "flex";
+
   const tasks = window.scriptData.tasks || [];
   const groupUsers = window.scriptData.groupUsers || [];
   const user_id = window.scriptData.userId;
@@ -85,6 +89,8 @@ function showTasks() {
     li.appendChild(section);
     main_list.appendChild(li);
   });
+  // hide loading screen
+  loading.style.display = "none";
 }
 
 document
