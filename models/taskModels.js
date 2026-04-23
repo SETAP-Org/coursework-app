@@ -51,3 +51,15 @@ export async function getTasksByProjectIdModel(projectId) {
     [projectId],
   );
 }
+
+export async function getTaskByIdModel(taskId) {
+  return await query(
+    `
+      SELECT task_id, project_id, assignee_id, task_title, task_description, task_weight, task_status, task_deadline
+      FROM tasks
+      WHERE task_id = $1
+      LIMIT 1
+    `,
+    [taskId],
+  );
+}

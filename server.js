@@ -52,7 +52,11 @@ import {
 
 import { addMessage, getMessages } from "./controllers/chatControllers.js";
 
-import { addTask, getProjectTasks } from "./controllers/taskControllers.js";
+import {
+  addTask,
+  getProjectTasks,
+  updateTaskStatus,
+} from "./controllers/taskControllers.js";
 
 // util imports
 import createSession from "./utils/session.js";
@@ -192,6 +196,13 @@ app.get("/api/chat", getMessages);
 
 // ---- UPDATE ----
 app.put("/api/users/changeUsername", checkValidUsername, updateUsername);
+app.put(
+  "/api/projects/:project_id/tasks/:task_id/updateStatus",
+  checkIfLoggedIn,
+  loadProject,
+  checkMembership,
+  updateTaskStatus,
+);
 
 // ---- DELETE ----
 
