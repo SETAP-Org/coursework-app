@@ -268,27 +268,37 @@
     text-align: center;
 }
 
-/* Bottom group sticks to the bottom of the card */
+/* Bottom group: assignee left, date right — baseline-aligned */
 .card-bottom {
     margin-top: auto;
     display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    align-items: center;
-    justify-content: flex-end;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline; /* align text baselines so date and assignee sit level */
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
 }
 
-/* Date & assignee */
-.task-date,
+/* Assignee on the left */
 .task-assignee {
     margin: 0;
     font-size: 0.9rem;
     opacity: 0.9;
-    text-align: center;
+    text-align: left;
+    line-height: 1;
+    font-style: italic;
 }
 
+/* Date on the right */
 .task-date {
-    margin-bottom: 0.25rem;
+    margin: 0; /* removed previous bottom margin so it doesn't sit lower */
+    font-size: 0.9rem;
+    opacity: 0.9;
+    text-align: right;
+    line-height: 1;
+    font-style: italic;
 }
 
 /* Small responsive adjustments */
