@@ -4,10 +4,9 @@ function toggleNewTaskForm() {
 }
 
 function showTasks() {
-  const tasks = window.scriptData.tasks;
-  const groupUsers = window.scriptData.groupUsers;
+  const tasks = window.scriptData.tasks || [];
+  const groupUsers = window.scriptData.groupUsers || [];
   const user_id = window.scriptData.userId;
-  const project_id = window.scriptData.projectId;
 
   const userMap = new Map(groupUsers.map((u) => [u.user_id, u.username]));
 
@@ -18,47 +17,66 @@ function showTasks() {
 
   if (tasks.length === 0) {
     main_list.innerHTML = "No tasks yet!";
-  } else {
-    tasks.forEach((task) => {
-      const node = template.content.cloneNode(true);
-      // find section within template that contains the dom content to alter
-      const section = node.querySelector(".task-card-individual");
-
-      const taskTitle = section.querySelector(".task-name");
-      const taskDescription = section.querySelector(".task-desc");
-      const taskDeadline = section.querySelector(".task-date");
-      const taskAssignee = section.querySelector(".task-assignee");
-      const checkbox = section.querySelector(".task-complete-checkbox");
-
-      const deadline = new Date(task.task_deadline);
-      const formatted_deadline = deadline.toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      });
-
-      taskTitle.textContent = task.task_title;
-      taskDescription.textContent = task.task_description;
-      taskDeadline.textContent = formatted_deadline;
-      taskAssignee.textContent = userMap.get(task.assignee_id);
-
-      if (task.assignee_id === user_id) {
-        checkbox.style.display = "inline-block";
-        checkbox.dataset.taskId = task.task_id;
-        checkbox.checked = task.task_status === "Completed";
-        checkbox.disabled = false;
-      } else {
-        // hide the checkbox for non-assignees
-        checkbox.style.display = "none";
-        checkbox.disabled = true;
-      }
-
-      const li = document.createElement("li");
-      li.className = "task-list-item";
-      li.appendChild(section);
-      main_list.appendChild(li);
-    });
+    return;
   }
+
+  // Status: "Completed" should sort last
+  const statusPriority = (status) =>
+    String(status).toLowerCase() === "completed" ? 1 : 0;
+
+  const sorted = [...tasks].sort((a, b) => {
+    const sa = statusPriority(a.task_status);
+    const sb = statusPriority(b.task_status);
+    if (sa !== sb) return sa - sb;
+
+    const da = new Date(a.task_deadline).getTime();
+    const db = new Date(b.task_deadline).getTime();
+    return da - db;
+  });
+
+  sorted.forEach((task) => {
+    const node = template.content.cloneNode(true);
+    const section = node.querySelector(".task-card-individual");
+
+    const taskTitle = section.querySelector(".task-name");
+    const taskDescription = section.querySelector(".task-desc");
+    const taskDeadline = section.querySelector(".task-date");
+    const taskAssignee = section.querySelector(".task-assignee");
+    const checkbox = section.querySelector(".task-complete-checkbox");
+
+    const deadline = new Date(task.task_deadline);
+    const formatted_deadline = deadline.toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+
+    taskTitle.textContent = task.task_title;
+    taskDescription.textContent = task.task_description;
+    taskDeadline.textContent = formatted_deadline;
+    taskAssignee.textContent = userMap.get(task.assignee_id) || "Unknown";
+
+    if (task.assignee_id === user_id) {
+      checkbox.style.display = "inline-block";
+      checkbox.dataset.taskId = task.task_id;
+      checkbox.checked = task.task_status === "Completed";
+      checkbox.disabled = false;
+    } else {
+      checkbox.style.display = "none";
+      checkbox.disabled = true;
+    }
+
+    if (task.task_status === "Completed") {
+      section.classList.add("task-completed");
+    } else {
+      section.classList.remove("task-completed");
+    }
+
+    const li = document.createElement("li");
+    li.className = "task-list-item";
+    li.appendChild(section);
+    main_list.appendChild(li);
+  });
 }
 
 document
@@ -131,7 +149,9 @@ document.addEventListener("DOMContentLoaded", () => {
           // Redirect only if we have a username and project id
           if (username && data.project?.project_id) {
             window.location.replace(
-              `/${encodeURIComponent(username)}/projects/${encodeURIComponent(data.project.project_id)}/tasks`,
+              `/${encodeURIComponent(username)}/projects/${encodeURIComponent(
+                data.project.project_id,
+              )}/tasks`,
             );
           } else {
             // Otherwise just reload the page
@@ -169,12 +189,11 @@ document.querySelector("#task-list").addEventListener("change", async (e) => {
   // decide new status
   const newStatus = cb.checked ? "Completed" : "To Do";
 
-  const url = `/api/projects/${encodeURIComponent(projectId)}/tasks/${encodeURIComponent(taskId)}/updateStatus`;
-  console.log("PUT", url, "payload:", { taskStatus: newStatus });
-
   try {
     const res = await fetch(
-      `/api/projects/${encodeURIComponent(projectId)}/tasks/${encodeURIComponent(taskId)}/updateStatus`,
+      `/api/projects/${encodeURIComponent(
+        projectId,
+      )}/tasks/${encodeURIComponent(taskId)}/updateStatus`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -185,11 +204,15 @@ document.querySelector("#task-list").addEventListener("change", async (e) => {
     const data = await res.json().catch(() => ({}));
 
     if (res.ok && data.success) {
-      // update status text in the same card
-      const card = cb.closest(".task-card-individual");
-      if (card) {
-        alert(`Task status set to ${newStatus}!`);
+      // Update the in-memory tasks list and re-render so sorting is recalculated
+      const tasks = window.scriptData.tasks || [];
+      const idx = tasks.findIndex((t) => String(t.task_id) === String(taskId));
+      if (idx !== -1) {
+        tasks[idx].task_status = newStatus;
       }
+
+      // Re-render sorted list
+      showTasks();
     } else {
       // server rejected; revert checkbox
       cb.checked = !cb.checked;
@@ -200,6 +223,7 @@ document.querySelector("#task-list").addEventListener("change", async (e) => {
     cb.checked = !cb.checked;
     alert("An unexpected error occurred updating the task status.");
   } finally {
+    // Re-enable (safe even if the element was re-rendered)
     cb.disabled = false;
   }
 });
