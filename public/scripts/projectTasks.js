@@ -40,21 +40,29 @@ function showTasks() {
 
     const taskTitle = section.querySelector(".task-name");
     const taskDescription = section.querySelector(".task-desc");
+    const weightEl = section.querySelector(".task-weight");
     const taskDeadline = section.querySelector(".task-date");
     const taskAssignee = section.querySelector(".task-assignee");
     const checkbox = section.querySelector(".task-complete-checkbox");
 
     const deadline = new Date(task.task_deadline);
     const formatted_deadline = deadline.toLocaleDateString("en-GB", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
     });
 
     taskTitle.textContent = task.task_title;
     taskDescription.textContent = task.task_description;
     taskDeadline.textContent = formatted_deadline;
     taskAssignee.textContent = userMap.get(task.assignee_id) || "Unknown";
+
+    if (weightEl) {
+      weightEl.textContent = String(task.task_weight);
+      weightEl.title = `Weight: ${task.task_weight}`;
+      weightEl.dataset.weight = String(task.task_weight);
+      weightEl.style.display = ""; // ensure visible
+    }
 
     if (task.assignee_id === user_id) {
       checkbox.style.display = "inline-block";
