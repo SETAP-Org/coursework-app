@@ -14,11 +14,11 @@
 }
 
 #content-body {
-    flex-direction: column;
+    display: flex;
+    flex-direction: center;
     align-items: center;
     justify-content: center;
     padding: 40px;
-    text-align: center;
 }
 
 #strapline {

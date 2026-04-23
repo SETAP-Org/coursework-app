@@ -145,12 +145,12 @@
     top: 32%;
     left: 42%;
     padding: 5px;
-    border: var(--border);
+    border: 2px solid black;
     background-color: white;
     border-radius: 20px;
     height: 15%;
     width: 15%;
-    color: var(--text);
+    color: black;
 }
 
 #page-content {
