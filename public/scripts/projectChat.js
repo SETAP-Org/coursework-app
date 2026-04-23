@@ -119,6 +119,9 @@ async function projectChat() {
             // show loading screen
             loading.style.display = "flex";
 
+            // getting the username of the sender
+            const senderUsername = groupUsers.find(u => u.user_id === message.sender_id).username;
+
             // creating the elements
             const container = document.createElement("div");
             const infoTop = document.createElement("p");
@@ -130,7 +133,7 @@ async function projectChat() {
             content.innerText = message.message_content
 
             if (message.sender_id != userId) {
-                infoTop.innerText = `Sent by ${message.sender_id}`
+                infoTop.innerText = `Sent by ${senderUsername}`;
                 container.className = "message-container-left";
                 infoTop.className = "message-info-left";
                 infoBottom.className = "message-info-left";
