@@ -1,3 +1,4 @@
+/* Page layout */
 #page-content {
     display: flex;
     flex-direction: column;
@@ -162,6 +163,7 @@
     align-items: stretch;
 }
 
+/* list items / sizing */
 #task-list > li,
 .task-list > li {
     list-style: none;
@@ -172,7 +174,7 @@
     align-items: stretch;
 }
 
-/* Outer card container */
+/* Outer card container (visual styles) */
 .task-list-item,
 #task-list > li .task-card-individual,
 .task-list > li .task-card-individual {
@@ -192,6 +194,39 @@
     box-sizing: border-box;
     justify-content: space-between;
     height: 100%;
+
+    /* Fixes for checkbox placement and spacing */
+    position: relative; /* allow absolute checkbox positioned relative to card */
+    padding-top: 1.25rem; /* small top padding so checkbox doesn't overlap title */
+}
+
+/* Keep label in flow — the title remains centered and wrapped/clamped if needed */
+.task-checkbox-label {
+    position: static;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: normal;
+    z-index: 1;
+}
+
+/* absolutely position only the checkbox input so it never affects layout */
+.task-complete-checkbox {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--good);
+    cursor: pointer;
+    z-index: 2;
+    background: transparent;
+    border: none;
+}
+
+/* Completed state must override base card background — keep selector specific */
+#task-list > li .task-card-individual.task-completed {
+    background: var(--card4);
 }
 
 /* Top group — center contents so title & description align to the middle horizontally */
@@ -204,8 +239,14 @@
     text-align: center;
 }
 
-/* Title */
+/* Title — clamp to 2 lines to avoid pushing layout / wrapping issues */
 .task-name {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+
     font-weight: 700;
     line-height: 1.1;
     word-break: break-word;
@@ -248,4 +289,40 @@
 
 .task-date {
     margin-bottom: 0.25rem;
+}
+
+/* Small responsive adjustments */
+@media (max-width: 1100px) {
+    #task-list > li {
+        flex: 1 1 calc((100% - (var(--card-gap) * 3)) / 4);
+        max-width: calc((100% - (var(--card-gap) * 3)) / 4);
+    }
+}
+
+@media (max-width: 800px) {
+    #task-list > li {
+        flex: 1 1 calc((100% - (var(--card-gap) * 2)) / 3);
+        max-width: calc((100% - (var(--card-gap) * 2)) / 3);
+    }
+    .task-complete-checkbox {
+        top: 0.5rem;
+        right: 0.5rem;
+    }
+}
+
+@media (max-width: 520px) {
+    #page-content {
+        width: 95%;
+        padding: 16px 0;
+    }
+    #task-list > li {
+        flex: 1 1 calc((100% - var(--card-gap)) / 2);
+        max-width: calc((100% - var(--card-gap)) / 2);
+    }
+    .task-complete-checkbox {
+        width: 0.95rem;
+        height: 0.95rem;
+        top: 0.45rem;
+        right: 0.45rem;
+    }
 }
