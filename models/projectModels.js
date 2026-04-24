@@ -67,7 +67,8 @@ export async function getUserProjectsModel(userId) {
       ON p.project_id = up.project_id
     JOIN users u
       ON p.created_by = u.user_id
-    WHERE up.user_id = $1;
+    WHERE up.user_id = $1
+    ORDER BY p.project_deadline ASC NULLS LAST;
     `,
     [userId],
   );
