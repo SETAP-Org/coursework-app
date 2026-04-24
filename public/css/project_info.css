@@ -114,6 +114,8 @@ body, .page-container * {
 dialog {
     border-radius: 20px;
     padding: 20px;
+    align-self: center;
+    left: 30%;
 }
 
 dialog::backdrop {
