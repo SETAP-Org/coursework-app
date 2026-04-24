@@ -24,11 +24,14 @@ export async function postNotificationModel(user_id, project_id, task_id, notifi
 }
 
 // READ
-export async function getNotificationsModel() {
+export async function getNotificationsModel(user_id) {
     return await query(
         `
+        SELECT * FROM notifications
+        WHERE user_id = $1
+        ORDER BY n_date_created DESC;
         `,
-        [],
+        [user_id],
     );
 }
 
