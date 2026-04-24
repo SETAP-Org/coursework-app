@@ -101,11 +101,10 @@
 /* each list row */
 .project-list-item {
     display: flex;
-    align-items: center; /* center content vertically */
-    height: 64px;
+    align-items: center;
+    min-height: 64px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     position: relative;
-    padding: 0;
 }
 
 /* internal card: full-width content inside the row */
@@ -147,12 +146,9 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     font-weight: 700;
-    line-height: 1;
+    line-height: 1.25;
     margin: 0;
-    /* reasonable cap so meta + button have room on typical desktop widths */
-    max-width: calc(
-        60vw
-    ); /* tweak this if you want title to be wider/narrower */
+    max-width: calc(60vw);
     min-width: 0;
 }
 
