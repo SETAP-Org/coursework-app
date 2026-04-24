@@ -14,10 +14,6 @@ function daysUntil(dateString) {
 }
 
 function showTasks() {
-  // show loading screen
-  const loading = document.querySelector(".loading");
-  loading.style.display = "flex";
-
   const tasks = window.scriptData.tasks || [];
   const groupUsers = window.scriptData.groupUsers || [];
   const user_id = window.scriptData.userId;
@@ -112,29 +108,28 @@ function showTasks() {
     li.appendChild(section);
     main_list.appendChild(li);
   });
-  // hide loading screen
-  loading.style.display = "none";
 }
 
 const teamLeaderId = window.scriptData.teamLeaderId;
 const userId = window.scriptData.userId;
 
 if (teamLeaderId === userId) {
-  document
-    .querySelector("#new-task-button")
-    .addEventListener("click", toggleNewTaskForm);
+  const newTaskBtn = document.querySelector("#new-task-button");
+  if (newTaskBtn) {
+    newTaskBtn.addEventListener("click", toggleNewTaskForm);
+  }
 }
 
-document
-  .querySelector("#create-task-dialog")
-  .addEventListener("click", function (e) {
+const createTaskDialog = document.querySelector("#create-task-dialog");
+if (createTaskDialog) {
+  createTaskDialog.addEventListener("click", function (e) {
     if (e.target === this) this.close();
   });
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   // Elements and data queried after DOM is ready
   const dialogForm = document.querySelector("#create-task-dialog form");
-  const loading = document.querySelector(".loading");
   const { username } = window.scriptData || {};
 
   // Weight range UI
@@ -156,8 +151,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   dialogForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-
-    if (loading) loading.style.display = "flex";
 
     const form = e.target;
     const title = form["taskTitle"]?.value;
@@ -208,8 +201,6 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       console.error("Error creating task:", err);
       alert("An unexpected error occurred creating the task.");
-    } finally {
-      if (loading) loading.style.display = "none";
     }
   });
 });
