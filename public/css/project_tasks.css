@@ -364,6 +364,16 @@
     margin-left: 0.25rem;
 }
 
+.task-date.deadline-overdue {
+    color: #ff4d4f;
+    font-weight: 700;
+}
+
+.task-date.deadline-warning {
+    color: #ffb400;
+    font-weight: 700;
+}
+
 /* Small responsive adjustments */
 @media (max-width: 1100px) {
     #task-list > li {

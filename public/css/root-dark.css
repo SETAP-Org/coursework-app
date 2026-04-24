@@ -25,6 +25,7 @@
 * {
     box-sizing: border-box;
 }
+
 body {
     margin: 0;
     min-height: 100vh;
@@ -102,3 +103,11 @@ button:hover {
 #ms-logo {
     margin-right: 12px;
 }
+
+/*.deadline-overdue {
+    box-shadow: 0 4px 12px rgba(255, 77, 79, 0.08);
+}
+
+.deadline-warning {
+    box-shadow: 0 4px 12px rgba(255, 191, 0, 0.06);
+}*/

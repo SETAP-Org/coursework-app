@@ -136,3 +136,77 @@ section > a {
     padding: 7.5px;
     box-shadow: 0 px5 10px rgba(0, 0, 0, 0.35);
 }
+
+/* Softer full-row tint: faded edges using a pseudo-element */
+.project-list-item {
+    position: relative; /* allow pseudo-element overlay */
+}
+
+/* ensure inner content stays above the overlay */
+.user-dash-project-card-individual {
+    position: relative;
+    z-index: 1;
+}
+
+/* Overlays with faded edges for overdue (red) */
+.project-list-item.deadline-overdue::before {
+    content: "";
+    position: absolute;
+    inset: 0; /* cover the full li */
+    pointer-events: none;
+    z-index: 0; /* behind the content */
+    background: linear-gradient(
+        90deg,
+        rgba(255, 77, 79, 0) 0%,
+        rgba(255, 77, 79, 0.06) 15%,
+        rgba(255, 77, 79, 0.06) 85%,
+        rgba(255, 77, 79, 0) 100%
+    );
+}
+
+/* Overlays with faded edges for warning (amber) */
+.project-list-item.deadline-warning::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 191, 0, 0) 0%,
+        rgba(255, 191, 0, 0.06) 15%,
+        rgba(255, 191, 0, 0.06) 85%,
+        rgba(255, 191, 0, 0) 100%
+    );
+}
+
+/* keep the divider slightly tinted but not harsh */
+.project-list-item.deadline-overdue {
+    border-bottom: 1px solid rgba(255, 77, 79, 0.12);
+}
+.project-list-item.deadline-warning {
+    border-bottom: 1px solid rgba(255, 191, 0, 0.1);
+}
+
+/* Text emphasis stays the same */
+.project-list-item.deadline-overdue .project-name,
+.project-list-item.deadline-overdue .project-date,
+.project-date.deadline-overdue {
+    color: #ff4d4f;
+    font-weight: 700;
+}
+.project-list-item.deadline-warning .project-name,
+.project-list-item.deadline-warning .project-date,
+.project-date.deadline-warning {
+    color: #ffb400;
+    font-weight: 700;
+}
+
+/* button blending (keep from before) */
+.project-list-item.deadline-overdue a.project-dash-button,
+.project-list-item.deadline-warning a.project-dash-button {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: none;
+    color: inherit;
+}
