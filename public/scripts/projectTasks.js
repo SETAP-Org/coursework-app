@@ -17,6 +17,7 @@ function showTasks() {
   const tasks = window.scriptData.tasks || [];
   const groupUsers = window.scriptData.groupUsers || [];
   const user_id = window.scriptData.userId;
+  const teamLeaderId = window.scriptData.teamLeaderId;
 
   const userMap = new Map(groupUsers.map((u) => [u.user_id, u.username]));
 
@@ -54,6 +55,7 @@ function showTasks() {
     const taskDeadline = section.querySelector(".task-date");
     const taskAssignee = section.querySelector(".task-assignee");
     const checkbox = section.querySelector(".task-complete-checkbox");
+    const deleteBtn = section.querySelector(".task-delete-button");
 
     const days = daysUntil(task.task_deadline);
 
@@ -84,6 +86,14 @@ function showTasks() {
     } else {
       checkbox.style.display = "none";
       checkbox.disabled = true;
+    }
+
+    // Show delete button only for team leader
+    if (String(teamLeaderId) === String(user_id)) {
+      deleteBtn.style.display = ""; // visible
+      deleteBtn.dataset.taskId = task.task_id;
+    } else {
+      deleteBtn.style.display = "none";
     }
 
     if (task.task_status === "Completed") {
@@ -258,6 +268,52 @@ document.querySelector("#task-list").addEventListener("change", async (e) => {
   } finally {
     // Re-enable (safe even if the element was re-rendered)
     cb.disabled = false;
+  }
+});
+
+// NEW: handle delete clicks via event delegation
+document.querySelector("#task-list").addEventListener("click", async (e) => {
+  const btn = e.target.closest(".task-delete-button");
+  if (!btn) return;
+
+  const confirmed = window.confirm("Delete this task? This cannot be undone.");
+  if (!confirmed) return;
+
+  const taskId = btn.dataset.taskId;
+  const projectId = window.scriptData.projectId;
+  if (!taskId || !projectId) {
+    alert("Missing task or project id.");
+    return;
+  }
+
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(
+      `/api/projects/${encodeURIComponent(projectId)}/tasks/${encodeURIComponent(taskId)}`,
+      {
+        method: "DELETE",
+      },
+    );
+
+    const data = await res.json().catch(() => ({}));
+
+    if (res.ok && data.success) {
+      // Remove task from in-memory list and re-render
+      const tasks = window.scriptData.tasks || [];
+      const idx = tasks.findIndex((t) => String(t.task_id) === String(taskId));
+      if (idx !== -1) {
+        tasks.splice(idx, 1);
+      }
+      showTasks();
+    } else {
+      alert(data.error || "Failed to delete task.");
+    }
+  } catch (err) {
+    console.error("Error deleting task:", err);
+    alert("An unexpected error occurred deleting the task.");
+  } finally {
+    btn.disabled = false;
   }
 });
 
