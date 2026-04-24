@@ -1,3 +1,12 @@
+function daysUntil(dateString) {
+  if (!dateString) return null;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const d = new Date(dateString);
+  d.setHours(0, 0, 0, 0);
+  return Math.round((d - today) / (1000 * 60 * 60 * 24));
+}
+
 async function projects() {
   // show loading screen
   const loading = document.querySelector(".loading");
@@ -39,10 +48,30 @@ async function projects() {
           });
           titleEl.textContent = project.project_name;
           dateEl.textContent = formatted_due_date;
+
+          const days = daysUntil(project.project_deadline);
+          if (days !== null) {
+            if (days < 0) {
+              section.classList.add("deadline-overdue");
+              dateEl.classList.add("deadline-overdue");
+            } else if (days <= 7) {
+              // within 7 days -> amber for projects
+              section.classList.add("deadline-warning");
+              dateEl.classList.add("deadline-warning");
+            }
+          }
+
           linkEl.href = `/${encodeURIComponent(username)}/projects/${encodeURIComponent(project.project_id)}`;
           linkEl.textContent = "Go to project";
           const li = document.createElement("li");
           li.className = "project-list-item";
+
+          if (section.classList.contains("deadline-overdue")) {
+            li.classList.add("deadline-overdue");
+          } else if (section.classList.contains("deadline-warning")) {
+            li.classList.add("deadline-warning");
+          }
+
           li.appendChild(section);
           projectsList.appendChild(li);
         }
@@ -84,7 +113,7 @@ async function projects() {
         body: JSON.stringify({
           project_name: name,
           project_deadline: deadline,
-        })
+        }),
       });
 
       if (res.ok) {
