@@ -1,14 +1,14 @@
-import { postNotificationModel, getNotificationsModel, deleteNotificationModel } from "../models/notificationModels";
+import { postNotificationModel, getNotificationsModel, deleteNotificationModel } from "../models/notificationModels.js";
 
 // function to fetch all user notifications
 export async function fetchNotificationsByUserId(req, res, next) {
     try {
         const response = await getNotificationsModel(req.params.user_id);
-        const data = await response.json();
+        const data = await response.rows;
 
         res.status(200).json({
             success: true,
-            notifications: data.rows,
+            notifications: data,
         })
     } catch(err) {
         console.error("Error with fetchNotificationsByUserId:", err);

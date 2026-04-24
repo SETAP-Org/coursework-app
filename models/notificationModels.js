@@ -1,4 +1,4 @@
-import { query } from "../db/connection";
+import { query } from "../db/connection.js";
 
 // CREATE
 export async function postNotificationModel(user_id, project_id, notification_type, notification_message) {

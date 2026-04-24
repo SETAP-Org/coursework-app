@@ -5,6 +5,10 @@ async function navInit() {
 
   // ejs values
   const { username, userId } = window.scriptData;
+
+  // fetching notifications
+  const notificationResponse = await fetch(`/api/notifications/${userId}`);
+  const notificationData = await notificationResponse.json();
   
   // getting dom elements
   const projectsBtn = document.querySelector("#projects-button");
@@ -13,6 +17,10 @@ async function navInit() {
   const navMobile = document.querySelector(".nav-mobile");
   const notificationBell = document.querySelector(".notif-bell");
   const notificationBox = document.querySelector("#notif-dialog");
+  const notifInnerContainer = document.querySelector(".dialog-inner-container");
+  const notifList = document.querySelector(".notif-list");
+  const notifTemplate = document.querySelector(".notif-template");
+
 
   // assigning urls to nav buttons
   if (projectsBtn) {
@@ -66,6 +74,30 @@ async function navInit() {
   notificationBox.addEventListener("click", (e) => {
     if (e.target === notificationBox) notificationBox.close();
   });
+
+  // populate the notifications panel
+  if (!notificationData.success) {
+    const notifMessage = document.createElement("p");
+    notifMessage.className = "notif-message";
+    notifMessage.innerText = "Notifications failed to load."
+    notifInnerContainer.appendChild(notifMessage);
+  } else if (notificationData.notifications.length === 0) {
+    const notifMessage = document.createElement("p");
+    notifMessage.className = "notif-message";
+    notifMessage.innerText = "You currently have no notifications."
+    notifInnerContainer.appendChild(notifMessage);
+  } else {
+    for (const notification of notificationData.notifications) {
+      // clone the template
+      const clone = notifTemplate.content.cloneNode(true);
+  
+      // change the values in the clone
+      clone.querySelector('.notif-list-info').innerText = notification.notification_message;
+  
+      // add the item to the list
+      notifList.appendChild(clone);
+    }
+  }
 
   // hide loading screen
   loading.style.display = "none";
