@@ -3,6 +3,16 @@ function toggleNewTaskForm() {
   dialog.open ? dialog.close() : dialog.showModal();
 }
 
+function daysUntil(dateString) {
+  if (!dateString) return null;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const d = new Date(dateString);
+  d.setHours(0, 0, 0, 0);
+  const diff = d - today;
+  return Math.round(diff / (1000 * 60 * 60 * 24));
+}
+
 function showTasks() {
   // show loading screen
   const loading = document.querySelector(".loading");
@@ -49,6 +59,8 @@ function showTasks() {
     const taskAssignee = section.querySelector(".task-assignee");
     const checkbox = section.querySelector(".task-complete-checkbox");
 
+    const days = daysUntil(task.task_deadline);
+
     const deadline = new Date(task.task_deadline);
     const formatted_deadline = deadline.toLocaleDateString("en-GB", {
       day: "2-digit",
@@ -82,6 +94,17 @@ function showTasks() {
       section.classList.add("task-completed");
     } else {
       section.classList.remove("task-completed");
+    }
+
+    if (task.task_status !== "Completed" && days !== null) {
+      if (days < 0) {
+        section.classList.add("deadline-overdue");
+        taskDeadline.classList.add("deadline-overdue");
+      } else if (days <= 1) {
+        // within 1 day -> amber for tasks
+        section.classList.add("deadline-warning");
+        taskDeadline.classList.add("deadline-warning");
+      }
     }
 
     const li = document.createElement("li");
