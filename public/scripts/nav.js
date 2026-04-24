@@ -1,20 +1,22 @@
 async function navInit() {
-  const userDataJson = await fetch("/api/me");
-  const userData = await userDataJson.json();
-  const dbUserData = userData.dbUser;
-
+  // ejs values
+  const { username } = window.scriptData;
+  
+  // getting dom elements
   const projectsBtn = document.querySelector("#projects-button");
   const profileBtn = document.querySelector("#profile-button");
-
   const check = document.getElementById("check");
   const navMobile = document.querySelector(".nav-mobile");
+  const notificationBell = document.querySelector(".notif-bell");
+  const notificationBox = document.querySelector("#notif-dialog");
 
   // assigning urls to nav buttons
   if (projectsBtn) {
-    projectsBtn.href = `/${dbUserData.username}/projects`;
+    projectsBtn.href = `/${username}/projects`;
   }
+
   if (profileBtn) {
-    profileBtn.href = `/${dbUserData.username}/profile`;
+    profileBtn.href = `/${username}/profile`;
   }
 
   // close nav when a menu link is clicked
@@ -48,6 +50,17 @@ async function navInit() {
 
     // Close the menu
     check.checked = false;
+  });
+
+  // NOTIFICATIONS
+  // event listener to show notif dialog
+  notificationBell.addEventListener("click", () => {
+    notificationBox.showModal();
+  })
+
+  // event listener to close notif dialog when clicked outside
+  notificationBox.addEventListener("click", (e) => {
+    if (e.target === notificationBox) notificationBox.close();
   });
 }
 

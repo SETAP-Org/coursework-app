@@ -177,6 +177,47 @@ body{
     text-decoration: none;
 }
 
+.notif-container {
+    width: 400px;
+    height: 400px;
+    background-color: white;
+}
+
+.notif-bell {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2px;
+}
+
+.notif-bell:hover {
+    cursor: pointer;
+}
+
+.notif-bell i {
+    font-size: 2em;
+}
+
+#notif-bell-num-bubble {
+    border-radius: 100px;
+    background-color: #0055ff;
+    width: 20px;
+    height: 20px;
+    aspect-ratio: 1 / 1;
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#notif-bell-num {
+    text-align: center;
+    font-style: bold;
+}
+
 /* Mobile */
 @media screen and (max-width: 900px) {
     .Dashboard-header {
@@ -241,39 +282,4 @@ body{
     .nav-menu {
         left: 0;
     }
-}
-
-.notification-container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 2px;
-}
-
-.notification-container:hover {
-    cursor: pointer;
-}
-
-.notification-container i {
-    font-size: 2em;
-}
-
-.notification-container div {
-    border-radius: 100px;
-    background-color: #0055ff;
-    width: 20px;
-    height: 20px;
-    aspect-ratio: 1 / 1;
-    position: absolute;
-    right: 0;
-    top: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.notification-container p {
-    text-align: center;
-    font-style: bold;
 }

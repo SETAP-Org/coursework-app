@@ -1,18 +1,14 @@
-.notif-container {
-    position: absolute;
-    right: 100px;
-    top: 100px;
-    padding: 50px;
-    border-radius: 20px;
-    min-height: 200px;
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.dialog-inner-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
-    display: none;
 }
 
-.notif-container p {
+.notif-message {
     font-size: 2em;
 }

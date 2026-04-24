@@ -13,15 +13,16 @@
     <div class="card nav-links">
         <a class="Dashboard-text Dashboard-links" id="projects-button">Projects</a>
         <a class="Dashboard-text Dashboard-links" id="profile-button">Profile</a>
-        <div class="notification-container">
+        
+        <div class="notif-bell">
             <i class="fa fa-bell"></i>
-            <div id="notif-number-bubble">
-                <p>5</p>
+            <div id="notif-bell-num-bubble">
+                <p id="notif-bell-num">5</p>
             </div>
         </div>
     </div>
 
+    <%- include('../partials/notifications') %>
+
 <!-- <button class="nav-burger">&#9776;</button> -->
 </nav>
-
-<%- include('partials/projectNav') %>
