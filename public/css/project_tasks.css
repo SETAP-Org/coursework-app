@@ -538,10 +538,9 @@
     font-style: normal;
     text-overflow: ellipsis;
     overflow: hidden;
-    white-space: normal;
+    white-space: nowrap;
     min-height: 1em;
     max-width: 100%;
-    word-break: break-word;
 }
 
 @media (max-width: 520px) {
