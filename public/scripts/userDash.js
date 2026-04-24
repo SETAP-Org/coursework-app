@@ -34,6 +34,7 @@ async function userDash() {
         if (section) {
           const titleEl = section.querySelector(".project-name");
           const dateEl = section.querySelector(".project-date");
+          const creatorEl = section.querySelector(".project-creator");
           const linkEl = section.querySelector("a.project-dash-button");
 
           const due_date = new Date(project.project_deadline);
@@ -45,6 +46,7 @@ async function userDash() {
 
           titleEl.textContent = project.project_name;
           dateEl.textContent = formatted_due_date;
+          creatorEl.textContent = project.creator_username;
 
           linkEl.href = `/${encodeURIComponent(username)}/projects/${encodeURIComponent(project.project_id)}`;
           linkEl.textContent = "Go to project";

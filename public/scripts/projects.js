@@ -39,15 +39,19 @@ async function projects() {
         if (section) {
           const titleEl = section.querySelector(".project-name");
           const dateEl = section.querySelector(".project-date");
+          const creatorEl = section.querySelector(".project-creator");
           const linkEl = section.querySelector("a.project-dash-button");
+
           const due_date = new Date(project.project_deadline);
           const formatted_due_date = due_date.toLocaleDateString("en-GB", {
             day: "numeric",
             month: "long",
             year: "numeric",
           });
+
           titleEl.textContent = project.project_name;
           dateEl.textContent = formatted_due_date;
+          creatorEl.textContent = project.creator_username;
 
           const days = daysUntil(project.project_deadline);
           if (days !== null) {
