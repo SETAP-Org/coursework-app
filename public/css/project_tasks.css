@@ -163,7 +163,6 @@
     align-items: stretch;
 }
 
-/* list items / sizing */
 #task-list > li,
 .task-list > li {
     list-style: none;
@@ -174,7 +173,6 @@
     align-items: stretch;
 }
 
-/* Outer card container (visual styles) */
 .task-list-item,
 #task-list > li .task-card-individual,
 .task-list > li .task-card-individual {
@@ -184,7 +182,6 @@
     overflow: hidden;
 }
 
-/* Inner card layout (single, unified rule) */
 .task-card-individual {
     display: flex;
     flex-direction: column;
@@ -195,18 +192,14 @@
     justify-content: space-between;
     height: 100%;
 
-    /* Fixes for checkbox & weight placement */
-    position: relative; /* allow absolute children (checkbox, weight) */
-    /* reserve space so absolutely positioned controls don't overlap the title */
+    position: relative;
     padding-top: 2rem;
     padding-left: 1rem;
     padding-right: 1rem;
 
-    /* important: ensure the card itself clips any overflowing children */
     overflow: hidden;
 }
 
-/* Weight badge (top-left) */
 .task-weight {
     position: absolute;
     top: 0.55rem;
@@ -230,17 +223,15 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
 }
 
-/* Keep label in flow — the title remains centered and wrapped/clamped if needed */
 .task-checkbox-label {
     position: static;
-    display: block; /* full-width block so children stack reliably */
-    text-align: center; /* keep the title centered */
+    display: block;
+    text-align: center;
     padding-top: 0.15rem;
-    margin: 0 0 0.25rem 0; /* small spacing between title and desc */
+    margin: 0 0 0.25rem 0;
     z-index: 1;
 }
 
-/* absolutely position only the checkbox input so it never affects layout */
 .task-complete-checkbox {
     position: absolute;
     top: 0.55rem;
@@ -254,12 +245,10 @@
     border: none;
 }
 
-/* Completed state must override base card background — keep selector specific */
 #task-list > li .task-card-individual.task-completed {
     background: var(--card4);
 }
 
-/* Top group — allow the top block to expand so description can fill available space */
 .card-top {
     display: flex;
     flex-direction: column;
@@ -270,38 +259,33 @@
     flex: 1 1 auto;
     justify-content: flex-start;
     padding-top: 0.1rem;
-
-    /* reserve vertical space under the top area so the description never touches the bottom row */
-    padding-bottom: 0.9rem; /* <-- increased reserved space (adjust as needed) */
+    padding-bottom: 0.9rem;
 }
 
-/* Title — avoid overlapping top-left/right controls */
 .task-name {
     display: block;
     margin: 0;
-    padding-left: 2.2rem; /* keep away from left badge */
-    padding-right: 2.2rem; /* keep away from right checkbox */
+    padding-left: 2.2rem;
+    padding-right: 2.2rem;
     font-weight: 700;
     line-height: 1.1;
     word-break: break-word;
     font-size: 1.05rem;
-    max-height: calc(1.1em * 2); /* approximate 2 lines */
-    overflow: hidden; /* clip any excess */
+    max-height: calc(1.1em * 2);
+    overflow: hidden;
     text-overflow: ellipsis;
-    z-index: 2; /* sit above the description if stacking occurs */
+    z-index: 2;
 }
 
-/* Description — make it a scrollable flex area so long text cannot escape the card */
 .task-desc {
     margin: 0;
-    padding: 0 0.4rem 0.5rem 0.4rem; /* bottom padding added (0.5rem) */
+    padding: 0 0.4rem 0.5rem 0.4rem;
     font-style: italic;
     color: rgba(255, 255, 255, 0.85);
     font-size: 0.95rem;
     line-height: 1.2;
     text-align: center;
 
-    /* fill available space but leave breathing room, and scroll if content is long */
     flex: 1 1 auto;
     align-self: stretch;
     overflow: auto;
@@ -320,20 +304,18 @@
     scrollbar-color: rgba(255, 255, 255, 0.06) transparent;
 }
 
-/* Bottom group: assignee left, date right — baseline-aligned */
 .card-bottom {
     margin-top: auto;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: baseline; /* align text baselines so date and assignee sit level */
+    align-items: baseline;
     gap: 0.5rem;
     width: 100%;
     padding: 0 0.5rem;
     box-sizing: border-box;
 }
 
-/* Assignee on the left: truncate if long */
 .task-assignee {
     margin: 0;
     font-size: 0.9rem;
@@ -350,9 +332,8 @@
     padding-right: 0.5rem;
 }
 
-/* Date on the right */
 .task-date {
-    margin: 0; /* no bottom margin so it sits level with assignee */
+    margin: 0;
     font-size: 0.9rem;
     opacity: 0.9;
     text-align: right;
@@ -374,7 +355,85 @@
     font-weight: 700;
 }
 
-/* Small responsive adjustments */
+.card-bottom {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
+}
+
+.card-bottom-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+.card-bottom-left {
+    align-items: flex-start;
+    text-align: left;
+}
+
+.card-bottom-right {
+    align-items: flex-end;
+    text-align: right;
+}
+
+.card-bottom-header {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.65;
+    font-weight: 700;
+}
+
+.task-assignee,
+.task-date {
+    font-style: normal;
+    font-size: 0.95rem;
+    opacity: 0.95;
+    line-height: 1;
+}
+
+#task-list > li .task-card-individual.task-completed .card-bottom-header,
+#task-list > li .task-card-individual.task-completed .task-assignee,
+#task-list > li .task-card-individual.task-completed .task-date {
+    color: inherit;
+    opacity: 0.85;
+}
+
+.card-bottom-col .task-assignee {
+    position: relative;
+    z-index: 6;
+    color: var(--text) !important;
+    opacity: 1 !important;
+    display: block;
+    font-style: normal;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: normal;
+    min-height: 1em;
+    max-width: 100%;
+    word-break: break-word;
+}
+
+@media (max-width: 520px) {
+    .card-bottom {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .card-bottom-right,
+    .card-bottom-left {
+        align-items: flex-start;
+        text-align: left;
+    }
+}
+
 @media (max-width: 1100px) {
     #task-list > li {
         flex: 1 1 calc((100% - (var(--card-gap) * 3)) / 4);

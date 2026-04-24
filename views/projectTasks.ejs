@@ -49,13 +49,20 @@
                     <p class="task-desc"></p>
                 </div>
 
-                <!-- Bottom group: date + assignee (sticky to bottom) -->
+                <!-- Bottom group: headers + values (assignee left, date right) -->
                 <div class="card-bottom">
-                    <em class="task-assignee"></em>
-                    <em class="task-date"></em>
+                    <div class="card-bottom-col card-bottom-left">
+                        <span class="card-bottom-header">ASSIGNEE</span>
+                        <em class="task-assignee"></em>
+                    </div>
+                    <div class="card-bottom-col card-bottom-right">
+                        <span class="card-bottom-header">DUE IN</span>
+                        <em class="task-date"></em>
+                    </div>
                 </div>
             </section>
         </template>
+
 
         <!-- Popup for creating new task -->
         <dialog id="create-task-dialog">
