@@ -223,26 +223,148 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
 }
 
-.task-checkbox-label {
-    position: static;
-    display: block;
-    text-align: center;
-    padding-top: 0.15rem;
-    margin: 0 0 0.25rem 0;
-    z-index: 1;
-}
-
+/* Styled round checkbox to match the weight bubble */
 .task-complete-checkbox {
+    /* remove native checkbox look so we can style it */
+    -webkit-appearance: none;
+    appearance: none;
+
     position: absolute;
     top: 0.55rem;
     right: 0.55rem;
-    width: 1rem;
-    height: 1rem;
-    accent-color: var(--good);
+
+    /* size: visually similar to .task-weight */
+    width: 1.4rem;
+    height: 1.4rem;
+    min-width: 1.4rem;
+    min-height: 1.4rem;
+
+    /* round like the weight bubble */
+    border-radius: 999px;
+
+    /* background + border like the bubble */
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+
+    /* lift it off the card a little */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+
     cursor: pointer;
-    z-index: 4;
-    background: transparent;
-    border: none;
+    z-index: 5;
+
+    /* smooth transition for interactions */
+    transition:
+        background-color 120ms ease,
+        transform 100ms ease,
+        box-shadow 120ms ease,
+        border-color 120ms ease;
+}
+
+/* Hover -> subtle pop */
+.task-complete-checkbox:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.16);
+}
+
+/* Focus -> visible focus ring (keeps keyboard accessibility) */
+.task-complete-checkbox:focus {
+    outline: none;
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.12),
+        0 0 0 4px rgba(34, 150, 243, 0.12); /* gentle accent ring */
+}
+
+/* Checked -> use the project's success colour and show a white check icon */
+.task-complete-checkbox:checked {
+    background: var(--good);
+    border-color: var(--good);
+
+    /* Thick white stroked check (no fill) for high contrast on green */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='none' stroke='%23ffffff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' d='M4.5 12.5l4.5 4.5L19.5 6.5'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 68% 68%;
+
+    /* subtle lift for polish */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    transform: translateY(-0.5px);
+    transition:
+        transform 100ms ease,
+        box-shadow 120ms ease,
+        background-color 120ms ease;
+}
+
+/* Disabled state */
+.task-complete-checkbox:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.task-delete-button {
+    position: absolute;
+    top: 0.55rem;
+    right: 2.2rem; /* offset so it sits left of the checkbox */
+    width: 1.4rem;
+    height: 1.4rem;
+    padding: 0;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+
+    /* Use grid to place the SVG exactly in the middle */
+    display: inline-grid;
+    place-items: center;
+
+    cursor: pointer;
+    z-index: 5;
+    transition:
+        transform 100ms ease,
+        box-shadow 120ms ease,
+        background-color 120ms ease,
+        border-color 120ms ease;
+
+    color: #ffffff;
+    line-height: initial;
+    border-width: 1px;
+}
+.task-delete-button .icon-trash {
+    width: 68%;
+    height: 68%;
+    display: block;
+    fill: currentColor;
+    transform: translateX(0.8px); /* move the icon right */
+    will-change: transform;
+}
+
+/* Hover / active states remain unchanged */
+.task-delete-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.16);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.task-delete-button:active:not(:disabled),
+.task-delete-button.confirming {
+    background: rgba(255, 92, 122, 0.12); /* soft red tint */
+    border-color: rgba(255, 92, 122, 0.18);
+}
+
+.task-delete-button:focus {
+    outline: none;
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.12),
+        0 0 0 4px rgba(255, 92, 122, 0.08);
+}
+
+.task-delete-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
 #task-list > li .task-card-individual.task-completed {
@@ -446,6 +568,7 @@
         flex: 1 1 calc((100% - (var(--card-gap) * 2)) / 3);
         max-width: calc((100% - (var(--card-gap) * 2)) / 3);
     }
+    /* small positional tweak to match smaller cards */
     .task-complete-checkbox {
         top: 0.5rem;
         right: 0.5rem;
@@ -486,5 +609,21 @@
     }
     .task-desc {
         padding: 0 0.3rem;
+    }
+}
+
+@media (max-width: 520px) {
+    .task-delete-button {
+        top: 0.45rem;
+        right: 2.05rem;
+        width: 1.05rem;
+        height: 1.05rem;
+    }
+    .task-delete-button .icon-trash {
+        width: 72%;
+        height: 72%;
+        transform: translateX(
+            0.6px
+        ); /* slightly smaller nudge on small screens */
     }
 }
