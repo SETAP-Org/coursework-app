@@ -38,10 +38,13 @@ export async function getNotificationsModel(user_id) {
 // UPDATE
 
 // DELETE
-export async function deleteNotificationModel() {
+export async function deleteNotificationModel(notification_id) {
     return await query(
         `
+        DELETE FROM notifications
+        WHERE notification_id = $1
+        RETURNING *;
         `,
-        [],
+        [notification_id],
     );
 }
