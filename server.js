@@ -76,6 +76,12 @@ import {
   removeEvent,
 } from './controllers/calendarController.js';
 
+import {
+  fetchNotificationsByUserId,
+  addNotification,
+  removeNotification,
+} from './controllers/notificationControllers.js';
+
 // util imports
 import createSession from "./utils/session.js";
 import setUpAuth from "./utils/auth.js";
@@ -183,6 +189,8 @@ app.post("/api/chat/addMessage", addMessage);
 
 app.post("/api/projects/user", addUserToProject);
 
+app.post("/api/notifications", addNotification);
+
 // ---- READ ----
 // ---- API ROUTES FOR calandar EVENTS ----
 app.get("/api/calendar/events", checkIfLoggedInCalendar, getEvent);
@@ -226,6 +234,8 @@ app.get("/api/projects/:project_id", getProjectDetails);
 
 app.get("/api/chat", getMessages);
 
+app.get("/api/notifications/:user_id", fetchNotificationsByUserId);
+
 // ---- UPDATE ----
 app.put("/api/users/changeUsername", checkValidUsername, updateUsername);
 
@@ -235,6 +245,8 @@ app.put("/api/projects/leader", updateTeamLeader);
 app.delete("/api/projects/user", removeUserFromProject);
 
 app.delete("/api/projects/:project_id", removeProject);
+
+app.delete("/api/notifications/:notification_id", removeNotification);
 
 // assigning the server to a port so that requests can be made
 server.listen(port, () => {
