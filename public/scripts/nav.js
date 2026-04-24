@@ -1,6 +1,10 @@
 async function navInit() {
+  // show loading screen
+  const loading = document.querySelector(".loading");
+  loading.style.display = "flex";
+
   // ejs values
-  const { username } = window.scriptData;
+  const { username, userId } = window.scriptData;
   
   // getting dom elements
   const projectsBtn = document.querySelector("#projects-button");
@@ -62,6 +66,9 @@ async function navInit() {
   notificationBox.addEventListener("click", (e) => {
     if (e.target === notificationBox) notificationBox.close();
   });
+
+  // hide loading screen
+  loading.style.display = "none";
 }
 
 navInit();
