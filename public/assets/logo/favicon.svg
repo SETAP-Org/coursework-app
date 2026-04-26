@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- GCMS Favicon -->
+  <!-- Flat mark, padded into a square viewBox -->
+  <rect width="64" height="64" fill="#FAF8F3"/>
+  <g transform="translate(4, 8)">
+    <path d="M 28 0 A 28 28 0 1 0 56 28 L 56 28 L 36 28 L 36 35 L 49 35 A 21 21 0 1 1 28 7 Z" fill="#0F2A44"/>
+  </g>
+</svg>

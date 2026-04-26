@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 320" font-family="Georgia, 'Times New Roman', serif">
+  <!-- GCMS Primary Emblem - Inverted on Navy -->
+  <rect width="460" height="320" fill="#0F2A44"/>
+
+  <!-- Flanking rules + dots -->
+  <line x1="20" y1="100" x2="100" y2="100" stroke="#F4EBD3" stroke-width="0.8" opacity="0.5"/>
+  <circle cx="118" cy="100" r="3" fill="#C9A646"/>
+  <circle cx="342" cy="100" r="3" fill="#C9A646"/>
+  <line x1="360" y1="100" x2="440" y2="100" stroke="#F4EBD3" stroke-width="0.8" opacity="0.5"/>
+
+  <!-- Bevelled G mark, parchment + gold -->
+  <g transform="translate(140, 20)">
+    <path d="M 80 0 A 80 80 0 1 0 160 80 L 160 80 L 105 80 L 105 100 L 140 100 A 60 60 0 1 1 80 20 Z" fill="#F4EBD3"/>
+    <path d="M 160 80 L 172 68 L 172 80 Z" fill="#C9A646"/>
+    <path d="M 140 100 L 152 88 L 152 100 Z" fill="#C9A646"/>
+    <path d="M 105 100 L 117 88 L 117 100 Z" fill="#C9A646"/>
+    <path d="M 105 80 L 117 68 L 117 80 Z" fill="#C9A646"/>
+    <path d="M 160 80 L 172 68 L 152 68 L 140 80 Z" fill="#E0D0A0"/>
+    <path d="M 140 100 L 152 88 L 117 88 L 105 100 Z" fill="#FFFFFF"/>
+  </g>
+
+  <!-- Wordmark + tagline -->
+  <text x="230" y="240" font-size="42" fill="#F4EBD3" text-anchor="middle" letter-spacing="8">GCMS</text>
+  <text x="230" y="270" font-size="14" fill="#C9A646" font-style="italic" text-anchor="middle">Learn · together · ship · together</text>
+</svg>

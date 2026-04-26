@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 172 160">
+  <!-- GCMS Mark - Bevelled -->
+  <!-- Use at sizes >= 48px -->
+  <path d="M 80 0 A 80 80 0 1 0 160 80 L 160 80 L 105 80 L 105 100 L 140 100 A 60 60 0 1 1 80 20 Z" fill="#0F2A44"/>
+  <path d="M 160 80 L 172 68 L 172 80 Z" fill="#050F1C"/>
+  <path d="M 140 100 L 152 88 L 152 100 Z" fill="#050F1C"/>
+  <path d="M 105 100 L 117 88 L 117 100 Z" fill="#050F1C"/>
+  <path d="M 105 80 L 117 68 L 117 80 Z" fill="#050F1C"/>
+  <path d="M 160 80 L 172 68 L 152 68 L 140 80 Z" fill="#1A3C5E"/>
+  <path d="M 140 100 L 152 88 L 117 88 L 105 100 Z" fill="#23527E"/>
+</svg>

@@ -1,0 +1,261 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1800" width="1400" height="1800" font-family="Georgia, 'Times New Roman', serif">
+  <!-- ============================================================ -->
+  <!-- GCMS Brand Sheet                                              -->
+  <!-- Group Coursework Management System                            -->
+  <!-- ============================================================ -->
+
+  <defs>
+    <!-- Reusable: bevelled G mark, full colour, fits in a 172 × 160 box -->
+    <symbol id="mark-bevelled" viewBox="0 0 172 160">
+      <path d="M 80 0 A 80 80 0 1 0 160 80 L 160 80 L 105 80 L 105 100 L 140 100 A 60 60 0 1 1 80 20 Z" fill="#0F2A44"/>
+      <path d="M 160 80 L 172 68 L 172 80 Z" fill="#050F1C"/>
+      <path d="M 140 100 L 152 88 L 152 100 Z" fill="#050F1C"/>
+      <path d="M 105 100 L 117 88 L 117 100 Z" fill="#050F1C"/>
+      <path d="M 105 80 L 117 68 L 117 80 Z" fill="#050F1C"/>
+      <path d="M 160 80 L 172 68 L 152 68 L 140 80 Z" fill="#1A3C5E"/>
+      <path d="M 140 100 L 152 88 L 117 88 L 105 100 Z" fill="#23527E"/>
+    </symbol>
+
+    <!-- Reusable: bevelled G, but light/inverted for dark backgrounds -->
+    <symbol id="mark-bevelled-light" viewBox="0 0 172 160">
+      <path d="M 80 0 A 80 80 0 1 0 160 80 L 160 80 L 105 80 L 105 100 L 140 100 A 60 60 0 1 1 80 20 Z" fill="#F4EBD3"/>
+      <path d="M 160 80 L 172 68 L 172 80 Z" fill="#C9A646"/>
+      <path d="M 140 100 L 152 88 L 152 100 Z" fill="#C9A646"/>
+      <path d="M 105 100 L 117 88 L 117 100 Z" fill="#C9A646"/>
+      <path d="M 105 80 L 117 68 L 117 80 Z" fill="#C9A646"/>
+      <path d="M 160 80 L 172 68 L 152 68 L 140 80 Z" fill="#E0D0A0"/>
+      <path d="M 140 100 L 152 88 L 117 88 L 105 100 Z" fill="#FFFFFF"/>
+    </symbol>
+
+    <!-- Reusable: simplified flat G (no bevels) for small sizes -->
+    <symbol id="mark-flat" viewBox="0 0 172 160">
+      <path d="M 80 0 A 80 80 0 1 0 160 80 L 160 80 L 105 80 L 105 100 L 140 100 A 60 60 0 1 1 80 20 Z" fill="#0F2A44"/>
+    </symbol>
+
+    <!-- Reusable: monochrome flat G -->
+    <symbol id="mark-mono" viewBox="0 0 172 160">
+      <path d="M 80 0 A 80 80 0 1 0 160 80 L 160 80 L 105 80 L 105 100 L 140 100 A 60 60 0 1 1 80 20 Z" fill="#1a1a1a"/>
+    </symbol>
+  </defs>
+
+  <!-- Sheet background -->
+  <rect width="1400" height="1800" fill="#FAF8F3"/>
+
+  <!-- ============================================================ -->
+  <!-- HEADER                                                        -->
+  <!-- ============================================================ -->
+  <g transform="translate(80, 80)">
+    <text x="0" y="0" font-size="14" fill="#8B1E2D" letter-spacing="6" font-style="italic">— BRAND SHEET —</text>
+    <text x="0" y="48" font-size="42" fill="#0F2A44" letter-spacing="3">GCMS</text>
+    <text x="0" y="76" font-size="14" fill="#555" font-style="italic">Group Coursework Management System  ·  Visual identity, v1</text>
+
+    <line x1="0" y1="100" x2="1240" y2="100" stroke="#0F2A44" stroke-width="0.6"/>
+  </g>
+
+  <!-- ============================================================ -->
+  <!-- 1 · PRIMARY EMBLEM                                            -->
+  <!-- ============================================================ -->
+  <g transform="translate(80, 240)">
+    <text x="0" y="0" font-size="11" fill="#999" letter-spacing="3" font-family="Helvetica, Arial, sans-serif">01 · PRIMARY EMBLEM</text>
+    <line x1="0" y1="14" x2="600" y2="14" stroke="#999" stroke-width="0.4"/>
+
+    <g transform="translate(0, 60)">
+      <line x1="0" y1="100" x2="80" y2="100" stroke="#555" stroke-width="0.8"/>
+      <circle cx="98" cy="100" r="3" fill="#8B1E2D"/>
+      <use href="#mark-bevelled" x="120" y="20" width="172" height="160"/>
+      <circle cx="314" cy="100" r="3" fill="#8B1E2D"/>
+      <line x1="332" y1="100" x2="412" y2="100" stroke="#555" stroke-width="0.8"/>
+
+      <text x="206" y="240" font-size="42" fill="#0F2A44" text-anchor="middle" letter-spacing="8">GCMS</text>
+      <text x="206" y="270" font-size="14" fill="#555" font-style="italic" text-anchor="middle">Learn · together · ship · together</text>
+    </g>
+
+    <text x="700" y="80" font-size="13" fill="#333" font-family="Helvetica, Arial, sans-serif">USE FOR</text>
+    <text x="700" y="106" font-size="13" fill="#555" font-style="italic">Report covers, project documentation,</text>
+    <text x="700" y="124" font-size="13" fill="#555" font-style="italic">presentation title slides, the GitHub repo</text>
+    <text x="700" y="142" font-size="13" fill="#555" font-style="italic">README banner, official communication.</text>
+
+    <text x="700" y="186" font-size="13" fill="#333" font-family="Helvetica, Arial, sans-serif">CLEAR SPACE</text>
+    <text x="700" y="212" font-size="13" fill="#555" font-style="italic">Maintain a margin equal to the height of</text>
+    <text x="700" y="230" font-size="13" fill="#555" font-style="italic">the GCMS wordmark on all four sides.</text>
+
+    <text x="700" y="274" font-size="13" fill="#333" font-family="Helvetica, Arial, sans-serif">MINIMUM SIZE</text>
+    <text x="700" y="300" font-size="13" fill="#555" font-style="italic">Mark + wordmark must be at least 220px</text>
+    <text x="700" y="318" font-size="13" fill="#555" font-style="italic">wide. Below this, use the stacked or mark-only variant.</text>
+  </g>
+
+  <!-- ============================================================ -->
+  <!-- 2 · STACKED LOCKUP                                            -->
+  <!-- ============================================================ -->
+  <g transform="translate(80, 660)">
+    <text x="0" y="0" font-size="11" fill="#999" letter-spacing="3" font-family="Helvetica, Arial, sans-serif">02 · STACKED LOCKUP</text>
+    <line x1="0" y1="14" x2="600" y2="14" stroke="#999" stroke-width="0.4"/>
+
+    <g transform="translate(50, 60)">
+      <use href="#mark-bevelled" x="0" y="0" width="172" height="160"/>
+      <text x="86" y="218" font-size="32" fill="#0F2A44" text-anchor="middle" letter-spacing="6">GCMS</text>
+      <text x="86" y="244" font-size="11" fill="#555" font-style="italic" text-anchor="middle">Learn · together · ship · together</text>
+    </g>
+
+    <text x="380" y="80" font-size="13" fill="#333" font-family="Helvetica, Arial, sans-serif">USE FOR</text>
+    <text x="380" y="106" font-size="13" fill="#555" font-style="italic">Square contexts: app store icons,</text>
+    <text x="380" y="124" font-size="13" fill="#555" font-style="italic">social-media avatars, splash screens,</text>
+    <text x="380" y="142" font-size="13" fill="#555" font-style="italic">posters, t-shirts.</text>
+  </g>
+
+  <!-- ============================================================ -->
+  <!-- 3 · MARK ONLY                                                 -->
+  <!-- ============================================================ -->
+  <g transform="translate(80, 1000)">
+    <text x="0" y="0" font-size="11" fill="#999" letter-spacing="3" font-family="Helvetica, Arial, sans-serif">03 · MARK ONLY</text>
+    <line x1="0" y1="14" x2="600" y2="14" stroke="#999" stroke-width="0.4"/>
+
+    <g transform="translate(50, 60)">
+      <use href="#mark-bevelled" x="0" y="0" width="172" height="160"/>
+      <text x="86" y="200" font-size="11" fill="#999" text-anchor="middle" font-family="Helvetica, Arial, sans-serif">bevelled · 160 × 160</text>
+    </g>
+
+    <g transform="translate(280, 60)">
+      <use href="#mark-flat" x="0" y="0" width="129" height="120"/>
+      <text x="64" y="200" font-size="11" fill="#999" text-anchor="middle" font-family="Helvetica, Arial, sans-serif">flat · 120 × 120</text>
+    </g>
+
+    <text x="500" y="80" font-size="13" fill="#333" font-family="Helvetica, Arial, sans-serif">USE FOR</text>
+    <text x="500" y="106" font-size="13" fill="#555" font-style="italic">App icon, browser favicon, GitHub avatar,</text>
+    <text x="500" y="124" font-size="13" fill="#555" font-style="italic">UI loading states, watermark.</text>
+
+    <text x="500" y="170" font-size="13" fill="#333" font-family="Helvetica, Arial, sans-serif">WHEN TO USE FLAT</text>
+    <text x="500" y="196" font-size="13" fill="#555" font-style="italic">At sizes below 48px, drop the bevels.</text>
+    <text x="500" y="214" font-size="13" fill="#555" font-style="italic">They blur and add visual noise at small scale.</text>
+  </g>
+
+  <!-- ============================================================ -->
+  <!-- 4 · MONOCHROME                                                -->
+  <!-- ============================================================ -->
+  <g transform="translate(80, 1320)">
+    <text x="0" y="0" font-size="11" fill="#999" letter-spacing="3" font-family="Helvetica, Arial, sans-serif">04 · MONOCHROME &amp; INVERTED</text>
+    <line x1="0" y1="14" x2="600" y2="14" stroke="#999" stroke-width="0.4"/>
+
+    <g transform="translate(0, 50)">
+      <use href="#mark-mono" x="20" y="20" width="129" height="120"/>
+      <text x="84" y="160" font-size="11" fill="#999" text-anchor="middle" font-family="Helvetica, Arial, sans-serif">monochrome black</text>
+    </g>
+
+    <g transform="translate(220, 50)">
+      <rect x="0" y="0" width="180" height="160" fill="#0F2A44"/>
+      <use href="#mark-bevelled-light" x="20" y="20" width="129" height="120"/>
+      <text x="90" y="200" font-size="11" fill="#999" text-anchor="middle" font-family="Helvetica, Arial, sans-serif">on navy (parchment + gold)</text>
+    </g>
+
+    <g transform="translate(420, 50)">
+      <rect x="0" y="0" width="180" height="160" fill="#1a1a1a"/>
+      <use href="#mark-bevelled-light" x="20" y="20" width="129" height="120"/>
+      <text x="90" y="200" font-size="11" fill="#999" text-anchor="middle" font-family="Helvetica, Arial, sans-serif">on black (parchment + gold)</text>
+    </g>
+
+    <text x="700" y="80" font-size="13" fill="#333" font-family="Helvetica, Arial, sans-serif">USE FOR</text>
+    <text x="700" y="106" font-size="13" fill="#555" font-style="italic">Black-and-white printing, fax/photocopy</text>
+    <text x="700" y="124" font-size="13" fill="#555" font-style="italic">contexts, dark-mode UI, embossed contexts.</text>
+  </g>
+
+  <!-- ============================================================ -->
+  <!-- 5 · FAVICON SCALE TEST                                        -->
+  <!-- ============================================================ -->
+  <g transform="translate(720, 1000)">
+    <text x="0" y="0" font-size="11" fill="#999" letter-spacing="3" font-family="Helvetica, Arial, sans-serif">05 · FAVICON SCALE TEST</text>
+    <line x1="0" y1="14" x2="600" y2="14" stroke="#999" stroke-width="0.4"/>
+
+    <g transform="translate(0, 70)">
+      <use href="#mark-flat" x="0" y="0" width="129" height="120"/>
+      <text x="64" y="142" font-size="10" fill="#999" text-anchor="middle" font-family="Helvetica, Arial, sans-serif">128 px</text>
+    </g>
+
+    <g transform="translate(160, 110)">
+      <use href="#mark-flat" x="0" y="0" width="64" height="60"/>
+      <text x="32" y="78" font-size="10" fill="#999" text-anchor="middle" font-family="Helvetica, Arial, sans-serif">64 px</text>
+    </g>
+
+    <g transform="translate(260, 140)">
+      <use href="#mark-flat" x="0" y="0" width="32" height="30"/>
+      <text x="16" y="48" font-size="10" fill="#999" text-anchor="middle" font-family="Helvetica, Arial, sans-serif">32 px</text>
+    </g>
+
+    <g transform="translate(330, 156)">
+      <use href="#mark-flat" x="0" y="0" width="16" height="14"/>
+      <text x="8" y="32" font-size="10" fill="#999" text-anchor="middle" font-family="Helvetica, Arial, sans-serif">16 px</text>
+    </g>
+  </g>
+
+  <!-- ============================================================ -->
+  <!-- 6 · COLOUR PALETTE                                            -->
+  <!-- ============================================================ -->
+  <g transform="translate(80, 1580)">
+    <text x="0" y="0" font-size="11" fill="#999" letter-spacing="3" font-family="Helvetica, Arial, sans-serif">06 · COLOUR PALETTE</text>
+    <line x1="0" y1="14" x2="1240" y2="14" stroke="#999" stroke-width="0.4"/>
+
+    <g transform="translate(0, 40)">
+      <rect x="0" y="0" width="120" height="120" fill="#0F2A44"/>
+      <text x="0" y="142" font-size="12" fill="#0F2A44" font-family="Helvetica, Arial, sans-serif">NAVY</text>
+      <text x="0" y="158" font-size="11" fill="#555" font-family="Helvetica, Arial, sans-serif">#0F2A44</text>
+      <text x="0" y="174" font-size="10" fill="#999" font-style="italic">primary · mark, wordmark</text>
+    </g>
+
+    <g transform="translate(160, 40)">
+      <rect x="0" y="0" width="120" height="120" fill="#1A3C5E"/>
+      <text x="0" y="142" font-size="12" fill="#0F2A44" font-family="Helvetica, Arial, sans-serif">NAVY · LIGHT</text>
+      <text x="0" y="158" font-size="11" fill="#555" font-family="Helvetica, Arial, sans-serif">#1A3C5E</text>
+      <text x="0" y="174" font-size="10" fill="#999" font-style="italic">bevel highlight</text>
+    </g>
+
+    <g transform="translate(320, 40)">
+      <rect x="0" y="0" width="120" height="120" fill="#23527E"/>
+      <text x="0" y="142" font-size="12" fill="#0F2A44" font-family="Helvetica, Arial, sans-serif">NAVY · MID</text>
+      <text x="0" y="158" font-size="11" fill="#555" font-family="Helvetica, Arial, sans-serif">#23527E</text>
+      <text x="0" y="174" font-size="10" fill="#999" font-style="italic">bevel face</text>
+    </g>
+
+    <g transform="translate(480, 40)">
+      <rect x="0" y="0" width="120" height="120" fill="#8B1E2D"/>
+      <text x="0" y="142" font-size="12" fill="#0F2A44" font-family="Helvetica, Arial, sans-serif">OXBLOOD</text>
+      <text x="0" y="158" font-size="11" fill="#555" font-family="Helvetica, Arial, sans-serif">#8B1E2D</text>
+      <text x="0" y="174" font-size="10" fill="#999" font-style="italic">accent · dots, motto, rules</text>
+    </g>
+
+    <g transform="translate(640, 40)">
+      <rect x="0" y="0" width="120" height="120" fill="#C9A646"/>
+      <text x="0" y="142" font-size="12" fill="#0F2A44" font-family="Helvetica, Arial, sans-serif">GOLD</text>
+      <text x="0" y="158" font-size="11" fill="#555" font-family="Helvetica, Arial, sans-serif">#C9A646</text>
+      <text x="0" y="174" font-size="10" fill="#999" font-style="italic">on dark only · trim, edges</text>
+    </g>
+
+    <g transform="translate(800, 40)">
+      <rect x="0" y="0" width="120" height="120" fill="#F4EBD3" stroke="#0F2A44" stroke-width="0.5"/>
+      <text x="0" y="142" font-size="12" fill="#0F2A44" font-family="Helvetica, Arial, sans-serif">PARCHMENT</text>
+      <text x="0" y="158" font-size="11" fill="#555" font-family="Helvetica, Arial, sans-serif">#F4EBD3</text>
+      <text x="0" y="174" font-size="10" fill="#999" font-style="italic">on dark only · inverted mark</text>
+    </g>
+
+    <g transform="translate(960, 40)">
+      <rect x="0" y="0" width="120" height="120" fill="#FAF8F3" stroke="#0F2A44" stroke-width="0.5"/>
+      <text x="0" y="142" font-size="12" fill="#0F2A44" font-family="Helvetica, Arial, sans-serif">CANVAS</text>
+      <text x="0" y="158" font-size="11" fill="#555" font-family="Helvetica, Arial, sans-serif">#FAF8F3</text>
+      <text x="0" y="174" font-size="10" fill="#999" font-style="italic">background · neutral</text>
+    </g>
+
+    <g transform="translate(1120, 40)">
+      <rect x="0" y="0" width="120" height="120" fill="#1a1a1a"/>
+      <text x="0" y="142" font-size="12" fill="#0F2A44" font-family="Helvetica, Arial, sans-serif">INK</text>
+      <text x="0" y="158" font-size="11" fill="#555" font-family="Helvetica, Arial, sans-serif">#1a1a1a</text>
+      <text x="0" y="174" font-size="10" fill="#999" font-style="italic">monochrome · text on light</text>
+    </g>
+  </g>
+
+  <!-- ============================================================ -->
+  <!-- FOOTER                                                        -->
+  <!-- ============================================================ -->
+  <g transform="translate(80, 1760)">
+    <line x1="0" y1="0" x2="1240" y2="0" stroke="#999" stroke-width="0.4"/>
+    <text x="0" y="20" font-size="11" fill="#999" font-style="italic">GCMS · Group Coursework Management System · github.com/SETAP-Org/group-coursework-management-system</text>
+    <text x="1240" y="20" font-size="11" fill="#999" font-style="italic" text-anchor="end">v1 · 2025</text>
+  </g>
+</svg>

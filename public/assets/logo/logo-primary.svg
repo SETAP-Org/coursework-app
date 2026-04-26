@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 320" font-family="Georgia, 'Times New Roman', serif">
+  <!-- GCMS Primary Emblem -->
+  <!-- Group Coursework Management System -->
+
+  <!-- Flanking rules + dots -->
+  <line x1="20" y1="100" x2="100" y2="100" stroke="#555" stroke-width="0.8"/>
+  <circle cx="118" cy="100" r="3" fill="#8B1E2D"/>
+  <circle cx="342" cy="100" r="3" fill="#8B1E2D"/>
+  <line x1="360" y1="100" x2="440" y2="100" stroke="#555" stroke-width="0.8"/>
+
+  <!-- Bevelled G mark -->
+  <g transform="translate(140, 20)">
+    <path d="M 80 0 A 80 80 0 1 0 160 80 L 160 80 L 105 80 L 105 100 L 140 100 A 60 60 0 1 1 80 20 Z" fill="#0F2A44"/>
+    <path d="M 160 80 L 172 68 L 172 80 Z" fill="#050F1C"/>
+    <path d="M 140 100 L 152 88 L 152 100 Z" fill="#050F1C"/>
+    <path d="M 105 100 L 117 88 L 117 100 Z" fill="#050F1C"/>
+    <path d="M 105 80 L 117 68 L 117 80 Z" fill="#050F1C"/>
+    <path d="M 160 80 L 172 68 L 152 68 L 140 80 Z" fill="#1A3C5E"/>
+    <path d="M 140 100 L 152 88 L 117 88 L 105 100 Z" fill="#23527E"/>
+  </g>
+
+  <!-- Wordmark + tagline -->
+  <text x="230" y="240" font-size="42" fill="#0F2A44" text-anchor="middle" letter-spacing="8">GCMS</text>
+  <text x="230" y="270" font-size="14" fill="#555" font-style="italic" text-anchor="middle">Learn · together · ship · together</text>
+</svg>
