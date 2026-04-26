@@ -15,16 +15,41 @@
 
 #content-body {
     display: flex;
-    flex-direction: center;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    padding: 40px;
+    gap: 48px;
+    padding: 60px 40px;
+}
+
+#landing-image {
+    width: 600px;
+    height: auto;
+    border-radius: var(--radius);
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+#landing-text {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 560px;
 }
 
 #strapline {
-    font-size: 3em;
+    font-size: 2.5em;
     font-style: italic;
     font-weight: 800;
+}
+
+#landing-text h2 {
+    margin: 0;
+}
+
+#landing-text p {
+    margin: 0;
+    line-height: 1.6;
 }
 
 @media (max-width: 768px) {

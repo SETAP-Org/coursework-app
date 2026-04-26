@@ -41,6 +41,10 @@
     color: var(--muted);
 }
 
+.footer-text {
+    font-size: 0.9rem;
+}
+
 
 @media (max-width: 900px) {
     .Dashboard-footer {
