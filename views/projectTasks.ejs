@@ -4,18 +4,21 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <link rel="stylesheet" href="/css/root-dark.css"
-        />
-        <link rel="stylesheet" href="/css/project_dash.css" />
+        <link rel="stylesheet" href="/css/root-dark.css"/>
+        <link rel="stylesheet" href="/css/project_tasks.css" />
         <link rel="icon" href="/assets/favicon.png" type="image/png" />
 
         <script>
             window.scriptData = {
                 userId: "<%= userId %>",
+                projectId: "<%= projectId %>",
+                groupUsers: <%- JSON.stringify(groupUsers) %>,
+                tasks: <%- JSON.stringify(tasks) %>,
+                teamLeaderId: "<%= teamLeaderId %>"
             };
         </script>
         <script src="/scripts/L&D-mode.js" defer></script>
-        <script src="/scripts/projects.js" defer></script>
+        <script src="/scripts/projectTasks.js" defer></script>
 
         <title>GCMS | <%= projectName %> Tasks</title>
     </head>
@@ -25,8 +28,86 @@
         <section id="page-content">
             <section class="page-header">
                 <h1 id="page-title">Tasks</h1>
+                <% if (userId == teamLeaderId) { %>
+                    <button id="new-task-button">New Task</button>
+                <% } %>
+            </section>
+            <section id="task-panel">
+                <ul id="task-list"></ul>
             </section>
         </section>
+
+        <template id="task-template">
+            <section class="task-card-individual">
+                <span class="task-weight" aria-hidden="true"></span>
+                <!-- Top group: title + description -->
+                <div class="card-top">
+                    <label class="task-checkbox-label">
+                        <b class="task-name"></b>
+                        <input type="checkbox" class="task-complete-checkbox" />
+                    </label>
+                    <p class="task-desc"></p>
+                </div>
+
+                <!-- Bottom group: date + assignee (sticky to bottom) -->
+                <div class="card-bottom">
+                    <em class="task-assignee"></em>
+                    <em class="task-date"></em>
+                </div>
+            </section>
+        </template>
+
+        <!-- Popup for creating new task -->
+        <dialog id="create-task-dialog">
+            <button class="modal-close" onclick="toggleNewTaskForm()">
+                X
+            </button>
+            <form method="dialog">
+                <h1>Create Task</h1>
+                <label>
+                    Title
+                    <input
+                        type="text"
+                        placeholder="e.g. My Task"
+                        name="taskTitle"
+                        required
+                    />
+                </label>
+                <label>
+                    Description
+                    <input
+                        type="text"
+                        placeholder="e.g. This is a task"
+                        name="taskDesc"
+                        required
+                    />
+                </label>
+                <label>
+                    Deadline
+                    <input type="date" name="taskDeadline" required />
+                </label>
+                <label>
+                    Weighting
+                    <div class="range-row">
+                    <input id="taskWeightRange" type="range" name="taskWeight" min=1 max=10 value=1 required />
+                    <output id="taskWeightValue" class="range-value" for="taskWeightRange">1</output>
+                    </div>
+                </label>
+                <label>
+                    Member
+                    <select name = "taskAssignee" required>
+                        <% if (groupUsers && groupUsers.length) { %>
+                                <% groupUsers.forEach(function(user) { %>
+                                <option value="<%= user.user_id %>"><%= user.username %></option>
+                                <% }) %>
+                            <% } else { %>
+                                <option disabled>No members in project</option>
+                        <% } %>
+                    </select>
+                </label>
+                <button type="submit">Create Task</button>
+            </form>
+        </dialog>
 
         <%- include('partials/footer') %>
 

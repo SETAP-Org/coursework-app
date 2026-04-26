@@ -6,6 +6,7 @@
     --card: rgba(255, 255, 255, 0.08);
     --card2: rgba(255, 255, 255, 0.12);
     --card3: rgba(47, 113, 226, 0.381);
+    --card4: rgba(46, 204, 113, 0.08);
     --text: #ffffff;
     --text-2: #000000;
     --muted: rgb(32, 133, 228);
@@ -18,16 +19,16 @@
     --scrollbar-color: #4267b2;
     --border: 0.5px solid rgba(255, 255, 255, 0.15);
     --radius: 18px;
-    --button-bg : rgb(255, 254, 254);
-    --button-text :rgb(0, 0, 0);
+    --card-gap: 1rem;
+    --card-min: 160px;
 }
 * {
     box-sizing: border-box;
 }
 body {
     margin: 0;
-    min-height: 110vh;
-    padding: 16px 16px 14px 16px;
+    min-height: 100vh;
+    padding: 16px 16px 64px 16px;
     display: grid;
     gap: 24px;
     align-content: start;
@@ -100,24 +101,4 @@ button:hover {
 
 #ms-logo {
     margin-right: 12px;
-}
-
-
-::-webkit-scrollbar {
-    width: 10px; 
-    height: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1; 
-    border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #888; 
-    border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #555; 
 }

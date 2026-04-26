@@ -13,7 +13,6 @@
     padding: 2rem;
     min-width: 320px;
     box-shadow: var(--shadow);
-    z-index: 99;
 }
 
 #create-project-dialog::backdrop {
@@ -111,7 +110,7 @@
     justify-content: center;
     align-items: center;
     height: 70px;
-    border-bottom: var(--border);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .user-dash-project-card-individual {
@@ -127,18 +126,13 @@
     font-size: 0.9rem;
 }
 
-.project-dash-button {
-    color: var(--button-text);
+section > a {
+    color: white;
     text-decoration: none;
     border-radius: var(--radius);
     font-size: 0.9em;
-    background: var(--button-bg) !important;
+    background: var(--card);
     border: var(--border);
     padding: 7.5px;
-    box-shadow: 0px 10px rgba(0, 0, 0, 0.35);
-}
-
-.project-dash-button:hover {
-    background-color: lightblue !important; /* this allows it to take priority*/
-    opacity: 0.85;
+    box-shadow: 0 px5 10px rgba(0, 0, 0, 0.35);
 }
