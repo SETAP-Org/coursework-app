@@ -16,6 +16,7 @@ async function userNav() {
     const projectsBtn = document.querySelector("#projects-button");
     const profileBtn = document.querySelector("#profile-button");
     const notificationBell = document.querySelector(".notif-bell");
+    const bellNumber = document.querySelector("#notif-bell-num");
     const notificationBox = document.querySelector("#notif-dialog");
     const notifInnerContainer = document.querySelector(".dialog-inner-container");
     const notifList = document.querySelector(".notif-list");
@@ -43,12 +44,14 @@ async function userNav() {
         notifMessage.className = "notif-message";
         notifMessage.innerText = "You currently have no notifications.";
         notifInnerContainer.appendChild(notifMessage);
+        bellNumber.innerText = notificationData.notifications.length;
     } else {
         for (const notification of notificationData.notifications) {
             const clone = notifTemplate.content.cloneNode(true);
             clone.querySelector('.notif-list-text').innerText = notification.notification_message;
             notifList.appendChild(clone);
         }
+        bellNumber.innerText = notificationData.notifications.length;
     }
 
     // socket handling when recieving notification
