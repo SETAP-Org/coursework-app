@@ -46,7 +46,7 @@ async function userNav() {
     } else {
         for (const notification of notificationData.notifications) {
             const clone = notifTemplate.content.cloneNode(true);
-            clone.querySelector('.notif-list-info').innerText = notification.notification_message;
+            clone.querySelector('.notif-list-text').innerText = notification.notification_message;
             notifList.appendChild(clone);
         }
     }
@@ -56,7 +56,9 @@ async function userNav() {
         if (notif.targetUsers.includes(userId)) {
             if (notif.notificationType === "Message") {
                 const clone = notifTemplate.content.cloneNode(true);
-                clone.querySelector('.notif-list-info').innerText = notif.notificationMessage;
+                const pTag = clone.querySelector('.notif-list-text');
+                console.log(pTag, 'this is the p tag.........')
+                clone.querySelector('.notif-list-text').innerText = notif.notificationMessage;
                 notifList.prepend(clone);
             }
         }

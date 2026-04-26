@@ -99,13 +99,10 @@ async function projectChat() {
 
         messageFieldSet.disabled = false;
         messageBox.value = "";
-        loading.style.display = "none";
 
         // create notifications for other group members
-        loading.style.display = "flex";
-
         socket.emit('notification', {
-            targetMembers: [userId],
+            targetUsers: [userId],
             projectId: projectId,
             notificationType: "Message",
             notificationMessage: "This is the new message!!!",
@@ -119,11 +116,6 @@ async function projectChat() {
         messageContent = e.target.value;
         if (!messageContent.length) sendBtn.disabled = true;
         else sendBtn.disabled = false;
-    })
-
-    // send button event listener
-    sendBtn.addEventListener("click", () => {
-
     })
 
     // handling messages incoming from socket io
