@@ -1,3 +1,5 @@
+const notifSocket = io();
+
 async function navInit() {
   // show loading screen
   const loading = document.querySelector(".loading");
@@ -98,6 +100,22 @@ async function navInit() {
       notifList.appendChild(clone);
     }
   }
+
+  // socket for new notification
+  notifSocket.on("notification", (notif) => {
+    if (notif.targetUsers.includes(userId)) {
+      if (notif.notificationType === "Message") {
+        // clone the template
+        const clone = notifTemplate.content.cloneNode(true);
+    
+        // change the values in the clone
+        clone.querySelector('.notif-list-info').innerText = notif.notificationMessage;
+    
+        // add the item to the start of the list
+        notifList.prepend(clone);
+      }
+    }
+  })
 
   // hide loading screen
   loading.style.display = "none";

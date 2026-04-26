@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 
 // model imports
 import { postMessageModel } from "./models/chatModels.js";
+import { postNotificationModel } from "./models/notificationModels.js";
 
 // controller imports
 import {
@@ -78,7 +79,7 @@ import {
 
 import {
   fetchNotificationsByUserId,
-  addNotification,
+  // addNotification,
   removeNotification,
 } from './controllers/notificationControllers.js';
 
@@ -114,10 +115,22 @@ io.on('connection', (socket) => {
       msg.projectId,
       msg.message,
     );
-
-    console.log(data, 'this is the data back.....')
     
     io.emit('chat', data.rows[0]);
+  });
+
+  socket.on('notification', async (notif) => {
+    for (let i=0; i<notif.targetUsers.length; i++) {
+      const data = await postNotificationModel(
+        notif.targetUsers[i],
+        notif.projectId,
+        notif.notificationType,
+        notif.notificationMessage,
+      );
+      console.log(data.rows, 'this was a notification that was created...')
+    }
+
+    io.emit('notification', notif);
   })
 
   socket.on('disconnect', () => {
@@ -189,7 +202,8 @@ app.post("/api/chat/addMessage", addMessage);
 
 app.post("/api/projects/user", addUserToProject);
 
-app.post("/api/notifications", addNotification);
+// potentially dont need...
+// app.post("/api/notifications", addNotification);
 
 // ---- READ ----
 // ---- API ROUTES FOR calandar EVENTS ----

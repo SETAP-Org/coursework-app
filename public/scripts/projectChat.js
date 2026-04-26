@@ -87,6 +87,7 @@ async function projectChat() {
     messageForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
+        // send the message
         loading.style.display = "flex";
         messageFieldSet.disabled = true;
 
@@ -98,6 +99,18 @@ async function projectChat() {
 
         messageFieldSet.disabled = false;
         messageBox.value = "";
+        loading.style.display = "none";
+
+        // create notifications for other group members
+        loading.style.display = "flex";
+
+        socket.emit('notification', {
+            targetMembers: [userId],
+            projectId: projectId,
+            notificationType: "Message",
+            notificationMessage: "This is the new message!!!",
+        });
+
         loading.style.display = "none";
     })
     
