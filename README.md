@@ -27,9 +27,11 @@ npm install
 ```
 
 2. Create the required .env files
+   
 Based on [this](https://gcms-docs.readthedocs.io/en/latest/getting-started/environment-configuration.html) page in the documentation, set-up the .env files as described.
 
 3. Install the database
+   
 In a terminal opened to the root folder of the project, run:
 ```bash
 npm run install_db
