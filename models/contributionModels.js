@@ -16,6 +16,7 @@ export async function getContributionsByProjectIdModel(
     completed AS (
       SELECT
         assignee_id,
+        COUNT(*)::int AS user_tasks,
         SUM(COALESCE(task_weight, 0))::numeric AS user_weight
       FROM tasks
       WHERE project_id = $1
@@ -33,6 +34,7 @@ export async function getContributionsByProjectIdModel(
           'assignee_id', pm.user_id,
           'username', pm.username,
           'user_weight', COALESCE(c.user_weight, 0)::float8,
+          'tasks_completed', COALESCE(c.user_tasks, 0)::int,
           'pct_of_project',
             CASE
               WHEN pt.project_weight = 0 THEN 0
