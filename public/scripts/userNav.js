@@ -48,11 +48,18 @@ async function userNav() {
     } else {
         for (const notification of notificationData.notifications) {
             const clone = notifTemplate.content.cloneNode(true);
-            clone.querySelector('.notif-list-text').innerText = notification.notification_message;
+            const listItem = clone.querySelector(".notif-list-item");
+
+            clone.querySelector(".notif-list-text").innerText = notification.notification_message;
+            clone.querySelector(".bin-icon").addEventListener("click", () => listItem.remove())
             notifList.appendChild(clone);
         }
         bellNumber.innerText = notificationData.notifications.length;
     }
+
+    const binIcon = document.querySelector(".bin-icon");
+
+    console.log(binIcon, 'this is the bin icon');
 
     // socket handling when recieving notification
     notifSocket.on("notification", (notif) => {

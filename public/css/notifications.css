@@ -1,3 +1,9 @@
+dialog {
+    border-radius: 20px;
+    align-self: center;
+    justify-self: center;
+}
+
 dialog::backdrop {
     background: rgba(0, 0, 0, 0.7);
 }
@@ -5,8 +11,39 @@ dialog::backdrop {
 .dialog-inner-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
+    width: 500px;
+    height: 500px;
+    overflow-y: auto;
+}
+
+.notif-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+    list-style: none;
+}
+
+.notif-list-item:not(:last-child) {
+    border-bottom: solid rgba(180, 180, 180, 0.5) 2px;
+}
+
+.notif-list-item {
+    width: 100%;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+}
+
+.bin-icon {
+    font-size: 1.5em;
+    color: black;
+
 }
 
 .notif-message {
