@@ -27,8 +27,8 @@ CREATE TABLE USERS(
     user_last_name VARCHAR(50) NOT NULL,
     user_email VARCHAR(100) NOT NULL UNIQUE,
     microsoft_id TEXT NOT NULL UNIQUE,
-    date_created TIMESTAMP,
-    last_login TIMESTAMP,
+    date_created TIMESTAMPTZ,
+    last_login TIMESTAMPTZ,
     username VARCHAR(20) UNIQUE,
 );
 
@@ -38,8 +38,8 @@ CREATE TABLE PROJECTS(
     team_leader_id UUID NOT NULL,
     project_name VARCHAR(50) NOT NULL,
     project_deadline DATE NOT NULL,
-    p_date_created TIMESTAMP,
-    p_time_updated TIMESTAMP,
+    p_date_created TIMESTAMPTZ,
+    p_time_updated TIMESTAMPTZ,
     FOREIGN KEY (team_leader_id) REFERENCES USERS(user_id),
     UNIQUE (created_by, project_name)
 );
@@ -62,8 +62,8 @@ CREATE TABLE TASKS(
     task_weight DECIMAL NOT NULL,
     task_status task_status NOT NULL,
     task_deadline DATE,
-    t_date_created TIMESTAMP,
-    t_time_updated TIMESTAMP,
+    t_date_created TIMESTAMPTZ,
+    t_time_updated TIMESTAMPTZ,
     FOREIGN KEY (project_id) REFERENCES PROJECTS(project_id)
 );
 
@@ -77,7 +77,7 @@ CREATE TABLE NOTIFICATIONS(
     notification_type notification_type NOT NULL,
     notification_message TEXT,
     is_read BOOLEAN DEFAULT FALSE,
-    n_date_created TIMESTAMP,
+    n_date_created TIMESTAMPTZ,
     FOREIGN KEY (user_id) REFERENCES USERS(user_id),
     FOREIGN KEY (project_id) REFERENCES PROJECTS(project_id),
     FOREIGN KEY (task_id) REFERENCES TASKS(task_id)
@@ -88,7 +88,7 @@ CREATE TABLE MESSAGES(
     sender_id UUID NOT NULL,
     project_id UUID NOT NULL,
     message_content TEXT NOT NULL,
-    m_date_sent TIMESTAMP,
+    m_date_sent TIMESTAMPTZ,
     FOREIGN KEY (sender_id) REFERENCES USERS(user_id),
     FOREIGN KEY (project_id) REFERENCES PROJECTS(project_id)
 );
@@ -99,7 +99,7 @@ CREATE TABLE MEETINGS(
     meeting_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     team_leader_id UUID NOT NULL,
     project_id UUID NOT NULL,
-    scheduled_time TIMESTAMP NOT NULL,
+    scheduled_time TIMESTAMPTZ NOT NULL,
     meeting_duration INT NOT NULL,
     meeting_location meeting_location,
     meeting_notes TEXT,
@@ -114,7 +114,7 @@ CREATE TABLE MEETING_ATTENDANCES(
     user_id UUID NOT NULL,
     meeting_id UUID NOT NULL,
     attendance_status attendance_status,
-    check_in_time TIMESTAMP NOT NULL,
+    check_in_time TIMESTAMPTZ NOT NULL,
     FOREIGN KEY (user_id) REFERENCES USERS(user_id),
     FOREIGN KEY (meeting_id) REFERENCES MEETINGS(meeting_id)
 );
