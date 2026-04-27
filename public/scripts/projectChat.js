@@ -107,10 +107,9 @@ async function projectChat() {
 
         // create notifications for other group members
         socket.emit('notification', {
-            targetUsers: [groupUsers
+            targetUsers: groupUsers
                 .filter(u => u.user_id !== userId)
-                .map(u => u.user_id)
-            ],
+                .map(u => u.user_id),
             projectId: projectId,
             notificationType: "Message",
             notificationMessage: `${username} sent a new message in ${projectName}`,

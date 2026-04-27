@@ -1,3 +1,5 @@
+const socket = io();
+
 // show loading screen
 const loading = document.querySelector(".loading");
 loading.style.display = "flex";
@@ -110,6 +112,17 @@ leaveDialogYesBtn.addEventListener("click", async () => {
 
         // change the message of the secondary dialog
         if (data.success) {
+            // socket.emit('notification', {
+            //     targetUsers: [groupUsers
+            //         .filter(u => u.user_id !== userId)
+            //         .map(u => u.user_id)
+            //     ],
+            //     projectId: projectId,
+            //     notificationType: "Member Leave",
+            //     notificationMessage: `${username} has left ${projectName}`,
+            // });
+
+            // update and show secondary dialog
             secondaryDialogHeading.textContent = "Success!";
             secondaryDialogMsg.textContent = data.message;
         } else {
@@ -130,7 +143,7 @@ secondaryDialogBtn.addEventListener("click", () => {
     window.location.relocate("/");
 });
 
-// ---------------------------------------------- event listeners for team leader
+// event listeners for team leader
 if (teamLeaderId === userId) {
     // add memeber username input
     let addUserInputValue = "";
@@ -226,7 +239,21 @@ if (teamLeaderId === userId) {
 
             const data = await response.json();
 
+            console.log(data, 'this is the new user being added...');
+
             if (data.success) {
+                // send notification to other group members
+                // socket.emit('notification', {
+                //     targetUsers: [groupUsers
+                //         .filter(u => u.user_id !== userId)
+                //         .map(u => u.user_id)
+                //     ],
+                //     projectId: projectId,
+                //     notificationType: "Member Join",
+                //     notificationMessage: `${username} sent a new message in ${projectName}`,
+                // });
+
+                // load the secondary dialog
                 secondaryDialogHeading.textContent = "Success!";
                 secondaryDialogMsg.textContent = `${addUserInputValue} has been added to the group!`;
             } else {
@@ -265,6 +292,18 @@ if (teamLeaderId === userId) {
         const data = await response.json();
 
         if (data.success) {
+            // send notifications to group members
+            // socket.emit('notification', {
+            //     targetUsers: [groupUsers
+            //         .filter(u => u.user_id !== userId)
+            //         .map(u => u.user_id)
+            //     ],
+            //     projectId: projectId,
+            //     notificationType: "Leader",
+            //     notificationMessage: ,
+            // });
+
+            // update and show the secondary dialog
             secondaryDialogHeading.textContent = "Success!";
             secondaryDialogMsg.textContent = data.message;
         } else {
@@ -291,6 +330,17 @@ if (teamLeaderId === userId) {
         const data = await response.json();
 
         if (data.success) {
+            // socket.emit('notification', {
+            //     targetUsers: [groupUsers
+            //         .filter(u => u.user_id !== userId)
+            //         .map(u => u.user_id)
+            //     ],
+            //     projectId: projectId,
+            //     notificationType: "Project",
+            //     notificationMessage: `${projectName} has been deleted`,
+            // });
+
+            // update and show the secondary dialog
             secondaryDialogHeading.textContent = "Success!";
             secondaryDialogMsg.textContent = data.message;
         } else {
