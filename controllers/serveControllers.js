@@ -259,8 +259,9 @@ export async function serveProjectContributions(req, res, next) {
     const dbUser = dbUserResult.rows[0];
 
     // get the contribution tasksData
-    const contributionDataRaw =
-      await getContributionsByProjectIdModel(project_id);
+    const contributionDataRaw = await getContributionsByProjectIdModel(
+      req.session.project.project_id,
+    );
     const contributionData = contributionDataRaw.rows[0];
 
     res.render("projectContributions", {
