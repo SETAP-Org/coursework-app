@@ -26,7 +26,7 @@
             <div class="profile-container">
                 <div class="user-info">
                     <div class="profile-avatar-wrap">
-                        <img class="profile-avatar" src="/assets/default-avatar.svg" alt="User Avatar">
+                        <img class="profile-avatar" src="/api/me/photo" alt="User Avatar" onerror="this.onerror=null;this.src='/assets/default-avatar.svg';">
                         <button id="change-profile-picture"></button>
                     </div>
                     <h1>Hey, <%= userFirstName %></h1>

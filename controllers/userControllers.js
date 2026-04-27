@@ -4,6 +4,7 @@ import {
     getUserByMicrosoftIdModel,
     putUsernameByIdModel
 } from "../models/userModels.js";
+import { getProfilePhoto } from "../models/calendarModels.js";
 
 // function to add a user to the database
 export async function addUser(req, res, next) {
@@ -92,5 +93,22 @@ export async function getCurrentUser(req, res, next) {
             sessionUser: null,
             dbUser: null
         });
+    }
+}
+
+export async function getCurrentUserPhoto(req, res) {
+    if (!req.user?.accessToken) {
+        return res.redirect("/assets/default-avatar.svg");
+    }
+
+    try {
+        const photo = await getProfilePhoto(req.user.accessToken);
+
+        res.set("Content-Type", photo.contentType);
+        res.set("Cache-Control", "no-store");
+        return res.send(photo.buffer);
+    } catch (err) {
+        console.error("getCurrentUserPhoto error:", err.message);
+        return res.redirect("/assets/default-avatar.svg");
     }
 }

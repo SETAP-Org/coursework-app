@@ -42,6 +42,7 @@ import {
   checkValidUsername,
   updateUsername,
   getCurrentUser,
+  getCurrentUserPhoto,
 } from "./controllers/userControllers.js";
 
 import {
@@ -224,6 +225,8 @@ app.get("/api/auth/signout", signOut, checkIfLoggedInRedirect);
 app.get("/api/auth/justAuthenticated", getJustAuthenticatedFlag);
 
 app.get("/api/me", getCurrentUser);
+
+app.get("/api/me/photo", checkIfLoggedInCalendar, getCurrentUserPhoto);
 
 app.get("/api/me/projects", getUserProjects);
 
