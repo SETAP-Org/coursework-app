@@ -1,0 +1,12 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="200" height="200">
+  <defs>
+    <clipPath id="circle-clip">
+      <circle cx="100" cy="100" r="100"/>
+    </clipPath>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="#D3D1C7"/>
+  <g clip-path="url(#circle-clip)">
+    <circle cx="100" cy="78" r="36" fill="#888780"/>
+    <ellipse cx="100" cy="175" rx="58" ry="42" fill="#888780"/>
+  </g>
+</svg>

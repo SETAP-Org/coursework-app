@@ -1,5 +1,26 @@
 const GRAPH_URL = "https://graph.microsoft.com/v1.0";
 
+export async function getProfilePhoto(accessToken) {
+    const response = await fetch(`${GRAPH_URL}/me/photo/$value`, {
+        headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }
+    });
+
+    if (!response.ok) {
+        const error = new Error(`Error fetching profile photo: ${response.statusText}`);
+        error.status = response.status;
+        throw error;
+    }
+
+    const arrayBuffer = await response.arrayBuffer();
+
+    return {
+        contentType: response.headers.get('content-type') || 'image/jpeg',
+        buffer: Buffer.from(arrayBuffer)
+    };
+}
+
 export async function getCalendarEvents(accessToken) {
     console.log("fetching calendar events");
     const response = await fetch( `${GRAPH_URL}/me/events`, {
