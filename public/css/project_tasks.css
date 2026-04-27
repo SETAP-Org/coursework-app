@@ -163,7 +163,6 @@
     align-items: stretch;
 }
 
-/* list items / sizing */
 #task-list > li,
 .task-list > li {
     list-style: none;
@@ -174,7 +173,6 @@
     align-items: stretch;
 }
 
-/* Outer card container (visual styles) */
 .task-list-item,
 #task-list > li .task-card-individual,
 .task-list > li .task-card-individual {
@@ -184,7 +182,6 @@
     overflow: hidden;
 }
 
-/* Inner card layout (single, unified rule) */
 .task-card-individual {
     display: flex;
     flex-direction: column;
@@ -195,18 +192,14 @@
     justify-content: space-between;
     height: 100%;
 
-    /* Fixes for checkbox & weight placement */
-    position: relative; /* allow absolute children (checkbox, weight) */
-    /* reserve space so absolutely positioned controls don't overlap the title */
+    position: relative;
     padding-top: 2rem;
     padding-left: 1rem;
     padding-right: 1rem;
 
-    /* important: ensure the card itself clips any overflowing children */
     overflow: hidden;
 }
 
-/* Weight badge (top-left) */
 .task-weight {
     position: absolute;
     top: 0.55rem;
@@ -230,36 +223,154 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
 }
 
-/* Keep label in flow — the title remains centered and wrapped/clamped if needed */
-.task-checkbox-label {
-    position: static;
-    display: block; /* full-width block so children stack reliably */
-    text-align: center; /* keep the title centered */
-    padding-top: 0.15rem;
-    margin: 0 0 0.25rem 0; /* small spacing between title and desc */
-    z-index: 1;
-}
-
-/* absolutely position only the checkbox input so it never affects layout */
+/* Styled round checkbox to match the weight bubble */
 .task-complete-checkbox {
+    /* remove native checkbox look so we can style it */
+    -webkit-appearance: none;
+    appearance: none;
+
     position: absolute;
     top: 0.55rem;
     right: 0.55rem;
-    width: 1rem;
-    height: 1rem;
-    accent-color: var(--good);
+
+    /* size: visually similar to .task-weight */
+    width: 1.4rem;
+    height: 1.4rem;
+    min-width: 1.4rem;
+    min-height: 1.4rem;
+
+    /* round like the weight bubble */
+    border-radius: 999px;
+
+    /* background + border like the bubble */
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+
+    /* lift it off the card a little */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+
     cursor: pointer;
-    z-index: 4;
-    background: transparent;
-    border: none;
+    z-index: 5;
+
+    /* smooth transition for interactions */
+    transition:
+        background-color 120ms ease,
+        transform 100ms ease,
+        box-shadow 120ms ease,
+        border-color 120ms ease;
 }
 
-/* Completed state must override base card background — keep selector specific */
+/* Hover -> subtle pop */
+.task-complete-checkbox:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.16);
+}
+
+/* Focus -> visible focus ring (keeps keyboard accessibility) */
+.task-complete-checkbox:focus {
+    outline: none;
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.12),
+        0 0 0 4px rgba(34, 150, 243, 0.12); /* gentle accent ring */
+}
+
+/* Checked -> use the project's success colour and show a white check icon */
+.task-complete-checkbox:checked {
+    background: var(--good);
+    border-color: var(--good);
+
+    /* Thick white stroked check (no fill) for high contrast on green */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='none' stroke='%23ffffff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' d='M4.5 12.5l4.5 4.5L19.5 6.5'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 68% 68%;
+
+    /* subtle lift for polish */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    transform: translateY(-0.5px);
+    transition:
+        transform 100ms ease,
+        box-shadow 120ms ease,
+        background-color 120ms ease;
+}
+
+/* Disabled state */
+.task-complete-checkbox:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.task-delete-button {
+    position: absolute;
+    top: 0.55rem;
+    right: 2.2rem; /* offset so it sits left of the checkbox */
+    width: 1.4rem;
+    height: 1.4rem;
+    padding: 0;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+
+    /* Use grid to place the SVG exactly in the middle */
+    display: inline-grid;
+    place-items: center;
+
+    cursor: pointer;
+    z-index: 5;
+    transition:
+        transform 100ms ease,
+        box-shadow 120ms ease,
+        background-color 120ms ease,
+        border-color 120ms ease;
+
+    color: #ffffff;
+    line-height: initial;
+    border-width: 1px;
+}
+.task-delete-button .icon-trash {
+    width: 68%;
+    height: 68%;
+    display: block;
+    fill: currentColor;
+    transform: translateX(0.8px); /* move the icon right */
+    will-change: transform;
+}
+
+/* Hover / active states remain unchanged */
+.task-delete-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.16);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.task-delete-button:active:not(:disabled),
+.task-delete-button.confirming {
+    background: rgba(255, 92, 122, 0.12); /* soft red tint */
+    border-color: rgba(255, 92, 122, 0.18);
+}
+
+.task-delete-button:focus {
+    outline: none;
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.12),
+        0 0 0 4px rgba(255, 92, 122, 0.08);
+}
+
+.task-delete-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
 #task-list > li .task-card-individual.task-completed {
     background: var(--card4);
 }
 
-/* Top group — allow the top block to expand so description can fill available space */
 .card-top {
     display: flex;
     flex-direction: column;
@@ -270,38 +381,33 @@
     flex: 1 1 auto;
     justify-content: flex-start;
     padding-top: 0.1rem;
-
-    /* reserve vertical space under the top area so the description never touches the bottom row */
-    padding-bottom: 0.9rem; /* <-- increased reserved space (adjust as needed) */
+    padding-bottom: 0.9rem;
 }
 
-/* Title — avoid overlapping top-left/right controls */
 .task-name {
     display: block;
     margin: 0;
-    padding-left: 2.2rem; /* keep away from left badge */
-    padding-right: 2.2rem; /* keep away from right checkbox */
+    padding-left: 2.2rem;
+    padding-right: 2.2rem;
     font-weight: 700;
     line-height: 1.1;
     word-break: break-word;
     font-size: 1.05rem;
-    max-height: calc(1.1em * 2); /* approximate 2 lines */
-    overflow: hidden; /* clip any excess */
+    max-height: calc(1.1em * 2);
+    overflow: hidden;
     text-overflow: ellipsis;
-    z-index: 2; /* sit above the description if stacking occurs */
+    z-index: 2;
 }
 
-/* Description — make it a scrollable flex area so long text cannot escape the card */
 .task-desc {
     margin: 0;
-    padding: 0 0.4rem 0.5rem 0.4rem; /* bottom padding added (0.5rem) */
+    padding: 0 0.4rem 0.5rem 0.4rem;
     font-style: italic;
     color: rgba(255, 255, 255, 0.85);
     font-size: 0.95rem;
     line-height: 1.2;
     text-align: center;
 
-    /* fill available space but leave breathing room, and scroll if content is long */
     flex: 1 1 auto;
     align-self: stretch;
     overflow: auto;
@@ -320,20 +426,18 @@
     scrollbar-color: rgba(255, 255, 255, 0.06) transparent;
 }
 
-/* Bottom group: assignee left, date right — baseline-aligned */
 .card-bottom {
     margin-top: auto;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: baseline; /* align text baselines so date and assignee sit level */
+    align-items: baseline;
     gap: 0.5rem;
     width: 100%;
     padding: 0 0.5rem;
     box-sizing: border-box;
 }
 
-/* Assignee on the left: truncate if long */
 .task-assignee {
     margin: 0;
     font-size: 0.9rem;
@@ -350,9 +454,8 @@
     padding-right: 0.5rem;
 }
 
-/* Date on the right */
 .task-date {
-    margin: 0; /* no bottom margin so it sits level with assignee */
+    margin: 0;
     font-size: 0.9rem;
     opacity: 0.9;
     text-align: right;
@@ -364,7 +467,94 @@
     margin-left: 0.25rem;
 }
 
-/* Small responsive adjustments */
+.task-date.deadline-overdue {
+    color: #ff4d4f;
+    font-weight: 700;
+}
+
+.task-date.deadline-warning {
+    color: #ffb400;
+    font-weight: 700;
+}
+
+.card-bottom {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
+}
+
+.card-bottom-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+.card-bottom-left {
+    align-items: flex-start;
+    text-align: left;
+}
+
+.card-bottom-right {
+    align-items: flex-end;
+    text-align: right;
+}
+
+.card-bottom-header {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.65;
+    font-weight: 700;
+}
+
+.task-assignee,
+.task-date {
+    font-style: normal;
+    font-size: 0.95rem;
+    opacity: 0.95;
+    line-height: 1;
+}
+
+#task-list > li .task-card-individual.task-completed .card-bottom-header,
+#task-list > li .task-card-individual.task-completed .task-assignee,
+#task-list > li .task-card-individual.task-completed .task-date {
+    color: inherit;
+    opacity: 0.85;
+}
+
+.card-bottom-col .task-assignee {
+    position: relative;
+    z-index: 6;
+    color: var(--text) !important;
+    opacity: 1 !important;
+    display: block;
+    font-style: normal;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    min-height: 1em;
+    max-width: 100%;
+}
+
+@media (max-width: 520px) {
+    .card-bottom {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .card-bottom-right,
+    .card-bottom-left {
+        align-items: flex-start;
+        text-align: left;
+    }
+}
+
 @media (max-width: 1100px) {
     #task-list > li {
         flex: 1 1 calc((100% - (var(--card-gap) * 3)) / 4);
@@ -377,6 +567,7 @@
         flex: 1 1 calc((100% - (var(--card-gap) * 2)) / 3);
         max-width: calc((100% - (var(--card-gap) * 2)) / 3);
     }
+    /* small positional tweak to match smaller cards */
     .task-complete-checkbox {
         top: 0.5rem;
         right: 0.5rem;
@@ -417,5 +608,21 @@
     }
     .task-desc {
         padding: 0 0.3rem;
+    }
+}
+
+@media (max-width: 520px) {
+    .task-delete-button {
+        top: 0.45rem;
+        right: 2.05rem;
+        width: 1.05rem;
+        height: 1.05rem;
+    }
+    .task-delete-button .icon-trash {
+        width: 72%;
+        height: 72%;
+        transform: translateX(
+            0.6px
+        ); /* slightly smaller nudge on small screens */
     }
 }

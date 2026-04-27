@@ -39,6 +39,18 @@ export async function updateTaskStatusModel(taskId, projectId, status) {
   );
 }
 
+// DELETE
+export async function deleteTaskModel(taskId, projectId) {
+  return await query(
+    `
+    DELETE FROM tasks
+    WHERE task_id = $1 AND project_id = $2
+    RETURNING *;
+    `,
+    [taskId, projectId],
+  );
+}
+
 // READ
 export async function getTasksByProjectIdModel(projectId) {
   return await query(
