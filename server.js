@@ -130,10 +130,12 @@ io.on("connection", (socket) => {
         notif.notificationType,
         notif.notificationMessage,
       );
-      console.log(data.rows, 'this was a notification that was created...')
+
+      io.emit('notification', {
+        notification: notif,
+        dbReturn: data.rows[0],
+      });
     }
-  
-    io.emit('notification', notif);
   })
 
   socket.on("disconnect", () => {
