@@ -49,6 +49,8 @@ async function userNav() {
         bellNumBubble.style.display = "none";
     } else {
         for (const notification of notificationData.notifications) {
+            console.log(notification.target_username, username);
+
             // getting the clone elements
             const clone = notifTemplate.content.cloneNode(true);
             const listItem = clone.querySelector(".notif-list-item");
@@ -137,11 +139,11 @@ async function userNav() {
                 if (notif.notification.notificationType === "Message") {
                     window.location.href = `/${username}/projects/${notif.notification.projectId}/chat`
                 } else if (notif.notification.notificationType === "Member Leave" || notif.notification.notificationType === "Member Join") {
-                    window.location.href = `${username}/projects/${notif.notification.projectId}`
+                    window.location.href = `/${username}/projects/${notif.notification.projectId}`
                 } else if (notif.notification.notificationType === "Leader") {
-                    window.location.href = `${username}/projects/${notif.notification.projectId}`
+                    window.location.href = `/${username}/projects/${notif.notification.projectId}`
                 } else if (notif.notification.notificationType === "Task") {
-                    window.location.href = `${username}/projects/${notif.notification.projectId}/tasks`
+                    window.location.href = `/${username}/projects/${notif.notification.projectId}/tasks`
                 }
             });
 
