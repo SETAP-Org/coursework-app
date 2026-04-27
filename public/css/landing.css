@@ -1,3 +1,21 @@
+body.landing-page {
+    padding: 0 0 64px;
+    gap: 0;
+}
+
+.logo {
+    display: block;
+    width: 100%;
+    height: 200px;
+    margin: 0;
+    padding: 0;
+    object-fit: cover;
+}
+
+#landing-text .ms-sign-in {
+    align-self: center;
+}
+
 .link-style {
     text-decoration: none;
     font-size: 1.3em;
@@ -15,16 +33,41 @@
 
 #content-body {
     display: flex;
-    flex-direction: center;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    padding: 40px;
+    gap: 48px;
+    padding: 60px 40px;
+}
+
+#landing-image {
+    width: 600px;
+    height: auto;
+    border-radius: var(--radius);
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+#landing-text {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 560px;
 }
 
 #strapline {
-    font-size: 3em;
+    font-size: 2.5em;
     font-style: italic;
     font-weight: 800;
+}
+
+#landing-text h2 {
+    margin: 0;
+}
+
+#landing-text p {
+    margin: 0;
+    line-height: 1.6;
 }
 
 @media (max-width: 768px) {
