@@ -1,96 +1,120 @@
 # Group Coursework Management System (GCMS)
-
-A comprehensive web-based platform designed to streamline group coursework management for university students. This application addresses common challenges in academic collaboration by consolidating communication, task management, and file sharing into a single, integrated solution.
-
----
-
-## .env Structure
-
-`DATABASE_URL = postgresql://[username]:[password]@localhost:5432/gcms`
-
-<p>If you don't use a password for your psql, the url is just:</p> 
-
-`postgresql://[username]@localhost:5432/gcms`
-
-> Where [username] is what appears before `=#` when typing psql into a terminal window.
-> This also assumes you have PostgreSQL configured to default to port `5432`
+**GCMS** is a web application to help students manage their group coursework projects.
 
 ## Overview
-Managing group coursework often involves juggling multiple platforms—WhatsApp for communication, OneDrive for files, separate calendars for meetings, and informal methods for tracking contributions. Our platform eliminates this fragmentation by providing an **all-in-one solution** tailored specifically for student coursework projects.
+GCMS has been developed to best suit students at the [University of Portsmouth](https://www.port.ac.uk/), however it can be used by anyone with a Microsoft account, meaning it is perfect for any group university students looking for a better way to manage their group coursework projects!
 
----
+The features will be described and outlined in the below [section](#features).
 
-## Key Features
+For those wishing to contribute to the project, you are welcome to fork this repository and follow the below [instructions](#installation) to get started!
 
-* **Microsoft Integration:** Seamless authentication via university Microsoft accounts with OneDrive integration for file management.
-* **Task Management:** Create, assign, and track tasks with customizable weights to ensure fair contribution tracking.
-* **Shared Calendar:** Coordinate group meetings and deadlines with availability tracking across all team members.
-* **Group Chat:** Dedicated communication channels for each project, keeping coursework discussions separate from personal messaging.
-* **Interactive Project Board:** Collaborative workspace with draggable widgets for notes, reminders, and project organization.
-* **Real-Time Notifications:** Stay updated on deadlines, task assignments, and project changes via email and in-app alerts.
-* **Contribution Tracking:** Transparent system for monitoring individual contributions based on completed tasks.
-* **Team Leadership Tools:** Assign and manage team leaders with appropriate permissions for project oversight.
-* **AI-Powered Assistant:** Summarize and clarify coursework specifications using integrated AI capabilities.
+## Demo
+Add a link here to the demo video
 
----
+## Installation
+### Prerequisites
+This is a simple list of tech you must have installed and configured to be able to develop **GCMS**. If you do not have any of the below installed, please see the respective official websites for more information on how to do so (linked below).
+- [PostgreSQL 18+](https://www.postgresql.org/)
+- [Node.js](https://nodejs.org/en)
+- [Git](https://git-scm.com/install/)
+- [Microsoft Account](https://account.microsoft.com/account)
 
-## Built With
+### Steps
+1. Clone the GitHub repository, and install all Node.js dependencies.
+```bash
+git clone https://github.com/SETAP-Org/group-coursework-management-system.git
+npm install
+```
 
-| Layer | Technology |
-| :--- | :--- |
-| **Frontend** | HTML, CSS, Javascript |
-| **Backend** | Express.js |
-| **Libraries** | EmailJS (notifications), Konva.js (project board) |
-| **External APIs** | Microsoft Graph API, OpenAI API |
-| **Architecture** | Layered event-driven architecture with centralized event bus |
+2. Create the required .env files
+Based on [this](https://gcms-docs.readthedocs.io/en/latest/getting-started/environment-configuration.html) page in the documentation, set-up the .env files as described.
 
----
+3. Install the database
+In a terminal opened to the root folder of the project, run:
+```bash
+npm run install_db
+```
 
-## The Problem We're Solving
-Based on extensive user research with **15 interviews and a focus group**, we identified three critical pain points:
+> For any troubleshooting, or more information, see the in-depth documentation linked [below](#contributing).
 
-1.  **Platform Fragmentation:** Students use 3-5 different applications per project, leading to cognitive overhead and missed communications.
-2.  **Lack of Accountability:** Verbal task assignments without written records result in unclear responsibilities and unequal contributions.
-3.  **Meeting Coordination:** Finding common availability across team members wastes significant time at the start of every project.
+## Usage
+1. Run the app
+```bash
+npm run dev # For developing the app
+```
 
----
+```bash
+npm run prod # For deployment
+```
 
-## Target Users
-University students working on group coursework projects across all disciplines, with an initial focus on those with Microsoft/Office 365 university accounts.
+2. Open the server in your browser of choice, by navigating to the link below
+```plaintext
+http://localhost:3000
+```
 
-> **Project Context:** Developed by Group 5B for the Software Engineering Theory & Practice (SETaP) module
+## Features
+### Task Management
+GCMS provides the user with a straightforward, clear task tracking system. It allows a project's 'team leader' to assign tasks to a project's members, including assigning deadlines to tasks to keep members accountable. All users in a project are able to see everyone's tasks, and can see who is completing tasks on time vs. who is going over the deadines. Tasks are also assigned weights, to make the contribution tracking as accurate as possible - a bigger task can have a bigger weighting to give the assignee a higher contribution % for completing that task.
 
+SCREENSHOT
 
-## Check status of Postgre
-sc query postgresql-x64-18
+### Deadline Monitoring
+All projects and tasks are assigned a deadline. This allows users to clearly see how long they have until each project and task is due. The deashboard automatically colours tasks/projects in amber and red for close to and over deadlines respectively.
 
-## if not running use this 
-net start postgresql-x64-18
+SCREENSHOT, showing an overdue task, a near task, and a 'comfortable' task
 
-## if running 
-netstat -ano | findstr :5432
+### Calendar Integrations
+Within a project, you can create a meeting on the calendar page. This will display for all members of a project, and will also integrate into your Microsoft calendar, utilising the [Microsoft Graph API](#tech-stack).
 
-## if stopped 
-net start postgresql-x64-18
+### Live Project Group Chat
+Each project has a chat page, which gives the members access to unlimited messaging between anybody in the group. The page updates in real-time, allowing for seamless integration. The group chat feature integrates with the notification system to keep members informed, even if they aren't on the message page.
 
-## psql dictionary 
-sc qc postgresql-x64-18
+SCREENSHOT
 
-## in the case tcp ip is broken 
-C:\Program Files\PostgreSQL\18\data\postgresql.conf
+### Contribution Tracking
+GCMS allows users to easily track group member contributions, so users never have to have those awkward chats! On the contributions page, users and able to view a pie-chart to visualise the individual contribution points for all members assigned to the group. These points are calculated based on the weighting of the tasks each member has completed.
 
-## find these lines 
-#listen_addresses = 'localhost'
-#port = 5432
+SCREENSHOT
 
-## chamge to these 
-listen_addresses = '*'
-port = 5432
+### User-Specific Notification System
+All users have access to a notifications viewer, where they can view any updates and changes with any project they are assigned to. If they receive a message from one project, a new task from another, they will always be able to stay up-to-date.
 
-## chage these 
-C:\Program Files\PostgreSQL\18\data\pg_hba.conf
+SCREENSHOT
 
-host    all     all     127.0.0.1/32    trust
-host    all     all     ::1/128         trust
+### Interactive Project Board
+A collaborative workspace featuring draggable widgets for notes, reminders, and project organization, built seamlessly into the project dashboard using Konva.js.
 
-## password devpass
+SCREENSHOT showing the interactive notes board
+
+### Multiple Concurrent Project Capabilities
+Any user is able to have a theoretically unlimited number of active projects at one time. This allows them to keep track of as many group coursework projects they may have assigned to them across multiple modules on their course.
+
+SCREENSHOT of lots of projects
+
+## Tech Stack
+### Frontend
+- **Languages**: HTML, CSS, Javascript
+- **Templated** with EJS
+- **Libraries**: Konva.js
+
+### Backend & Database
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Database**: PostgreSQL
+- **Real-time updating**: Socket.io
+- **Authentication**: Passport.js
+
+### External Integrations
+- **Microsoft Graph API**
+
+## Contributing
+All the information regarding contributing to the project can be found in the project's in-depth [documentation](https://gcms-docs.readthedocs.io/en/latest/index.html). This goes into all the details on contributing, with detailed troubleshooting steps should they be required. We want anybody to be able to contribute with as little hassle as possible!
+
+## License
+MIT License, see `LICENSE` file for more details.
+
+## Acknowledgements
+This project was developed by Group5B for the Software Engineering Theory & Practice (SETaP) module at the [University of Portsmouth](https://www.port.ac.uk/).
+
+We would like to say an extra thanks to:
+- **Our focus group participants** - For providing the initial user research and pain points that shaped the core features of GCMS.
