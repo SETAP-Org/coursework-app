@@ -27,18 +27,29 @@ export async function getContributionsByProjectIdModel(
       FROM completed
     )
     SELECT
-      pm.user_id                                  AS assignee_id,
-      pm.username,
-      COALESCE(c.user_weight, 0)                  AS user_weight,
-      pt.project_weight                           AS project_weight,
-      CASE
-        WHEN pt.project_weight = 0 THEN 0
-        ELSE ROUND(COALESCE(c.user_weight, 0) / pt.project_weight * 100, 2)
-      END                                         AS pct_of_project
+      pt.project_weight::float8 AS project_weight,
+      json_agg(
+        json_build_object(
+          'assignee_id', pm.user_id,
+          'username', pm.username,
+          'user_weight', COALESCE(c.user_weight, 0)::float8,
+          'pct_of_project',
+            CASE
+              WHEN pt.project_weight = 0 THEN 0
+              ELSE ROUND(COALESCE(c.user_weight, 0) / pt.project_weight * 100, 2)::float8
+            END
+        )
+        ORDER BY
+          CASE
+            WHEN pt.project_weight = 0 THEN 0
+            ELSE ROUND(COALESCE(c.user_weight, 0) / pt.project_weight * 100, 2)
+          END DESC,
+          pm.username
+      ) AS contributions
     FROM project_members pm
     LEFT JOIN completed c ON c.assignee_id = pm.user_id
     CROSS JOIN project_total pt
-    ORDER BY pct_of_project DESC, pm.username;
+    GROUP BY pt.project_weight;
     `,
     [projectId, status],
   );

@@ -13,9 +13,9 @@ export async function getProjectContributions(req, res, next) {
     const contributionDataRaw =
       await getContributionsByProjectIdModel(project_id);
 
-    const contributionData = contributionDataRaw.rows;
+    const contributionData = contributionDataRaw.rows[0];
 
-    res.json({ success: true, contributions: contributionData });
+    res.json({ success: true, contributionData: contributionData });
   } catch (err) {
     console.error("getProjectContributions error: ", err);
     return res.status(500).json({ success: false, error: err.message });
