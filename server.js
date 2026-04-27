@@ -86,7 +86,9 @@ import {
   fetchNotificationsByUserId,
   // addNotification,
   removeNotification,
-} from './controllers/notificationControllers.js';
+} from "./controllers/notificationControllers.js";
+
+import { getProjectContributions } from "./controllers/contributionControllers.js";
 
 // util imports
 import createSession from "./utils/session.js";
@@ -120,12 +122,12 @@ io.on("connection", (socket) => {
       msg.projectId,
       msg.message,
     );
-    
-    io.emit('chat', data.rows[0]);
+
+    io.emit("chat", data.rows[0]);
   });
 
-  socket.on('notification', async (notif) => {
-    for (let i=0; i<notif.targetUsers.length; i++) {
+  socket.on("notification", async (notif) => {
+    for (let i = 0; i < notif.targetUsers.length; i++) {
       const data = await postNotificationModel(
         notif.targetUsers[i],
         notif.projectId || null,
@@ -135,7 +137,7 @@ io.on("connection", (socket) => {
         notif.projectName || null,
       );
 
-      io.emit('notification', {
+      io.emit("notification", {
         notification: {
           targetUsers: [notif.targetUsers[i]],
           projectId: notif.projectId,
@@ -147,8 +149,7 @@ io.on("connection", (socket) => {
         dbReturn: data.rows[0],
       });
     }
-
-  })
+  });
 
   socket.on("disconnect", () => {
     console.log("user disconnected");
@@ -302,6 +303,8 @@ app.get("/api/me/projects", getUserProjects);
 app.get("/api/projects/:project_id", getProjectDetails);
 
 app.get("/api/projects/:project_id/tasks", getProjectTasks);
+
+app.get("/api/contributions/:project_id", getProjectContributions);
 
 app.get("/api/chat", getMessages);
 
