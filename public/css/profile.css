@@ -8,9 +8,17 @@
 .profile-avatar {
     width: 120px;
     height: 120px;
+    display: block;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #ffffff;
+}
+
+.profile-avatar-wrap {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    flex: 0 0 120px;
     margin-right: 20px;
 }
 
@@ -33,11 +41,15 @@
 }
 
 #change-profile-picture {
-    background-image: url('/assets/change_picture_button.svg');
+    background-image: url('/assets/change_picture_icon.svg');
     background-size: cover;
     background-position: center;
-    width: 40px;
-    height: 40px;   
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    z-index: 1;
     border: none;
     border-radius: 50%;
     cursor: pointer;
