@@ -5,31 +5,50 @@
     color: var(--text);
 }
 
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ffffff;
+    margin-right: 20px;
+}
+
 .profile-container .user-info {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.user_info h1,
+.user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.user-info h1,
 .user-info h2, 
 .user-info p {
     word-break: break-word;
 }
 
-.profile-picture {
-    width: 120px;
-    height: 120px;
+#change-profile-picture {
+    background-image: url('/assets/change_picture_button.svg');
+    background-size: cover;
+    background-position: center;
+    width: 40px;
+    height: 40px;   
+    border: none;
     border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #007BFF;
-    background-color: #ddd;
+    cursor: pointer;
 }
 
 .user-info h1 {
     font-size: 1em;
     color: rgb(255, 255, 255);
     margin-bottom: 5px;
+    text-align: center;
+
 }
 
 .user-info h2 {
