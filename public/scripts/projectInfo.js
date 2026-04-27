@@ -335,15 +335,13 @@ if (teamLeaderId === userId) {
         console.log(data, 'this is the data...')
 
         if (data.success) {
-            // socket.emit('notification', {
-            //     targetUsers: [groupUsers
-            //         .filter(u => u.user_id !== userId)
-            //         .map(u => u.user_id)
-            //     ],
-            //     projectId: projectId,
-            //     notificationType: "Project",
-            //     notificationMessage: `${projectName} has been deleted`,
-            // });
+            socket.emit('notification', {
+                targetUsers: projectMembers
+                    .filter(u => u.user_id !== userId)
+                    .map(u => u.user_id),
+                notificationType: "Project",
+                notificationMessage: `${projectName} has been deleted`,
+            });
 
             // update and show the secondary dialog
             secondaryDialogHeading.textContent = "Success!";

@@ -126,7 +126,7 @@ io.on("connection", (socket) => {
     for (let i=0; i<notif.targetUsers.length; i++) {
       const data = await postNotificationModel(
         notif.targetUsers[i],
-        notif.projectId,
+        notif.projectId || null,
         notif.notificationType,
         notif.notificationMessage,
         notif.targetUsername || null,
