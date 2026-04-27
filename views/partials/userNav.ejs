@@ -13,7 +13,9 @@
 
     <div class="card nav-links">
         <a class="Dashboard-text Dashboard-links" id="projects-button">Projects</a>
-        <a class="Dashboard-text Dashboard-links" id="profile-button">Profile</a>
+        <button class="profile-nav-button" id="profile-button" type="button" aria-label="Open profile">
+            <img class="profile-nav-avatar" src="/api/me/photo" alt="Your profile picture" onerror="this.onerror=null;this.src='/assets/default-avatar.svg';">
+        </button>
         
         <div class="notif-bell">
             <i class="fa fa-bell bell-icon"></i>

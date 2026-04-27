@@ -25,7 +25,11 @@ async function userNav() {
 
     // assigning urls to nav buttons
     if (projectsBtn) projectsBtn.href = `/${username}/projects`;
-    if (profileBtn) profileBtn.href = `/${username}/profile`;
+    if (profileBtn) {
+        profileBtn.addEventListener("click", () => {
+            window.location.href = `/${username}/profile`;
+        });
+    }
 
     // NOTIFICATIONS
     // event listener to open and close notification dialog
