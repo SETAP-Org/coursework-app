@@ -2,8 +2,6 @@ const pathSegments = window.location.pathname.split('/');
 const projectIndex = pathSegments.indexOf('projects');
 const projectId = pathSegments[projectIndex + 1];
 const username = pathSegments[1];
-console.log("Extracted projectId:", projectId);
-console.log("usernakme is: ", username);
 
 export async function saveNotesToDB(projectId, text, x, y, widgetId = null) {
     const response = await fetch(`/${username}/projects/${projectId}/save`, {

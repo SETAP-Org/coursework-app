@@ -1,5 +1,8 @@
 <link rel="stylesheet" href="/css/header_style.css">
-<script src="/scripts/nav.js" defer></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+<script src="/socket.io/socket.io.js" defer></script>
+<script src="/scripts/userNav.js" defer></script>
 
 <nav class="Dashboard-header" id="MyHeader">
     <div class="card logo-card">
@@ -11,7 +14,16 @@
     <div class="card nav-links">
         <a class="Dashboard-text Dashboard-links" id="projects-button">Projects</a>
         <a class="Dashboard-text Dashboard-links" id="profile-button">Profile</a>
+        
+        <div class="notif-bell">
+            <i class="fa fa-bell bell-icon"></i>
+            <div id="notif-bell-num-bubble">
+                <span id="notif-bell-num"></span>
+            </div>
+        </div>
     </div>
+
+    <%- include('../partials/notifications') %>
 
 <!-- <button class="nav-burger">&#9776;</button> -->
 </nav>

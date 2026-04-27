@@ -179,6 +179,47 @@
     text-decoration: none;
 }
 
+.notif-container {
+    width: 400px;
+    height: 400px;
+    background-color: white;
+}
+
+.notif-bell {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2px;
+}
+
+.notif-bell:hover {
+    cursor: pointer;
+}
+
+.bell-icon {
+    font-size: 2em;
+}
+
+#notif-bell-num-bubble {
+    border-radius: 100px;
+    background-color: #0055ff;
+    width: 20px;
+    height: 20px;
+    aspect-ratio: 1 / 1;
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+#notif-bell-num {
+    text-align: center;
+    font-style: bold;
+}
+
 /* Mobile */
 @media screen and (max-width: 900px) {
     .Dashboard-header {

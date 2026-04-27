@@ -12,11 +12,13 @@
             window.scriptData = {
                 userId: "<%= userId %>",
                 projectId: "<%= projectId %>",
+                projectName: "<%= projectName %>",
                 groupUsers: <%- JSON.stringify(groupUsers) %>,
                 tasks: <%- JSON.stringify(tasks) %>,
                 teamLeaderId: "<%= teamLeaderId %>"
             };
         </script>
+        <script src="/socket.io/socket.io.js"></script>
         <script src="/scripts/L&D-mode.js" defer></script>
         <script src="/scripts/projectTasks.js" defer></script>
 

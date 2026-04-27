@@ -12,6 +12,7 @@
             window.scriptData = {
                 userFirstName: "<%= userFirstName %>",
                 username: "<%= username %>",
+                userId: "<%= userId %>",
             };
         </script>
         <script src="/scripts/L&D-mode.js" defer></script>
@@ -30,53 +31,14 @@
 
                 <p><button onclick="changeTheme()">Toggle Theme</button></p>
             </div>
-
-            <div class="profile-cards">
-                <div class="profile-card">
-                    <h3>Projects</h3><br>
-                    <h3>Make a good disney star wars film</h3>
-                    <div class ="profile-progress-item">
-                        <label class="profile-span">1/10</label>
-
-                        <div class="profile-progress-bar">
-                            <div class="profile-progress-fill" style="width: 12%;"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="profile-card">
-                    <h3>Tasks</h3>
-                    
-                    <br>
-
-                    <div class="profile-progress-item">
-                        <label class="profile-span">12/20</label>
-
-                        <div class="profile-progress-bar">
-                            <div class="profile-progress-fill" style="width: 60%;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="profile-card">
-                <h3>Deadlines</h3>
-                
-                <ul class="profile-deadline-list">
-                    <li class= "profile-deadline-item">
-                        <span class="profile-span"> Design Homepage</span>
-                        <span class="profile-date">Due: 2024-07-15</span>
-                    </li>
-                </ul>
-            </div>
-
-            <a id="sign-out-button" href="/api/auth/signout">Sign Out</a>
             
             <form action="" class="username-form">
                 <input type="text" class="username-input">
                 <button class="username-save-button" disabled="true">Save Changes</button>
                 <p class="username-message"></p>
             </form>
+
+            <a id="sign-out-button" href="/api/auth/signout">Sign Out</a>
         </main>
 
         <dialog class="username-dialog">

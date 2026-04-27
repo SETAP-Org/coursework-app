@@ -22,6 +22,7 @@
                 projectMembers: <%- JSON.stringify(projectMembers) %>,
             };
         </script>
+        <script src="/socket.io/socket.io.js"></script>
         <script src="/scripts/L&D-mode.js" defer></script>
         <script src="/scripts/projectInfo.js" defer></script>
 
@@ -171,7 +172,7 @@
             <div class="dialog-inner-container">
                 <h1 id="secondary-dialog-heading"></h1>
                 <p id="secondary-dialog-message"></p>
-                <button id="secondary-dialog-button">Go To Home</button>
+                <button id="secondary-dialog-button">Refresh The Application</button>
             </div>
         </dialog>
 
