@@ -54,12 +54,12 @@ http://localhost:3000
 
 ## Features
 ### Task Management
-GCMS provides the user with a straightforward, clear task tracking system. It allows a project's 'team leader' to assign tasks to a project's members, including assigning deadlines to tasks to keep members accountable. All users in a project are able to see everyone's tasks, and can see who is completing tasks on time vs. who is going over the deadines. Tasks are also assigned weights, to make the contribution tracking as accurate as possible - a bigger task can have a bigger weighting to give the assignee a higher contribution % for completing that task.
+GCMS provides the user with a straightforward, clear task tracking system. It allows a project's 'team leader' to assign tasks to a project's members, including assigning deadlines to tasks to keep members accountable. All users in a project are able to see everyone's tasks, and can see who is completing tasks on time vs. who is going over the deadlines. Tasks are also assigned weights, to make the contribution tracking as accurate as possible - a bigger task can have a bigger weighting to give the assignee a higher contribution % for completing that task.
 
 SCREENSHOT
 
 ### Deadline Monitoring
-All projects and tasks are assigned a deadline. This allows users to clearly see how long they have until each project and task is due. The deashboard automatically colours tasks/projects in amber and red for close to and over deadlines respectively.
+All projects and tasks are assigned a deadline. This allows users to clearly see how long they have until each project and task is due. The dashboard automatically colours tasks/projects in amber and red for close to and over deadlines respectively.
 
 SCREENSHOT, showing an overdue task, a near task, and a 'comfortable' task
 
@@ -72,7 +72,7 @@ Each project has a chat page, which gives the members access to unlimited messag
 SCREENSHOT
 
 ### Contribution Tracking
-GCMS allows users to easily track group member contributions, so users never have to have those awkward chats! On the contributions page, users and able to view a pie-chart to visualise the individual contribution points for all members assigned to the group. These points are calculated based on the weighting of the tasks each member has completed.
+GCMS allows users to easily track group member contributions, so users never have to have those awkward chats! On the contributions page, users are able to view a pie-chart to visualise the individual contribution points for all members assigned to the group. These points are calculated based on the weighting of the tasks each member has completed.
 
 SCREENSHOT
 
