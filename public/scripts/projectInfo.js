@@ -140,7 +140,7 @@ leaveDialogYesBtn.addEventListener("click", async () => {
 
 // event listener for secondary dialog
 secondaryDialogBtn.addEventListener("click", () => {
-    window.location.relocate("/");
+    window.location.replace("/");
 });
 
 // event listeners for team leader
@@ -232,7 +232,7 @@ if (teamLeaderId === userId) {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    username: username,
+                    username: addUserInputValue,
                     projectId: projectId
                 })
             });
@@ -326,8 +326,12 @@ if (teamLeaderId === userId) {
         loading.style.display = "flex";
 
         // delete the project
-        const response = await fetch(`/api/projects/${projectId}`);
+        const response = await fetch(`/api/projects/${projectId}`, {
+            method: "DELETE",
+        });
         const data = await response.json();
+
+        console.log(data, 'this is the data...')
 
         if (data.success) {
             // socket.emit('notification', {

@@ -128,12 +128,13 @@ export async function updateTeamLeader(req, res, next) {
 // function to delete the project (should cascade to delete other parts)
 export async function removeProject(req, res, next) {
   try {
+    console.log('we are getting here......')
     const data = await deleteProjectByIdModel(req.params.project_id);
 
     if (data.rows.length > 0) {
       res.status(200).json({
         success: true,
-        message: "The team leader has been changed"
+        message: "The project has been deleted!"
       });
     } else {
       res.status(400).json({
