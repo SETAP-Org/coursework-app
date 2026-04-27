@@ -166,6 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data.success) {
           socket.emit('notification', {
                 targetUsers: [assignee],
+                projectId: window.scriptData.projectId,
                 notificationType: "Task",
                 notificationMessage: `You have been assigned a task in ${window.scriptData.projectName}`,
           });
