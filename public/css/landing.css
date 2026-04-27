@@ -1,9 +1,19 @@
+body.landing-page {
+    padding: 0 0 64px;
+    gap: 0;
+}
+
 .logo {
     display: block;
     width: 100%;
-    height: 150px;
-    margin: 0 auto;
+    height: 200px;
+    margin: 0;
+    padding: 0;
     object-fit: cover;
+}
+
+#landing-text .ms-sign-in {
+    align-self: center;
 }
 
 .link-style {
