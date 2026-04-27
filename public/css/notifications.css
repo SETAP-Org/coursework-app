@@ -11,9 +11,8 @@ dialog::backdrop {
 .dialog-inner-container {
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */
     align-items: center;
-    width: 500px;
+    width: 700px;
     height: 500px;
     overflow-y: auto;
 }
