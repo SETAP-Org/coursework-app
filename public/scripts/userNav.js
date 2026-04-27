@@ -51,15 +51,35 @@ async function userNav() {
             const listItem = clone.querySelector(".notif-list-item");
 
             clone.querySelector(".notif-list-text").innerText = notification.notification_message;
-            clone.querySelector(".bin-icon").addEventListener("click", () => listItem.remove())
+            clone.querySelector(".bin-icon").addEventListener("click", async () => {
+                loading.style.display = "flex";
+
+                const response = await fetch(`/api/notifications/${notification.notification_id}`, {
+                    method: "DELETE"
+                });
+                const data = await response.json();
+
+                listItem.remove();
+
+                console.log(notifList.children, 'These are the children')
+
+                console.log(notifList.children.length, 'This is the length')
+
+                // update the list if no more items left
+                if (notifList.children.length === 1) {
+                    // add the no more notifications message
+                    const notifMessage = document.createElement("p");
+                    notifMessage.className = "notif-message";
+                    notifMessage.innerText = "You currently have no notifications.";
+                    notifInnerContainer.appendChild(notifMessage);
+                }
+
+                loading.style.display = "none";
+            });
             notifList.appendChild(clone);
         }
         bellNumber.innerText = notificationData.notifications.length;
     }
-
-    const binIcon = document.querySelector(".bin-icon");
-
-    console.log(binIcon, 'this is the bin icon');
 
     // socket handling when recieving notification
     notifSocket.on("notification", (notif) => {
