@@ -164,12 +164,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (res.ok) {
         if (data.success) {
-          socket.emit('notification', {
-                targetUsers: [assignee],
-                projectId: window.scriptData.projectId,
-                notificationType: "Task",
-                notificationMessage: `You have been assigned a task in ${window.scriptData.projectName}`,
-          });
+          if (assignee !== window.scriptData.userId) {
+            socket.emit('notification', {
+                  targetUsers: [assignee],
+                  projectId: window.scriptData.projectId,
+                  notificationType: "Task",
+                  notificationMessage: `You have been assigned a task in ${window.scriptData.projectName}`,
+            });
+          }
 
           document.getElementById("create-task-dialog").close();
           form.reset();
