@@ -6,8 +6,7 @@ import {
 import { getMessagesByProjectIdModel } from "../models/chatModels.js";
 import { getUsersByProjectId } from "../models/userProjectModels.js";
 import { getTasksByProjectIdModel } from "../models/taskModels.js";
-
-const __dirname = import.meta.dirname;
+import { getContributionsByProjectIdModel } from "../models/contributionModels.js";
 
 export function serveLanding(req, res, next) {
   try {
@@ -259,11 +258,18 @@ export async function serveProjectContributions(req, res, next) {
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult.rows[0];
 
+    // get the contribution tasksData
+    const contributionDataRaw = await getContributionsByProjectIdModel(
+      req.session.project.project_id,
+    );
+    const contributionData = contributionDataRaw.rows[0];
+
     res.render("projectContributions", {
       username: req.params.username,
       userId: dbUser.user_id,
       projectId: req.session.project.project_id,
       projectName: req.session.project.project_name,
+      contributionData: contributionData,
     });
   } catch (err) {
     res.render("error", {

@@ -11,7 +11,6 @@ export async function addTask(req, res, next) {
   try {
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult?.rows?.[0];
-    const userId = dbUser.user_id;
 
     const data = await postTaskModel(
       req.session.project.project_id,
@@ -38,9 +37,7 @@ export async function addTask(req, res, next) {
 }
 
 export async function getProjectTasks(req, res, next) {
-  console.log("hey you");
   try {
-    console.log("hey");
     const { project_id } = req.params;
     const projectTasksResult = await getTasksByProjectIdModel(project_id);
     const projectTasks = projectTasksResult.rows;
