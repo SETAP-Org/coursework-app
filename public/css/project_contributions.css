@@ -1,0 +1,47 @@
+#chart-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 24px 20px;
+    /* reduce the min-height so the page content fits without scrolling */
+    min-height: calc(100vh - 220px - 80px);
+    box-sizing: border-box;
+}
+
+/* Card wrapper so the chart sits in a panel consistent with the rest of the app */
+.chart-card {
+    width: min(620px, 80%);
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.02),
+        rgba(255, 255, 255, 0.01)
+    );
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(6px);
+    /* keep the card from growing taller than the viewport */
+    max-height: calc(100vh - 260px);
+    overflow: hidden;
+}
+
+/* Make canvas responsive while preserving a pleasing height */
+#contributions-chart {
+    width: 100%;
+    /* responsive size: never larger than 420px, and also limited by viewport height */
+    height: min(420px, 60vh);
+    display: block;
+}
+
+/* Tighten spacing on smaller screens */
+@media (max-width: 640px) {
+    .chart-card {
+        padding: 14px;
+        width: min(520px, 92%);
+    }
+    #contributions-chart {
+        height: min(340px, 48vh);
+    }
+}

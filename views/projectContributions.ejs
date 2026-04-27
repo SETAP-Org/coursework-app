@@ -4,9 +4,8 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <link rel="stylesheet" href="/css/root-dark.css"
-        />
-        <link rel="stylesheet" href="/css/project_dash.css" />
+        <link rel="stylesheet" href="/css/root-dark.css" />
+        <link rel="stylesheet" href="/css/project_contributions.css" />
         <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml" />
 
         <script>
@@ -15,7 +14,12 @@
                 contributionData: <%- JSON.stringify(contributionData) %>,
             };
         </script>
+
         <script src="/scripts/L&D-mode.js" defer></script>
+
+        <!-- Load Chart.js BEFORE the module that uses it -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+        <script src="/scripts/projectContributions.js" type="module" defer></script>
 
         <title>GCMS | <%= projectName %> Contributions</title>
     </head>
@@ -27,9 +31,16 @@
             <section class="page-header">
                 <h1 id="page-title">Contributions</h1>
             </section>
+
+            <section id="chart-section">
+                <div class="chart-card">
+                    <canvas id="contributions-chart"></canvas>
+                </div>
+            </section>
         </section>
 
         <%- include('partials/footer') %>
 
         <%- include('partials/loading') %>
     </body>
+</html>
