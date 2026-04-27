@@ -23,9 +23,14 @@ async function projectChat() {
     loading.style.display = "flex";
 
     // ejs variables
-    const { userId, projectId, projectName } = window.scriptData;
-    const messages = window.scriptData.messages;
-    const groupUsers = window.scriptData.groupUsers;
+    const {
+        userId,
+        username,
+        projectId,
+        projectName,
+        messages,
+        groupUsers
+    } = window.scriptData;
 
     // get a hold of the elements that you are trying to access
     const messageForm = document.querySelector(".chat-form");
@@ -105,7 +110,7 @@ async function projectChat() {
             targetUsers: [userId],
             projectId: projectId,
             notificationType: "Message",
-            notificationMessage: "This is the new message!!!",
+            notificationMessage: `${username} sent a new message in ${projectName}`,
         });
 
         loading.style.display = "none";

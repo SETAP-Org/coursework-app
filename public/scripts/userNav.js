@@ -71,7 +71,9 @@ async function userNav() {
             });
 
             // bin event listener
-            clone.querySelector(".bin-icon").addEventListener("click", async () => {
+            clone.querySelector(".bin-icon").addEventListener("click", async (e) => {
+                e.stopPropagation();
+
                 loading.style.display = "flex";
 
                 const response = await fetch(`/api/notifications/${notification.notification_id}`, {
@@ -137,7 +139,9 @@ async function userNav() {
             });
 
             // bin event listener
-            clone.querySelector(".bin-icon").addEventListener("click", async () => {
+            clone.querySelector(".bin-icon").addEventListener("click", async (e) => {
+                e.stopPropagation();
+
                 loading.style.display = "flex";
 
                 const response = await fetch(`/api/notifications/${notif.dbReturn.notification_id}`, {
