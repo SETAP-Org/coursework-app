@@ -1,14 +1,14 @@
 import { query } from "../db/connection.js";
 
 // CREATE
-export async function postNotificationModel(user_id, project_id, notification_type, notification_message) {
+export async function postNotificationModel(user_id, project_id, notification_type, notification_message, target_username, project_name) {
     return await query(
         `
-        INSERT INTO notifications (user_id, project_id, notification_type, notification_message, n_date_created)
-        VALUES ($1, $2, $3, $4, NOW())
+        INSERT INTO notifications (user_id, project_id, notification_type, notification_message, n_date_created, target_username, project_name)
+        VALUES ($1, $2, $3, $4, NOW(), $5, $6)
         RETURNING *;
         `,
-        [user_id, project_id, notification_type, notification_message],
+        [user_id, project_id, notification_type, notification_message, target_username, project_name],
     );
 }
 

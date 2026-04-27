@@ -53,20 +53,24 @@ async function userNav() {
             const clone = notifTemplate.content.cloneNode(true);
             const listItem = clone.querySelector(".notif-list-item");
 
+            console.log(notification, 'this is the notification');
+
             // sets the text of the notification
             clone.querySelector(".notif-list-text").innerText = notification.notification_message;
+            if (notification.notification_type === "Member Join" && notification.target_username === username) {
+                clone.querySelector('.notif-list-text').innerText = `You have been added to ${notification.project_name}`;
+            }
 
             // sets the target url when notification is clicked
             listItem.addEventListener("click", () => {
-                console.log(notification, 'we are getting here....')
                 if (notification.notification_type === "Message") {
                     window.location.href = `/${username}/projects/${notification.project_id}/chat`
                 } else if (notification.notification_type === "Member Leave" || notification.notification_type === "Member Join") {
-                    window.location.href = `${username}/projects/${notification.project_id}/information`
+                    window.location.href = `/${username}/projects/${notification.project_id}`
                 } else if (notification.notification_type === "Leader") {
-                    window.location.href = `${username}/projects/${notification.project_id}`
+                    window.location.href = `/${username}/projects/${notification.project_id}`
                 } else if (notification.notification_type === "Task") {
-                    window.location.href = `${username}/projects/${notification.project_id}/tasks`
+                    window.location.href = `/${username}/projects/${notification.project_id}/tasks`
                 }
             });
 
@@ -124,13 +128,16 @@ async function userNav() {
 
             // sets the text of the notification
             clone.querySelector('.notif-list-text').innerText = notif.notification.notificationMessage;
+            if (notif.notification.notificationType === "Member Join" && notif.notification.targetUsername === username) {
+                clone.querySelector('.notif-list-text').innerText = `You have been added to ${notif.notification.projectName}`;
+            }
 
             // sets the target url when notification is clicked
             listItem.addEventListener("click", () => {
                 if (notif.notification.notificationType === "Message") {
                     window.location.href = `/${username}/projects/${notif.notification.projectId}/chat`
                 } else if (notif.notification.notificationType === "Member Leave" || notif.notification.notificationType === "Member Join") {
-                    window.location.href = `${username}/projects/${notif.notification.projectId}/information`
+                    window.location.href = `${username}/projects/${notif.notification.projectId}`
                 } else if (notif.notification.notificationType === "Leader") {
                     window.location.href = `${username}/projects/${notif.notification.projectId}`
                 } else if (notif.notification.notificationType === "Task") {

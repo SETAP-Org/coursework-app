@@ -48,7 +48,8 @@ export async function addUserToProject(req, res, next) {
         if (data.rows.length > 0) {
             res.status(200).json({
                 success: true,
-                message: "User successfully added to the project!"
+                message: "User successfully added to the project!",
+                userId: userData.rows[0].user_id
             })
         } else {
             res.status(400).json({

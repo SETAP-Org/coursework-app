@@ -123,14 +123,14 @@ io.on("connection", (socket) => {
   });
 
   socket.on('notification', async (notif) => {
-    const dbReturn = [];
-
     for (let i=0; i<notif.targetUsers.length; i++) {
       const data = await postNotificationModel(
         notif.targetUsers[i],
         notif.projectId,
         notif.notificationType,
         notif.notificationMessage,
+        notif.targetUsername || null,
+        notif.projectName || null,
       );
 
       io.emit('notification', {
@@ -139,6 +139,8 @@ io.on("connection", (socket) => {
           projectId: notif.projectId,
           notificationType: notif.notificationType,
           notificationMessage: notif.notificationMessage,
+          targetUsername: notif.targetUsername || null,
+          projectName: notif.projectName || null,
         },
         dbReturn: data.rows[0],
       });

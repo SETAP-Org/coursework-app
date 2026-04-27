@@ -239,19 +239,20 @@ if (teamLeaderId === userId) {
 
             const data = await response.json();
 
-            console.log(data, 'this is the new user being added...');
-
             if (data.success) {
                 // send notification to other group members
-                // socket.emit('notification', {
-                //     targetUsers: [groupUsers
-                //         .filter(u => u.user_id !== userId)
-                //         .map(u => u.user_id)
-                //     ],
-                //     projectId: projectId,
-                //     notificationType: "Member Join",
-                //     notificationMessage: `${username} sent a new message in ${projectName}`,
-                // });
+                socket.emit('notification', {
+                    targetUsers: [...projectMembers
+                        .filter(u => u.user_id !== userId)
+                        .map(u => u.user_id),
+                        data.userId,
+                    ],
+                    projectId: projectId,
+                    notificationType: "Member Join",
+                    notificationMessage: `${addUserInputValue} has been added added to ${projectName}`,
+                    targetUsername: addUserInputValue,
+                    projectName: projectName
+                });
 
                 // load the secondary dialog
                 secondaryDialogHeading.textContent = "Success!";
