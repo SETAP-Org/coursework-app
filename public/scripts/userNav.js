@@ -49,13 +49,9 @@ async function userNav() {
         bellNumBubble.style.display = "none";
     } else {
         for (const notification of notificationData.notifications) {
-            console.log(notification.target_username, username);
-
             // getting the clone elements
             const clone = notifTemplate.content.cloneNode(true);
             const listItem = clone.querySelector(".notif-list-item");
-
-            console.log(notification, 'this is the notification');
 
             // sets the text of the notification
             clone.querySelector(".notif-list-text").innerText = notification.notification_message;
@@ -67,7 +63,32 @@ async function userNav() {
             }
 
             // sets the target url when notification is clicked
-            listItem.addEventListener("click", () => {
+            listItem.addEventListener("click", async () => {
+                loading.style.display = "flex";
+
+                const response = await fetch(`/api/notifications/${notification.notification_id}`, {
+                    method: "DELETE"
+                });
+                const data = await response.json();
+
+                listItem.remove();
+
+                // update the list if no more items left
+                if (notifList.children.length === 1) {
+                    // add the no more notifications message
+                    const notifMessage = document.createElement("p");
+                    notifMessage.className = "notif-message";
+                    notifMessage.innerText = "You currently have no notifications.";
+                    notifInnerContainer.appendChild(notifMessage);
+                }
+
+                bellNumber.innerText = parseInt(bellNumber.innerText, 10) - 1;
+                if (bellNumber.innerText === "0") {
+                    bellNumBubble.style.display = "none";
+                }
+
+                loading.style.display = "none";
+
                 if (notification.notification_type === "Message") {
                     window.location.href = `/${username}/projects/${notification.project_id}/chat`
                 } else if (notification.notification_type === "Member Leave" || notification.notification_type === "Member Join") {
@@ -141,7 +162,32 @@ async function userNav() {
             }
 
             // sets the target url when notification is clicked
-            listItem.addEventListener("click", () => {
+            listItem.addEventListener("click", async () => {
+                loading.style.display = "flex";
+
+                const response = await fetch(`/api/notifications/${notif.notification.notificationId}`, {
+                    method: "DELETE"
+                });
+                const data = await response.json();
+
+                listItem.remove();
+
+                // update the list if no more items left
+                if (notifList.children.length === 1) {
+                    // add the no more notifications message
+                    const notifMessage = document.createElement("p");
+                    notifMessage.className = "notif-message";
+                    notifMessage.innerText = "You currently have no notifications.";
+                    notifInnerContainer.appendChild(notifMessage);
+                }
+
+                bellNumber.innerText = parseInt(bellNumber.innerText, 10) - 1;
+                if (bellNumber.innerText === "0") {
+                    bellNumBubble.style.display = "none";
+                }
+
+                loading.style.display = "none";
+
                 if (notif.notification.notificationType === "Message") {
                     window.location.href = `/${username}/projects/${notif.notification.projectId}/chat`
                 } else if (notif.notification.notificationType === "Member Leave" || notif.notification.notificationType === "Member Join") {
