@@ -62,6 +62,9 @@ async function userNav() {
             if (notification.notification_type === "Member Join" && notification.target_username === username) {
                 clone.querySelector('.notif-list-text').innerText = `You have been added to ${notification.project_name}`;
             }
+            if (notification.notification_type === "Leader" && notification.target_username === username) {
+                clone.querySelector('.notif-list-text').innerText = `You have been promoted to team leader in ${notification.project_name}`;
+            }
 
             // sets the target url when notification is clicked
             listItem.addEventListener("click", () => {
@@ -132,6 +135,9 @@ async function userNav() {
             clone.querySelector('.notif-list-text').innerText = notif.notification.notificationMessage;
             if (notif.notification.notificationType === "Member Join" && notif.notification.targetUsername === username) {
                 clone.querySelector('.notif-list-text').innerText = `You have been added to ${notif.notification.projectName}`;
+            }
+            if (notif.notification.notificationType === "Leader" && notif.notification.targetUsername === username) {
+                clone.querySelector('.notif-list-text').innerText = `You have been promoted to team leader in ${notif.notification.projectName}`;
             }
 
             // sets the target url when notification is clicked

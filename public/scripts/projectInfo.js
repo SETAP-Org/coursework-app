@@ -112,15 +112,14 @@ leaveDialogYesBtn.addEventListener("click", async () => {
 
         // change the message of the secondary dialog
         if (data.success) {
-            // socket.emit('notification', {
-            //     targetUsers: [groupUsers
-            //         .filter(u => u.user_id !== userId)
-            //         .map(u => u.user_id)
-            //     ],
-            //     projectId: projectId,
-            //     notificationType: "Member Leave",
-            //     notificationMessage: `${username} has left ${projectName}`,
-            // });
+            socket.emit('notification', {
+                targetUsers: projectMembers
+                    .filter(u => u.user_id !== userId)
+                    .map(u => u.user_id),
+                projectId: projectId,
+                notificationType: "Member Leave",
+                notificationMessage: `${username} has left ${projectName}`,
+            });
 
             // update and show secondary dialog
             secondaryDialogHeading.textContent = "Success!";
@@ -294,15 +293,16 @@ if (teamLeaderId === userId) {
 
         if (data.success) {
             // send notifications to group members
-            // socket.emit('notification', {
-            //     targetUsers: [groupUsers
-            //         .filter(u => u.user_id !== userId)
-            //         .map(u => u.user_id)
-            //     ],
-            //     projectId: projectId,
-            //     notificationType: "Leader",
-            //     notificationMessage: ,
-            // });
+            socket.emit('notification', {
+                targetUsers: projectMembers
+                    .filter(u => u.user_id !== userId)
+                    .map(u => u.user_id),
+                projectId: projectId,
+                notificationType: "Leader",
+                notificationMessage: `${teamLeaderSelect.options[teamLeaderSelect.selectedIndex].text} has been made the team leader of ${projectName}`,
+                targetUsername: teamLeaderSelect.options[teamLeaderSelect.selectedIndex].text,
+                projectName: projectName,
+            });
 
             // update and show the secondary dialog
             secondaryDialogHeading.textContent = "Success!";
