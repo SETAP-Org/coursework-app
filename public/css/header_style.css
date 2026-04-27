@@ -231,21 +231,21 @@
 }
 
 .bell-icon {
-    font-size: 2em;
+    font-size: 1.5em;
 }
 
 #notif-bell-num-bubble {
     border-radius: 100px;
     background-color: #0055ff;
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     aspect-ratio: 1 / 1;
     position: absolute;
     right: 0;
     top: 0;
     display: none;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
 }
 
 #notif-bell-num {
