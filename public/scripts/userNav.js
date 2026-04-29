@@ -102,30 +102,25 @@ async function userNav() {
     }
 
     // assigning urls to nav buttons
-    if (projectsBtn) projectsBtn.href = `/${username}/projects`;
-    if (profileBtn) {
-        profileBtn.addEventListener("click", () => {
-            window.location.href = `/${username}/profile`;
-        });
-    }
+    projectsBtn.href = `/${username}/projects`;
+    profileBtn.href = `/${username}/profile`;
 
-    // NOTIFICATIONS
     // event listener to open and close notification dialog
     notificationBell.addEventListener("click", () => notificationBox.showModal());
     notificationBox.addEventListener("click", (e) => {
         if (e.target === notificationBox) notificationBox.close();
     });
 
-    // populate the notifications panel
-    if (!notificationData.success) {
+    // populate the notifications panel (either with notifications or a message)
+    if (!notificationData.success || !notificationData.notifications.length) {
         const notifMessage = document.createElement("p");
         notifMessage.className = "notif-message";
-        notifMessage.innerText = "Notifications failed to load.";
-        notifInnerContainer.appendChild(notifMessage);
-    } else if (notificationData.notifications.length === 0) {
-        const notifMessage = document.createElement("p");
-        notifMessage.className = "notif-message";
-        notifMessage.innerText = "You currently have no notifications.";
+
+        // set the message text based on the situation
+        if (!notificationData.success) notifMessage.innerText = "Notifications failed to load."
+        else notifMessage.innerText = "You currently have no notifications.";
+
+        // add the message to the notification box and set the bell icon number to 0
         notifInnerContainer.appendChild(notifMessage);
         bellNumber.innerText = notificationData.notifications.length;
         bellNumBubble.style.display = "none";
@@ -152,6 +147,8 @@ async function userNav() {
             if ([...notifInnerContainer.children].some(child => child.className === "notif-message")) {
                 document.querySelector(".notif-message").remove();
             }
+
+            // add the notification to the ui
             addNotificationUi(
                 notif.notification.notificationId,
                 notif.notification.notificationType,
@@ -159,7 +156,8 @@ async function userNav() {
                 notif.notification.targetUsername,
                 notif.notification.projectName
             );
-            // increment the bubble counter and show it
+
+            // increment the bubble counter and show it if not already showing
             bellNumber.innerText = parseInt(bellNumber.innerText, 10) + 1;
             bellNumBubble.style.display = "flex";
         }
