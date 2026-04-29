@@ -76,7 +76,7 @@ Each project has a chat page, which gives the members access to unlimited messag
 ### Contribution Tracking
 GCMS allows users to easily track group member contributions, so users never have to have those awkward chats! On the contributions page, users are able to view a pie-chart to visualise the individual contribution points for all members assigned to the group. These points are calculated based on the weighting of the tasks each member has completed.
 
-SCREENSHOT
+<img width="2812" height="1515" alt="image" src="https://github.com/user-attachments/assets/bf27f29d-942e-4c06-a146-fe3aecb927e9" />
 
 ### User-Specific Notification System
 All users have access to a notifications viewer, where they can view any updates and changes with any project they are assigned to. If they receive a message from one project, a new task from another, they will always be able to stay up-to-date.
