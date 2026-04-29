@@ -23,6 +23,84 @@ async function userNav() {
     const notifList = document.querySelector(".notif-list");
     const notifTemplate = document.querySelector(".notif-template");
 
+    // function to add notification ui element
+    function addNotificationUi(id, type, message, targetUsername = null, projectName = null) {
+        // creating the clone of the template
+        const clone = notifTemplate.content.cloneNode(true);
+        const listItem = clone.querySelector(".notif-list-item");
+
+        // setting the text of the notification
+        const text = clone.querySelector(".notif-list-text");
+        text.innerText = message;
+        if (type === "Member Join" && targetUsername === username) text.innerText = `You have been added to ${projectName}`;
+        else if (type === "Leader" && targetUsername === username) text.innerText = `You have been promoted to team leader in ${projectName}`;
+
+        // sets the target url when notification is clicked
+        listItem.addEventListener("click", async () => {
+            loading.style.display = "flex";
+
+            const response = await fetch(`/api/notifications/${id}`, {
+                method: "DELETE"
+            });
+            const data = await response.json();
+
+            listItem.remove();
+
+            // update the list if no more items left
+            if (notifList.children.length === 1) {
+                // add the no more notifications message
+                const notifMessage = document.createElement("p");
+                notifMessage.className = "notif-message";
+                notifMessage.innerText = "You currently have no notifications.";
+                notifInnerContainer.appendChild(notifMessage);
+            }
+
+            bellNumber.innerText = parseInt(bellNumber.innerText, 10) - 1;
+            if (bellNumber.innerText === "0") {
+                bellNumBubble.style.display = "none";
+            }
+
+            loading.style.display = "none";
+
+            if (type === "Message") window.location.href = `/${username}/projects/${id}/chat`
+            else if (type === "Member Leave" || type === "Member Join") window.location.href = `/${username}/projects/${id}`
+            else if (type === "Leader") window.location.href = `/${username}/projects/${id}`
+            else if (type === "Task") window.location.href = `/${username}/projects/${id}/tasks`
+        });
+
+        clone.querySelector(".bin-icon").addEventListener("click", async (e) => {
+            // prevent clicking the element underneath the bin element
+            e.stopPropagation();
+
+            // show the loading screen
+            loading.style.display = "flex";
+
+            // deleting the notification from the db
+            const response = await fetch(`/api/notifications/${id}`, {method: "DELETE"});
+            const data = await response.json();
+
+            // removing the notifiacation visually
+            listItem.remove();
+
+            // after deleting, if there are no more notifications, then show a relevant message
+            if (notifList.children.length === 1) {
+                const notifMessage = document.createElement("p");
+                notifMessage.className = "notif-message";
+                notifMessage.innerText = "You currently have no notifications.";
+                notifInnerContainer.appendChild(notifMessage);
+            }
+
+            // reduce the number above the bell icon
+            bellNumber.innerText = parseInt(bellNumber.innerText, 10) - 1;
+
+            // hide the bubble altogether if number is 0
+            if (bellNumber.innerText === "0") bellNumBubble.style.display = "none";
+
+            // hide the loading screen
+            loading.style.display = "none";
+        });
+    }
+
     // assigning urls to nav buttons
     if (projectsBtn) projectsBtn.href = `/${username}/projects`;
     if (profileBtn) {
@@ -53,89 +131,13 @@ async function userNav() {
         bellNumBubble.style.display = "none";
     } else {
         for (const notification of notificationData.notifications) {
-            // getting the clone elements
-            const clone = notifTemplate.content.cloneNode(true);
-            const listItem = clone.querySelector(".notif-list-item");
-
-            // sets the text of the notification
-            clone.querySelector(".notif-list-text").innerText = notification.notification_message;
-            if (notification.notification_type === "Member Join" && notification.target_username === username) {
-                clone.querySelector('.notif-list-text').innerText = `You have been added to ${notification.project_name}`;
-            }
-            if (notification.notification_type === "Leader" && notification.target_username === username) {
-                clone.querySelector('.notif-list-text').innerText = `You have been promoted to team leader in ${notification.project_name}`;
-            }
-
-            // sets the target url when notification is clicked
-            listItem.addEventListener("click", async () => {
-                loading.style.display = "flex";
-
-                const response = await fetch(`/api/notifications/${notification.notification_id}`, {
-                    method: "DELETE"
-                });
-                const data = await response.json();
-
-                listItem.remove();
-
-                // update the list if no more items left
-                if (notifList.children.length === 1) {
-                    // add the no more notifications message
-                    const notifMessage = document.createElement("p");
-                    notifMessage.className = "notif-message";
-                    notifMessage.innerText = "You currently have no notifications.";
-                    notifInnerContainer.appendChild(notifMessage);
-                }
-
-                bellNumber.innerText = parseInt(bellNumber.innerText, 10) - 1;
-                if (bellNumber.innerText === "0") {
-                    bellNumBubble.style.display = "none";
-                }
-
-                loading.style.display = "none";
-
-                if (notification.notification_type === "Message") {
-                    window.location.href = `/${username}/projects/${notification.project_id}/chat`
-                } else if (notification.notification_type === "Member Leave" || notification.notification_type === "Member Join") {
-                    window.location.href = `/${username}/projects/${notification.project_id}`
-                } else if (notification.notification_type === "Leader") {
-                    window.location.href = `/${username}/projects/${notification.project_id}`
-                } else if (notification.notification_type === "Task") {
-                    window.location.href = `/${username}/projects/${notification.project_id}/tasks`
-                }
-            });
-
-            // bin event listener
-            clone.querySelector(".bin-icon").addEventListener("click", async (e) => {
-                e.stopPropagation();
-
-                loading.style.display = "flex";
-
-                const response = await fetch(`/api/notifications/${notification.notification_id}`, {
-                    method: "DELETE"
-                });
-                const data = await response.json();
-
-                listItem.remove();
-
-                // update the list if no more items left
-                if (notifList.children.length === 1) {
-                    // add the no more notifications message
-                    const notifMessage = document.createElement("p");
-                    notifMessage.className = "notif-message";
-                    notifMessage.innerText = "You currently have no notifications.";
-                    notifInnerContainer.appendChild(notifMessage);
-                }
-
-                bellNumber.innerText = parseInt(bellNumber.innerText, 10) - 1;
-                if (bellNumber.innerText === "0") {
-                    bellNumBubble.style.display = "none";
-                }
-
-                loading.style.display = "none";
-            });
-
-            // adding the clone to the list
-            notifList.appendChild(clone);
+            addNotificationUi(
+                notification.notification_id,
+                notification.notification_type,
+                notification.notification_message,
+                notification.target_username,
+                notification.project_name
+            );
         }
 
         // updating the bell bubble
@@ -150,91 +152,13 @@ async function userNav() {
             if ([...notifInnerContainer.children].some(child => child.className === "notif-message")) {
                 document.querySelector(".notif-message").remove();
             }
-
-            // getting the clone elements
-            const clone = notifTemplate.content.cloneNode(true);
-            const pTag = clone.querySelector('.notif-list-text');
-            const listItem = clone.querySelector(".notif-list-item");
-
-            // sets the text of the notification
-            clone.querySelector('.notif-list-text').innerText = notif.notification.notificationMessage;
-            if (notif.notification.notificationType === "Member Join" && notif.notification.targetUsername === username) {
-                clone.querySelector('.notif-list-text').innerText = `You have been added to ${notif.notification.projectName}`;
-            }
-            if (notif.notification.notificationType === "Leader" && notif.notification.targetUsername === username) {
-                clone.querySelector('.notif-list-text').innerText = `You have been promoted to team leader in ${notif.notification.projectName}`;
-            }
-
-            // sets the target url when notification is clicked
-            listItem.addEventListener("click", async () => {
-                loading.style.display = "flex";
-
-                const response = await fetch(`/api/notifications/${notif.notification.notificationId}`, {
-                    method: "DELETE"
-                });
-                const data = await response.json();
-
-                listItem.remove();
-
-                // update the list if no more items left
-                if (notifList.children.length === 1) {
-                    // add the no more notifications message
-                    const notifMessage = document.createElement("p");
-                    notifMessage.className = "notif-message";
-                    notifMessage.innerText = "You currently have no notifications.";
-                    notifInnerContainer.appendChild(notifMessage);
-                }
-
-                bellNumber.innerText = parseInt(bellNumber.innerText, 10) - 1;
-                if (bellNumber.innerText === "0") {
-                    bellNumBubble.style.display = "none";
-                }
-
-                loading.style.display = "none";
-
-                if (notif.notification.notificationType === "Message") {
-                    window.location.href = `/${username}/projects/${notif.notification.projectId}/chat`
-                } else if (notif.notification.notificationType === "Member Leave" || notif.notification.notificationType === "Member Join") {
-                    window.location.href = `/${username}/projects/${notif.notification.projectId}`
-                } else if (notif.notification.notificationType === "Leader") {
-                    window.location.href = `/${username}/projects/${notif.notification.projectId}`
-                } else if (notif.notification.notificationType === "Task") {
-                    window.location.href = `/${username}/projects/${notif.notification.projectId}/tasks`
-                }
-            });
-
-            // bin event listener
-            clone.querySelector(".bin-icon").addEventListener("click", async (e) => {
-                e.stopPropagation();
-
-                loading.style.display = "flex";
-
-                const response = await fetch(`/api/notifications/${notif.dbReturn.notification_id}`, {
-                    method: "DELETE"
-                });
-                const data = await response.json();
-
-                listItem.remove();
-
-                // update the list if no more items left
-                if (notifList.children.length === 1) {
-                    const notifMessage = document.createElement("p");
-                    notifMessage.className = "notif-message";
-                    notifMessage.innerText = "You currently have no notifications.";
-                    notifInnerContainer.appendChild(notifMessage);
-                }
-
-                bellNumber.innerText = parseInt(bellNumber.innerText, 10) - 1;
-                if (bellNumber.innerText === "0") {
-                    bellNumBubble.style.display = "none";
-                }
-
-                loading.style.display = "none";
-            });
-
-            // adding the clone to the list
-            notifList.prepend(clone);
-
+            addNotificationUi(
+                notif.notification.notificationId,
+                notif.notification.notificationType,
+                notif.notification.notificationMessage,
+                notif.notification.targetUsername,
+                notif.notification.projectName
+            );
             // increment the bubble counter and show it
             bellNumber.innerText = parseInt(bellNumber.innerText, 10) + 1;
             bellNumBubble.style.display = "flex";
