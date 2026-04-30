@@ -119,7 +119,7 @@ MIT License, see [`LICENSE`](LICENSE) file for more details.
 hfaulk - Harry Faulkner - up2305969
 jaymckerracher - Jay McKerracher - up2306458
 marqueese - Marcus Thomas - up2271401
-Jaketh444 - Jake Friend - up
+Jaketh444 - Jake Friend - up2274964
 angeloenrico123 - Angelo Espirito Santo Mansur Paixao - up2267576
 tjw-all - Tom Waller - up
 
