@@ -10,10 +10,11 @@ import { getProfilePhoto } from "../models/calendarModels.js";
 export async function addUser(req, res, next) {
     try {
         const { microsoftId, firstName, lastName, email } = req.user;
-        await postUserModel(microsoftId, firstName, lastName, email, microsoftId);
+        const data = await postUserModel(microsoftId, firstName, lastName, email, microsoftId);
         res.status(200).json({
             success: true,
-            message: "User added successfully!"
+            message: "User added successfully!",
+            user: data.rows[0],
         })
     } catch (err) {
         res.status(400).json({

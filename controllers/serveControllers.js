@@ -22,9 +22,20 @@ export function serveLanding(req, res, next) {
   }
 }
 
-export function serveWelcome(req, res, next) {
+export async function serveWelcome(req, res, next) {
   try {
-    res.render("welcome");
+    if (req.session.justAuthenticated) {
+      req.session.justAuthenticated = false;
+
+      res.redirect("/welcome");
+    } else if (req.user) {
+      const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+      const dbUser = dbUserResult.rows[0];
+
+      res.redirect(`/${dbUser.username}`);
+    } else {
+      res.redirect("/");
+    }
   } catch (err) {
     res.render("error", {
       error: err,
