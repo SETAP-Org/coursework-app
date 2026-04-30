@@ -26,6 +26,7 @@ import {
   serveProjectNotes,
   serveProjectContributions,
   redirectWelcome,
+  serveError,
 } from "./controllers/serveControllers.js";
 
 import {
@@ -160,6 +161,8 @@ io.on("connection", (socket) => {
 app.get("/", checkIfLoggedIn, serveLanding);
 
 app.get("/welcome", serveWelcome);
+
+app.get("/error", serveError);
 
 app.get("/:username", checkIfLoggedInRedirect, serveUserDash);
 

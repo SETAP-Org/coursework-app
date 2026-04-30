@@ -16,9 +16,7 @@ export function serveLanding(req, res, next) {
       cookieConsent: cookieConsent,
     });
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
 }
 
@@ -37,10 +35,16 @@ export async function serveWelcome(req, res, next) {
       res.redirect("/");
     }
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
+};
+
+export function serveError(req, res, next) {
+  const error = req.query.err;
+
+  res.render("error", {
+    error: error
+  })
 }
 
 export async function serveUserDash(req, res, next) {
@@ -60,9 +64,7 @@ export async function serveUserDash(req, res, next) {
       projects: projectsData,
     });
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
 }
 
@@ -78,9 +80,7 @@ export async function serveProfile(req, res, next) {
       userId: dbUser.user_id,
     });
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
 }
 
@@ -101,9 +101,7 @@ export async function serveProjects(req, res, next) {
       projects: projectsData,
     });
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
 }
 
@@ -122,9 +120,7 @@ export async function serveProjectDash(req, res, next) {
       projectId: req.session.project.project_id,
     });
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
 }
 
@@ -153,9 +149,7 @@ export async function serveProjectInfo(req, res, next) {
       projectMembers: groupUsersData,
     });
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
 }
 
@@ -188,9 +182,7 @@ export async function serveProjectTasks(req, res, next) {
       groupUsers: groupUsersData,
     });
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
 }
 
@@ -207,9 +199,7 @@ export async function serveProjectCalendar(req, res, next) {
       projectName: req.session.project.project_name,
     });
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
 }
 
@@ -242,9 +232,7 @@ export async function serveProjectChat(req, res, next) {
       groupUsers: groupUsersData,
     });
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
 }
 
@@ -283,9 +271,7 @@ export async function serveProjectContributions(req, res, next) {
       contributionData: contributionData,
     });
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
 }
 
