@@ -95,7 +95,7 @@ Any user is able to have a theoretically unlimited number of active projects at 
 ### Frontend
 - **Languages**: HTML, CSS, Javascript
 - **Templated** with EJS
-- **Libraries**: Konva.js
+- **Libraries**: Konva.js, Chart.js
 
 ### Backend & Database
 - **Runtime**: Node.js
