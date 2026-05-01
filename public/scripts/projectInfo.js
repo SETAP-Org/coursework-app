@@ -13,7 +13,7 @@ const {
     creatorId,
     teamLeaderId,
     projectDeadline,
-    projectMembers
+    projectMembers,
 } = window.scriptData;
 
 // getting dom elements
@@ -62,6 +62,7 @@ for (const member of projectMembers) {
     // change the values in the clone
     clone.querySelector('.info-section-li-text').textContent = member.username;
 
+    // if user is team leader, give them a crown and update colours to gold
     if (member.user_id === teamLeaderId) {
         clone.querySelector(".fa").classList.remove('fa-user');
         clone.querySelector(".fa").classList.add('fa-crown', 'team-leader');
@@ -70,23 +71,29 @@ for (const member of projectMembers) {
     
     // add the clone to the list
     sectionList.appendChild(clone);
-}
+};
 
-// event listeners to open dialogs
+// event listener for secondary dialog (redirect to home)
+secondaryDialogBtn.addEventListener("click", () => {
+    window.location.replace("/");
+});
+
+// event listener to open leave dialog
 leaveButton.addEventListener("click", () => {
     leaveDialog.showModal();
-})
+});
 
-// event listeners to close dialogs
+// event listener to close leave dialog (click outside)
 leaveDialog.addEventListener("click", (e) => {
     if (e.target === leaveDialog) leaveDialog.close();
 });
 
+// event listener to close leave dialog (cancel button)
 leaveDialogNoBtn.addEventListener("click", () => {
     leaveDialog.close();
 });
 
-// event listener to leave the project
+// event listener if user chooses to leave the project
 leaveDialogYesBtn.addEventListener("click", async () => {
     leaveDialog.close();
 
@@ -137,23 +144,18 @@ leaveDialogYesBtn.addEventListener("click", async () => {
     }
 });
 
-// event listener for secondary dialog
-secondaryDialogBtn.addEventListener("click", () => {
-    window.location.replace("/");
-});
-
-// event listeners for team leader
+// event listeners if the user is team leader
 if (teamLeaderId === userId) {
     // add memeber username input
     let addUserInputValue = "";
 
-    // event listener to track add member input
+    // event listener to update addUserInputValue
     addMemberInput.addEventListener("input", (e) => {
         addUserInputValue = e.target.value;
         e.target.value === "" ? addDialogYesBtn.disabled = true : addDialogYesBtn.disabled = false;
     });
 
-    // populating team leader dropdown
+    // populating new team leader dropdown
     for (const member of projectMembers) {
         if (member.user_id !== userId) {
             // clone the template
@@ -166,49 +168,26 @@ if (teamLeaderId === userId) {
             // add the clone to the select
             teamLeaderSelect.appendChild(clone);
         }
-    }
+    };
 
-    // event listeners to open dialogs
+    // event listener to open new member dialog
     newMemberButton.addEventListener("click", () => {
         addDialog.showModal();
-    })
-
-    changeLeaderButton.addEventListener("click", () => {
-        teamLeaderDialog.showModal();
-    })
-
-    deleteButton.addEventListener("click", () => {
-        deleteDialog.showModal();
-    })
-
-    // event listeners to close dialogs
-    addDialog.addEventListener("click", (e) => {
-    if (e.target === addDialog) addDialog.close();
-    addMemberInput.value = "";
     });
 
+    // event listener to close new member dialog (click outside)
+    addDialog.addEventListener("click", (e) => {
+        if (e.target === addDialog) addDialog.close();
+        addMemberInput.value = "";
+    });
+
+    // event listener to close new member dialog (cancel button)
     addDialogNoBtn.addEventListener("click", () => {
         addDialog.close();
         addMemberInput.value = "";
     });
 
-    teamLeaderDialog.addEventListener("click", (e) => {
-        if (e.target === teamLeaderDialog) teamLeaderDialog.close();
-    });
-
-    teamLeaderDialogNoBtn.addEventListener("click", () => {
-        teamLeaderDialog.close();
-    });
-
-    deleteDialog.addEventListener("click", (e) => {
-        if (e.target === deleteDialog) deleteDialog.close();
-    });
-
-    deleteDialogNoBtn.addEventListener("click", () => {
-        deleteDialog.close();
-    });
-
-    // event listener to add member to project
+    // event listener to add new member to project
     addDialogYesBtn.addEventListener("click", async () => {
         addDialog.close();
 
@@ -271,6 +250,21 @@ if (teamLeaderId === userId) {
         }
     });
 
+    // event listener to open new team leader dialog
+    changeLeaderButton.addEventListener("click", () => {
+        teamLeaderDialog.showModal();
+    });
+
+    // event listner to close new team leader dialog (click outside)
+    teamLeaderDialog.addEventListener("click", (e) => {
+        if (e.target === teamLeaderDialog) teamLeaderDialog.close();
+    });
+
+    // event listener to close new team leader dialog (cancel button)
+    teamLeaderDialogNoBtn.addEventListener("click", () => {
+        teamLeaderDialog.close();
+    });
+
     // event listener to change the team leader
     teamLeaderDialogYesBtn.addEventListener("click", async () => {
         teamLeaderDialog.close();
@@ -319,6 +313,21 @@ if (teamLeaderId === userId) {
         secondaryDialog.showModal();
     });
 
+    // event listener to open delete project dialog
+    deleteButton.addEventListener("click", () => {
+        deleteDialog.showModal();
+    });
+
+    // event listener to close delete project dialog (click outside)
+    deleteDialog.addEventListener("click", (e) => {
+        if (e.target === deleteDialog) deleteDialog.close();
+    });
+
+    // event listener to close delete project dialog (cancel button)
+    deleteDialogNoBtn.addEventListener("click", () => {
+        deleteDialog.close();
+    });
+
     // event listener to delete the project
     deleteDialogYesBtn.addEventListener("click", async () => {
         deleteDialog.close();
@@ -331,8 +340,6 @@ if (teamLeaderId === userId) {
             method: "DELETE",
         });
         const data = await response.json();
-
-        console.log(data, 'this is the data...')
 
         if (data.success) {
             socket.emit('notification', {
@@ -357,7 +364,7 @@ if (teamLeaderId === userId) {
         // show redirect dialog
         secondaryDialog.showModal();
     });
-}
+};
 
 // hide loading screen
 loading.style.display = "none";

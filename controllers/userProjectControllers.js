@@ -33,7 +33,7 @@ export async function addUserToProject(req, res, next) {
     try {
         const { username, projectId } = req.body;
 
-        // check if user actually existsf
+        // check if user actually exists
         const userData = await getUserByUsernameModel(username);
 
         if (userData.rows.length === 0) {
