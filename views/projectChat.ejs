@@ -33,7 +33,19 @@
             <h1 id="page-title">Chat</h1>
 
             <div class="chat-container">
-                <div class="chat-messages"></div>
+                <div class="chat-messages">
+                    <template id="chat-message-template">
+                        <div id="message-container">
+                            <p id="message-info-top"></p>
+
+                            <div id="message-bubble">
+                                <p id="message-content"></p>
+                            </div>
+
+                            <p id="message-info-bottom"></p>
+                        </div>
+                    </template>
+                </div>
 
                 <form action="" class="chat-form">
                     <fieldset class="chat-fieldset">
