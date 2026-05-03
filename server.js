@@ -69,7 +69,9 @@ import {
 } from "./controllers/userProjectControllers.js";
 
 import { 
-  addFileMetadata 
+  addFileMetadata,
+  getFileMetadata,
+  initFileUpload,
 } from "./controllers/fileControllers.js";
 //konva controllers support
 import {
@@ -194,10 +196,24 @@ app.post("/api/tasks/addTask", addTask);
 app.post("/api/projects/user", addUserToProject);
 
 app.post(
+  "/api/projects/:project_id/files/upload-init",
+  loadProject,
+  checkMembership,
+  initFileUpload,
+);
+
+app.post(
   "/api/projects/:project_id/files/metadata",
   loadProject,
   checkMembership,
   addFileMetadata,
+);
+
+app.get(
+  "/api/projects/:project_id/files/metadata",
+  loadProject,
+  checkMembership,
+  getFileMetadata,
 );
 
 // ---- READ ----
