@@ -67,6 +67,10 @@ import {
   removeUserFromProject,
   addUserToProject,
 } from "./controllers/userProjectControllers.js";
+
+import { 
+  addFileMetadata 
+} from "./controllers/fileControllers.js";
 //konva controllers support
 import {
   saveNote,
@@ -188,6 +192,13 @@ app.post("/api/chat/addMessage", addMessage);
 app.post("/api/tasks/addTask", addTask);
 
 app.post("/api/projects/user", addUserToProject);
+
+app.post(
+  "/api/projects/:project_id/files/metadata",
+  loadProject,
+  checkMembership,
+  addFileMetadata,
+);
 
 // ---- READ ----
 // ---- API ROUTES FOR calandar EVENTS ----
