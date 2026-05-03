@@ -8,12 +8,25 @@ A comprehensive web-based platform designed to streamline group coursework manag
 
 `DATABASE_URL = postgresql://[username]:[password]@localhost:5432/gcms`
 
+`SUPABASE_URL = https://[project-ref].supabase.co`
+
+`SUPABASE_SERVICE_ROLE_KEY = [server-side-service-role-key]`
+
+`SUPABASE_SHARED_FOLDERS_BUCKET = shared-folders`
+
 <p>If you don't use a password for your psql, the url is just:</p> 
 
 `postgresql://[username]@localhost:5432/gcms`
 
 > Where [username] is what appears before `=#` when typing psql into a terminal window.
 > This also assumes you have PostgreSQL configured to default to port `5432`
+
+### Shared Folder Storage Notes
+
+- `SUPABASE_SERVICE_ROLE_KEY` must only be used on the server.
+- Never expose `SUPABASE_SERVICE_ROLE_KEY` to browser scripts.
+- Use a private bucket for shared folders.
+- This project now includes a reusable Supabase helper in `utils/supabase.js` for server-side storage operations.
 
 ## Overview
 Managing group coursework often involves juggling multiple platforms—WhatsApp for communication, OneDrive for files, separate calendars for meetings, and informal methods for tracking contributions. Our platform eliminates this fragmentation by providing an **all-in-one solution** tailored specifically for student coursework projects.
