@@ -73,4 +73,5 @@ async function handleDelete(eventId) {
     await init();
 }
 
+
 init();

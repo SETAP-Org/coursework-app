@@ -1,5 +1,6 @@
 import {getCalendarEvents, createCalendarEvent, deleteCalendarEvent} from "../models/calendarModels.js";
 
+
 export async function getEvent(req, res) {
     try {
         const accessToken = req.user.accessToken;
@@ -55,3 +56,4 @@ export async function removeEvent(req, res){
         res.status(500).json({ error: error.message });
     }
 }
+

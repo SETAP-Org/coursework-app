@@ -30,11 +30,12 @@ async function loadFiles() {
   });
 }
 
+
 async function uploadFile(file) {
   const { signedUrl, storagePath } = await fetch(`/api/projects/${projectId}/files/upload-init`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ fileName: file.name }),
+    body: JSON.stringify({ fileName: file.name, size: file.size }),
   }).then(r => r.json());
 
   await fetch(signedUrl, { method: "PUT", headers: { "Content-Type": file.type || "application/octet-stream" }, body: file });
@@ -50,9 +51,16 @@ async function uploadFile(file) {
 
 document.getElementById("upload-button").addEventListener("click", () => document.getElementById("file-input").click());
 
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+
 document.getElementById("file-input").addEventListener("change", async (e) => {
   const file = e.target.files[0];
   if (!file) return;
+  if (file.size > MAX_FILE_SIZE) {
+    alert("File size exceeds the maximum limit of 10 MB.");
+    e.target.value = "";
+    return;
+  }
   await uploadFile(file);
   e.target.value = "";
 });
