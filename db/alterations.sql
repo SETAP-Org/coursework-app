@@ -54,4 +54,9 @@ ALTER TABLE meeting_attendances
     FOREIGN KEY (meeting_id) REFERENCES meetings(meeting_id)
     ON DELETE CASCADE;
 
+AlTER TABLE AI_CHAT_MESSAGES
+  DROP CONSTRAINT IF EXISTS ai_chat_messages_project_id_fkey,
+  ADD CONSTRAINT ai_chat_messages_project_id_fkey
+    FOREIGN KEY (project_id) REFERENCES projects(project_id)
+    ON DELETE CASCADE;
 -- Further Alterations here...
