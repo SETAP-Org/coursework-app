@@ -54,7 +54,7 @@ function generateEmailHTML(recipientName, notificationMessage, notificationType,
         <div class="container">
             <div class="header">
                 <div class="logo">
-                    <img src="cid:logo" alt="GCMS Logo">
+                    <img src="/assets/logo/logo-mark.svg" alt="GCMS Logo">
                 </div>
                 <h1>GCMS</h1>
                 <p>Group Coursework Management System</p>
