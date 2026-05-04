@@ -73,7 +73,9 @@ import {
   addFileMetadata,
   getFileMetadata,
   initFileUpload,
+  getDownloadUrl,
 } from "./controllers/fileControllers.js";
+
 //konva controllers support
 import {
   saveNote,
@@ -222,6 +224,13 @@ app.get(
   loadProject,
   checkMembership,
   getFileMetadata,
+);
+
+app.get(
+  "/api/projects/:project_id/files/download",
+  loadProject,
+  checkMembership,
+  getDownloadUrl,
 );
 
 // ---- READ ----

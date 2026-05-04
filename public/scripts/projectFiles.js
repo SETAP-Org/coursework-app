@@ -9,7 +9,25 @@ async function loadFiles() {
         <li class="file-item">
           <span class="file-name">${f.file_name}</span>
           <span class="file-meta">${(f.size / 1024).toFixed(1)} KB &bull; ${new Date(f.date_uploaded).toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "2-digit" })}</span>
+          <button class="download-btn" data-path="${f.storage_path}" data-name="${f.file_name}">Download</button>
         </li>`).join("");
+
+  list.querySelectorAll(".download-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const { signedUrl } = await fetch(`/api/projects/${projectId}/files/download?storagePath=${encodeURIComponent(btn.dataset.path)}`).then(r => r.json());
+
+      if ((btn.dataset.name || "").toLowerCase().endsWith(".pdf")) {
+        const opened = window.open(signedUrl, "_blank");
+        if (!opened) window.location.href = signedUrl;
+        return;
+      }
+
+      const a = document.createElement("a");
+      a.href = signedUrl;
+      a.download = "";
+      a.click();
+    });
+  });
 }
 
 async function uploadFile(file) {
