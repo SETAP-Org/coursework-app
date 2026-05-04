@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
+
     <link id="theme-stylesheet" rel="stylesheet"/>
     <link rel="stylesheet" href="/css/project_tasks.css" />
     <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml" />
@@ -14,8 +14,8 @@
             userId: "<%= userId %>",
             projectId: "<%= projectId %>",
             projectName: "<%= projectName %>",
-            groupUsers: <% - JSON.stringify(groupUsers) %>,
-            tasks: <% - JSON.stringify(tasks) %>,
+            groupUsers: <%- JSON.stringify(groupUsers) %>,
+            tasks: <%- JSON.stringify(tasks) %>,
             teamLeaderId: "<%= teamLeaderId %>",
             username: "<%= username %>",
             isTeamLeader: <%= typeof isTeamLeader !== 'undefined' && isTeamLeader ? 'true' : 'false' %>
