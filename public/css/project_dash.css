@@ -16,7 +16,8 @@
 
 .card,
 .Dashboard-container,
-.small-box,
+.deadline-box,
+.calendar-box,
 .Dashboard-bottom {
     background-color: var(--card);
     border-radius: var(--radius);
@@ -75,7 +76,17 @@
     flex: 1;
 }
 
-.card.small-box {
+.deadline-box {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 12px 16px;
+    height: 100%;
+}
+
+.calendar-box {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -120,13 +131,38 @@
     width: 100%;
 }
 
-.small-box {
+.deadline-box,
+.calendar-box {
     width: 100%;
     min-height: 110px;
     height: auto;
     text-align: center;
     font-size: 1.2rem;
     padding: 12px;
+    border: var(--border);
+}
+
+.deadline-box h2,
+.calendar-box h2 {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--muted);
+    text-align: center;
+}
+
+.deadline-box p {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    font-size: 1rem;
+    color: var(--muted);
+    text-align: center;
+}
+
+.deadline-box,
+.calendar-box {
     border: var(--border);
 }
 

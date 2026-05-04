@@ -3,7 +3,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <link rel="stylesheet" href="/css/root-dark.css" />
+        <link id="theme-stylesheet" rel="stylesheet"/>
         <link rel="stylesheet" href="/css/project_dash.css" />
         <link rel="stylesheet" href="/css/Konva.css"  />
         <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml" />
@@ -12,10 +12,12 @@
             window.scriptData = {
                 userId: "<%= userId %>",
                 username: "<%= username %>",
+                projectId: "<%= projectId %>",
+                notes: <%- JSON.stringify(notes) %>
             };
         </script>
-        <script src="/scripts/L&D-mode.js"></script>
-        <script src="https://unpkg.com/konva@9/konva.min.js"></script>
+        <script src="/scripts/L&D-mode.js" type="module"></script>
+        <script src="https://unpkg.com/konva@9/konva.min.js" type="module"></script>
         <script type="module" src="/scripts/konva-dash.js"></script>
 
         <title>GCMS | <%= projectName %></title>
@@ -44,12 +46,13 @@
                 </section>
 
                 <aside class="Dashboard-right">
-                    <section class="card small-box">
-                        <h2 class="Dashboard-text">Deadline</h2>
+                    <section class="deadline-box">
+                        <h2>Deadline</h2>
+                        <p><%= deadlineLabel %></p>
                     </section>
 
-                    <section class="card small-box">
-                        <h2 class="Dashboard-text">Calandar</h2>
+                    <section class="calendar-box">
+                        <h2>Calendar</h2>
                     </section>
                 </aside>
             </main>

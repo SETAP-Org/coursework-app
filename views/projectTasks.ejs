@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <link rel="stylesheet" href="/css/root-dark.css"/>
+        <link id="theme-stylesheet" rel="stylesheet"/>
         <link rel="stylesheet" href="/css/project_tasks.css" />
         <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml" />
 
@@ -18,9 +18,9 @@
                 teamLeaderId: "<%= teamLeaderId %>"
             };
         </script>
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="/scripts/L&D-mode.js" defer></script>
-        <script src="/scripts/projectTasks.js" defer></script>
+        <script src="/socket.io/socket.io.js" type="module"></script>
+        <script src="/scripts/L&D-mode.js" defer type="module"></script>
+        <script src="/scripts/projectTasks.js" defer type="module"></script>
 
         <title>GCMS | <%= projectName %> Tasks</title>
     </head>
@@ -31,6 +31,7 @@
         <section id="page-content">
             <section class="page-header">
                 <h1 id="page-title">Tasks</h1>
+                <!-- Only show create task button if user is team leader -->
                 <% if (userId == teamLeaderId) { %>
                     <button id="new-task-button">New Task</button>
                 <% } %>

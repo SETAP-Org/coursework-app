@@ -17,6 +17,14 @@
   },
   "keywords": [],
   "author": "",
+  "contributors": [
+    "Jay McKerracher",
+    "Harry Faulkner",
+    "Angelo Espirito Santo Mansur Paixao",
+    "Jake Friend",
+    "Marcus Thomas",
+    "Tom Waller"
+  ],
   "license": "MIT",
   "type": "module",
   "bugs": {
@@ -24,6 +32,7 @@
   },
   "homepage": "https://github.com/SETAP-Org/group-coursework-management-system#readme",
   "dependencies": {
+    "@supabase/supabase-js": "^2.105.1",
     "chart.js": "^4.5.1",
     "cookie-parser": "^1.4.7",
     "cross-env": "^10.1.0",

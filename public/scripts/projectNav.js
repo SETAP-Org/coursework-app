@@ -1,41 +1,53 @@
 async function projectNav() {
-    // show loading screen
-    const loading = document.querySelector(".loading");
-    loading.style.display = "flex";
+  // Show loading screen
+  const loading = document.querySelector(".loading");
+  loading.style.display = "flex";
 
-    // ejs values
-    const { username, projectId } = window.scriptData;
+  // Extract EJS values
+  const { username } = window.scriptData;
 
-    // getting dom elements
-    const projectsBtn = document.querySelector("#projects-button");
-    const check = document.getElementById("check");
-    const navMobile = document.querySelector(".nav-mobile");
+  // Get DOM elements
+  const projectsBtn = document.querySelector("#projects-button");
+  const navCheckbox = document.getElementById("check");
+  const navMobile = document.querySelector(".nav-mobile");
+  const checkBtn = document.querySelector(".checkbtn");
 
-    // assigning urls to nav buttons
-    projectsBtn.href = `/${username}/projects`;
+  // Validate required elements exist
+  if (!projectsBtn || !navCheckbox || !navMobile || !checkBtn) {
+    console.warn("Required navigation elements not found");
+    loading.style.display = "none";
+    return;
+  }
 
-    // close nav when a menu link is clicked
-    if (check || navMobile) {
-        navMobile.addEventListener("click", (e) => {
-            const link = e.target.closest("a");
-            if (link) {
-                check.checked = false;
-            }
-        });
+  // Set navigation button URL
+  projectsBtn.href = `/${username}/projects`;
+
+  // Close navigation menu when a link is clicked
+  navMobile.addEventListener("click", (e) => {
+    const link = e.target.closest("a");
+    if (link) {
+      navCheckbox.checked = false;
+    }
+  });
+
+  // Close navigation menu when clicking outside
+  document.addEventListener("click", (e) => {
+    // Don't close if clicking the checkbox toggle button
+    if (e.target === navCheckbox || e.target.closest(".checkbtn")) {
+      return;
     }
 
-    // Close nav-mobile when clicking outside menu
-    document.addEventListener("click", (e) => {
-        if (!check || !navMobile) return;
-        if (e.target === check) return;
-        if (e.target.closest(".checkbtn")) return;
-        if (navMobile.contains(e.target)) return;
+    // Don't close if clicking inside the nav menu
+    if (navMobile.contains(e.target)) {
+      return;
+    }
 
-        check.checked = false;
-    });
+    // Close the menu
+    navCheckbox.checked = false;
+  });
 
-    // hide loading screen
-    loading.style.display = "none";
+  // Hide loading screen
+  loading.style.display = "none";
 }
 
 projectNav();

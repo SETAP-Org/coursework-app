@@ -3,23 +3,17 @@ import { getUserByMicrosoftIdModel } from "../models/userModels.js";
 
 // function to redirect user to landing if not signed in
 export async function checkIfLoggedInRedirect(req, res, next) {
-  // ensure user exists in session
-  if (!req.user || !req.user.microsoftId) {
-    return res.redirect("/");
-  }
-
   try {
-    const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
-    const dbUser = dbUserResult?.rows?.[0];
+    if (!req.user) {
+      return res.redirect("/");
+    } else {
+      const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+      const dbUser = dbUserResult.rows;
 
-    if (
-      req.user &&
-      req.user.accessToken &&
-      dbUser &&
-      dbUser.username == req.params.username
-    )
+      if (!dbUser.length) return res.redirect("/");
+
       next();
-    else res.redirect("/");
+    }
   } catch (err) {
     console.error("checkIfLoggedInRedirect error:", err);
     res.redirect("/");
@@ -62,7 +56,7 @@ export function authenticatePassport(req, res, next) {
 
 // middleware function to change justAuthenticated value in session
 export function setJustAuthenticatedFlag(req, res, next) {
-  req.session.justAuthenticated = !req.session.justAuthenticated;
+  req.session.justAuthenticated = true;
   next();
 }
 

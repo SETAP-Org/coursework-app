@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link id="theme-stylesheet" rel="stylesheet" href="/css/root-dark.css" />
+        <link id="theme-stylesheet" rel="stylesheet"/>
         <link rel="stylesheet" href="/css/profile.css">
         <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml">
 
@@ -15,8 +15,8 @@
                 userId: "<%= userId %>",
             };
         </script>
-        <script src="/scripts/L&D-mode.js" defer></script>
-        <script src="/scripts/profile.js" defer></script>
+        <script src="/scripts/L&D-mode.js" defer type="module"></script>
+        <script src="/scripts/profile.js" defer type="module"></script>
 
         <title>GCMS | Profile</title>
     </head>
@@ -33,15 +33,18 @@
                     <h1>Hey, <%= userFirstName %></h1>
                     
                 </div>
-
-                <p><button onclick="changeTheme()">Toggle Theme</button></p>
             </div>
-            
-            <form action="" class="username-form">
-                <input type="text" class="username-input">
+
+
+            <div class="username-form-section">
+                <h3>Change Username</h3>
+                <form action="" class="username-form">
+                    <p>New Username</p>
+                    <input type="text" class="username-input">
+                    <p class="username-message"></p>
+                </form>
                 <button class="username-save-button" disabled="true">Save Changes</button>
-                <p class="username-message"></p>
-            </form>
+            </div>
 
             <div class="email-notification-preferences">
                 <label for="email-notifications-toggle" class="email-notifications-label">

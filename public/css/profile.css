@@ -1,3 +1,94 @@
+.user-info h1{
+    font-size: 1.4em;
+    color: rgb(255, 255, 255);
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.username-input {
+    width: 100%;
+    padding: 10px;
+    border: var(--border);
+    border-radius: 5px;
+    font-size: 1em;
+    align-self: center;
+    text-align: center;
+    outline: 1px solid #000000;
+}
+
+.username-form-section p {
+    color: var(--text-2);
+    font-size: 0.9em;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.username-form-section {
+    background-color: #fff;
+    border: var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.username-save-button {
+    width: 50%;
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius);
+    border: var(--border);
+    background: var(--accent, #4f8ef7);
+    color: #fff;
+    font-family: var(--font);
+    font-size: 0.95rem;
+    cursor: pointer;
+    margin-top: 8px;
+    align-self: center;
+}
+
+.username-save-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.username-save-button:not(:disabled):hover {
+    opacity: 0.85;
+}
+
+#sign-out-button {
+    display: block;
+    width: 50%;
+    padding: 0.6rem 1.2rem;
+    margin-top: 12px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: var(--radius);
+    border: var(--border);
+    background: var(--accent, #4f8ef7);
+    color: #fff;
+    font-family: var(--font);
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+}
+
+#sign-out-button:hover {
+    opacity: 0.85;
+}
+
+
+.username-form-section h3 {
+    color: rgb(0, 0, 0);
+    text-align: center;
+    margin-bottom: 15px;
+}
+
 .profile-container {
     width: 90%;
     max-width: 1200px;

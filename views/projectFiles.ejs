@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="stylesheet" href="/css/root-dark.css"/>
+        <link rel="stylesheet" href="/css/project_files.css" />
+        <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml" />
+
+        <script>
+            window.scriptData = {
+                projectId: "<%= projectId %>",
+                username: "<%= username %>"
+            };
+        </script>
+        <script src="/scripts/L&D-mode.js" defer></script>
+        <script src="/scripts/projectFiles.js" defer></script>
+
+        <title>GCMS | <%= projectName %> Files</title>
+    </head>
+    <body>
+        <%- include('partials/projectNav') %>
+
+        <section id="page-content">
+            <section class="page-header">
+                <h1 id="page-title">Files</h1>
+                <button id="upload-button">Upload File</button>
+            </section>
+
+            <input type="file" id="file-input" hidden />
+
+            <section id="file-list-panel">
+                <ul id="file-list"></ul>
+            </section>
+        </section>
+    </body>
+</html>

@@ -1,5 +1,11 @@
 -- Alterations to foreign keys to make them Cascade on Delete 
 
+ALTER TABLE files
+  DROP CONSTRAINT IF EXISTS files_project_id_fkey,
+  ADD CONSTRAINT files_project_id_fkey
+    FOREIGN KEY (project_id) REFERENCES projects(project_id)
+    ON DELETE CASCADE;
+
 ALTER TABLE tasks
   DROP CONSTRAINT IF EXISTS tasks_project_id_fkey,
   ADD CONSTRAINT tasks_project_id_fkey

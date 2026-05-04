@@ -4,18 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link id="theme-stylesheet" rel="stylesheet" href="/css/root-dark.css" />
+    <link id="theme-stylesheet" rel="stylesheet"/>
     <link rel="stylesheet" href="/css/error.css">
     <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml">
 
-    <script src="/scripts/error.js" defer></script>
-    <script src="/scripts/L&D-mode.js" defer></script>
+    <script src="/scripts/error.js" defer type="module"></script>
+    <script src="/scripts/L&D-mode.js" defer type="module"></script>
 
     <title>GCMS | Error</title>
 </head>
 <body>
     <h1>ERROR!</h1>
-    <p>We apologies but there was an error with your request, please return home and try again</p>
+    <p>There was an error with your request. Please login and try again.</p>
+    <p><%= error %></p>
     <button>Go Home</button>
     
     <%- include('partials/loading') %>

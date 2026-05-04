@@ -7,6 +7,9 @@ import { getMessagesByProjectIdModel } from "../models/chatModels.js";
 import { getUsersByProjectId } from "../models/userProjectModels.js";
 import { getTasksByProjectIdModel } from "../models/taskModels.js";
 import { getContributionsByProjectIdModel } from "../models/contributionModels.js";
+import { getCalendarEvents } from "../models/calendarModels.js";
+import { getNotesByProjectId } from "../models/konvaModels.js";
+import { getNotes } from "./konvaControllers.js";
 
 export function serveLanding(req, res, next) {
   try {
@@ -16,20 +19,37 @@ export function serveLanding(req, res, next) {
       cookieConsent: cookieConsent,
     });
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
 }
 
-export function serveWelcome(req, res, next) {
+export async function serveWelcome(req, res, next) {
   try {
-    res.render("welcome");
+    if (req.session.justAuthenticated) {
+      req.session.justAuthenticated = false;
+
+      res.redirect("/welcome");
+    } else if (req.user) {
+      const dbUserResult = await getUserByMicrosoftIdModel(
+        req.user.microsoftId,
+      );
+      const dbUser = dbUserResult.rows[0];
+
+      res.redirect(`/${dbUser.username}`);
+    } else {
+      res.redirect("/");
+    }
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
+}
+
+export function serveError(req, res, next) {
+  const error = req.query.err;
+
+  res.render("error", {
+    error: error,
+  });
 }
 
 export async function serveUserDash(req, res, next) {
@@ -49,9 +69,7 @@ export async function serveUserDash(req, res, next) {
       projects: projectsData,
     });
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
 }
 
@@ -67,9 +85,7 @@ export async function serveProfile(req, res, next) {
       userId: dbUser.user_id,
     });
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
 }
 
@@ -90,30 +106,62 @@ export async function serveProjects(req, res, next) {
       projects: projectsData,
     });
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
 }
 
-export async function serveProjectDash(req, res, next) {
+export async function serveProjectDash(req, res) {
   try {
     // get the user details
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult.rows[0];
 
+    // get the project konva notes
+    const notesResult = await getNotesByProjectId(req.params.project_id);
+    const notes = notesResult.rows;
+
+    // get project data
+    const projectResponse = await getProjectByIdModel(req.params.project_id);
+    const project = projectResponse.rows[0];
+
+    const rawDeadline = project.project_deadline;
+    let deadlineLabel = "No deadline set";
+
+    if (rawDeadline) {
+      const today = new Date();
+      today.setHours(0,0,0,0);
+
+      const deadlineDate = new Date(rawDeadline);
+      deadlineDate.setHours(0,0,0,0);
+
+      const daysLeft = Math.ceil(
+        (deadlineDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+      );
+
+      if (daysLeft > 0) {
+        deadlineLabel = `${daysLeft} day${daysLeft > 1 ? "s" : ""} left until deadline`;
+      } else if (daysLeft === 0) {
+        deadlineLabel = "Deadline is today!";
+      } else {
+        const daysOverdue = Math.abs(daysLeft);
+        deadlineLabel = `Deadline passed ${daysOverdue} day${daysOverdue > 1 ? "s" : ""} ago`;
+      }
+    }
+    
+
+
     res.render("projectDash", {
       name: req.user.firstName,
       username: req.params.username,
       userId: dbUser.user_id,
-      project: req.session.project,
-      projectName: req.session.project.project_name,
-      projectId: req.session.project.project_id,
+      notes: notes,
+      project: project,
+      projectName: project.project_name,
+      projectId: project.project_id,
+      deadlineLabel: deadlineLabel,
     });
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
 }
 
@@ -142,9 +190,7 @@ export async function serveProjectInfo(req, res, next) {
       projectMembers: groupUsersData,
     });
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
 }
 
@@ -172,14 +218,12 @@ export async function serveProjectTasks(req, res, next) {
       userId: dbUser.user_id,
       projectId: req.params.project_id,
       teamLeaderId: projectData.team_leader_id,
-      projectName: req.session.project.project_name,
+      projectName: projectData.project_name,
       tasks: tasksData,
       groupUsers: groupUsersData,
     });
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
 }
 
@@ -189,16 +233,22 @@ export async function serveProjectCalendar(req, res, next) {
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult.rows[0];
 
+    const projectResponse = await getProjectByIdModel(req.params.project_id);
+    const project = projectResponse.rows[0];
+
+    // get the calendar events
+    const events = await getCalendarEvents(req.user.accessToken);
+
     res.render("projectCalendar", {
       username: req.params.username,
       userId: dbUser.user_id,
-      projectId: req.session.project.project_id,
-      projectName: req.session.project.project_name,
+      project: project,
+      projectId: project.project_id,
+      projectName: project.project_name,
+      events: events.value,
     });
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
 }
 
@@ -231,25 +281,8 @@ export async function serveProjectChat(req, res, next) {
       groupUsers: groupUsersData,
     });
   } catch (err) {
-    res.render("error", {
-      error: err,
-    });
+    res.redirect("/error?err=" + encodeURIComponent(err));
   }
-}
-
-export async function serveProjectNotes(req, res, next) {
-  // get the user details
-  const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
-  const dbUser = dbUserResult.rows[0];
-
-  res.render("projectDash", {
-    name: req.user.firstName,
-    username: req.params.username,
-    userId: dbUser.user_id,
-    project: req.session.project,
-    project_id: req.session.project.project_id,
-    project_name: req.session.project.project_name,
-  });
 }
 
 export async function serveProjectContributions(req, res, next) {
@@ -258,23 +291,37 @@ export async function serveProjectContributions(req, res, next) {
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult.rows[0];
 
+    // get project details
+    const projectResponse = await getProjectByIdModel(req.params.project_id);
+    const project = projectResponse.rows[0];
+
     // get the contribution tasksData
     const contributionDataRaw = await getContributionsByProjectIdModel(
-      req.session.project.project_id,
+      project.project_id,
     );
     const contributionData = contributionDataRaw.rows[0];
 
     res.render("projectContributions", {
       username: req.params.username,
       userId: dbUser.user_id,
-      projectId: req.session.project.project_id,
-      projectName: req.session.project.project_name,
+      projectId: project.project_id,
+      projectName: project.project_name,
       contributionData: contributionData,
     });
   } catch (err) {
-    res.render("error", {
-      error: err,
+    res.redirect("/error?err=" + encodeURIComponent(err));
+  }
+}
+
+export async function serveProjectFiles(req, res, next) {
+  try {
+    res.render("projectFiles", {
+      username: req.params.username,
+      projectId: req.session.project.project_id,
+      projectName: req.session.project.project_name,
     });
+  } catch (err) {
+    res.render("error", { error: err });
   }
 }
 

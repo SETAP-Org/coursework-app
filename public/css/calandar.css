@@ -1,7 +1,7 @@
 .event-card {
     border: 1px solid #ccc;
     border-radius: 8px;
-    padding: 15px;
+    padding: 5px;
     margin: 10px 0;
     background: #fff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -30,4 +30,17 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    display: block;
+    margin: 12px auto 0;
+    text-align: center;
+}
+
+.event-card button {
+    display: block;
+    margin: 10px auto 0;
+}
+
+.event-card--deadline {
+    border-left: 4px solid #e05c00;
+    background: #fff8f5;
 }

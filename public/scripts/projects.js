@@ -1,22 +1,15 @@
-function daysUntil(dateString) {
-  if (!dateString) return null;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const d = new Date(dateString);
-  d.setHours(0, 0, 0, 0);
-  return Math.round((d - today) / (1000 * 60 * 60 * 24));
-}
+import { daysUntil } from "./utils.js";
 
 async function projects() {
-  // show loading screen
+  // Show loading screen
   const loading = document.querySelector(".loading");
   loading.style.display = "flex";
 
-  // ejs data
+  // Ejs data
   const { username } = window.scriptData;
   const projects = window.scriptData.projects;
 
-  // get the relevant dom elements
+  // Get relevant dom elements
   const projectsList = document.querySelector(".projects-list");
   const template = document.querySelector("#project-template");
   const dialog = document.getElementById("create-project-dialog");
@@ -25,12 +18,12 @@ async function projects() {
   const closeCreateNewFormButton = document.querySelector(".modal-close");
 
   try {
-    // update ui based on list of projects
+    // Update ui based on list of projects
     if (projects.length === 0) {
-      // if no projects in list...
+      // If no projects in list
       projectsList.innerHTML = "<li>No projects found.</li>";
     } else {
-      // otherwise, loop over the projects and clone the template to populate the list
+      // Otherwise, loop over the projects and clone the template to populate the list
       projects.forEach((project) => {
         const node = template.content.cloneNode(true);
         const section = node.querySelector(
@@ -82,22 +75,22 @@ async function projects() {
       });
     }
 
-    // event to open dialog when user clicks 'create new project'
+    // Event to open dialog when user clicks 'create new project'
     createProjectBtn.addEventListener("click", () => {
       dialog.showModal();
     });
 
-    // event to close dialog when you click the "X" on the dialog
+    // Event to close dialog when you click the "X" on the dialog
     closeCreateNewFormButton.addEventListener("click", () => {
       dialog.close();
     });
 
-    // event to close dialog box when clicking anywhere outside the form
+    // Event to close dialog box when clicking anywhere outside the form
     dialog.addEventListener("click", function (e) {
       if (e.target === this) this.close();
     });
 
-    // event listener to add project
+    // Event listener to add project
     dialogForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -108,6 +101,14 @@ async function projects() {
       const form = e.target;
       const name = form["project-name"].value;
       const deadline = form["project-deadline"].value;
+
+      const deadlineDate = new Date(deadline);
+
+      if (deadlineDate <= new Date()) {
+        alert("Project not created: Deadline must be in the future!");
+        loading.style.display = "none";
+        return;
+      }
 
       const res = await fetch("/api/projects/addProject", {
         method: "POST",
@@ -144,7 +145,7 @@ async function projects() {
       projectsList.innerHTML = "<li>Error loading projects.</li>";
   }
 
-  // hide loading screen
+  // Hide loading screen
   loading.style.display = "none";
 }
 
