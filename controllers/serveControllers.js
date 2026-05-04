@@ -90,7 +90,7 @@ export async function serveProjects(req, res, next) {
   }
 }
 
-export async function serveProjectDash(req, res, next) {
+export async function serveProjectDash(req, res) {
   try {
     res.render("projectDash", {
       name: req.user.firstName,

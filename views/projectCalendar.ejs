@@ -6,9 +6,15 @@
 
         <link rel="stylesheet" href="/css/root-dark.css"/>
         <link rel="stylesheet" href="/css/project_dash.css" />
+        <link rel="stylesheet" href="/css/calandar.css" />
         <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml" />
 
         <script src="/scripts/L&D-mode.js" defer></script>
+        <script>
+            window.scriptData = {
+                projectId: "<%= projectId %>"
+            };
+        </script>
 
         <title>GCMS | <%= projectName %> Calendar</title>
     </head>
@@ -32,7 +38,7 @@
                 <label for="event-description">Description</label>
                 <textarea id="event-description" rows="3" placeholder="Optional description"></textarea>
 
-                <button type="submit">Create Event</button>
+                <button type="submit" >Create Event</button>
             </form>
         </div>
 
