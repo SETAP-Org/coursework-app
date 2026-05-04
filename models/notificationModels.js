@@ -22,16 +22,16 @@ export async function postNotificationModel(user_id, project_id, notification_ty
                     const user = userResult.rows[0];
                     if (user.email_notifications && user.user_email) {
                         // Send email asynchronously without blocking the response
-                        console.log(`� Sending email notification to ${user.user_first_name} (${user.user_email}) for: ${notification_type}`);
+                        console.log(`Sending email notification to ${user.user_first_name} (${user.user_email}) for: ${notification_type}`);
                         sendNotificationEmail(
                             user.user_email,
                             user.user_first_name,
                             notification_message,
                             notification_type,
                             project_name
-                        ).catch(err => console.error('❌ Failed to send notification email:', err));
+                        ).catch(err => console.error('Failed to send notification email:', err));
                     } else {
-                        console.log(`📭 Email notifications disabled for ${user.user_first_name} (${user.user_email || 'no email'})`);
+                        console.log(`Email notifications disabled for ${user.user_first_name} (${user.user_email || 'no email'})`);
                     }
                 }
             } catch (emailError) {

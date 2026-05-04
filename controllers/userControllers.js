@@ -132,7 +132,7 @@ export async function updateEmailNotificationPreference(req, res) {
         if (data.rows[0]) {
             return res.status(200).json({
                 success: true,
-                message: "Email notification preference updated successfully",
+                message: "Email notification preference changed :)",
                 emailNotifications: data.rows[0].email_notifications
             });
         }

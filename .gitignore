@@ -3,3 +3,5 @@ node_modules/
 .env.development
 .env.session-secret
 .env.auth
+testEmail.mjs
+testNotifications.mjs
