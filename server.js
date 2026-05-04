@@ -44,6 +44,7 @@ import {
   updateUsername,
   getCurrentUser,
   getCurrentUserPhoto,
+  updateEmailNotificationPreference,
 } from "./controllers/userControllers.js";
 
 import {
@@ -312,6 +313,7 @@ app.get("/api/notifications/:user_id", fetchNotificationsByUserId);
 
 // ---- UPDATE ----
 app.put("/api/users/changeUsername", checkValidUsername, updateUsername);
+app.put("/api/users/emailPreference", updateEmailNotificationPreference);
 app.put(
   "/api/projects/:project_id/tasks/:task_id/updateStatus",
   loadProject,

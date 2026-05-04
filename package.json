@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env NODE_ENV=development node server.js --watch",
     "prod": "cross-env NODE_ENV=production node server.js --watch",
-    "install_db": "node node_scripts/install_db.js"
+    "install_db": "node node_scripts/install_db.js",
+    "email:test": "node testEmail.mjs",
+    "notification:test": "node testNotification.mjs"
   },
   "repository": {
     "type": "git",
@@ -30,6 +32,7 @@
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "konva": "^10.2.3",
+    "nodemailer": "^6.9.7",
     "passport": "^0.7.0",
     "passport-microsoft": "^2.1.0",
     "pg": "^8.19.0",

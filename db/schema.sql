@@ -30,6 +30,7 @@ CREATE TABLE USERS(
     date_created TIMESTAMPTZ,
     last_login TIMESTAMPTZ,
     username VARCHAR(20) UNIQUE,
+    email_notifications BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE PROJECTS(

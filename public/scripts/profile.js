@@ -13,8 +13,57 @@ async function loadProfile() {
   const usernameForm = document.querySelector(".username-form");
   const usernameDialog = document.querySelector(".username-dialog");
   const usernameDialogBtn = document.querySelector(".username-dialog-button");
+  const emailNotificationsToggle = document.querySelector(".email-notifications-toggle");
+  const emailNotificationMsg = document.querySelector(".email-notification-message");
   const regex = /^(?!^[0-9]+$)[a-zA-Z0-9]+$/;
   let usernameValue = "";
+
+  // Fetch current email notification preference
+  try {
+    const response = await fetch('/api/me');
+    const data = await response.json();
+    if (data.dbUser && data.dbUser.email_notifications !== undefined) {
+      emailNotificationsToggle.checked = data.dbUser.email_notifications;
+    }
+  } catch (err) {
+    console.error('Error fetching user preferences:', err);
+  }
+
+  // event listener for email notifications toggle
+  emailNotificationsToggle.addEventListener("change", async (e) => {
+    const emailNotifications = e.target.checked;
+    
+    try {
+      loading.style.display = "flex";
+      const response = await fetch('/api/users/emailPreference', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ emailNotifications })
+      });
+      const data = await response.json();
+
+      loading.style.display = "none";
+
+      if (data.success) {
+        emailNotificationMsg.innerText = "Email notification preference updated!";
+        emailNotificationMsg.style.color = "green";
+      } else {
+        emailNotificationMsg.innerText = data.message || "Error updating preference";
+        emailNotificationMsg.style.color = "red";
+        emailNotificationsToggle.checked = !emailNotifications; // Revert toggle
+      }
+
+      // Clear message after 3 seconds
+      setTimeout(() => {
+        emailNotificationMsg.innerText = "";
+      }, 3000);
+    } catch (err) {
+      console.error('Error updating email preference:', err);
+      emailNotificationMsg.innerText = "Error updating preference";
+      emailNotificationMsg.style.color = "red";
+      emailNotificationsToggle.checked = !emailNotifications; // Revert toggle
+    }
+  });
 
   // event listerer for input box
   usernameInput.addEventListener("input", (e) => {

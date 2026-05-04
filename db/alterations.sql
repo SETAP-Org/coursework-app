@@ -48,4 +48,6 @@ ALTER TABLE meeting_attendances
     FOREIGN KEY (meeting_id) REFERENCES meetings(meeting_id)
     ON DELETE CASCADE;
 
--- Further Alterations here...
+-- change users table, add email_notifications column
+--ALTER TABLE users
+--  ADD COLUMN IF NOT EXISTS email_notifications BOOLEAN DEFAULT TRUE;
