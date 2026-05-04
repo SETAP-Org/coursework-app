@@ -229,53 +229,15 @@ app.post("/api/tasks/addTask", addTask);
 
 app.post("/api/projects/user", addUserToProject);
 
+app.post("/api/notes", saveNote);
+
+app.post("/api/calendar/events", checkIfLoggedInCalendar, addEvent);
+
 // potentially dont need...
 // app.post("/api/notifications", addNotification);
 
 // ---- READ ----
-// ---- API ROUTES FOR calandar EVENTS ----
-app.get("/api/calendar/events", checkIfLoggedInCalendar, getEvent);
-
-app.post("/api/calendar/events", checkIfLoggedInCalendar, addEvent);
-
-app.delete(
-  "/api/calendar/events/:eventId",
-  checkIfLoggedInCalendar,
-  removeEvent,
-);
-
-app.delete(
-  "/api/projects/:project_id/tasks/:task_id",
-  loadProject,
-  checkMembership,
-  deleteTask,
-);
-
-// ---- API ROUTES FOR NOTES ----
-app.post(
-  "/:username/projects/:project_id/save",
-  checkIfLoggedInRedirect,
-  loadProject,
-  saveNote,
-);
-
-app.post(
-  "/:username/projects/:project_id/delete",
-  checkIfLoggedInRedirect,
-  loadProject,
-  deleteNote,
-);
-
-app.get(
-  "/:username/projects/:project_id/notes",
-  checkIfLoggedInRedirect,
-  loadProject,
-  getNotes,
-);
-
 app.get("/:username/projects/:project_id", checkMembership, serveProjectDash);
-
-//---- READ ----
 
 app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
 
@@ -306,8 +268,11 @@ app.get("/api/chat", getMessages);
 
 app.get("/api/notifications/:user_id", fetchNotificationsByUserId);
 
+app.get("/api/calendar/events", checkIfLoggedInCalendar, getEvent);
+
 // ---- UPDATE ----
 app.put("/api/users/changeUsername", checkValidUsername, updateUsername);
+
 app.put(
   "/api/projects/:project_id/tasks/:task_id/updateStatus",
   loadProject,
@@ -323,6 +288,21 @@ app.delete("/api/projects/user", removeUserFromProject);
 app.delete("/api/projects/:project_id", removeProject);
 
 app.delete("/api/notifications/:notification_id", removeNotification);
+
+app.delete(
+  "/api/calendar/events/:eventId",
+  checkIfLoggedInCalendar,
+  removeEvent,
+);
+
+app.delete(
+  "/api/projects/:project_id/tasks/:task_id",
+  loadProject,
+  checkMembership,
+  deleteTask,
+);
+
+app.delete("/api/notes/:note_id", deleteNote);
 
 // assigning the server to a port so that requests can be made
 server.listen(port, () => {
