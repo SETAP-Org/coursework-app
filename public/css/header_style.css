@@ -5,7 +5,6 @@
     font-family: "Poppins", sans-serif;
 }
 
-
 .Dashboard-header {
     display: flex;
     align-items: center;
@@ -13,7 +12,7 @@
     position: relative;
     width: 100%;
     min-height: 60px;
-    padding: 10px 24px;
+    padding: 2px 24px;
     background:
         radial-gradient(
             900px 500px at 10% 10%,
@@ -97,6 +96,12 @@
 
 .Dashboard-links:hover {
     color: var(--accent);
+}
+
+#projects-button img {
+    display: block;
+    width: 80px;
+    height: 80px;
 }
 
 .profile-nav-button {
