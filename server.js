@@ -97,6 +97,12 @@ import {
 
 import { getProjectContributions } from "./controllers/contributionControllers.js";
 
+import {
+  postAiChatMessage,
+  getAiChatMessages,
+  clearAiChatHistory,
+} from "./controllers/aiChatControllers.js";
+
 // util imports
 import createSession from "./utils/session.js";
 import setUpAuth from "./utils/auth.js";
@@ -343,6 +349,28 @@ app.get("/api/contributions/:project_id", getProjectContributions);
 app.get("/api/chat", getMessages);
 
 app.get("/api/notifications/:user_id", fetchNotificationsByUserId);
+
+// ---- AI Chat Assistant Routes ----
+app.get(
+  "/api/projects/:project_id/ai-chat",
+  loadProject,
+  checkMembership,
+  getAiChatMessages,
+);
+
+app.post(
+  "/api/projects/:project_id/ai-chat",
+  loadProject,
+  checkMembership,
+  postAiChatMessage,
+);
+
+app.delete(
+  "/api/projects/:project_id/ai-chat",
+  loadProject,
+  checkMembership,
+  clearAiChatHistory,
+);
 
 // ---- UPDATE ----
 app.put("/api/users/changeUsername", checkValidUsername, updateUsername);
