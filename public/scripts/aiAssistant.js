@@ -138,10 +138,12 @@
             const res = await fetch(`/api/projects/${projectId}/ai-chat`, {
                 method: "GET",
                 credentials: "same-origin",
+                cache: "no-store",
             });
             if (!res.ok) throw new Error(`status ${res.status}`);
 
-            const payload = await res.json();
+            const payload = await
+                res.json();
             messagesEl.innerHTML = "";
 
             if (!payload.messages || payload.messages.length === 0) {

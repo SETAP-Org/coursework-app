@@ -71,7 +71,7 @@ import {
   addUserToProject,
 } from "./controllers/userProjectControllers.js";
 
-import { 
+import {
   addFileMetadata,
   getFileMetadata,
   initFileUpload,
@@ -228,7 +228,7 @@ app.get(
   serveProjectContributions,
 );
 
-app.get( "/:username/projects/:project_id/files",
+app.get("/:username/projects/:project_id/files",
   checkIfLoggedInRedirect,
   loadProject,
   checkMembership,
@@ -311,6 +311,29 @@ app.get(
   getNotes,
 );
 
+// ---- AI Chat Assistant Routes ----
+app.get(
+  "/api/projects/:project_id/ai-chat",
+  loadProject,
+  checkMembership,
+  getAiChatMessages,
+);
+
+app.post(
+  "/api/projects/:project_id/ai-chat",
+  loadProject,
+  checkMembership,
+  postAiChatMessage,
+);
+
+app.delete(
+  "/api/projects/:project_id/ai-chat",
+  loadProject,
+  checkMembership,
+  clearAiChatHistory,
+);
+
+
 app.get(
   "/:username/projects/:project_id/:page",
   checkMembership,
@@ -350,27 +373,6 @@ app.get("/api/chat", getMessages);
 
 app.get("/api/notifications/:user_id", fetchNotificationsByUserId);
 
-// ---- AI Chat Assistant Routes ----
-app.get(
-  "/api/projects/:project_id/ai-chat",
-  loadProject,
-  checkMembership,
-  getAiChatMessages,
-);
-
-app.post(
-  "/api/projects/:project_id/ai-chat",
-  loadProject,
-  checkMembership,
-  postAiChatMessage,
-);
-
-app.delete(
-  "/api/projects/:project_id/ai-chat",
-  loadProject,
-  checkMembership,
-  clearAiChatHistory,
-);
 
 // ---- UPDATE ----
 app.put("/api/users/changeUsername", checkValidUsername, updateUsername);

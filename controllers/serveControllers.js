@@ -268,16 +268,16 @@ export async function serveProjectNotes(req, res, next) {
   const dbUser = dbUserResult.rows[0];
 
   const isTeamLeader =
-  req.session.project &&
-  req.session.project.team_leader_id === dbUser.user_id;
+    req.session.project &&
+    req.session.project.team_leader_id === dbUser.user_id;
 
   res.render("projectDash", {
     name: req.user.firstName,
     username: req.params.username,
     userId: dbUser.user_id,
     project: req.session.project,
-    project_id: req.session.project.project_id,
-    project_name: req.session.project.project_name,
+    projectId: req.session.project.project_id,
+    projectName: req.session.project.project_name,
     isTeamLeader,
   });
 }

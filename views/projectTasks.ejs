@@ -1,136 +1,133 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <link rel="stylesheet" href="/css/root-dark.css"/>
-        <link rel="stylesheet" href="/css/project_tasks.css" />
-        <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml" />
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <script>
-            window.scriptData = {
-                userId: "<%= userId %>",
-                projectId: "<%= projectId %>",
-                projectName: "<%= projectName %>",
-                groupUsers: <%- JSON.stringify(groupUsers) %>,
-                tasks: <%- JSON.stringify(tasks) %>,
-                teamLeaderId: "<%= teamLeaderId %>",
-                username: "<%= username %>",
-                isTeamLeader: <%= typeof isTeamLeader !== 'undefined' && isTeamLeader ? 'true' : 'false' %>
+    <link rel="stylesheet" href="/css/root-dark.css" />
+    <link rel="stylesheet" href="/css/project_tasks.css" />
+    <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml" />
+
+    <script>
+        window.scriptData = {
+            userId: "<%= userId %>",
+            projectId: "<%= projectId %>",
+            projectName: "<%= projectName %>",
+            groupUsers: <% - JSON.stringify(groupUsers) %>,
+            tasks: <% - JSON.stringify(tasks) %>,
+            teamLeaderId: "<%= teamLeaderId %>",
+            username: "<%= username %>",
+            isTeamLeader: <%= typeof isTeamLeader !== 'undefined' && isTeamLeader ? 'true' : 'false' %>
             };
-        </script>
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="/scripts/L&D-mode.js" defer></script>
-        <script src="/scripts/projectTasks.js" defer></script>
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/scripts/L&D-mode.js" defer></script>
+    <script src="/scripts/projectTasks.js" defer></script>
 
-        <title>GCMS | <%= projectName %> Tasks</title>
-    </head>
-    <body>
-        <%- include('partials/userNav') %>
+    <title>GCMS | <%= projectName %> Tasks</title>
+</head>
+
+<body>
+    <%- include('partials/userNav') %>
         <%- include('partials/projectNav') %>
 
-        <section id="page-content">
-            <section class="page-header">
-                <h1 id="page-title">Tasks</h1>
-                <% if (userId == teamLeaderId) { %>
-                    <button id="new-task-button">New Task</button>
-                <% } %>
-            </section>
-            <section id="task-panel">
-                <ul id="task-list"></ul>
-            </section>
-        </section>
-
-        <template id="task-template">
-            <section class="task-card-individual">
-                <span class="task-weight" aria-hidden="true"></span>
-                <!-- Top group: title + description -->
-                <div class="card-top">
-                    <label class="task-checkbox-label">
-                        <b class="task-name"></b>
-                        <input type="checkbox" class="task-complete-checkbox" />
-                    </label>
-                    <p class="task-desc"></p>
-
-                    <!-- Delete button, shown to team leader only via JS -->
-                    <button type="button" class="task-delete-button" title="Delete task" aria-label="Delete task" style="display:none;">
-                        <svg class="icon-trash" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false" role="img">
-                            <path d="M9 3h6a1 1 0 0 1 1 1v1h3a1 1 0 1 1 0 2h-1v11a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7H2a1 1 0 1 1 0-2h3V4a1 1 0 0 1 1-1zm1 4a1 1 0 0 0-1 1v8a1 1 0 1 0 2 0V8a1 1 0 0 0-1-1zm4 0a1 1 0 0 0-1 1v8a1 1 0 1 0 2 0V8a1 1 0 0 0-1-1z"/>
-                        </svg>
-                    </button>
-                </div>
-
-                <!-- Bottom group: headers + values (assignee left, date right) -->
-                <div class="card-bottom">
-                    <div class="card-bottom-col card-bottom-left">
-                        <span class="card-bottom-header">ASSIGNEE</span>
-                        <em class="task-assignee"></em>
-                    </div>
-                    <div class="card-bottom-col card-bottom-right">
-                        <span class="card-bottom-header">DUE</span>
-                        <em class="task-date"></em>
-                    </div>
-                </div>
-            </section>
-        </template>
-
-
-        <!-- Popup for creating new task -->
-        <dialog id="create-task-dialog">
-            <button class="modal-close" onclick="toggleNewTaskForm()">
-                X
-            </button>
-            <form method="dialog">
-                <h1>Create Task</h1>
-                <label>
-                    Title
-                    <input
-                        type="text"
-                        placeholder="e.g. My Task"
-                        name="taskTitle"
-                        required
-                    />
-                </label>
-                <label>
-                    Description
-                    <input
-                        type="text"
-                        placeholder="e.g. This is a task"
-                        name="taskDesc"
-                        required
-                    />
-                </label>
-                <label>
-                    Deadline
-                    <input type="date" name="taskDeadline" required />
-                </label>
-                <label>
-                    Weighting
-                    <div class="range-row">
-                    <input id="taskWeightRange" type="range" name="taskWeight" min=1 max=10 value=1 required />
-                    <output id="taskWeightValue" class="range-value" for="taskWeightRange">1</output>
-                    </div>
-                </label>
-                <label>
-                    Member
-                    <select name = "taskAssignee" required>
-                        <% if (groupUsers && groupUsers.length) { %>
-                                <% groupUsers.forEach(function(user) { %>
-                                <option value="<%= user.user_id %>"><%= user.username %></option>
-                                <% }) %>
-                            <% } else { %>
-                                <option disabled>No members in project</option>
+            <section id="page-content">
+                <section class="page-header">
+                    <h1 id="page-title">Tasks</h1>
+                    <% if (userId==teamLeaderId) { %>
+                        <button id="new-task-button">New Task</button>
                         <% } %>
-                    </select>
-                </label>
-                <button type="submit">Create Task</button>
-            </form>
-        </dialog>
+                </section>
+                <section id="task-panel">
+                    <ul id="task-list"></ul>
+                </section>
+            </section>
 
-        <%- include('partials/footer') %>
+            <template id="task-template">
+                <section class="task-card-individual">
+                    <span class="task-weight" aria-hidden="true"></span>
+                    <!-- Top group: title + description -->
+                    <div class="card-top">
+                        <label class="task-checkbox-label">
+                            <b class="task-name"></b>
+                            <input type="checkbox" class="task-complete-checkbox" />
+                        </label>
+                        <p class="task-desc"></p>
 
-        <%- iclude('partials/aiAssistant') %>
+                        <!-- Delete button, shown to team leader only via JS -->
+                        <button type="button" class="task-delete-button" title="Delete task" aria-label="Delete task"
+                            style="display:none;">
+                            <svg class="icon-trash" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet"
+                                aria-hidden="true" focusable="false" role="img">
+                                <path
+                                    d="M9 3h6a1 1 0 0 1 1 1v1h3a1 1 0 1 1 0 2h-1v11a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7H2a1 1 0 1 1 0-2h3V4a1 1 0 0 1 1-1zm1 4a1 1 0 0 0-1 1v8a1 1 0 1 0 2 0V8a1 1 0 0 0-1-1zm4 0a1 1 0 0 0-1 1v8a1 1 0 1 0 2 0V8a1 1 0 0 0-1-1z" />
+                            </svg>
+                        </button>
+                    </div>
 
-        <%- include('partials/loading') %>
-    </body>
+                    <!-- Bottom group: headers + values (assignee left, date right) -->
+                    <div class="card-bottom">
+                        <div class="card-bottom-col card-bottom-left">
+                            <span class="card-bottom-header">ASSIGNEE</span>
+                            <em class="task-assignee"></em>
+                        </div>
+                        <div class="card-bottom-col card-bottom-right">
+                            <span class="card-bottom-header">DUE</span>
+                            <em class="task-date"></em>
+                        </div>
+                    </div>
+                </section>
+            </template>
+
+
+            <!-- Popup for creating new task -->
+            <dialog id="create-task-dialog">
+                <button class="modal-close" onclick="toggleNewTaskForm()">
+                    X
+                </button>
+                <form method="dialog">
+                    <h1>Create Task</h1>
+                    <label>
+                        Title
+                        <input type="text" placeholder="e.g. My Task" name="taskTitle" required />
+                    </label>
+                    <label>
+                        Description
+                        <input type="text" placeholder="e.g. This is a task" name="taskDesc" required />
+                    </label>
+                    <label>
+                        Deadline
+                        <input type="date" name="taskDeadline" required />
+                    </label>
+                    <label>
+                        Weighting
+                        <div class="range-row">
+                            <input id="taskWeightRange" type="range" name="taskWeight" min=1 max=10 value=1 required />
+                            <output id="taskWeightValue" class="range-value" for="taskWeightRange">1</output>
+                        </div>
+                    </label>
+                    <label>
+                        Member
+                        <select name="taskAssignee" required>
+                            <% if (groupUsers && groupUsers.length) { %>
+                                <% groupUsers.forEach(function(user) { %>
+                                    <option value="<%= user.user_id %>">
+                                        <%= user.username %>
+                                    </option>
+                                    <% }) %>
+                                        <% } else { %>
+                                            <option disabled>No members in project</option>
+                                            <% } %>
+                        </select>
+                    </label>
+                    <button type="submit">Create Task</button>
+                </form>
+            </dialog>
+
+            <%- include('partials/footer') %>
+
+                <%- include('partials/aiAssistant') %>
+
+                    <%- include('partials/loading') %>
+</body>
