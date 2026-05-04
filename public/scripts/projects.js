@@ -1,12 +1,4 @@
-// Find number of days between given date and current date
-function daysUntil(dateString) {
-  if (!dateString) return null;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const d = new Date(dateString);
-  d.setHours(0, 0, 0, 0);
-  return Math.round((d - today) / (1000 * 60 * 60 * 24));
-}
+import { daysUntil } from "./utils.js";
 
 async function projects() {
   // Show loading screen
