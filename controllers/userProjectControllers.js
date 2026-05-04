@@ -1,4 +1,4 @@
-import { deleteUserFromProjectModel } from "../models/userProjectModels.js";
+import { deleteUserFromProjectModel, postUserToProjectModel } from "../models/userProjectModels.js";
 import { getUserByUsernameModel } from "../models/userModels.js";
 
 // function to remove a user from a project
@@ -43,12 +43,13 @@ export async function addUserToProject(req, res, next) {
             })
         }
 
-        const data = await postUserToProjectModel(userId, projectId);
+        const data = await postUserToProjectModel(userData.rows[0].user_id, projectId);
 
-        if (data.rows[0].length > 0) {
+        if (data.rows.length > 0) {
             res.status(200).json({
                 success: true,
-                message: "User successfully added to the project!"
+                message: "User successfully added to the project!",
+                userId: userData.rows[0].user_id
             })
         } else {
             res.status(400).json({

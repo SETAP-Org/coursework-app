@@ -23,9 +23,14 @@ async function projectChat() {
     loading.style.display = "flex";
 
     // ejs variables
-    const { userId, projectId, projectName } = window.scriptData;
-    const messages = window.scriptData.messages;
-    const groupUsers = window.scriptData.groupUsers;
+    const {
+        userId,
+        username,
+        projectId,
+        projectName,
+        messages,
+        groupUsers
+    } = window.scriptData;
 
     // get a hold of the elements that you are trying to access
     const messageForm = document.querySelector(".chat-form");
@@ -87,6 +92,7 @@ async function projectChat() {
     messageForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
+        // send the message
         loading.style.display = "flex";
         messageFieldSet.disabled = true;
 
@@ -98,6 +104,17 @@ async function projectChat() {
 
         messageFieldSet.disabled = false;
         messageBox.value = "";
+
+        // create notifications for other group members
+        socket.emit('notification', {
+            targetUsers: groupUsers
+                .filter(u => u.user_id !== userId)
+                .map(u => u.user_id),
+            projectId: projectId,
+            notificationType: "Message",
+            notificationMessage: `${username} sent a new message in ${projectName}`,
+        });
+
         loading.style.display = "none";
     })
     
@@ -108,16 +125,14 @@ async function projectChat() {
         else sendBtn.disabled = false;
     })
 
-    // send button event listener
-    sendBtn.addEventListener("click", () => {
-
-    })
-
     // handling messages incoming from socket io
     socket.on('chat', (message) => {
         if (message.project_id == projectId) {
             // show loading screen
             loading.style.display = "flex";
+
+            // getting the username of the sender
+            const senderUsername = groupUsers.find(u => u.user_id === message.sender_id).username;
 
             // creating the elements
             const container = document.createElement("div");
@@ -130,7 +145,7 @@ async function projectChat() {
             content.innerText = message.message_content
 
             if (message.sender_id != userId) {
-                infoTop.innerText = `Sent by ${message.sender_id}`
+                infoTop.innerText = `Sent by ${senderUsername}`;
                 container.className = "message-container-left";
                 infoTop.className = "message-info-left";
                 infoBottom.className = "message-info-left";

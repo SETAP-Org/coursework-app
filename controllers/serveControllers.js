@@ -6,8 +6,7 @@ import {
 import { getMessagesByProjectIdModel } from "../models/chatModels.js";
 import { getUsersByProjectId } from "../models/userProjectModels.js";
 import { getTasksByProjectIdModel } from "../models/taskModels.js";
-
-const __dirname = import.meta.dirname;
+import { getContributionsByProjectIdModel } from "../models/contributionModels.js";
 
 export function serveLanding(req, res, next) {
   try {
@@ -46,6 +45,7 @@ export async function serveUserDash(req, res, next) {
     res.render("userDash", {
       userFirstName: req.user.firstName,
       username: req.params.username,
+      userId: dbUser.user_id,
       projects: projectsData,
     });
   } catch (err) {
@@ -57,9 +57,14 @@ export async function serveUserDash(req, res, next) {
 
 export async function serveProfile(req, res, next) {
   try {
+    // get the user details
+    const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+    const dbUser = dbUserResult.rows[0];
+
     res.render("profile", {
       userFirstName: req.user.firstName,
       username: req.params.username,
+      userId: dbUser.user_id,
     });
   } catch (err) {
     res.render("error", {
@@ -81,6 +86,7 @@ export async function serveProjects(req, res, next) {
     res.render("projects", {
       userFirstName: req.user.firstName,
       username: req.params.username,
+      userId: dbUser.user_id,
       projects: projectsData,
     });
   } catch (err) {
@@ -92,9 +98,14 @@ export async function serveProjects(req, res, next) {
 
 export async function serveProjectDash(req, res, next) {
   try {
+    // get the user details
+    const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+    const dbUser = dbUserResult.rows[0];
+
     res.render("projectDash", {
       name: req.user.firstName,
       username: req.params.username,
+      userId: dbUser.user_id,
       project: req.session.project,
       projectName: req.session.project.project_name,
       projectId: req.session.project.project_id,
@@ -158,6 +169,7 @@ export async function serveProjectTasks(req, res, next) {
     res.render("projectTasks", {
       userId: dbUser.user_id,
       username: req.params.username,
+      userId: dbUser.user_id,
       projectId: req.params.project_id,
       teamLeaderId: projectData.team_leader_id,
       projectName: req.session.project.project_name,
@@ -173,8 +185,13 @@ export async function serveProjectTasks(req, res, next) {
 
 export async function serveProjectCalendar(req, res, next) {
   try {
+    // get the user details
+    const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+    const dbUser = dbUserResult.rows[0];
+
     res.render("projectCalendar", {
       username: req.params.username,
+      userId: dbUser.user_id,
       projectId: req.session.project.project_id,
       projectName: req.session.project.project_name,
     });
@@ -221,9 +238,14 @@ export async function serveProjectChat(req, res, next) {
 }
 
 export async function serveProjectNotes(req, res, next) {
+  // get the user details
+  const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+  const dbUser = dbUserResult.rows[0];
+
   res.render("projectDash", {
     name: req.user.firstName,
     username: req.params.username,
+    userId: dbUser.user_id,
     project: req.session.project,
     project_id: req.session.project.project_id,
     project_name: req.session.project.project_name,
@@ -232,10 +254,22 @@ export async function serveProjectNotes(req, res, next) {
 
 export async function serveProjectContributions(req, res, next) {
   try {
+    // get the user details
+    const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+    const dbUser = dbUserResult.rows[0];
+
+    // get the contribution tasksData
+    const contributionDataRaw = await getContributionsByProjectIdModel(
+      req.session.project.project_id,
+    );
+    const contributionData = contributionDataRaw.rows[0];
+
     res.render("projectContributions", {
       username: req.params.username,
+      userId: dbUser.user_id,
       projectId: req.session.project.project_id,
       projectName: req.session.project.project_name,
+      contributionData: contributionData,
     });
   } catch (err) {
     res.render("error", {

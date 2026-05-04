@@ -17,6 +17,7 @@
             window.scriptData = {
                 userFirstName: "<%= userFirstName %>",
                 username: "<%= username %>",
+                userId: "<%= userId %>",
                 projects: <%- JSON.stringify(projects) %>
             };
         </script>
@@ -32,9 +33,22 @@
 
         <template id="project-template">
             <section class="user-dash-project-card-individual">
-                <div id="project-info">
+                <div class="project-info">
                     <b class="project-name"></b>
-                    <span class="project-date"></span>
+
+                    <!-- meta: compact single-line layout with two stacked columns -->
+                    <div class="project-meta" aria-hidden="false">
+                        <div class="meta-columns">
+                            <div class="meta-col">
+                                <span class="card-bottom-header">DUE</span>
+                                <span class="project-date"></span>
+                            </div>
+                            <div class="meta-col">
+                                <span class="card-bottom-header">Created by</span>
+                                <span class="project-creator"></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <a href="" class="project-dash-button">Go to project</a>
             </section>

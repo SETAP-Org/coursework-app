@@ -1,16 +1,25 @@
+const socket = io();
+
 function toggleNewTaskForm() {
   const dialog = document.getElementById("create-task-dialog");
   dialog.open ? dialog.close() : dialog.showModal();
 }
 
-function showTasks() {
-  // show loading screen
-  const loading = document.querySelector(".loading");
-  loading.style.display = "flex";
+function daysUntil(dateString) {
+  if (!dateString) return null;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const d = new Date(dateString);
+  d.setHours(0, 0, 0, 0);
+  const diff = d - today;
+  return Math.round(diff / (1000 * 60 * 60 * 24));
+}
 
+function showTasks() {
   const tasks = window.scriptData.tasks || [];
   const groupUsers = window.scriptData.groupUsers || [];
   const user_id = window.scriptData.userId;
+  const teamLeaderId = window.scriptData.teamLeaderId;
 
   const userMap = new Map(groupUsers.map((u) => [u.user_id, u.username]));
 
@@ -48,6 +57,9 @@ function showTasks() {
     const taskDeadline = section.querySelector(".task-date");
     const taskAssignee = section.querySelector(".task-assignee");
     const checkbox = section.querySelector(".task-complete-checkbox");
+    const deleteBtn = section.querySelector(".task-delete-button");
+
+    const days = daysUntil(task.task_deadline);
 
     const deadline = new Date(task.task_deadline);
     const formatted_deadline = deadline.toLocaleDateString("en-GB", {
@@ -78,10 +90,29 @@ function showTasks() {
       checkbox.disabled = true;
     }
 
+    // Show delete button only for team leader
+    if (String(teamLeaderId) === String(user_id)) {
+      deleteBtn.style.display = ""; // visible
+      deleteBtn.dataset.taskId = task.task_id;
+    } else {
+      deleteBtn.style.display = "none";
+    }
+
     if (task.task_status === "Completed") {
       section.classList.add("task-completed");
     } else {
       section.classList.remove("task-completed");
+    }
+
+    if (task.task_status !== "Completed" && days !== null) {
+      if (days < 0) {
+        section.classList.add("deadline-overdue");
+        taskDeadline.classList.add("deadline-overdue");
+      } else if (days <= 1) {
+        // within 1 day -> amber for tasks
+        section.classList.add("deadline-warning");
+        taskDeadline.classList.add("deadline-warning");
+      }
     }
 
     const li = document.createElement("li");
@@ -89,29 +120,28 @@ function showTasks() {
     li.appendChild(section);
     main_list.appendChild(li);
   });
-  // hide loading screen
-  loading.style.display = "none";
 }
 
 const teamLeaderId = window.scriptData.teamLeaderId;
 const userId = window.scriptData.userId;
 
 if (teamLeaderId === userId) {
-  document
-    .querySelector("#new-task-button")
-    .addEventListener("click", toggleNewTaskForm);
+  const newTaskBtn = document.querySelector("#new-task-button");
+  if (newTaskBtn) {
+    newTaskBtn.addEventListener("click", toggleNewTaskForm);
+  }
 }
 
-document
-  .querySelector("#create-task-dialog")
-  .addEventListener("click", function (e) {
+const createTaskDialog = document.querySelector("#create-task-dialog");
+if (createTaskDialog) {
+  createTaskDialog.addEventListener("click", function (e) {
     if (e.target === this) this.close();
   });
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   // Elements and data queried after DOM is ready
   const dialogForm = document.querySelector("#create-task-dialog form");
-  const loading = document.querySelector(".loading");
   const { username } = window.scriptData || {};
 
   // Weight range UI
@@ -133,8 +163,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   dialogForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-
-    if (loading) loading.style.display = "flex";
 
     const form = e.target;
     const title = form["taskTitle"]?.value;
@@ -162,6 +190,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (res.ok) {
         if (data.success) {
+          if (assignee !== window.scriptData.userId) {
+            socket.emit('notification', {
+                  targetUsers: [assignee],
+                  projectId: window.scriptData.projectId,
+                  notificationType: "Task",
+                  notificationMessage: `You have been assigned a task in ${window.scriptData.projectName}`,
+            });
+          }
+
           document.getElementById("create-task-dialog").close();
           form.reset();
 
@@ -185,8 +222,6 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       console.error("Error creating task:", err);
       alert("An unexpected error occurred creating the task.");
-    } finally {
-      if (loading) loading.style.display = "none";
     }
   });
 });
@@ -244,6 +279,52 @@ document.querySelector("#task-list").addEventListener("change", async (e) => {
   } finally {
     // Re-enable (safe even if the element was re-rendered)
     cb.disabled = false;
+  }
+});
+
+// NEW: handle delete clicks via event delegation
+document.querySelector("#task-list").addEventListener("click", async (e) => {
+  const btn = e.target.closest(".task-delete-button");
+  if (!btn) return;
+
+  const confirmed = window.confirm("Delete this task? This cannot be undone.");
+  if (!confirmed) return;
+
+  const taskId = btn.dataset.taskId;
+  const projectId = window.scriptData.projectId;
+  if (!taskId || !projectId) {
+    alert("Missing task or project id.");
+    return;
+  }
+
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(
+      `/api/projects/${encodeURIComponent(projectId)}/tasks/${encodeURIComponent(taskId)}`,
+      {
+        method: "DELETE",
+      },
+    );
+
+    const data = await res.json().catch(() => ({}));
+
+    if (res.ok && data.success) {
+      // Remove task from in-memory list and re-render
+      const tasks = window.scriptData.tasks || [];
+      const idx = tasks.findIndex((t) => String(t.task_id) === String(taskId));
+      if (idx !== -1) {
+        tasks.splice(idx, 1);
+      }
+      showTasks();
+    } else {
+      alert(data.error || "Failed to delete task.");
+    }
+  } catch (err) {
+    console.error("Error deleting task:", err);
+    alert("An unexpected error occurred deleting the task.");
+  } finally {
+    btn.disabled = false;
   }
 });
 

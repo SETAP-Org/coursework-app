@@ -1,3 +1,4 @@
+/* ========== Page layout ========== */
 body {
     height: 100vh;
     display: flex;
@@ -10,6 +11,8 @@ body {
     align-items: center;
     padding: 32px 0 0 0;
 }
+
+/* container for the projects card */
 .projects-outer-container {
     display: flex;
     flex: 1;
@@ -30,6 +33,8 @@ body {
     box-shadow: var(--shadow);
     overflow: hidden;
 }
+
+/* list */
 .projects-list {
     list-style: none;
     width: 100%;
@@ -37,33 +42,161 @@ body {
     margin: 0;
     overflow: auto;
 }
+
+/* row */
 .project-list-item {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    height: 70px;
     display: flex;
-    justify-content: center;
     align-items: center;
-}
-.user-dash-project-card-individual {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-}
-.project-date {
-    margin-left: 10px;
-    opacity: 0.7;
-    font-size: 0.9rem;
+    min-height: 64px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
 }
 
-section > a {
+/* content inside row */
+.user-dash-project-card-individual {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 1rem;
+    gap: 1rem;
+    z-index: 1;
+}
+
+/* ---- NEW: group title+meta on the left, button on the right ---- */
+.project-info {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    flex: 0 1 auto;
+    min-width: 0;
+}
+
+/* action button pinned right */
+.project-dash-button {
+    margin-left: auto;
     color: white;
     text-decoration: none;
-    border-radius: var(--radius);
-    font-size: 0.9em;
+    border-radius: 12px;
+    font-size: 0.9rem;
     background: var(--card);
     border: var(--border);
-    padding: 7.5px;
-    box-shadow: 0 px5 10px rgba(0, 0, 0, 0.35);
+    padding: 7px 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* title */
+.project-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0;
+    max-width: calc(60vw);
+    min-width: 0;
+}
+
+/* meta (immediately to the right of the title) */
+.project-meta {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-left: 0.9rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* small label (compact) */
+.card-bottom-header {
+    font-size: 0.62rem;
+    letter-spacing: 0.06rem;
+    opacity: 0.85;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: rgba(233, 238, 252, 0.72);
+    line-height: 1;
+    margin: 0 0 3px 0;
+}
+
+/* meta columns inline, label above value */
+.meta-columns {
+    display: flex;
+    flex-direction: row;
+    gap: 1.2rem;
+    align-items: flex-start;
+    white-space: nowrap;
+}
+
+.meta-col {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    align-items: flex-start;
+}
+
+/* values */
+.project-date,
+.project-creator {
+    font-size: 0.92rem;
+    color: var(--text);
+    opacity: 0.95;
+    line-height: 1;
+    margin: 0;
+}
+
+/* urgency */
+.project-list-item.deadline-overdue .card-bottom-header,
+.project-list-item.deadline-overdue .project-date,
+.project-list-item.deadline-overdue .project-creator,
+.project-list-item.deadline-overdue .project-name {
+    color: #ff4d4f;
+    font-weight: 700;
+}
+.project-list-item.deadline-warning .card-bottom-header,
+.project-list-item.deadline-warning .project-date,
+.project-list-item.deadline-warning .project-creator,
+.project-list-item.deadline-warning .project-name {
+    color: #ffb400;
+    font-weight: 700;
+}
+
+/* overlay tints */
+.project-list-item.deadline-overdue::before,
+.project-list-item.deadline-warning::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+.project-list-item.deadline-overdue::before {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 77, 79, 0) 0%,
+        rgba(255, 77, 79, 0.05) 20%,
+        rgba(255, 77, 79, 0.05) 80%,
+        rgba(255, 77, 79, 0) 100%
+    );
+}
+.project-list-item.deadline-warning::before {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 191, 0, 0) 0%,
+        rgba(255, 191, 0, 0.05) 20%,
+        rgba(255, 191, 0, 0.05) 80%,
+        rgba(255, 191, 0, 0) 100%
+    );
+}
+
+/* responsive */
+@media (max-width: 900px) {
+    .meta-columns {
+        gap: 0.35rem;
+    }
+    .project-name {
+        max-width: calc(40vw);
+    }
+    .project-dash-button {
+        padding: 6px 10px;
+    }
 }

@@ -1,3 +1,4 @@
+/* ========== Create project dialog ========== */
 #create-project-dialog {
     position: fixed;
     top: 50%;
@@ -5,7 +6,7 @@
     translate: -50% -50%;
     font-family: var(--font);
     color: var(--text);
-    background: rgba(11, 18, 32, 0.25); /* more transparent = glass shows */
+    background: rgba(11, 18, 32, 0.25);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     backdrop-filter: blur(20px) saturate(180%);
     border: var(--border);
@@ -14,24 +15,20 @@
     min-width: 320px;
     box-shadow: var(--shadow);
 }
-
 #create-project-dialog::backdrop {
     background: rgba(0, 0, 0, 0.4);
     -webkit-backdrop-filter: blur(4px);
-    backdrop-filter: blur(4px); /* subtle page blur behind backdrop */
+    backdrop-filter: blur(4px);
 }
-
 #create-project-dialog h1 {
     margin: 0 0 0.5rem;
     font-size: 1.5rem;
 }
-
 #create-project-dialog form {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
-
 #create-project-dialog label {
     display: flex;
     flex-direction: column;
@@ -39,7 +36,6 @@
     font-size: 0.875rem;
     opacity: 0.8;
 }
-
 #create-project-dialog :is(input, button[type="submit"]) {
     width: 100%;
     padding: 0.75rem 1rem;
@@ -48,12 +44,10 @@
     font-size: 1rem;
     color: var(--text);
 }
-
 #create-project-dialog input {
     background: var(--card2);
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
-
 #create-project-dialog input::placeholder {
     color: rgba(233, 238, 252, 0.4);
 }
@@ -61,18 +55,15 @@
     outline: none;
     border-color: var(--accent);
 }
-
 #create-project-dialog button[type="submit"] {
     background: var(--accent);
     border: none;
     cursor: pointer;
     transition: opacity 0.2s;
 }
-
 #create-project-dialog button[type="submit"]:hover {
     opacity: 0.85;
 }
-
 .modal-close {
     position: absolute;
     top: 1rem;
@@ -89,6 +80,7 @@
     opacity: 1;
 }
 
+/* ========== Page layout ========== */
 #page-content {
     display: flex;
     flex-direction: column;
@@ -97,6 +89,7 @@
     padding: 32px 0;
 }
 
+/* ========== Projects list ========== */
 .projects-list {
     list-style: none;
     width: 100%;
@@ -105,34 +98,162 @@
     overflow: auto;
 }
 
+/* each list row */
 .project-list-item {
     display: flex;
-    justify-content: center;
     align-items: center;
-    height: 70px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    min-height: 64px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
 }
 
+/* internal card: full-width content inside the row */
 .user-dash-project-card-individual {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     width: 100%;
+    padding: 0 1rem;
+    gap: 1rem;
+    z-index: 1;
 }
 
-.project-date {
-    margin-left: 10px;
-    opacity: 0.7;
-    font-size: 0.9rem;
+/* ---- NEW: group title+meta on the left, button on the right ---- */
+/* project-info groups title + meta and sizes to its content (so meta sits next to title) */
+.project-info {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    flex: 0 1 auto; /* let this size to content but allow shrinking */
+    min-width: 0; /* allow children to truncate */
 }
 
-section > a {
+/* force the action button to the far right */
+.project-dash-button {
+    margin-left: auto;
     color: white;
     text-decoration: none;
-    border-radius: var(--radius);
-    font-size: 0.9em;
+    border-radius: 12px;
+    font-size: 0.9rem;
     background: var(--card);
     border: var(--border);
-    padding: 7.5px;
-    box-shadow: 0 px5 10px rgba(0, 0, 0, 0.35);
+    padding: 7px 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* project title: allow truncation, but cap its max width so meta + button fit */
+.project-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0;
+    max-width: calc(60vw);
+    min-width: 0;
+}
+
+/* meta area: sits immediately to the right of the title */
+.project-meta {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-left: 0.9rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* small label used for 'DUE' and 'Created by' (compact) */
+.card-bottom-header {
+    font-size: 0.62rem;
+    letter-spacing: 0.06rem;
+    opacity: 0.85;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: rgba(233, 238, 252, 0.72);
+    line-height: 1;
+    margin: 0 0 3px 0;
+}
+
+/* columns inside meta: two vertical columns (label above value) */
+.meta-columns {
+    display: flex;
+    flex-direction: row;
+    gap: 1.2rem;
+    align-items: flex-start;
+    white-space: nowrap;
+}
+
+/* each meta column stacks label/value */
+.meta-col {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    align-items: flex-start;
+}
+
+/* values (date and creator) */
+.project-date,
+.project-creator {
+    font-size: 0.92rem;
+    color: var(--text);
+    opacity: 0.95;
+    line-height: 1;
+    margin: 0;
+}
+
+/* urgency colouring applies to label + values + title */
+.project-list-item.deadline-overdue .card-bottom-header,
+.project-list-item.deadline-overdue .project-date,
+.project-list-item.deadline-overdue .project-creator,
+.project-list-item.deadline-overdue .project-name {
+    color: #ff4d4f;
+    font-weight: 700;
+}
+.project-list-item.deadline-warning .card-bottom-header,
+.project-list-item.deadline-warning .project-date,
+.project-list-item.deadline-warning .project-creator,
+.project-list-item.deadline-warning .project-name {
+    color: #ffb400;
+    font-weight: 700;
+}
+
+/* overlays (soft) */
+.project-list-item.deadline-overdue::before,
+.project-list-item.deadline-warning::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+.project-list-item.deadline-overdue::before {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 77, 79, 0) 0%,
+        rgba(255, 77, 79, 0.05) 20%,
+        rgba(255, 77, 79, 0.05) 80%,
+        rgba(255, 77, 79, 0) 100%
+    );
+}
+.project-list-item.deadline-warning::before {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 191, 0, 0) 0%,
+        rgba(255, 191, 0, 0.05) 20%,
+        rgba(255, 191, 0, 0.05) 80%,
+        rgba(255, 191, 0, 0) 100%
+    );
+}
+
+/* small responsive tweaks */
+@media (max-width: 900px) {
+    .meta-columns {
+        gap: 0.35rem;
+    }
+    .project-name {
+        max-width: calc(40vw);
+    }
+    .project-dash-button {
+        padding: 6px 10px;
+    }
 }

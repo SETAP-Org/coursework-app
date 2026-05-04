@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 
 // model imports
 import { postMessageModel } from "./models/chatModels.js";
+import { postNotificationModel } from "./models/notificationModels.js";
 
 // controller imports
 import {
@@ -62,6 +63,7 @@ import {
   addTask,
   getProjectTasks,
   updateTaskStatus,
+  deleteTask,
 } from "./controllers/taskControllers.js";
 
 import {
@@ -85,7 +87,15 @@ import {
   getEvent,
   addEvent,
   removeEvent,
-} from './controllers/calendarController.js';
+} from "./controllers/calendarController.js";
+
+import {
+  fetchNotificationsByUserId,
+  // addNotification,
+  removeNotification,
+} from "./controllers/notificationControllers.js";
+
+import { getProjectContributions } from "./controllers/contributionControllers.js";
 
 // util imports
 import createSession from "./utils/session.js";
@@ -120,9 +130,32 @@ io.on("connection", (socket) => {
       msg.message,
     );
 
-    console.log(data, "this is the data back.....");
-
     io.emit("chat", data.rows[0]);
+  });
+
+  socket.on("notification", async (notif) => {
+    for (let i = 0; i < notif.targetUsers.length; i++) {
+      const data = await postNotificationModel(
+        notif.targetUsers[i],
+        notif.projectId || null,
+        notif.notificationType,
+        notif.notificationMessage,
+        notif.targetUsername || null,
+        notif.projectName || null,
+      );
+
+      io.emit("notification", {
+        notification: {
+          targetUsers: [notif.targetUsers[i]],
+          projectId: notif.projectId,
+          notificationType: notif.notificationType,
+          notificationMessage: notif.notificationMessage,
+          targetUsername: notif.targetUsername || null,
+          projectName: notif.projectName || null,
+        },
+        dbReturn: data.rows[0],
+      });
+    }
   });
 
   socket.on("disconnect", () => {
@@ -141,7 +174,8 @@ app.get("/:username/projects", checkIfLoggedInRedirect, serveProjects);
 
 app.get("/:username/profile", checkIfLoggedInRedirect, serveProfile);
 
-app.get( "/:username/projects/:project_id",
+app.get(
+  "/:username/projects/:project_id",
   checkIfLoggedInRedirect,
   loadProject, //Adds project details to req.session
   checkMembership, //Ensures user is member of the project
@@ -156,28 +190,32 @@ app.get(
   serveProjectInfo,
 );
 
-app.get( "/:username/projects/:project_id/tasks",
+app.get(
+  "/:username/projects/:project_id/tasks",
   checkIfLoggedInRedirect,
   loadProject,
   checkMembership,
   serveProjectTasks,
 );
 
-app.get( "/:username/projects/:project_id/calendar",
+app.get(
+  "/:username/projects/:project_id/calendar",
   checkIfLoggedInCalendar,
   loadProject,
   checkMembership,
   serveProjectCalendar,
 );
 
-app.get( "/:username/projects/:project_id/chat",
+app.get(
+  "/:username/projects/:project_id/chat",
   checkIfLoggedInRedirect,
   loadProject,
   checkMembership,
   serveProjectChat,
 );
 
-app.get( "/:username/projects/:project_id/contributions",
+app.get(
+  "/:username/projects/:project_id/contributions",
   checkIfLoggedInRedirect,
   loadProject,
   checkMembership,
@@ -223,6 +261,8 @@ app.get(
   checkMembership,
   getFileMetadata,
 );
+// potentially dont need...
+// app.post("/api/notifications", addNotification);
 
 // ---- READ ----
 // ---- API ROUTES FOR calandar EVENTS ----
@@ -230,19 +270,48 @@ app.get("/api/calendar/events", checkIfLoggedInCalendar, getEvent);
 
 app.post("/api/calendar/events", checkIfLoggedInCalendar, addEvent);
 
-app.delete("/api/calendar/events/:eventId", checkIfLoggedInCalendar, removeEvent);
+app.delete(
+  "/api/calendar/events/:eventId",
+  checkIfLoggedInCalendar,
+  removeEvent,
+);
+
+app.delete(
+  "/api/projects/:project_id/tasks/:task_id",
+  loadProject,
+  checkMembership,
+  deleteTask,
+);
 
 // ---- API ROUTES FOR NOTES ----
-app.post("/:username/projects/:project_id/save", checkIfLoggedInRedirect, loadProject, saveNote);
+app.post(
+  "/:username/projects/:project_id/save",
+  checkIfLoggedInRedirect,
+  loadProject,
+  saveNote,
+);
 
-app.post("/:username/projects/:project_id/delete", checkIfLoggedInRedirect, loadProject, deleteNote);
+app.post(
+  "/:username/projects/:project_id/delete",
+  checkIfLoggedInRedirect,
+  loadProject,
+  deleteNote,
+);
 
-app.get("/:username/projects/:project_id/notes", checkIfLoggedInRedirect, loadProject, getNotes);
+app.get(
+  "/:username/projects/:project_id/notes",
+  checkIfLoggedInRedirect,
+  loadProject,
+  getNotes,
+);
 
-app.get("/:username/projects/:project_id/:page", checkMembership, serveProjectNotes);
+app.get(
+  "/:username/projects/:project_id/:page",
+  checkMembership,
+  serveProjectNotes,
+);
 
 app.get("/:username/projects/:project_id", checkMembership, serveProjectDash);
-
 
 //---- READ ----
 
@@ -269,7 +338,11 @@ app.get("/api/projects/:project_id", getProjectDetails);
 
 app.get("/api/projects/:project_id/tasks", getProjectTasks);
 
+app.get("/api/contributions/:project_id", getProjectContributions);
+
 app.get("/api/chat", getMessages);
+
+app.get("/api/notifications/:user_id", fetchNotificationsByUserId);
 
 // ---- UPDATE ----
 app.put("/api/users/changeUsername", checkValidUsername, updateUsername);
@@ -286,6 +359,8 @@ app.put("/api/projects/leader", updateTeamLeader);
 app.delete("/api/projects/user", removeUserFromProject);
 
 app.delete("/api/projects/:project_id", removeProject);
+
+app.delete("/api/notifications/:notification_id", removeNotification);
 
 // assigning the server to a port so that requests can be made
 server.listen(port, () => {

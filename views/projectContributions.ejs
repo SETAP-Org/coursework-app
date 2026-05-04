@@ -6,10 +6,21 @@
 
         <link rel="stylesheet" href="/css/root-dark.css"
         />
-        <link rel="stylesheet" href="/css/project_dash.css" />
+        <link rel="stylesheet" href="/css/project_contributions.css" />
         <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml" />
 
+        <script>
+            window.scriptData = {
+                userId: "<%= userId %>",
+                contributionData: <%- JSON.stringify(contributionData) %>,
+            };
+        </script>
+
         <script src="/scripts/L&D-mode.js" defer></script>
+
+        <!-- Chart.js must load before the module that uses it -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+        <script src="/scripts/projectContributions.js" type="module" defer></script>
 
         <title>GCMS | <%= projectName %> Contributions</title>
     </head>
@@ -20,6 +31,21 @@
         <section id="page-content">
             <section class="page-header">
                 <h1 id="page-title">Contributions</h1>
+                <div class="page-header-actions" aria-hidden="true"></div>
+            </section>
+
+            <section id="chart-section">
+                <div class="chart-layout">
+                    <div class="chart-card">
+                        <canvas id="contributions-chart"></canvas>
+                    </div>
+
+                    <aside class="info-card" id="contributions-info" aria-labelledby="contribs-heading">
+                        <h2 id="contribs-heading" class="info-heading">Members</h2>
+                        <div id="contributions-list" class="contributions-list" aria-live="polite">
+                        </div>
+                    </aside>
+                </div>
             </section>
         </section>
 
@@ -27,3 +53,4 @@
 
         <%- include('partials/loading') %>
     </body>
+</html>

@@ -22,12 +22,14 @@
                 projectMembers: <%- JSON.stringify(projectMembers) %>,
             };
         </script>
+        <script src="/socket.io/socket.io.js"></script>
         <script src="/scripts/L&D-mode.js" defer></script>
         <script src="/scripts/projectInfo.js" defer></script>
 
         <title>GCMS | <%= projectName %> Information</title>
     </head>
     <body>
+        <%- include('partials/userNav') %>
         <%- include('partials/projectNav') %>
 
         <section class="page-container">
@@ -35,7 +37,7 @@
 
             <!-- information -->
             <h2 class="project-sub-heading">Information</h2>
-    
+
             <section class="section-outer-container">
                 <div class="section-inner-container">
                     <div class="info-section-card">
@@ -47,19 +49,19 @@
                         <h2 class="info-section-heading">Project Description</h2>
                         <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quos, dicta. Neque ipsam tempora, id harum dolor reprehenderit aperiam asperiores. Rem, mollitia recusandae temporibus at sunt incidunt! Voluptates nobis rerum minima?</p>
                     </div>
-    
+
 
                     <div class="info-section-card">
                         <h2 class="info-section-heading">Project Deadline</h2>
                         <p>Insert formatted deadline here...</p>
                     </div>
-    
+
 
                     <div class="info-section-card">
                         <h2 class="info-section-heading">Team Leader</h2>
                         <p class="info-section-team-leader"></p>
                     </div>
-    
+
 
                     <div class="info-section-card">
                         <h2 class="info-section-heading">Project Members</h2>
@@ -72,10 +74,10 @@
                             </template>
                         </ul>
                     </div>
-    
+
                 </div>
             </section>
-    
+
             <!-- settings -->
             <h2 class="project-sub-heading">Settings</h2>
 
@@ -86,14 +88,14 @@
                         <h2 class="settings-section-header">Want to leave the project?</h2>
                         <button class="settings-section-button" id="leave-button">Click Me!</button>
                     </div>
-                    
+
                     <% if (userId == teamLeaderId) { %>
                         <!-- add members -->
                         <div class="settings-section-card">
                             <h2 class="settings-section-header">Want to add a new member?</h2>
                             <button class="settings-section-button" id="new-member-button">Click Me!</button>
                         </div>
-                        
+
                         <!-- change team leader -->
                         <div class="settings-section-card">
                             <h2 class="settings-section-header">Want to change the team leader?</h2>
@@ -114,7 +116,7 @@
         <dialog class="dialog" id="leave-dialog">
             <div class="dialog-inner-container">
                 <h1>Are you sure want to leave the project?</h1>
-    
+
                 <div class="dialog-buttons">
                     <button class="settings-section-button" id="leave-dialog-no">No</button>
                     <button class="settings-section-button danger-button" id="leave-dialog-yes">Yes</button>
@@ -126,9 +128,9 @@
         <dialog id="add-dialog">
             <div class="dialog-inner-container">
                 <h1>Who would you like to add to the project?</h1>
-    
+
                 <input type="text" class="dialog-text-input" id="add-member-input">
-    
+
                 <div class="dialog-buttons">
                     <button class="settings-section-button" id="add-dialog-no">Cancel</button>
                     <button class="settings-section-button" id="add-dialog-yes">Add Member</button>
@@ -140,13 +142,13 @@
         <dialog class="dialog" id="team-leader-dialog">
             <div class="dialog-inner-container">
                 <h1>Who do you want to make team leader?</h1>
-    
+
                 <select class="dialog-select" id="team-leader-select" required>
                     <template class="team-leader-option-template">
                         <option class="team-leader-option"></option>
                     </template>
                 </select>
-    
+
                 <div class="dialog-buttons">
                     <button class="settings-section-button" id="team-leader-dialog-no">Cancel</button>
                     <button class="settings-section-button" id="team-leader-dialog-yes">Set Team Leader</button>
@@ -158,7 +160,7 @@
         <dialog class="dialog" id="delete-dialog">
             <div class="dialog-inner-container">
                 <h1>Are you sure want to delete the project?</h1>
-    
+
                 <div class="dialog-buttons">
                     <button class="settings-section-button" id="delete-dialog-no">No</button>
                     <button class="settings-section-button danger-button" id="delete-dialog-yes">Yes</button>
@@ -171,11 +173,11 @@
             <div class="dialog-inner-container">
                 <h1 id="secondary-dialog-heading"></h1>
                 <p id="secondary-dialog-message"></p>
-                <button id="secondary-dialog-button">Go To Home</button>
+                <button id="secondary-dialog-button">Refresh The Application</button>
             </div>
         </dialog>
 
         <%- include('partials/footer') %>
-        
+
         <%- include('partials/loading') %>
     </body>

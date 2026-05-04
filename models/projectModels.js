@@ -61,11 +61,14 @@ export async function getProjectByCreatorAndNameModel(
 export async function getUserProjectsModel(userId) {
   return await query(
     `
-    SELECT *
+    SELECT p.*, up.*, u.username AS creator_username
     FROM projects p
     JOIN user_projects up
-    ON p.project_id = up.project_id
-    WHERE up.user_id = $1;
+      ON p.project_id = up.project_id
+    JOIN users u
+      ON p.created_by = u.user_id
+    WHERE up.user_id = $1
+    ORDER BY p.project_deadline ASC NULLS LAST;
     `,
     [userId],
   );
@@ -98,7 +101,7 @@ export async function putTeamLeader(newLeaderId, projectId) {
     WHERE project_id = $2
     RETURNING *;
     `,
-    [newLeaderId, projectId]
+    [newLeaderId, projectId],
   );
 }
 
@@ -111,6 +114,6 @@ export async function deleteProjectByIdModel(projectId) {
     WHERE project_id = $1
     RETURNING *;
     `,
-    [projectId]
+    [projectId],
   );
 }

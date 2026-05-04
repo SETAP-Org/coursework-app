@@ -8,13 +8,18 @@
         <link rel="stylesheet" href="/css/project_dash.css" />
         <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml" />
 
+        <script>
+            window.scriptData = {
+                userId: "<%= userId %>",
+            };
+        </script>
         <script src="/scripts/L&D-mode.js" defer></script>
 
         <title>GCMS | <%= projectName %> Calendar</title>
     </head>
     <body>
         <%- include('partials/userNav') %>
-    <%- include('partials/projectNav') %>
+        <%- include('partials/projectNav') %>
 
         <!-- Create Event Form -->
         <div class="event-form">
