@@ -10,10 +10,12 @@
 
         <script>
             window.scriptData = {
-                userId: "<%= userId %>",
-                username: "<%= username %>",
-                projectId: "<%= projectId %>",
-                notes: <%- JSON.stringify(notes) %>
+              userId: "<%= userId %>",
+              username: "<%= username %>",
+              projectId: "<%= projectId %>",
+              projectName: "<%= projectName %>",
+              isTeamLeader: <%= typeof isTeamLeader !== 'undefined' && isTeamLeader ? 'true' : 'false' %>,
+              notes: <%- JSON.stringify(notes) %>
             };
         </script>
         <script src="/scripts/L&D-mode.js" type="module"></script>
@@ -54,13 +56,25 @@
                     <section class="calendar-box">
                         <h2>Calendar</h2>
                     </section>
-                </aside>
-            </main>
 
-        </div>
+                    <aside class="Dashboard-right">
+                        <section class="card small-box">
+                            <h2 class="Dashboard-text">Deadline</h2>
+                        </section>
 
-        <%- include('partials/footer') %>
+                        <section class="card small-box">
+                            <h2 class="Dashboard-text">Calandar</h2>
+                        </section>
+                    </aside>
+                </main>
 
-        <%- include('partials/loading') %>
-    </body>
+            </div>
+
+            <%- include('partials/footer') %>
+
+                <%- include('partials/aiAssistant') %>
+
+                    <%- include('partials/loading') %>
+</body>
+
 </html>

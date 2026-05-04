@@ -2,7 +2,8 @@ import {
     postUserModel,
     getUserByUsernameModel,
     getUserByMicrosoftIdModel,
-    putUsernameByIdModel
+    putUsernameByIdModel,
+    putEmailNotificationPreferenceModel
 } from "../models/userModels.js";
 import { getProfilePhoto } from "../models/calendarModels.js";
 
@@ -111,5 +112,36 @@ export async function getCurrentUserPhoto(req, res) {
     } catch (err) {
         console.error("getCurrentUserPhoto error:", err.message);
         return res.redirect("/assets/default-avatar.svg");
+    }
+}
+
+// controller to update email notification preference
+export async function updateEmailNotificationPreference(req, res) {
+    try {
+        const userId = req.user.microsoftId;
+        const emailNotifications = req.body.emailNotifications;
+
+        if (typeof emailNotifications !== 'boolean') {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid email notification preference value"
+            });
+        }
+
+        const data = await putEmailNotificationPreferenceModel(userId, emailNotifications);
+
+        if (data.rows[0]) {
+            return res.status(200).json({
+                success: true,
+                message: "Email notification preference changed :)",
+                emailNotifications: data.rows[0].email_notifications
+            });
+        }
+    } catch(err) {
+        console.error("updateEmailNotificationPreference error:", err);
+        res.status(400).json({
+            success: false,
+            message: "Error updating email notification preference, see console logs for more information."
+        })
     }
 }

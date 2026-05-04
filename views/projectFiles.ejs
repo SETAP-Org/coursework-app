@@ -10,10 +10,14 @@
 
         <script>
             window.scriptData = {
+                userId: "<%= userId %>",
+                username: "<%= username %>",
                 projectId: "<%= projectId %>",
-                username: "<%= username %>"
+                projectName: "<%= projectName %>",
+                isTeamLeader: <%= typeof isTeamLeader !== 'undefined' && isTeamLeader ? 'true' : 'false' %>
             };
         </script>
+
         <script src="/scripts/L&D-mode.js" defer></script>
         <script src="/scripts/projectFiles.js" defer></script>
 
@@ -34,5 +38,8 @@
                 <ul id="file-list"></ul>
             </section>
         </section>
+
+        <%- include('partials/aiAssistant') %>
+        
     </body>
 </html>

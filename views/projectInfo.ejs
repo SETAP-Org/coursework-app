@@ -20,6 +20,7 @@
                 teamLeaderId: "<%= teamLeaderId %>",
                 projectDeadline: "<%= projectDeadline %>",
                 projectMembers: <%- JSON.stringify(projectMembers) %>,
+                isTeamLeader: <%= typeof isTeamLeader !== 'undefined' && isTeamLeader ? 'true' : 'false' %>,
             };
         </script>
         <script src="/socket.io/socket.io.js" type="module"></script>
@@ -178,6 +179,8 @@
         </dialog>
 
         <%- include('partials/footer') %>
+
+        <%- include('partials/aiAssistant') %>
 
         <%- include('partials/loading') %>
     </body>

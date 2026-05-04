@@ -35,3 +35,4 @@ export async function getDownloadUrl(req, res) {
   const { data } = await supabase.storage.from(SHARED_FOLDERS_BUCKET).createSignedUrl(storagePath, 60);
   return res.status(200).json(data);
 }
+

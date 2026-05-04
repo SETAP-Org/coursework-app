@@ -40,6 +40,17 @@ export async function getUserByUsernameModel(username) {
     )
 }
 
+// read a user via their user_id
+export async function getUserByIdModel(userId) {
+    return await query(
+        `
+        SELECT * FROM users
+        WHERE user_id = $1;
+        `,
+        [userId]
+    )
+}
+
 // ---- UPDATE ----
 // update a users username
 export async function putUsernameByIdModel(microsoftId, username) {
@@ -51,6 +62,19 @@ export async function putUsernameByIdModel(microsoftId, username) {
         RETURNING *;
         `,
         [microsoftId, username]
+    )
+}
+
+// update a user's email notification preference
+export async function putEmailNotificationPreferenceModel(microsoftId, emailNotifications) {
+    return await query(
+        `
+        UPDATE users
+        SET email_notifications = $2
+        WHERE microsoft_id = $1
+        RETURNING *;
+        `,
+        [microsoftId, emailNotifications]
     )
 }
 
