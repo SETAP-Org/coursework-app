@@ -12,9 +12,14 @@
         <script>
             window.scriptData = {
                 userId: "<%= userId %>",
+                username: "<%= username %>",
+                projectId: "<%= projectId %>",
+                projectName: "<%= projectName %>",
                 contributionData: <%- JSON.stringify(contributionData) %>,
+                isTeamLeader: <%= typeof isTeamLeader !== 'undefined' && isTeamLeader ? 'true' : 'false' %>
             };
-        </script>
+
+</script>
 
         <script src="/scripts/L&D-mode.js" defer></script>
 
@@ -50,6 +55,8 @@
         </section>
 
         <%- include('partials/footer') %>
+
+        <%- include('partials/aiAssistant') %>
 
         <%- include('partials/loading') %>
     </body>

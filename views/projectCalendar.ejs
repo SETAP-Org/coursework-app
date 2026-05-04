@@ -9,9 +9,14 @@
         <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml" />
 
         <script>
-            window.scriptData = {
-                userId: "<%= userId %>",
-            };
+        window.scriptData = {
+            userId: "<%= userId %>",
+            username: "<%= username %>",
+            projectId: "<%= projectId %>",
+            projectName: "<%= projectName %>",
+            isTeamLeader: <%= typeof isTeamLeader !== 'undefined' && isTeamLeader ? 'true' : 'false' %>
+        };
+</script>
         </script>
         <script src="/scripts/L&D-mode.js" defer></script>
 
@@ -49,6 +54,8 @@
 
 
         <%- include('partials/footer') %>
+
+        <%- include('partials/aiAssistant') %>
 
         <%- include('partials/loading') %>
     </body>

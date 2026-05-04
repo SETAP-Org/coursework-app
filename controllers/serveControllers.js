@@ -102,7 +102,7 @@ export async function serveProjectDash(req, res, next) {
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult.rows[0];
 
-    const isTeamLeader = 
+    const isTeamLeader =
       req.session.project &&
       req.session.project.team_leader_id === dbUser.user_id;
 
@@ -136,6 +136,10 @@ export async function serveProjectInfo(req, res, next) {
     const groupUsersResponse = await getUsersByProjectId(req.params.project_id);
     const groupUsersData = groupUsersResponse.rows;
 
+    const isTeamLeader =
+      req.session.project &&
+      req.session.project.team_leader_id === dbUser.user_id;
+
     res.render("projectInfo", {
       userId: dbUser.user_id,
       username: req.params.username,
@@ -145,6 +149,7 @@ export async function serveProjectInfo(req, res, next) {
       teamLeaderId: projectData.team_leader_id,
       projectDeadline: projectData.deadline,
       projectMembers: groupUsersData,
+      isTeamLeader,
     });
   } catch (err) {
     res.render("error", {
@@ -171,6 +176,10 @@ export async function serveProjectTasks(req, res, next) {
     const tasksResponse = await getTasksByProjectIdModel(req.params.project_id);
     const tasksData = tasksResponse.rows;
 
+    const isTeamLeader =
+      req.session.project &&
+      req.session.project.team_leader_id === dbUser.user_id;
+
     res.render("projectTasks", {
       userId: dbUser.user_id,
       username: req.params.username,
@@ -180,6 +189,7 @@ export async function serveProjectTasks(req, res, next) {
       projectName: req.session.project.project_name,
       tasks: tasksData,
       groupUsers: groupUsersData,
+      isTeamLeader,
     });
   } catch (err) {
     res.render("error", {
@@ -194,11 +204,16 @@ export async function serveProjectCalendar(req, res, next) {
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult.rows[0];
 
+    const isTeamLeader =
+      req.session.project &&
+      req.session.project.team_leader_id === dbUser.user_id;
+
     res.render("projectCalendar", {
       username: req.params.username,
       userId: dbUser.user_id,
       projectId: req.session.project.project_id,
       projectName: req.session.project.project_name,
+      isTeamLeader,
     });
   } catch (err) {
     res.render("error", {
@@ -227,6 +242,10 @@ export async function serveProjectChat(req, res, next) {
     const groupUsersResponse = await getUsersByProjectId(req.params.project_id);
     const groupUsersData = groupUsersResponse.rows;
 
+    const isTeamLeader =
+      req.session.project &&
+      req.session.project.team_leader_id === dbUser.user_id;
+
     res.render("projectChat", {
       userId: dbUser.user_id,
       username: req.params.username,
@@ -234,6 +253,7 @@ export async function serveProjectChat(req, res, next) {
       projectName: projectData.project_name,
       messages: messagesData,
       groupUsers: groupUsersData,
+      isTeamLeader,
     });
   } catch (err) {
     res.render("error", {
@@ -269,12 +289,17 @@ export async function serveProjectContributions(req, res, next) {
     );
     const contributionData = contributionDataRaw.rows[0];
 
+    const isTeamLeader =
+      req.session.project &&
+      req.session.project.team_leader_id === dbUser.user_id;
+
     res.render("projectContributions", {
       username: req.params.username,
       userId: dbUser.user_id,
       projectId: req.session.project.project_id,
       projectName: req.session.project.project_name,
       contributionData: contributionData,
+      isTeamLeader,
     });
   } catch (err) {
     res.render("error", {
@@ -285,10 +310,16 @@ export async function serveProjectContributions(req, res, next) {
 
 export async function serveProjectFiles(req, res, next) {
   try {
+
+    const isTeamLeader =
+      req.session.project &&
+      req.session.project.team_leader_id === dbUser.user_id;
+
     res.render("projectFiles", {
       username: req.params.username,
       projectId: req.session.project.project_id,
       projectName: req.session.project.project_name,
+      isTeamLeader,
     });
   } catch (err) {
     res.render("error", { error: err });
