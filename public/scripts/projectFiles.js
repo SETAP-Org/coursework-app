@@ -1,8 +1,21 @@
 const { projectId } = window.scriptData;
 
 async function loadFiles() {
-  const files = await fetch(`/api/projects/${projectId}/files/metadata`).then(r => r.json());
   const list = document.getElementById("file-list");
+  let files = [];
+
+  try {
+    const response = await fetch(`/api/projects/${projectId}/files/metadata`);
+    if (!response.ok) {
+      throw new Error(`Failed to load files: ${response.status}`);
+    }
+    files = await response.json();
+  } catch (err) {
+    console.error(err);
+    list.innerHTML = "<li class='no-files'>Unable to load files right now.</li>";
+    return;
+  }
+
   list.innerHTML = files.length === 0
     ? "<li class='no-files'>No files uploaded yet.</li>"
     : files.map(f => `

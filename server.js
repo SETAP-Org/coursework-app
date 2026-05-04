@@ -20,6 +20,7 @@ import noteRoutes from "./routes/noteRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
 
+
 // util imports
 import createSession from "./utils/session.js";
 import setUpAuth from "./utils/auth.js";
@@ -58,6 +59,7 @@ app.use("/api", notificationRoutes);
 app.use("/api", contributionsRoutes);
 app.use("/api", noteRoutes);
 app.use("/api", fileRoutes);
+
 // start server
 server.listen(port, () => {
   console.log("Server running on http://localhost:3000/ :P");
