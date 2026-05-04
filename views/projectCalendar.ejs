@@ -10,12 +10,14 @@
         <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml" />
 
         <script>
-            window.scriptData = {
-                userId: "<%= userId %>",
-                username: "<%= username %>",
-                events: <%- JSON.stringify(events) %>
-            };
-        </script>
+          window.scriptData = {
+              userId: "<%= userId %>",
+              username: "<%= username %>",
+              projectId: "<%= projectId %>",
+              projectName: "<%= projectName %>",
+              events: <%- JSON.stringify(events) %>,
+              isTeamLeader: <%= typeof isTeamLeader !== 'undefined' && isTeamLeader ? 'true' : 'false' %>
+          };
         <script src="/scripts/L&D-mode.js" defer type="module"></script>
         <script src="/scripts/projectCalendar.js" defer type="module"></script>
 
@@ -60,6 +62,9 @@
         </div>
 
         <%- include('partials/footer') %>
+
+        <%- include('partials/aiAssistant') %>
+
         <%- include('partials/loading') %>
     </body>
 </html>

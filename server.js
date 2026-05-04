@@ -19,6 +19,12 @@ import contributionsRoutes from "./routes/contributionsRoutes.js";
 import noteRoutes from "./routes/noteRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js";
 
+import {
+  postAiChatMessage,
+  getAiChatMessages,
+  clearAiChatHistory,
+} from "./controllers/aiChatControllers.js";
+
 // util imports
 import createSession from "./utils/session.js";
 import setUpAuth from "./utils/auth.js";

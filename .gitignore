@@ -6,3 +6,5 @@ node_modules/
 testEmail.mjs
 testNotifications.mjs
 .env.gemini
+/scratch
+test.pdf

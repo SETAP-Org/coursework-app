@@ -140,3 +140,19 @@ CREATE TABLE WIDGETS(
     widget_text VARCHAR(200),
     FOREIGN KEY (project_id) REFERENCES PROJECTS(project_id)
 );
+
+CREATE TYPE ai_chat_role AS ENUM ('user', 'assistant');
+
+CREATE TABLE AI_CHAT_MESSAGES(
+    ai_message_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    project_id UUID NOT NULL,
+    user_id UUID,
+    role ai_chat_role NOT NULL,
+    content TEXT NOT NULL,
+    ai_date_sent TIMESTAMPTZ DEFAULT NOW(),
+    FOREIGN KEY (project_id) REFERENCES PROJECTS(project_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id)    REFERENCES USERS(user_id)       ON DELETE SET NULL
+);
+
+CREATE INDEX idx_ai_chat_messages_project_id
+    ON AI_CHAT_MESSAGES(project_id, ai_date_sent);

@@ -32,6 +32,7 @@
   },
   "homepage": "https://github.com/SETAP-Org/group-coursework-management-system#readme",
   "dependencies": {
+    "@google/genai": "^1.51.0",
     "@supabase/supabase-js": "^2.105.1",
     "chart.js": "^4.5.1",
     "cookie-parser": "^1.4.7",

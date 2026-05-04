@@ -54,6 +54,15 @@ ALTER TABLE meeting_attendances
     FOREIGN KEY (meeting_id) REFERENCES meetings(meeting_id)
     ON DELETE CASCADE;
 
--- change users table, add email_notifications column
---ALTER TABLE users
---  ADD COLUMN IF NOT EXISTS email_notifications BOOLEAN DEFAULT TRUE;
+AlTER TABLE AI_CHAT_MESSAGES
+  DROP CONSTRAINT IF EXISTS ai_chat_messages_project_id_fkey,
+  ADD CONSTRAINT ai_chat_messages_project_id_fkey
+    FOREIGN KEY (project_id) REFERENCES projects(project_id)
+    ON DELETE CASCADE;
+
+ALTER TABLE FILES
+  DROP CONSTRAINT IF EXISTS files_project_id_fkey,
+  ADD CONSTRAINT files_project_id_fkey
+    FOREIGN KEY (project_id) REFERENCES projects(project_id)
+    ON DELETE CASCADE;
+-- Further Alterations here...
