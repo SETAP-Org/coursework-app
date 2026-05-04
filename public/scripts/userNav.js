@@ -115,6 +115,9 @@ async function userNav() {
       // hide the loading screen
       loading.style.display = "none";
     });
+
+    // add to the ui
+    notifList.appendChild(clone);
   }
 
   // assigning urls to nav buttons
