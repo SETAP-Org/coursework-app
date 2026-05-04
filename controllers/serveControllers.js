@@ -7,6 +7,7 @@ import { getMessagesByProjectIdModel } from "../models/chatModels.js";
 import { getUsersByProjectId } from "../models/userProjectModels.js";
 import { getTasksByProjectIdModel } from "../models/taskModels.js";
 import { getContributionsByProjectIdModel } from "../models/contributionModels.js";
+import { getCalendarEvents } from "../models/calendarModels.js";
 
 export function serveLanding(req, res, next) {
   try {
@@ -192,11 +193,15 @@ export async function serveProjectCalendar(req, res, next) {
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult.rows[0];
 
+    // get the calendar events
+    const events = await getCalendarEvents(req.user.accessToken);
+
     res.render("projectCalendar", {
       username: req.params.username,
       userId: dbUser.user_id,
       projectId: req.session.project.project_id,
       projectName: req.session.project.project_name,
+      events: events.value,
     });
   } catch (err) {
     res.redirect("/error?err=" + encodeURIComponent(err));

@@ -38,10 +38,17 @@ export async function addEvent(req, res) {
         console.log("Sending to Microsoft:", JSON.stringify(event, null, 2));
         const result = await createCalendarEvent(accessToken, event);
         console.log("Microsoft response:", result);
-        res.status(201).json(result);
+        res.status(201).json({
+            success: true,
+            event: result,
+        });
     } catch (err) {
-        console.error("addEvent error:", err.message);
-        res.status(500).json({ error: err.message });
+        console.error("error with addEvent:", err.message);
+
+        res.status(500).json({
+            success: false,
+            message: err.message,
+        });
     }
 }
 
@@ -50,8 +57,14 @@ export async function removeEvent(req, res){
         const accessToken = req.user.accessToken;
         const { eventId } = req.params;
         await deleteCalendarEvent(accessToken, eventId);
-        res.status(200).json({ message: "Event deleted successfully" });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(200).json({
+            success: true,
+            message: "Event deleted successfully",
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message,
+        });
     }
 }

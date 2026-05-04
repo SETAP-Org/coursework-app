@@ -68,6 +68,7 @@ async function userNav() {
             else if (type === "Task") window.location.href = `/${username}/projects/${id}/tasks`
         });
 
+        // event listener to delete notification
         clone.querySelector(".bin-icon").addEventListener("click", async (e) => {
             // prevent clicking the element underneath the bin element
             e.stopPropagation();
