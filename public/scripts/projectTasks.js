@@ -217,12 +217,22 @@ if (dialogForm) {
       taskDeadline: form["taskDeadline"]?.value,
     };
 
+    const deadlineDate = new Date(payload.taskDeadline);
+
+    if (deadlineDate <= new Date()) {
+      alert("Task not created: Deadline must be in the future!");
+      return;
+    }
+
     try {
-      const { res, data } = await requestJson("/api/tasks/addTask", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const { res, data } = await requestJson(
+        `/api/tasks/${SD.projectId}/addTask`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        },
+      );
 
       if (res.ok && data.success) {
         // Notify assignee if it's not the creator

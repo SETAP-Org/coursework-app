@@ -102,6 +102,14 @@ async function projects() {
       const name = form["project-name"].value;
       const deadline = form["project-deadline"].value;
 
+      const deadlineDate = new Date(deadline);
+
+      if (deadlineDate <= new Date()) {
+        alert("Project not created: Deadline must be in the future!");
+        loading.style.display = "none";
+        return;
+      }
+
       const res = await fetch("/api/projects/addProject", {
         method: "POST",
         headers: {

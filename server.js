@@ -7,95 +7,22 @@ import path from "path";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 
-// model imports
-import { postMessageModel } from "./models/chatModels.js";
-import { postNotificationModel } from "./models/notificationModels.js";
-
-// controller imports
-import {
-  serveLanding,
-  serveWelcome,
-  serveUserDash,
-  serveProjectDash,
-  serveProfile,
-  serveProjects,
-  serveProjectInfo,
-  serveProjectTasks,
-  serveProjectCalendar,
-  serveProjectChat,
-  serveProjectContributions,
-  redirectWelcome,
-  serveError,
-} from "./controllers/serveControllers.js";
-
-import {
-  addProject,
-  getUserProjects,
-  getProjectDetails,
-  loadProject,
-  checkMembership,
-  updateTeamLeader,
-  removeProject,
-} from "./controllers/projectControllers.js";
-
-import {
-  addUser,
-  checkValidUsername,
-  updateUsername,
-  getCurrentUser,
-  getCurrentUserPhoto,
-} from "./controllers/userControllers.js";
-
-import {
-  checkIfLoggedIn,
-  checkIfLoggedInRedirect,
-  checkIfLoggedInCalendar,
-  signOut,
-  authenticatePassport,
-  setJustAuthenticatedFlag,
-  getJustAuthenticatedFlag,
-} from "./controllers/authControllers.js";
-
-import { addMessage, getMessages } from "./controllers/chatControllers.js";
-
-import {
-  addTask,
-  getProjectTasks,
-  updateTaskStatus,
-  deleteTask,
-} from "./controllers/taskControllers.js";
-
-import {
-  removeUserFromProject,
-  addUserToProject,
-} from "./controllers/userProjectControllers.js";
-//konva controllers support
-import {
-  addNote,
-  removeNote,
-  updateNote,
-  getNotes,
-} from "./controllers/KonvaController.js";
-
-import {
-  getEvent,
-  addEvent,
-  removeEvent,
-} from "./controllers/calendarController.js";
-
-import {
-  fetchNotificationsByUserId,
-  // addNotification,
-  removeNotification,
-} from "./controllers/notificationControllers.js";
-
-import { getProjectContributions } from "./controllers/contributionControllers.js";
+// route imports
+import pageRoutes from "./routes/pageRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import projectRoutes from "./routes/projectRoutes.js";
+import taskRoutes from "./routes/taskRoutes.js";
+import calendarRoutes from "./routes/calendarRoutes.js";
+import notificationRoutes from "./routes/notificationsRoutes.js";
+import contributionsRoutes from "./routes/contributionsRoutes.js";
 
 // util imports
 import createSession from "./utils/session.js";
 import setUpAuth from "./utils/auth.js";
+import setupSocket from "./utils/socket.js";
 
-// configfure environment variables
+// configure environment variables
 dotenv.config({ path: ".env.auth" });
 
 // configuration data for server
@@ -113,201 +40,20 @@ app.use(cookieParser());
 createSession(app);
 setUpAuth(app);
 
-// socket io logic
-io.on("connection", (socket) => {
-  console.log("a user connected");
+// socket io setup
+setupSocket(io);
 
-  socket.on("chat", async (msg) => {
-    const data = await postMessageModel(
-      msg.senderId,
-      msg.projectId,
-      msg.message,
-    );
+// route mounting
+app.use("/", pageRoutes);
+app.use("/api", authRoutes);
+app.use("/api", userRoutes);
+app.use("/api", projectRoutes);
+app.use("/api", taskRoutes);
+app.use("/api", calendarRoutes);
+app.use("/api", notificationRoutes);
+app.use("/api", contributionsRoutes);
 
-    io.emit("chat", data.rows[0]);
-  });
-
-  socket.on("notification", async (notif) => {
-    for (let i = 0; i < notif.targetUsers.length; i++) {
-      const data = await postNotificationModel(
-        notif.targetUsers[i],
-        notif.projectId || null,
-        notif.notificationType,
-        notif.notificationMessage,
-        notif.targetUsername || null,
-        notif.projectName || null,
-      );
-
-      io.emit("notification", {
-        notification: {
-          targetUsers: [notif.targetUsers[i]],
-          projectId: notif.projectId,
-          notificationType: notif.notificationType,
-          notificationMessage: notif.notificationMessage,
-          targetUsername: notif.targetUsername || null,
-          projectName: notif.projectName || null,
-        },
-        dbReturn: data.rows[0],
-      });
-    }
-  });
-
-  socket.on("disconnect", () => {
-    console.log("user disconnected");
-  });
-});
-
-// paths to navigate pages
-app.get("/", checkIfLoggedIn, serveLanding);
-
-app.get("/welcome", serveWelcome);
-
-app.get("/error", serveError);
-
-app.get("/:username", checkIfLoggedInRedirect, serveUserDash);
-
-app.get("/:username/projects", checkIfLoggedInRedirect, serveProjects);
-
-app.get("/:username/profile", checkIfLoggedInRedirect, serveProfile);
-
-app.get(
-  "/:username/projects/:project_id",
-  checkIfLoggedInRedirect,
-  loadProject, //Adds project details to req.session
-  checkMembership, //Ensures user is member of the project
-  serveProjectDash,
-);
-
-app.get(
-  "/:username/projects/:project_id/information",
-  checkIfLoggedInRedirect,
-  loadProject,
-  checkMembership,
-  serveProjectInfo,
-);
-
-app.get(
-  "/:username/projects/:project_id/tasks",
-  checkIfLoggedInRedirect,
-  loadProject,
-  checkMembership,
-  serveProjectTasks,
-);
-
-app.get(
-  "/:username/projects/:project_id/calendar",
-  checkIfLoggedInCalendar,
-  loadProject,
-  checkMembership,
-  serveProjectCalendar,
-);
-
-app.get(
-  "/:username/projects/:project_id/chat",
-  checkIfLoggedInRedirect,
-  loadProject,
-  checkMembership,
-  serveProjectChat,
-);
-
-app.get(
-  "/:username/projects/:project_id/contributions",
-  checkIfLoggedInRedirect,
-  loadProject,
-  checkMembership,
-  serveProjectContributions,
-);
-
-// API routes
-// ---- CREATE ----
-app.post("/api/projects/addProject", addProject);
-
-app.post("/api/users/addUser", setJustAuthenticatedFlag, addUser);
-
-app.post("/api/chat/addMessage", addMessage);
-
-app.post("/api/tasks/addTask", addTask);
-
-app.post("/api/projects/user", addUserToProject);
-
-app.post("/api/notes", addNote);
-
-app.post("/api/calendar/events", checkIfLoggedInCalendar, addEvent);
-
-// potentially dont need...
-// app.post("/api/notifications", addNotification);
-
-// ---- READ ----
-app.get("/:username/projects/:project_id", checkMembership, serveProjectDash);
-
-app.get("/api/auth", checkIfLoggedIn, authenticatePassport());
-
-app.get(
-  "/api/auth/callback",
-  authenticatePassport(),
-  setJustAuthenticatedFlag,
-  redirectWelcome,
-);
-
-app.get("/api/auth/signout", signOut, checkIfLoggedInRedirect);
-
-app.get("/api/auth/justAuthenticated", getJustAuthenticatedFlag);
-
-app.get("/api/me", getCurrentUser);
-
-app.get("/api/me/photo", checkIfLoggedInCalendar, getCurrentUserPhoto);
-
-app.get("/api/me/projects", getUserProjects);
-
-app.get("/api/projects/:project_id", getProjectDetails);
-
-app.get("/api/projects/:project_id/tasks", getProjectTasks);
-
-app.get("/api/contributions/:project_id", getProjectContributions);
-
-app.get("/api/chat", getMessages);
-
-app.get("/api/notifications/:user_id", fetchNotificationsByUserId);
-
-app.get("/api/calendar/events", checkIfLoggedInCalendar, getEvent);
-
-// ---- UPDATE ----
-app.put("/api/users/changeUsername", checkValidUsername, updateUsername);
-
-app.put(
-  "/api/projects/:project_id/tasks/:task_id/updateStatus",
-  loadProject,
-  checkMembership,
-  updateTaskStatus,
-);
-
-app.put("/api/projects/leader", updateTeamLeader);
-
-app.put("/api/notes/:note_id", updateNote);
-
-// ---- DELETE ----
-app.delete("/api/projects/user", removeUserFromProject);
-
-app.delete("/api/projects/:project_id", removeProject);
-
-app.delete("/api/notifications/:notification_id", removeNotification);
-
-app.delete(
-  "/api/calendar/events/:eventId",
-  checkIfLoggedInCalendar,
-  removeEvent,
-);
-
-app.delete(
-  "/api/projects/:project_id/tasks/:task_id",
-  loadProject,
-  checkMembership,
-  deleteTask,
-);
-
-app.delete("/api/notes/:note_id", removeNote);
-
-// assigning the server to a port so that requests can be made
+// start server
 server.listen(port, () => {
   console.log("Server running on http://localhost:3000/ :P");
 });
