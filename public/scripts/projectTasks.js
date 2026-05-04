@@ -217,6 +217,13 @@ if (dialogForm) {
       taskDeadline: form["taskDeadline"]?.value,
     };
 
+    const deadlineDate = new Date(payload.taskDeadline);
+
+    if (deadlineDate <= new Date()) {
+      alert("Task not created: Deadline must be in the future!");
+      return;
+    }
+
     try {
       const { res, data } = await requestJson("/api/tasks/addTask", {
         method: "POST",
