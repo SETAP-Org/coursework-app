@@ -92,12 +92,37 @@ export async function serveProjects(req, res, next) {
 
 export async function serveProjectDash(req, res) {
   try {
+    const rawDeadline = req.session.project?.project_deadline;
+    let deadlineLabel = "No deadline set";
+
+    if (rawDeadline) {
+      const today = new Date();
+      today.setHours(0,0,0,0);
+
+      const deadlineDate = new Date(rawDeadline);
+      deadlineDate.setHours(0,0,0,0);
+
+      const daysLeft = Math.ceil(
+        (deadlineDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+      );
+
+      if (daysLeft > 0) {
+        deadlineLabel = `${daysLeft} day${daysLeft > 1 ? "s" : ""} left until deadline`;
+      } else if (daysLeft === 0) {
+        deadlineLabel = "Deadline is today!";
+      } else {
+        const daysOverdue = Math.abs(daysLeft);
+        deadlineLabel = `Deadline passed ${daysOverdue} day${daysOverdue > 1 ? "s" : ""} ago`;
+      }
+    }
+    
     res.render("projectDash", {
       name: req.user.firstName,
       username: req.params.username,
       project: req.session.project,
       projectName: req.session.project.project_name,
       projectId: req.session.project.project_id,
+      deadlineLabel,
     });
   } catch (err) {
     res.render("error", {
