@@ -1,18 +1,43 @@
-import { saveNoteToDB, deleteNoteFromDB, getNotesByProjectId } from '../models/konvaModels.js';
-
+import { postNoteToDB, putNoteById, deleteNoteFromDB, getNotesByProjectId } from '../models/konvaModels.js';
 
 export async function saveNote(req, res, next) {
-    const { text, x, y, widgetId } = req.body;
-    const projectId = req.session.project.project_id;
-    console.log("saveNote called with widgetId:", widgetId);
-
     try {
+        const { text, x, y, widgetId } = req.body;
+        const projectId = req.params.project_id;
+
         const result = await saveNoteToDB(projectId, text, x, y, widgetId);
-        console.log("DB result:", result.rows[0]);
-        res.status(200).json({ success: true, note: result.rows[0] });
+
+        res.status(200).json({
+            success: true,
+            note: result.rows[0],
+        });
     } catch (err) {
-        console.error("Database error:", err);
-        res.status(400).json({ success: false, message: "DB Error" });
+        console.error("Error with saveNote:", err);
+
+        res.status(400).json({
+            success: false,
+            message: "DB Error"
+        });
+    }
+}
+
+export async function updateNote(req, res, next) {
+    try {
+        const { text, x, y, widgetId } = req.body;
+
+        const result = await putNoteById(widgetId, text, x, y);
+
+        res.status(200).json({
+            success: true,
+            note: result.rows[0],
+        });
+    } catch (err) {
+        console.error("Error with updateNote:", err);
+
+        res.status(400).json({
+            success: false,
+            message: err,
+        })
     }
 }
 
