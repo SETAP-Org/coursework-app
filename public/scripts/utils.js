@@ -2,7 +2,7 @@
 export function formatTime(timestamp) {
     const date = new Date(timestamp);
     const localDate = date.toLocaleString("en-UK", {
-        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     });
 
     const splitDate = localDate.split(", ")[0];
@@ -13,6 +13,17 @@ export function formatTime(timestamp) {
         date: splitDate,
         time: formattedTime,
     }
+}
+
+// Function to get number of days between given date and current date
+export function daysUntil(dateString) {
+    if (!dateString) return null;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const d = new Date(dateString);
+    d.setHours(0, 0, 0, 0);
+    const diff = d - today;
+    return Math.round(diff / (1000 * 60 * 60 * 24));
 }
 
 // function to set a cookie in the browser
