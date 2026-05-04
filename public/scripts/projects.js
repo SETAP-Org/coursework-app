@@ -1,13 +1,15 @@
+import { daysUntil } from "./utils.js";
+
 async function projects() {
-  // show loading screen
+  // Show loading screen
   const loading = document.querySelector(".loading");
   loading.style.display = "flex";
 
-  // ejs data
+  // Ejs data
   const { username } = window.scriptData;
   const projects = window.scriptData.projects;
 
-  // get the relevant dom elements
+  // Get relevant dom elements
   const projectsList = document.querySelector(".projects-list");
   const template = document.querySelector("#project-template");
   const dialog = document.getElementById("create-project-dialog");
@@ -16,12 +18,12 @@ async function projects() {
   const closeCreateNewFormButton = document.querySelector(".modal-close");
 
   try {
-    // update ui based on list of projects
+    // Update ui based on list of projects
     if (projects.length === 0) {
-      // if no projects in list...
+      // If no projects in list
       projectsList.innerHTML = "<li>No projects found.</li>";
     } else {
-      // otherwise, loop over the projects and clone the template to populate the list
+      // Otherwise, loop over the projects and clone the template to populate the list
       projects.forEach((project) => {
         const node = template.content.cloneNode(true);
         const section = node.querySelector(
@@ -30,41 +32,65 @@ async function projects() {
         if (section) {
           const titleEl = section.querySelector(".project-name");
           const dateEl = section.querySelector(".project-date");
+          const creatorEl = section.querySelector(".project-creator");
           const linkEl = section.querySelector("a.project-dash-button");
+
           const due_date = new Date(project.project_deadline);
           const formatted_due_date = due_date.toLocaleDateString("en-GB", {
             day: "numeric",
             month: "long",
             year: "numeric",
           });
+
           titleEl.textContent = project.project_name;
           dateEl.textContent = formatted_due_date;
+          creatorEl.textContent = project.creator_username;
+
+          const days = daysUntil(project.project_deadline);
+          if (days !== null) {
+            if (days < 0) {
+              section.classList.add("deadline-overdue");
+              dateEl.classList.add("deadline-overdue");
+            } else if (days <= 7) {
+              // within 7 days -> amber for projects
+              section.classList.add("deadline-warning");
+              dateEl.classList.add("deadline-warning");
+            }
+          }
+
           linkEl.href = `/${encodeURIComponent(username)}/projects/${encodeURIComponent(project.project_id)}`;
           linkEl.textContent = "Go to project";
           const li = document.createElement("li");
           li.className = "project-list-item";
+
+          if (section.classList.contains("deadline-overdue")) {
+            li.classList.add("deadline-overdue");
+          } else if (section.classList.contains("deadline-warning")) {
+            li.classList.add("deadline-warning");
+          }
+
           li.appendChild(section);
           projectsList.appendChild(li);
         }
       });
     }
 
-    // event to open dialog when user clicks 'create new project'
+    // Event to open dialog when user clicks 'create new project'
     createProjectBtn.addEventListener("click", () => {
       dialog.showModal();
     });
 
-    // event to close dialog when you click the "X" on the dialog
+    // Event to close dialog when you click the "X" on the dialog
     closeCreateNewFormButton.addEventListener("click", () => {
       dialog.close();
     });
 
-    // event to close dialog box when clicking anywhere outside the form
+    // Event to close dialog box when clicking anywhere outside the form
     dialog.addEventListener("click", function (e) {
       if (e.target === this) this.close();
     });
 
-    // event listener to add project
+    // Event listener to add project
     dialogForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -76,6 +102,14 @@ async function projects() {
       const name = form["project-name"].value;
       const deadline = form["project-deadline"].value;
 
+      const deadlineDate = new Date(deadline);
+
+      if (deadlineDate <= new Date()) {
+        alert("Project not created: Deadline must be in the future!");
+        loading.style.display = "none";
+        return;
+      }
+
       const res = await fetch("/api/projects/addProject", {
         method: "POST",
         headers: {
@@ -84,7 +118,7 @@ async function projects() {
         body: JSON.stringify({
           project_name: name,
           project_deadline: deadline,
-        })
+        }),
       });
 
       if (res.ok) {
@@ -111,7 +145,7 @@ async function projects() {
       projectsList.innerHTML = "<li>Error loading projects.</li>";
   }
 
-  // hide loading screen
+  // Hide loading screen
   loading.style.display = "none";
 }
 

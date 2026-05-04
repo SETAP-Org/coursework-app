@@ -1,3 +1,5 @@
+const socket = io();
+
 // show loading screen
 const loading = document.querySelector(".loading");
 loading.style.display = "flex";
@@ -11,7 +13,7 @@ const {
     creatorId,
     teamLeaderId,
     projectDeadline,
-    projectMembers
+    projectMembers,
 } = window.scriptData;
 
 // getting dom elements
@@ -48,27 +50,9 @@ const secondaryDialogHeading = document.querySelector("#secondary-dialog-heading
 const secondaryDialogMsg = document.querySelector("#secondary-dialog-message");
 const secondaryDialogBtn = document.querySelector("#secondary-dialog-button");
 
-// other variables
-let addUserInputValue = "";
-
 // team leader
 const leaderUsername = projectMembers.find(u => u.user_id === teamLeaderId).username;
 teamLeader.textContent = leaderUsername;
-
-// populating team leader dropdown
-for (const member of projectMembers) {
-    if (member.user_id !== userId) {
-        // clone the template
-        const clone = teamLeaderTemplate.content.cloneNode(true);
-
-        // change the values in the clone
-        clone.querySelector(".team-leader-option").textContent = member.username;
-        clone.querySelector(".team-leader-option").value = member.user_id;
-
-        // add the clone to the select
-        teamLeaderSelect.appendChild(clone);
-    }
-}
 
 // populate the members list
 for (const member of projectMembers) {
@@ -78,6 +62,7 @@ for (const member of projectMembers) {
     // change the values in the clone
     clone.querySelector('.info-section-li-text').textContent = member.username;
 
+    // if user is team leader, give them a crown and update colours to gold
     if (member.user_id === teamLeaderId) {
         clone.querySelector(".fa").classList.remove('fa-user');
         clone.querySelector(".fa").classList.add('fa-crown', 'team-leader');
@@ -86,61 +71,29 @@ for (const member of projectMembers) {
     
     // add the clone to the list
     sectionList.appendChild(clone);
-}
+};
 
-// event listeners to open dialogs
+// event listener for secondary dialog (redirect to home)
+secondaryDialogBtn.addEventListener("click", () => {
+    window.location.replace("/");
+});
+
+// event listener to open leave dialog
 leaveButton.addEventListener("click", () => {
     leaveDialog.showModal();
-})
+});
 
-newMemberButton.addEventListener("click", () => {
-    addDialog.showModal();
-})
-
-changeLeaderButton.addEventListener("click", () => {
-    teamLeaderDialog.showModal();
-})
-
-deleteButton.addEventListener("click", () => {
-    deleteDialog.showModal();
-})
-
-// event listeners to close dialogs
+// event listener to close leave dialog (click outside)
 leaveDialog.addEventListener("click", (e) => {
     if (e.target === leaveDialog) leaveDialog.close();
 });
 
+// event listener to close leave dialog (cancel button)
 leaveDialogNoBtn.addEventListener("click", () => {
     leaveDialog.close();
 });
 
-addDialog.addEventListener("click", (e) => {
-    if (e.target === addDialog) addDialog.close();
-    addMemberInput.value = "";
-});
-
-addDialogNoBtn.addEventListener("click", () => {
-    addDialog.close();
-    addMemberInput.value = "";
-});
-
-teamLeaderDialog.addEventListener("click", (e) => {
-    if (e.target === teamLeaderDialog) teamLeaderDialog.close();
-});
-
-teamLeaderDialogNoBtn.addEventListener("click", () => {
-    teamLeaderDialog.close();
-});
-
-deleteDialog.addEventListener("click", (e) => {
-    if (e.target === deleteDialog) deleteDialog.close();
-});
-
-deleteDialogNoBtn.addEventListener("click", () => {
-    deleteDialog.close();
-});
-
-// event listener to leave the project
+// event listener if user chooses to leave the project
 leaveDialogYesBtn.addEventListener("click", async () => {
     leaveDialog.close();
 
@@ -166,6 +119,16 @@ leaveDialogYesBtn.addEventListener("click", async () => {
 
         // change the message of the secondary dialog
         if (data.success) {
+            socket.emit('notification', {
+                targetUsers: projectMembers
+                    .filter(u => u.user_id !== userId)
+                    .map(u => u.user_id),
+                projectId: projectId,
+                notificationType: "Member Leave",
+                notificationMessage: `${username} has left ${projectName}`,
+            });
+
+            // update and show secondary dialog
             secondaryDialogHeading.textContent = "Success!";
             secondaryDialogMsg.textContent = data.message;
         } else {
@@ -181,125 +144,227 @@ leaveDialogYesBtn.addEventListener("click", async () => {
     }
 });
 
-// event listener for secondary dialog
-secondaryDialogBtn.addEventListener("click", () => {
-    window.location.relocate("/");
-});
+// event listeners if the user is team leader
+if (teamLeaderId === userId) {
+    // add memeber username input
+    let addUserInputValue = "";
 
-// event listener to track add member input
-addMemberInput.addEventListener("input", (e) => {
-    addUserInputValue = e.target.value;
-    e.target.value === "" ? addDialogYesBtn.disabled = true : addDialogYesBtn.disabled = false;
-});
+    // event listener to update addUserInputValue
+    addMemberInput.addEventListener("input", (e) => {
+        addUserInputValue = e.target.value;
+        e.target.value === "" ? addDialogYesBtn.disabled = true : addDialogYesBtn.disabled = false;
+    });
 
-// event listener to add member to project
-addDialogYesBtn.addEventListener("click", async () => {
-    addDialog.close();
+    // populating new team leader dropdown
+    for (const member of projectMembers) {
+        if (member.user_id !== userId) {
+            // clone the template
+            const clone = teamLeaderTemplate.content.cloneNode(true);
 
-    const userAlreadyInProject = projectMembers.some(member => member.username === addUserInputValue);
+            // change the values in the clone
+            clone.querySelector(".team-leader-option").textContent = member.username;
+            clone.querySelector(".team-leader-option").value = member.user_id;
 
-    if (addUserInputValue === username) {
-        alert("You cannot add yourself to the project!");
+            // add the clone to the select
+            teamLeaderSelect.appendChild(clone);
+        }
+    };
+
+    // event listener to open new member dialog
+    newMemberButton.addEventListener("click", () => {
+        addDialog.showModal();
+    });
+
+    // event listener to close new member dialog (click outside)
+    addDialog.addEventListener("click", (e) => {
+        if (e.target === addDialog) addDialog.close();
         addMemberInput.value = "";
-    } else if (userAlreadyInProject) {
-        alert(`${addUserInputValue} is already a part of the project!`);
+    });
+
+    // event listener to close new member dialog (cancel button)
+    addDialogNoBtn.addEventListener("click", () => {
+        addDialog.close();
         addMemberInput.value = "";
-    } else {
+    });
+
+    // event listener to add new member to project
+    addDialogYesBtn.addEventListener("click", async () => {
+        addDialog.close();
+
+        const userAlreadyInProject = projectMembers.some(member => member.username === addUserInputValue);
+
+        if (addUserInputValue === username) {
+            alert("You cannot add yourself to the project!");
+            addMemberInput.value = "";
+        } else if (userAlreadyInProject) {
+            alert(`${addUserInputValue} is already a part of the project!`);
+            addMemberInput.value = "";
+        } else {
+            // show loading
+            loading.style.display = "flex";
+
+            // attempt to add the user to the group
+            const response = await fetch("/api/projects/user", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: addUserInputValue,
+                    projectId: projectId
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // send notification to other group members
+                socket.emit('notification', {
+                    targetUsers: [...projectMembers
+                        .filter(u => u.user_id !== userId)
+                        .map(u => u.user_id),
+                        data.userId,
+                    ],
+                    projectId: projectId,
+                    notificationType: "Member Join",
+                    notificationMessage: `${addUserInputValue} has been added added to ${projectName}`,
+                    targetUsername: addUserInputValue,
+                    projectName: projectName
+                });
+
+                // load the secondary dialog
+                secondaryDialogHeading.textContent = "Success!";
+                secondaryDialogMsg.textContent = `${addUserInputValue} has been added to the group!`;
+            } else {
+                secondaryDialogHeading.textContent = "Error :(";
+                secondaryDialogMsg.textContent = data.message;
+            }
+
+            addMemberInput.value = "";
+
+            // close loading
+            loading.style.display = "none";
+        
+            // show redirect dialog
+            secondaryDialog.showModal();
+        }
+    });
+
+    // event listener to open new team leader dialog
+    changeLeaderButton.addEventListener("click", () => {
+        teamLeaderDialog.showModal();
+    });
+
+    // event listner to close new team leader dialog (click outside)
+    teamLeaderDialog.addEventListener("click", (e) => {
+        if (e.target === teamLeaderDialog) teamLeaderDialog.close();
+    });
+
+    // event listener to close new team leader dialog (cancel button)
+    teamLeaderDialogNoBtn.addEventListener("click", () => {
+        teamLeaderDialog.close();
+    });
+
+    // event listener to change the team leader
+    teamLeaderDialogYesBtn.addEventListener("click", async () => {
+        teamLeaderDialog.close();
+
         // show loading
         loading.style.display = "flex";
 
-        // attempt to add the user to the group
-        const response = await fetch("/api/projects/user", {
-            method: "POST",
+        // change the leader
+        const response = await fetch("/api/projects/leader", {
+            method: "PUT",
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                username: username,
+                newLeaderId: teamLeaderSelect.value,
                 projectId: projectId
             })
         });
-
         const data = await response.json();
 
         if (data.success) {
+            // send notifications to group members
+            socket.emit('notification', {
+                targetUsers: projectMembers
+                    .filter(u => u.user_id !== userId)
+                    .map(u => u.user_id),
+                projectId: projectId,
+                notificationType: "Leader",
+                notificationMessage: `${teamLeaderSelect.options[teamLeaderSelect.selectedIndex].text} has been made the team leader of ${projectName}`,
+                targetUsername: teamLeaderSelect.options[teamLeaderSelect.selectedIndex].text,
+                projectName: projectName,
+            });
+
+            // update and show the secondary dialog
             secondaryDialogHeading.textContent = "Success!";
-            secondaryDialogMsg.textContent = `${addUserInputValue} has been added to the group!`;
+            secondaryDialogMsg.textContent = data.message;
         } else {
             secondaryDialogHeading.textContent = "Error :(";
             secondaryDialogMsg.textContent = data.message;
         }
 
-        addMemberInput.value = "";
-
-        // close loading
+        // hide loading
         loading.style.display = "none";
-    
+
         // show redirect dialog
         secondaryDialog.showModal();
-    }
-});
-
-// event listener to change the team leader
-teamLeaderDialogYesBtn.addEventListener("click", async () => {
-    teamLeaderDialog.close();
-
-    // show loading
-    loading.style.display = "flex";
-
-    // change the leader
-    const response = await fetch("/api/projects/leader", {
-        method: "PUT",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            newLeaderId: teamLeaderSelect.value,
-            projectId: projectId
-        })
     });
-    const data = await response.json();
 
-    if (data.success) {
-        secondaryDialogHeading.textContent = "Success!";
-        secondaryDialogMsg.textContent = data.message;
-    } else {
-        secondaryDialogHeading.textContent = "Error :(";
-        secondaryDialogMsg.textContent = data.message;
-    }
+    // event listener to open delete project dialog
+    deleteButton.addEventListener("click", () => {
+        deleteDialog.showModal();
+    });
 
-    // hide loading
-    loading.style.display = "none";
+    // event listener to close delete project dialog (click outside)
+    deleteDialog.addEventListener("click", (e) => {
+        if (e.target === deleteDialog) deleteDialog.close();
+    });
 
-    // show redirect dialog
-    secondaryDialog.showModal();
-})
+    // event listener to close delete project dialog (cancel button)
+    deleteDialogNoBtn.addEventListener("click", () => {
+        deleteDialog.close();
+    });
 
-// event listener to delete the project
-deleteDialogYesBtn.addEventListener("click", async () => {
-    deleteDialog.close();
+    // event listener to delete the project
+    deleteDialogYesBtn.addEventListener("click", async () => {
+        deleteDialog.close();
 
-    // show loading
-    loading.style.display = "flex";
+        // show loading
+        loading.style.display = "flex";
 
-    // delete the project
-    const response = await fetch(`/api/projects/${projectId}`);
-    const data = await response.json();
+        // delete the project
+        const response = await fetch(`/api/projects/${projectId}`, {
+            method: "DELETE",
+        });
+        const data = await response.json();
 
-    if (data.success) {
-        secondaryDialogHeading.textContent = "Success!";
-        secondaryDialogMsg.textContent = data.message;
-    } else {
-        secondaryDialogHeading.textContent = "Error :(";
-        secondaryDialogMsg.textContent = data.message;
-    }
+        if (data.success) {
+            socket.emit('notification', {
+                targetUsers: projectMembers
+                    .filter(u => u.user_id !== userId)
+                    .map(u => u.user_id),
+                notificationType: "Project",
+                notificationMessage: `${projectName} has been deleted`,
+            });
 
-    // hide loading
-    loading.style.display = "none";
+            // update and show the secondary dialog
+            secondaryDialogHeading.textContent = "Success!";
+            secondaryDialogMsg.textContent = data.message;
+        } else {
+            secondaryDialogHeading.textContent = "Error :(";
+            secondaryDialogMsg.textContent = data.message;
+        }
 
-    // show redirect dialog
-    secondaryDialog.showModal();
-})
+        // hide loading
+        loading.style.display = "none";
+
+        // show redirect dialog
+        secondaryDialog.showModal();
+    });
+};
 
 // hide loading screen
 loading.style.display = "none";

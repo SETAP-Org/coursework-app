@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <link rel="stylesheet" href="/css/root-dark.css"/>
+        <link id="theme-stylesheet" rel="stylesheet"/>
         <link rel="stylesheet" href="/css/project_tasks.css" />
         <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml" />
 
@@ -12,22 +12,26 @@
             window.scriptData = {
                 userId: "<%= userId %>",
                 projectId: "<%= projectId %>",
+                projectName: "<%= projectName %>",
                 groupUsers: <%- JSON.stringify(groupUsers) %>,
                 tasks: <%- JSON.stringify(tasks) %>,
                 teamLeaderId: "<%= teamLeaderId %>"
             };
         </script>
-        <script src="/scripts/L&D-mode.js" defer></script>
-        <script src="/scripts/projectTasks.js" defer></script>
+        <script src="/socket.io/socket.io.js" type="module"></script>
+        <script src="/scripts/L&D-mode.js" defer type="module"></script>
+        <script src="/scripts/projectTasks.js" defer type="module"></script>
 
         <title>GCMS | <%= projectName %> Tasks</title>
     </head>
     <body>
+        <%- include('partials/userNav') %>
         <%- include('partials/projectNav') %>
 
         <section id="page-content">
             <section class="page-header">
                 <h1 id="page-title">Tasks</h1>
+                <!-- Only show create task button if user is team leader -->
                 <% if (userId == teamLeaderId) { %>
                     <button id="new-task-button">New Task</button>
                 <% } %>
@@ -47,15 +51,29 @@
                         <input type="checkbox" class="task-complete-checkbox" />
                     </label>
                     <p class="task-desc"></p>
+
+                    <!-- Delete button, shown to team leader only via JS -->
+                    <button type="button" class="task-delete-button" title="Delete task" aria-label="Delete task" style="display:none;">
+                        <svg class="icon-trash" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false" role="img">
+                            <path d="M9 3h6a1 1 0 0 1 1 1v1h3a1 1 0 1 1 0 2h-1v11a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7H2a1 1 0 1 1 0-2h3V4a1 1 0 0 1 1-1zm1 4a1 1 0 0 0-1 1v8a1 1 0 1 0 2 0V8a1 1 0 0 0-1-1zm4 0a1 1 0 0 0-1 1v8a1 1 0 1 0 2 0V8a1 1 0 0 0-1-1z"/>
+                        </svg>
+                    </button>
                 </div>
 
-                <!-- Bottom group: date + assignee (sticky to bottom) -->
+                <!-- Bottom group: headers + values (assignee left, date right) -->
                 <div class="card-bottom">
-                    <em class="task-assignee"></em>
-                    <em class="task-date"></em>
+                    <div class="card-bottom-col card-bottom-left">
+                        <span class="card-bottom-header">ASSIGNEE</span>
+                        <em class="task-assignee"></em>
+                    </div>
+                    <div class="card-bottom-col card-bottom-right">
+                        <span class="card-bottom-header">DUE</span>
+                        <em class="task-date"></em>
+                    </div>
                 </div>
             </section>
         </template>
+
 
         <!-- Popup for creating new task -->
         <dialog id="create-task-dialog">

@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <link rel="stylesheet" href="/css/root-dark.css"/>
+        <link id="theme-stylesheet" rel="stylesheet"/>
         <link rel="stylesheet" href="/css/project_dash.css" />
         <link rel="stylesheet" href="/css/project_chat.css" />
         <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml" />
@@ -19,9 +19,9 @@
                 groupUsers: <%- JSON.stringify(groupUsers) %>
             };
         </script>
-        <script src="/scripts/L&D-mode.js" defer></script>
-        <script src="/socket.io/socket.io.js" defer></script>
-        <script src="/scripts/projectChat.js" defer></script>
+        <script src="/scripts/L&D-mode.js" defer type="module"></script>
+        <script src="/socket.io/socket.io.js" defer type="module"></script>
+        <script type="module" src="/scripts/projectChat.js"></script>
 
         <title>GCMS | <%= projectName %> Chat</title>
     </head>
@@ -33,7 +33,19 @@
             <h1 id="page-title">Chat</h1>
 
             <div class="chat-container">
-                <div class="chat-messages"></div>
+                <div class="chat-messages">
+                    <template id="chat-message-template">
+                        <div id="message-container">
+                            <p id="message-info-top"></p>
+
+                            <div id="message-bubble">
+                                <p id="message-content"></p>
+                            </div>
+
+                            <p id="message-info-bottom"></p>
+                        </div>
+                    </template>
+                </div>
 
                 <form action="" class="chat-form">
                     <fieldset class="chat-fieldset">

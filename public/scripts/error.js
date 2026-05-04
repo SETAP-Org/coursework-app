@@ -4,8 +4,8 @@ loading.style.display = "flex";
 
 const button = document.querySelector("button");
 
-button.addEventListener("click", () => {
-    window.location.replace("/");
+button.addEventListener("click", async () => {
+    await fetch("/api/auth/signout");
 });
 
 // hide loading screen
