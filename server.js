@@ -18,12 +18,7 @@ import notificationRoutes from "./routes/notificationsRoutes.js";
 import contributionsRoutes from "./routes/contributionsRoutes.js";
 import noteRoutes from "./routes/noteRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js";
-
-import {
-  postAiChatMessage,
-  getAiChatMessages,
-  clearAiChatHistory,
-} from "./controllers/aiChatControllers.js";
+import aiRoutes from "./routes/aiRoutes.js";
 
 // util imports
 import createSession from "./utils/session.js";
@@ -55,6 +50,7 @@ setupSocket(io);
 app.use("/", pageRoutes);
 app.use("/api", authRoutes);
 app.use("/api", userRoutes);
+app.use("/api", aiRoutes);
 app.use("/api", projectRoutes);
 app.use("/api", taskRoutes);
 app.use("/api", calendarRoutes);

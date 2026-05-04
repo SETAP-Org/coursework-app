@@ -17,7 +17,10 @@ import { loadFilesForGemini } from "../utils/fileFetcher.js";
  */
 export async function postAiChatMessage(req, res) {
     try {
-        const projectId = req.session.project.project_id;
+        const projectResponse = await getProjectByIdModel(req.params.project_id);
+        const project = projectResponse.rows[0];
+
+        const projectId = project.project_id;
         const messageContent = (req.body.messageContent ?? "").trim();
 
         if (!messageContent) {
@@ -105,7 +108,10 @@ export async function postAiChatMessage(req, res) {
  */
 export async function getAiChatMessages(req, res) {
     try {
-        const projectId = req.session.project.project_id;
+        const projectResponse = await getProjectByIdModel(req.params.project_id);
+        const project = projectResponse.rows[0];
+
+        const projectId = project.project_id;
         const data = await getAiChatMessagesByProjectIdModel(projectId);
 
         return res.status(200).json({
@@ -129,12 +135,13 @@ export async function getAiChatMessages(req, res) {
  */
 export async function clearAiChatHistory(req, res) {
     try {
-        const projectId = req.session.project.project_id;
+        const projectResponse = await getProjectByIdModel(req.params.project_id);
+        const project = projectResponse.rows[0];
+
+        const projectId = project.project_id;
 
         const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
         const dbUser = dbUserResult?.rows?.[0];
-        const projectResult = await getProjectByIdModel(projectId);
-        const project = projectResult.rows[0];
 
         if (!dbUser || !project || project.team_leader_id !== dbUser.user_id) {
             return res.status(403).json({
