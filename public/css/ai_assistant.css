@@ -45,6 +45,11 @@
     display: none;
 }
 
+/* When the wrapper is collapsed, hide the panel. */
+.ai-assistant.ai-assistant--collapsed .ai-assistant__panel {
+    display: none;
+}
+
 /* ---- Expanded panel ---- */
 
 .ai-assistant__panel {
