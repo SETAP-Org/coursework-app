@@ -32,7 +32,6 @@ import {
   addProject,
   getUserProjects,
   getProjectDetails,
-  loadProject,
   checkMembership,
   updateTeamLeader,
   removeProject,
@@ -55,8 +54,6 @@ import {
   setJustAuthenticatedFlag,
   getJustAuthenticatedFlag,
 } from "./controllers/authControllers.js";
-
-import { addMessage, getMessages } from "./controllers/chatControllers.js";
 
 import {
   addTask,
@@ -172,7 +169,6 @@ app.get("/:username/profile", checkIfLoggedInRedirect, serveProfile);
 app.get(
   "/:username/projects/:project_id",
   checkIfLoggedInRedirect,
-  loadProject, //Adds project details to req.session
   checkMembership, //Ensures user is member of the project
   serveProjectDash,
 );
@@ -180,7 +176,6 @@ app.get(
 app.get(
   "/:username/projects/:project_id/information",
   checkIfLoggedInRedirect,
-  loadProject,
   checkMembership,
   serveProjectInfo,
 );
@@ -188,7 +183,6 @@ app.get(
 app.get(
   "/:username/projects/:project_id/tasks",
   checkIfLoggedInRedirect,
-  loadProject,
   checkMembership,
   serveProjectTasks,
 );
@@ -196,7 +190,6 @@ app.get(
 app.get(
   "/:username/projects/:project_id/calendar",
   checkIfLoggedInCalendar,
-  loadProject,
   checkMembership,
   serveProjectCalendar,
 );
@@ -204,7 +197,6 @@ app.get(
 app.get(
   "/:username/projects/:project_id/chat",
   checkIfLoggedInRedirect,
-  loadProject,
   checkMembership,
   serveProjectChat,
 );
@@ -212,7 +204,6 @@ app.get(
 app.get(
   "/:username/projects/:project_id/contributions",
   checkIfLoggedInRedirect,
-  loadProject,
   checkMembership,
   serveProjectContributions,
 );
@@ -223,14 +214,9 @@ app.post("/api/projects/addProject", addProject);
 
 app.post("/api/users/addUser", setJustAuthenticatedFlag, addUser);
 
-app.post("/api/chat/addMessage", addMessage);
-
-app.post("/api/tasks/addTask", addTask);
+app.post("/api/tasks/:project_id/addTask", addTask);
 
 app.post("/api/projects/user", addUserToProject);
-
-// potentially dont need...
-// app.post("/api/notifications", addNotification);
 
 // ---- READ ----
 // ---- API ROUTES FOR calandar EVENTS ----
@@ -246,7 +232,6 @@ app.delete(
 
 app.delete(
   "/api/projects/:project_id/tasks/:task_id",
-  loadProject,
   checkMembership,
   deleteTask,
 );
@@ -255,25 +240,20 @@ app.delete(
 app.post(
   "/:username/projects/:project_id/save",
   checkIfLoggedInRedirect,
-  loadProject,
   saveNote,
 );
 
 app.post(
   "/:username/projects/:project_id/delete",
   checkIfLoggedInRedirect,
-  loadProject,
   deleteNote,
 );
 
 app.get(
   "/:username/projects/:project_id/notes",
   checkIfLoggedInRedirect,
-  loadProject,
   getNotes,
 );
-
-app.get("/:username/projects/:project_id", checkMembership, serveProjectDash);
 
 //---- READ ----
 
@@ -302,15 +282,12 @@ app.get("/api/projects/:project_id/tasks", getProjectTasks);
 
 app.get("/api/contributions/:project_id", getProjectContributions);
 
-app.get("/api/chat", getMessages);
-
 app.get("/api/notifications/:user_id", fetchNotificationsByUserId);
 
 // ---- UPDATE ----
 app.put("/api/users/changeUsername", checkValidUsername, updateUsername);
 app.put(
   "/api/projects/:project_id/tasks/:task_id/updateStatus",
-  loadProject,
   checkMembership,
   updateTaskStatus,
 );

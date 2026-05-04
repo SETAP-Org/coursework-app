@@ -9,11 +9,12 @@ import { getUserByMicrosoftIdModel } from "../models/userModels.js";
 
 export async function addTask(req, res, next) {
   try {
+    const { project_id } = req.params;
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult?.rows?.[0];
 
     const data = await postTaskModel(
-      req.session.project.project_id,
+      project_id,
       req.body.taskAssignee,
       req.body.taskTitle,
       req.body.taskDesc,
@@ -101,8 +102,9 @@ export async function deleteTask(req, res, next) {
   try {
     const { project_id, task_id } = req.params;
 
-    // ensure project is loaded in session (loadProject middleware)
-    const project = req.session.project;
+    const projectResult = await getProjectByIdModel(project_id);
+    const project = projectResult.rows[0];
+
     if (!project) {
       return res
         .status(400)

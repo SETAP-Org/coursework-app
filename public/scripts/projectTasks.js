@@ -225,11 +225,14 @@ if (dialogForm) {
     }
 
     try {
-      const { res, data } = await requestJson("/api/tasks/addTask", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const { res, data } = await requestJson(
+        `/api/tasks/${SD.projectId}/addTask`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        },
+      );
 
       if (res.ok && data.success) {
         // Notify assignee if it's not the creator

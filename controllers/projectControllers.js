@@ -6,7 +6,7 @@ import {
   getProjectByIdModel,
   isUserMemberOfProjectModel,
   putTeamLeader,
-  deleteProjectByIdModel
+  deleteProjectByIdModel,
 } from "../models/projectModels.js";
 import { getUserByMicrosoftIdModel } from "../models/userModels.js";
 
@@ -18,7 +18,7 @@ export async function addProject(req, res, next) {
 
     const userId = dbUser.user_id;
     const { project_name, project_deadline } = req.body;
-    
+
     const result = await postProjectModel(
       userId,
       project_name,
@@ -108,20 +108,20 @@ export async function updateTeamLeader(req, res, next) {
     if (data.rows.length > 0) {
       res.status(200).json({
         success: true,
-        message: "The team leader has been changed"
-      })
+        message: "The team leader has been changed",
+      });
     } else {
       res.status(400).json({
         success: false,
-        message: "Something went wrong!"
-      })
+        message: "Something went wrong!",
+      });
     }
-  } catch(err) {
+  } catch (err) {
     console.error("Error with getUserProjects:", err);
     res.status(400).json({
       success: true,
-      message: err
-    })
+      message: err,
+    });
   }
 }
 
@@ -133,21 +133,21 @@ export async function removeProject(req, res, next) {
     if (data.rows.length > 0) {
       res.status(200).json({
         success: true,
-        message: "The project has been deleted!"
+        message: "The project has been deleted!",
       });
     } else {
       res.status(400).json({
         success: false,
-        message: "Something went wrong!"
-      })
+        message: "Something went wrong!",
+      });
     }
-  } catch(err) {
+  } catch (err) {
     console.error("Error with removeProject", err);
 
     res.status(400).json({
       success: false,
-      message: err
-    })
+      message: err,
+    });
   }
 }
 
@@ -171,7 +171,8 @@ export async function loadProject(req, res, next) {
 
 export async function checkMembership(req, res, next) {
   try {
-    if (!req.session.project) return res.status(500).send("Project not loaded");
+    const { project_id } = req.params;
+    if (!project_id) return res.status(500).send("Project not loaded");
 
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult.rows[0];
@@ -179,7 +180,7 @@ export async function checkMembership(req, res, next) {
 
     const membershipResult = await isUserMemberOfProjectModel(
       dbUser.user_id,
-      req.session.project.project_id,
+      project_id,
     );
     const isMember = membershipResult.rows[0].is_member;
 
