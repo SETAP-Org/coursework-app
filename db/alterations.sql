@@ -61,6 +61,7 @@ AlTER TABLE AI_CHAT_MESSAGES
     ON DELETE CASCADE;
 
 ALTER TABLE FILES
+  DROP CONSTRAINT IF EXISTS files_project_id_fkey,
   ADD CONSTRAINT files_project_id_fkey
     FOREIGN KEY (project_id) REFERENCES projects(project_id)
     ON DELETE CASCADE;
