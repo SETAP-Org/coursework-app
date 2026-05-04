@@ -1,55 +1,64 @@
+// Imports
+import { daysUntil } from "./utils.js";
+// Initialise sockets for notifications
 const socket = io();
 
+// Keep a single consolidated reference to data injected by the server (EJS)
+const SD = window.scriptData || {};
+// Destructure commonly used values (tasks kept on SD so updates persist)
+const { username, projectName } = SD;
+
+// Toggles the dialog window (popup) to create a task
 function toggleNewTaskForm() {
-  const dialog = document.getElementById("create-task-dialog");
+  const dialog = document.querySelector("#create-task-dialog");
   dialog.open ? dialog.close() : dialog.showModal();
 }
 
-function daysUntil(dateString) {
-  if (!dateString) return null;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const d = new Date(dateString);
-  d.setHours(0, 0, 0, 0);
-  const diff = d - today;
-  return Math.round(diff / (1000 * 60 * 60 * 24));
-}
-
+// Function to run when page loads to draw all tasks
 function showTasks() {
-  const tasks = window.scriptData.tasks || [];
-  const groupUsers = window.scriptData.groupUsers || [];
-  const user_id = window.scriptData.userId;
-  const teamLeaderId = window.scriptData.teamLeaderId;
-
-  const userMap = new Map(groupUsers.map((u) => [u.user_id, u.username]));
+  const tasks = SD.tasks || [];
+  const groupUsers = SD.groupUsers || [];
+  const user_id = SD.userId;
+  const teamLeaderId = SD.teamLeaderId;
 
   const main_list = document.querySelector("#task-list");
   const template = document.querySelector("#task-template");
 
+  // If required DOM is missing, nothing to render
+  if (!main_list || !template) return;
+
   main_list.innerHTML = "";
 
+  // If no tasks exist
   if (tasks.length === 0) {
     main_list.innerHTML = "No tasks yet!";
     return;
   }
 
-  // Status: "Completed" should sort last
+  // Generate map of user_id's in project to their respective usernames
+  const userMap = new Map(
+    (groupUsers || []).map((u) => [u.user_id, u.username]),
+  );
+
+  // Sorting tasks by closest deadline first (all completed tasks go after incomplete ones)
   const statusPriority = (status) =>
-    String(status).toLowerCase() === "completed" ? 1 : 0;
+    String(status || "").toLowerCase() === "completed" ? 1 : 0;
 
   const sorted = [...tasks].sort((a, b) => {
     const sa = statusPriority(a.task_status);
     const sb = statusPriority(b.task_status);
     if (sa !== sb) return sa - sb;
 
-    const da = new Date(a.task_deadline).getTime();
-    const db = new Date(b.task_deadline).getTime();
+    const da = new Date(a.task_deadline || 0).getTime();
+    const db = new Date(b.task_deadline || 0).getTime();
     return da - db;
   });
 
+  // Iterate over the tasks, drawing each one on the screen using the template
   sorted.forEach((task) => {
     const node = template.content.cloneNode(true);
     const section = node.querySelector(".task-card-individual");
+    if (!section) return; // template not as expected
 
     const taskTitle = section.querySelector(".task-name");
     const taskDescription = section.querySelector(".task-desc");
@@ -61,51 +70,57 @@ function showTasks() {
 
     const days = daysUntil(task.task_deadline);
 
-    const deadline = new Date(task.task_deadline);
-    const formatted_deadline = deadline.toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "2-digit",
-    });
+    const deadline = new Date(task.task_deadline || null);
+    const formatted_deadline = isNaN(deadline)
+      ? "No deadline"
+      : deadline.toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "2-digit",
+        });
 
-    taskTitle.textContent = task.task_title;
-    taskDescription.textContent = task.task_description;
+    taskTitle.textContent = task.task_title || "";
+    taskDescription.textContent = task.task_description || "";
     taskDeadline.textContent = formatted_deadline;
     taskAssignee.textContent = userMap.get(task.assignee_id) || "Unknown";
 
+    // Draw task weight as bubble in top left of task card
     if (weightEl) {
-      weightEl.textContent = String(task.task_weight);
-      weightEl.title = `Weight: ${task.task_weight}`;
-      weightEl.dataset.weight = String(task.task_weight);
+      weightEl.textContent = String(task.task_weight ?? "");
+      weightEl.title = `Weight: ${task.task_weight ?? ""}`;
+      weightEl.dataset.weight = String(task.task_weight ?? "");
       weightEl.style.display = ""; // ensure visible
     }
 
-    if (task.assignee_id === user_id) {
+    // If the current user belongs to the task, also draw tickbox in top right
+    if (task.assignee_id === user_id && checkbox) {
       checkbox.style.display = "inline-block";
       checkbox.dataset.taskId = task.task_id;
       checkbox.checked = task.task_status === "Completed";
       checkbox.disabled = false;
-    } else {
+    } else if (checkbox) {
       checkbox.style.display = "none";
       checkbox.disabled = true;
     }
 
     // Show delete button only for team leader
-    if (String(teamLeaderId) === String(user_id)) {
+    if (String(teamLeaderId) === String(user_id) && deleteBtn) {
       deleteBtn.style.display = ""; // visible
       deleteBtn.dataset.taskId = task.task_id;
-    } else {
+    } else if (deleteBtn) {
       deleteBtn.style.display = "none";
     }
 
+    // Apply completed style to any tasks that are already completed
     if (task.task_status === "Completed") {
       section.classList.add("task-completed");
     } else {
       section.classList.remove("task-completed");
     }
 
+    // Apply correct styling for tasks close to their deadlines
     if (task.task_status !== "Completed" && days !== null) {
-      if (days < 0) {
+      if (days <= 0) {
         section.classList.add("deadline-overdue");
         taskDeadline.classList.add("deadline-overdue");
       } else if (days <= 1) {
@@ -122,210 +137,219 @@ function showTasks() {
   });
 }
 
-const teamLeaderId = window.scriptData.teamLeaderId;
-const userId = window.scriptData.userId;
+// 'Free-floating' code
+// Get DOM references and consolidate data
+const createTaskDialog = document.querySelector("#create-task-dialog");
+const dialogForm = document.querySelector("#create-task-dialog form");
+const weightRange = document.getElementById("taskWeightRange");
+const valueOutput = document.getElementById("taskWeightValue");
+const taskListEl = document.querySelector("#task-list");
 
-if (teamLeaderId === userId) {
+// Only draw create task button if current user is also the team leader
+if (SD.teamLeaderId === SD.userId) {
   const newTaskBtn = document.querySelector("#new-task-button");
-  if (newTaskBtn) {
-    newTaskBtn.addEventListener("click", toggleNewTaskForm);
-  }
+  if (newTaskBtn) newTaskBtn.addEventListener("click", toggleNewTaskForm);
 }
 
-const createTaskDialog = document.querySelector("#create-task-dialog");
+// Close dialog window when clicking outside the dialog
 if (createTaskDialog) {
-  createTaskDialog.addEventListener("click", function (e) {
-    if (e.target === this) this.close();
+  createTaskDialog.addEventListener("click", (e) => {
+    if (e.target === createTaskDialog) createTaskDialog.close();
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Elements and data queried after DOM is ready
-  const dialogForm = document.querySelector("#create-task-dialog form");
-  const { username } = window.scriptData || {};
+// Ensure weight display matches range input
+if (weightRange && valueOutput) {
+  valueOutput.textContent = weightRange.value;
+  weightRange.addEventListener("input", (e) => {
+    valueOutput.textContent = e.target.value;
+  });
+}
 
-  // Weight range UI
-  const weightRange = document.getElementById("taskWeightRange");
-  const valueOutput = document.getElementById("taskWeightValue");
-
-  if (weightRange && valueOutput) {
-    // Ensure initial displayed value matches the input value
-    valueOutput.textContent = weightRange.value;
-
-    // Update as the user moves the slider
-    weightRange.addEventListener("input", (e) => {
-      valueOutput.textContent = e.target.value;
-    });
+// If there's no task list element, render tasks and exit if no form
+if (!taskListEl) {
+  showTasks();
+  if (!dialogForm) {
+    // nothing more to do
+    // (no task list interactions on this page)
   }
+}
 
-  // If there's no form on this page, nothing more to do
-  if (!dialogForm) return;
+// Small helper to fetch and parse JSON safely
+async function requestJson(url, opts) {
+  const res = await fetch(url, opts);
+  try {
+    const data = await res.json();
+    return { res, data };
+  } catch {
+    return { res, data: {} };
+  }
+}
 
+// Small helper to show server errors consistently
+function showError(payload, fallback = "An unexpected error occurred.") {
+  alert(payload?.error || fallback);
+}
+
+// Update local in-memory tasks list
+function removeTaskFromLocal(taskId) {
+  SD.tasks = SD.tasks || [];
+  const idx = SD.tasks.findIndex((t) => String(t.task_id) === String(taskId));
+  if (idx !== -1) SD.tasks.splice(idx, 1);
+}
+
+function updateTaskStatusLocal(taskId, status) {
+  SD.tasks = SD.tasks || [];
+  const idx = SD.tasks.findIndex((t) => String(t.task_id) === String(taskId));
+  if (idx !== -1) SD.tasks[idx].task_status = status;
+}
+
+// Handle create-task form submission
+if (dialogForm) {
   dialogForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-
     const form = e.target;
-    const title = form["taskTitle"]?.value;
-    const description = form["taskDesc"]?.value;
-    const deadline = form["taskDeadline"]?.value;
-    const weight = form["taskWeight"]?.value;
-    const assignee = form["taskAssignee"]?.value;
+    const payload = {
+      taskAssignee: form["taskAssignee"]?.value,
+      taskTitle: form["taskTitle"]?.value,
+      taskDesc: form["taskDesc"]?.value,
+      taskWeight: form["taskWeight"]?.value,
+      taskDeadline: form["taskDeadline"]?.value,
+    };
+
+    const deadlineDate = new Date(payload.taskDeadline);
+
+    if (deadlineDate <= new Date()) {
+      alert("Task not created: Deadline must be in the future!");
+      return;
+    }
 
     try {
-      const res = await fetch("/api/tasks/addTask", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const { res, data } = await requestJson(
+        `/api/tasks/${SD.projectId}/addTask`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
         },
-        body: JSON.stringify({
-          taskAssignee: assignee,
-          taskTitle: title,
-          taskDesc: description,
-          taskWeight: weight,
-          taskDeadline: deadline,
-        }),
-      });
+      );
 
-      const data = await res.json().catch(() => ({}));
-
-      if (res.ok) {
-        if (data.success) {
-          if (assignee !== window.scriptData.userId) {
-            socket.emit('notification', {
-                  targetUsers: [assignee],
-                  projectId: window.scriptData.projectId,
-                  notificationType: "Task",
-                  notificationMessage: `You have been assigned a task in ${window.scriptData.projectName}`,
-            });
-          }
-
-          document.getElementById("create-task-dialog").close();
-          form.reset();
-
-          // Redirect only if we have a username and project id
-          if (username && data.project?.project_id) {
-            window.location.replace(
-              `/${encodeURIComponent(username)}/projects/${encodeURIComponent(
-                data.project.project_id,
-              )}/tasks`,
-            );
-          } else {
-            // Otherwise just reload the page
-            window.location.reload();
-          }
-        } else {
-          alert(data.error || "Failed to create task.");
+      if (res.ok && data.success) {
+        // Notify assignee if it's not the creator
+        if (payload.taskAssignee && payload.taskAssignee !== SD.userId) {
+          socket.emit("notification", {
+            targetUsers: [payload.taskAssignee],
+            projectId: SD.projectId,
+            notificationType: "Task",
+            notificationMessage: `You have been assigned a task in ${projectName}`,
+          });
         }
+
+        // Close dialog and reset
+        const dlg = document.getElementById("create-task-dialog");
+        if (dlg) dlg.close();
+        form.reset();
+
+        // Redirect to project tasks view if we have both username and project id
+        if (username && data.project?.project_id) {
+          window.location.replace(
+            `/${encodeURIComponent(username)}/projects/${encodeURIComponent(
+              data.project.project_id,
+            )}/tasks`,
+          );
+          return;
+        }
+
+        // Otherwise reload to pick up server-side changes
+        window.location.reload();
       } else {
-        alert(data.error || "Failed to create task.");
+        showError(data, "Failed to create task.");
       }
     } catch (err) {
       console.error("Error creating task:", err);
       alert("An unexpected error occurred creating the task.");
     }
   });
-});
+}
 
-document.querySelector("#task-list").addEventListener("change", async (e) => {
-  const cb = e.target.closest(".task-complete-checkbox");
-  if (!cb) return;
+// Delegated listeners for task list interactions (delete + status change)
+if (taskListEl) {
+  // Delete handling on click (delegated)
+  taskListEl.addEventListener("click", async (e) => {
+    const del = e.target.closest(".task-delete-button");
+    if (!del) return;
 
-  const taskId = cb.dataset.taskId;
-  const projectId = window.scriptData.projectId;
-  if (!taskId || !projectId) {
-    alert("Missing task or project id.");
-    return;
-  }
+    if (!window.confirm("Delete this task? This cannot be undone.")) return;
 
-  // Optimistic UI: disable while updating
-  cb.disabled = true;
-
-  // decide new status
-  const newStatus = cb.checked ? "Completed" : "To Do";
-
-  try {
-    const res = await fetch(
-      `/api/projects/${encodeURIComponent(
-        projectId,
-      )}/tasks/${encodeURIComponent(taskId)}/updateStatus`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ taskStatus: newStatus }),
-      },
-    );
-
-    const data = await res.json().catch(() => ({}));
-
-    if (res.ok && data.success) {
-      // Update the in-memory tasks list and re-render so sorting is recalculated
-      const tasks = window.scriptData.tasks || [];
-      const idx = tasks.findIndex((t) => String(t.task_id) === String(taskId));
-      if (idx !== -1) {
-        tasks[idx].task_status = newStatus;
-      }
-
-      // Re-render sorted list
-      showTasks();
-    } else {
-      // server rejected; revert checkbox
-      cb.checked = !cb.checked;
-      alert(data.error || "Failed to update task status.");
+    const taskId = del.dataset.taskId;
+    const proj = SD.projectId;
+    if (!taskId || !proj) {
+      alert("Missing task or project id.");
+      return;
     }
-  } catch (err) {
-    console.error("Error updating status:", err);
-    cb.checked = !cb.checked;
-    alert("An unexpected error occurred updating the task status.");
-  } finally {
-    // Re-enable (safe even if the element was re-rendered)
-    cb.disabled = false;
-  }
-});
 
-// NEW: handle delete clicks via event delegation
-document.querySelector("#task-list").addEventListener("click", async (e) => {
-  const btn = e.target.closest(".task-delete-button");
-  if (!btn) return;
+    del.disabled = true;
+    try {
+      const { res, data } = await requestJson(
+        `/api/projects/${encodeURIComponent(proj)}/tasks/${encodeURIComponent(taskId)}`,
+        { method: "DELETE" },
+      );
 
-  const confirmed = window.confirm("Delete this task? This cannot be undone.");
-  if (!confirmed) return;
-
-  const taskId = btn.dataset.taskId;
-  const projectId = window.scriptData.projectId;
-  if (!taskId || !projectId) {
-    alert("Missing task or project id.");
-    return;
-  }
-
-  btn.disabled = true;
-
-  try {
-    const res = await fetch(
-      `/api/projects/${encodeURIComponent(projectId)}/tasks/${encodeURIComponent(taskId)}`,
-      {
-        method: "DELETE",
-      },
-    );
-
-    const data = await res.json().catch(() => ({}));
-
-    if (res.ok && data.success) {
-      // Remove task from in-memory list and re-render
-      const tasks = window.scriptData.tasks || [];
-      const idx = tasks.findIndex((t) => String(t.task_id) === String(taskId));
-      if (idx !== -1) {
-        tasks.splice(idx, 1);
+      if (res.ok && data.success) {
+        removeTaskFromLocal(taskId);
+        showTasks();
+      } else {
+        showError(data, "Failed to delete task.");
       }
-      showTasks();
-    } else {
-      alert(data.error || "Failed to delete task.");
+    } catch (err) {
+      console.error("Error deleting task:", err);
+      alert("An unexpected error occurred deleting the task.");
+    } finally {
+      del.disabled = false;
     }
-  } catch (err) {
-    console.error("Error deleting task:", err);
-    alert("An unexpected error occurred deleting the task.");
-  } finally {
-    btn.disabled = false;
-  }
-});
+  });
 
+  // Status update handling on change (delegated)
+  taskListEl.addEventListener("change", async (e) => {
+    const cb = e.target.closest(".task-complete-checkbox");
+    if (!cb) return;
+
+    const taskId = cb.dataset.taskId;
+    const proj = SD.projectId;
+    if (!taskId || !proj) {
+      alert("Missing task or project id.");
+      return;
+    }
+
+    cb.disabled = true;
+    const newStatus = cb.checked ? "Completed" : "To Do";
+
+    try {
+      const { res, data } = await requestJson(
+        `/api/projects/${encodeURIComponent(proj)}/tasks/${encodeURIComponent(taskId)}/updateStatus`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ taskStatus: newStatus }),
+        },
+      );
+
+      if (res.ok && data.success) {
+        updateTaskStatusLocal(taskId, newStatus);
+        showTasks();
+      } else {
+        cb.checked = !cb.checked; // revert
+        showError(data, "Failed to update task status.");
+      }
+    } catch (err) {
+      console.error("Error updating status:", err);
+      cb.checked = !cb.checked; // revert
+      alert("An unexpected error occurred updating the task status.");
+    } finally {
+      cb.disabled = false;
+    }
+  });
+}
+
+// Initial render
 showTasks();

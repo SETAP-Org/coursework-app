@@ -4,21 +4,22 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <link rel="stylesheet" href="/css/root-dark.css"/>
+        <link id="theme-stylesheet" rel="stylesheet"/>
         <link rel="stylesheet" href="/css/project_dash.css" />
+        <link rel="stylesheet" href="/css/calandar.css" />
         <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml" />
 
         <script>
-        window.scriptData = {
-            userId: "<%= userId %>",
-            username: "<%= username %>",
-            projectId: "<%= projectId %>",
-            projectName: "<%= projectName %>",
-            isTeamLeader: <%= typeof isTeamLeader !== 'undefined' && isTeamLeader ? 'true' : 'false' %>
-        };
-</script>
-        </script>
-        <script src="/scripts/L&D-mode.js" defer></script>
+          window.scriptData = {
+              userId: "<%= userId %>",
+              username: "<%= username %>",
+              projectId: "<%= projectId %>",
+              projectName: "<%= projectName %>",
+              events: <%- JSON.stringify(events) %>,
+              isTeamLeader: <%= typeof isTeamLeader !== 'undefined' && isTeamLeader ? 'true' : 'false' %>
+          };
+        <script src="/scripts/L&D-mode.js" defer type="module"></script>
+        <script src="/scripts/projectCalendar.js" defer type="module"></script>
 
         <title>GCMS | <%= projectName %> Calendar</title>
     </head>
@@ -30,28 +31,35 @@
         <div class="event-form">
             <h2>Add Event</h2>
             <form id="event-form">
-                <label for="event-subject">Subject</label>
-                <input type="text" id="event-subject" required placeholder="Meeting title">
+                <label for="event-form-subject">Subject</label>
+                <input type="text" id="event-form-subject" required placeholder="Meeting title">
 
-                <label for="event-start">Start</label>
-                <input type="datetime-local" id="event-start" required>
+                <label for="event-form-start">Start</label>
+                <input type="datetime-local" id="event-form-start" required>
 
-                <label for="event-end">End</label>
-                <input type="datetime-local" id="event-end" required>
+                <label for="event-form-end">End</label>
+                <input type="datetime-local" id="event-form-end" required>
 
-                <label for="event-description">Description</label>
-                <textarea id="event-description" rows="3" placeholder="Optional description"></textarea>
+                <label for="event-form-description">Description</label>
+                <textarea id="event-form-description" rows="3" placeholder="Optional description"></textarea>
 
-                <button type="submit">Create Event</button>
+                <button type="submit" >Create Event</button>
             </form>
         </div>
 
         <!-- Events List -->
         <h2>Your Events</h2>
         <div id="events-list">
-            <p>Loading events...</p>
+            <template class="event-template">
+                <div class="event-card">
+                    <h3 class="event-heading"></h3>
+                    <p class="event-start"></p>
+                    <p class="event-end"></p>
+                    <p class="event-description"></p>
+                    <button class="event-delete-button">Delete</button>
+                </div>
+            </template>
         </div>
-
 
         <%- include('partials/footer') %>
 
@@ -59,5 +67,4 @@
 
         <%- include('partials/loading') %>
     </body>
-
-    <script src="/scripts/calendar.js"></script>
+</html>

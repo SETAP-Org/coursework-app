@@ -4,6 +4,7 @@ export async function getProjectContributions(req, res, next) {
   try {
     const { project_id } = req.params;
 
+    // If no project id in url
     if (!project_id) {
       return res
         .status(400)
@@ -12,7 +13,6 @@ export async function getProjectContributions(req, res, next) {
 
     const contributionDataRaw =
       await getContributionsByProjectIdModel(project_id);
-
     const contributionData = contributionDataRaw.rows[0];
 
     res.json({ success: true, contributionData: contributionData });

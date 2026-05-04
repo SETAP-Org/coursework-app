@@ -1,52 +1,60 @@
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link id="theme-stylesheet" rel="stylesheet"/>
+        <link rel="stylesheet" href="/css/project_dash.css" />
+        <link rel="stylesheet" href="/css/Konva.css"  />
+        <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml" />
 
-    <link rel="stylesheet" href="/css/root-dark.css" />
-    <link rel="stylesheet" href="/css/project_dash.css" />
-    <link rel="stylesheet" href="/css/Konva.css" />
-    <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml" />
-
-    <script>
-        window.scriptData = {
-            userId: "<%= userId %>",
-            username: "<%= username %>",
-            projectId: "<%= projectId %>",
-            projectName: "<%= projectName %>",
-            isTeamLeader: <%= typeof isTeamLeader !== 'undefined' && isTeamLeader ? 'true' : 'false' %>
+        <script>
+            window.scriptData = {
+              userId: "<%= userId %>",
+              username: "<%= username %>",
+              projectId: "<%= projectId %>",
+              projectName: "<%= projectName %>",
+              isTeamLeader: <%= typeof isTeamLeader !== 'undefined' && isTeamLeader ? 'true' : 'false' %>,
+              notes: <%- JSON.stringify(notes) %>
             };
-    </script>
-    <script src="/scripts/L&D-mode.js"></script>
-    <script src="https://unpkg.com/konva@9/konva.min.js"></script>
-    <script type="module" src="/scripts/konva-dash.js"></script>
+        </script>
+        <script src="/scripts/L&D-mode.js" type="module"></script>
+        <script src="https://unpkg.com/konva@9/konva.min.js" type="module"></script>
+        <script type="module" src="/scripts/konva-dash.js"></script>
 
-    <title>GCMS | <%= projectName %>
-    </title>
-</head>
-
-<body>
-    <%- include('partials/userNav') %>
+        <title>GCMS | <%= projectName %></title>
+    </head>
+    <body>
+        <%- include('partials/userNav') %>
         <%- include('partials/projectNav') %>
 
-            <div class="Dashboard">
-                <main class="Dashboard-content">
-                    <section class="Dashboard-container">
-                        <div class="card">
-                            <h1 class="Dashboard-title">Main Content Area</h1>
-                            <p class="Dashboard-text">UNI type shit</p>
-                        </div>
+        <div class="Dashboard">
+            <main class="Dashboard-content">
+                <section class="Dashboard-container">
+                    <div class="card">
+                        <h1 class="Dashboard-title">Main Content Area</h1>
+                        <p class="Dashboard-text">UNI type shit</p>
+                    </div>
 
-                        <div class="button_bar"></div>
+                    <div class="button_bar"></div>
 
-                        <div class="konva-wrapper">
-                            <div id="Konva-container"></div>
-                            <div class="delete-zone">Drop Here to Delete</div>
-                            <button class="add-note-btn" id="add-note-btn">
-                                Add Note
-                            </button>
-                        </div>
+                    <div class="konva-wrapper">
+                        <div id="Konva-container"></div>
+                        <div class="delete-zone">Drop Here to Delete</div>
+                        <button class="add-note-btn" id="add-note-btn">
+                            Add Note
+                        </button>
+                    </div>
+                </section>
+
+                <aside class="Dashboard-right">
+                    <section class="deadline-box">
+                        <h2>Deadline</h2>
+                        <p><%= deadlineLabel %></p>
+                    </section>
+
+                    <section class="calendar-box">
+                        <h2>Calendar</h2>
                     </section>
 
                     <aside class="Dashboard-right">
