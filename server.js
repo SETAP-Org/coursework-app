@@ -25,6 +25,7 @@ import {
   serveProjectChat,
   serveProjectNotes,
   serveProjectContributions,
+  serveProjectFiles,
   redirectWelcome,
 } from "./controllers/serveControllers.js";
 
@@ -69,6 +70,12 @@ import {
   removeUserFromProject,
   addUserToProject,
 } from "./controllers/userProjectControllers.js";
+
+import { 
+  addFileMetadata,
+  getFileMetadata,
+  initFileUpload,
+} from "./controllers/fileControllers.js";
 //konva controllers support
 import {
   saveNote,
@@ -215,6 +222,13 @@ app.get(
   serveProjectContributions,
 );
 
+app.get( "/:username/projects/:project_id/files",
+  checkIfLoggedInRedirect,
+  loadProject,
+  checkMembership,
+  serveProjectFiles,
+);
+
 // API routes
 // ---- CREATE ----
 app.post("/api/projects/addProject", addProject);
@@ -227,6 +241,26 @@ app.post("/api/tasks/addTask", addTask);
 
 app.post("/api/projects/user", addUserToProject);
 
+app.post(
+  "/api/projects/:project_id/files/upload-init",
+  loadProject,
+  checkMembership,
+  initFileUpload,
+);
+
+app.post(
+  "/api/projects/:project_id/files/metadata",
+  loadProject,
+  checkMembership,
+  addFileMetadata,
+);
+
+app.get(
+  "/api/projects/:project_id/files/metadata",
+  loadProject,
+  checkMembership,
+  getFileMetadata,
+);
 // potentially dont need...
 // app.post("/api/notifications", addNotification);
 
