@@ -110,7 +110,7 @@ export async function serveProjects(req, res, next) {
   }
 }
 
-export async function serveProjectDash(req, res, next) {
+export async function serveProjectDash(req, res) {
   try {
     // get the user details
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
@@ -124,6 +124,32 @@ export async function serveProjectDash(req, res, next) {
     const projectResponse = await getProjectByIdModel(req.params.project_id);
     const project = projectResponse.rows[0];
 
+    const rawDeadline = project.project_deadline;
+    let deadlineLabel = "No deadline set";
+
+    if (rawDeadline) {
+      const today = new Date();
+      today.setHours(0,0,0,0);
+
+      const deadlineDate = new Date(rawDeadline);
+      deadlineDate.setHours(0,0,0,0);
+
+      const daysLeft = Math.ceil(
+        (deadlineDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+      );
+
+      if (daysLeft > 0) {
+        deadlineLabel = `${daysLeft} day${daysLeft > 1 ? "s" : ""} left until deadline`;
+      } else if (daysLeft === 0) {
+        deadlineLabel = "Deadline is today!";
+      } else {
+        const daysOverdue = Math.abs(daysLeft);
+        deadlineLabel = `Deadline passed ${daysOverdue} day${daysOverdue > 1 ? "s" : ""} ago`;
+      }
+    }
+    
+
+
     res.render("projectDash", {
       name: req.user.firstName,
       username: req.params.username,
@@ -132,6 +158,7 @@ export async function serveProjectDash(req, res, next) {
       project: project,
       projectName: project.project_name,
       projectId: project.project_id,
+      deadlineLabel: deadlineLabel,
     });
   } catch (err) {
     res.redirect("/error?err=" + encodeURIComponent(err));

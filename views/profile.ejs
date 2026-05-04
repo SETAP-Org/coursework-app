@@ -33,15 +33,18 @@
                     <h1>Hey, <%= userFirstName %></h1>
                     
                 </div>
-
-                <button id="change-theme-button">Toggle Theme</button>
             </div>
-            
-            <form action="" class="username-form">
-                <input type="text" class="username-input">
+
+
+            <div class="username-form-section">
+                <h3>Change Username</h3>
+                <form action="" class="username-form">
+                    <p>New Username</p>
+                    <input type="text" class="username-input">
+                    <p class="username-message"></p>
+                </form>
                 <button class="username-save-button" disabled="true">Save Changes</button>
-                <p class="username-message"></p>
-            </form>
+            </div>
 
             <a id="sign-out-button" href="/api/auth/signout">Sign Out</a>
         </main>
