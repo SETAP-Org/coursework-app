@@ -71,8 +71,9 @@ import {
 } from "./controllers/userProjectControllers.js";
 //konva controllers support
 import {
-  saveNote,
-  deleteNote,
+  addNote,
+  removeNote,
+  updateNote,
   getNotes,
 } from "./controllers/KonvaController.js";
 
@@ -229,7 +230,7 @@ app.post("/api/tasks/addTask", addTask);
 
 app.post("/api/projects/user", addUserToProject);
 
-app.post("/api/notes", saveNote);
+app.post("/api/notes", addNote);
 
 app.post("/api/calendar/events", checkIfLoggedInCalendar, addEvent);
 
@@ -282,6 +283,8 @@ app.put(
 
 app.put("/api/projects/leader", updateTeamLeader);
 
+app.put("/api/notes/:note_id", updateNote);
+
 // ---- DELETE ----
 app.delete("/api/projects/user", removeUserFromProject);
 
@@ -302,7 +305,7 @@ app.delete(
   deleteTask,
 );
 
-app.delete("/api/notes/:note_id", deleteNote);
+app.delete("/api/notes/:note_id", removeNote);
 
 // assigning the server to a port so that requests can be made
 server.listen(port, () => {

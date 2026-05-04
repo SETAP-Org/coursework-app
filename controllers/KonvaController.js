@@ -2,11 +2,9 @@ import { postNoteToDB, putNoteById, deleteNoteFromDB, getNotesByProjectId } from
 
 export async function addNote(req, res, next) {
     try {
-        const { text, x, y, widgetId } = req.body;
-        const projectId = req.params.project_id;
-
-        const result = await saveNoteToDB(projectId, text, x, y, widgetId);
-
+        const { projectId, text, x, y } = req.body;
+        const result = await postNoteToDB(projectId, text, x, y);
+        
         res.status(200).json({
             success: true,
             note: result.rows[0],
@@ -23,9 +21,9 @@ export async function addNote(req, res, next) {
 
 export async function updateNote(req, res, next) {
     try {
-        const { text, x, y, widgetId } = req.body;
+        const { text, x, y } = req.body;
 
-        const result = await putNoteById(widgetId, text, x, y);
+        const result = await putNoteById(req.params.note_id, text, x, y);
 
         res.status(200).json({
             success: true,
@@ -36,15 +34,15 @@ export async function updateNote(req, res, next) {
 
         res.status(400).json({
             success: false,
-            message: err.message,
+            message: "THis is the place it breadks",
         })
     }
 }
 
 export async function removeNote(req, res, next) {
-    const { text, x, y } = req.body;
     try {
-        const notes = await deleteNoteFromDB(req.session.project.project_id, text, x, y);
+        const notes = await deleteNoteFromDB(req.params.note_id);
+
         res.status(200).json({
             success: true,
             note: notes.rows[0]
@@ -59,10 +57,14 @@ export async function removeNote(req, res, next) {
 
 export async function getNotes(req, res) {
     try {
+        console.log('we are getting here....')
         const projectId = req.session.project.project_id;
         console.log("getNotes for project:", projectId);
 
         const result = await getNotesByProjectId(projectId);
+        console.log(result.rows, 'these are the rows...')
+        console.log(typeof result.rows[0].widget_x)
+
         res.status(200).json({
             success: true,
             notes: result.rows,
