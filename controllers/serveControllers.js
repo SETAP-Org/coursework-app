@@ -102,6 +102,10 @@ export async function serveProjectDash(req, res, next) {
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult.rows[0];
 
+    const isTeamLeader = 
+      req.session.project &&
+      req.session.project.team_leader_id === dbUser.user_id;
+
     res.render("projectDash", {
       name: req.user.firstName,
       username: req.params.username,
@@ -109,6 +113,7 @@ export async function serveProjectDash(req, res, next) {
       project: req.session.project,
       projectName: req.session.project.project_name,
       projectId: req.session.project.project_id,
+      isTeamLeader,
     });
   } catch (err) {
     res.render("error", {
