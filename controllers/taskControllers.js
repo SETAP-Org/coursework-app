@@ -10,9 +10,6 @@ import { getUserByMicrosoftIdModel } from "../models/userModels.js";
 export async function addTask(req, res, next) {
   try {
     const { project_id } = req.params;
-    const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
-    const dbUser = dbUserResult?.rows?.[0];
-
     const data = await postTaskModel(
       project_id,
       req.body.taskAssignee,

@@ -152,23 +152,6 @@ export async function removeProject(req, res, next) {
 }
 
 // Middleware
-export async function loadProject(req, res, next) {
-  try {
-    const { project_id } = req.params;
-    if (!project_id) return res.status(400).send("`project_id` not found");
-
-    const projectResult = await getProjectByIdModel(project_id);
-    if (!projectResult || projectResult.rows.length === 0) {
-      return res.status(404).send("Project not found");
-    }
-
-    req.session.project = projectResult.rows[0];
-    next();
-  } catch (err) {
-    next(err);
-  }
-}
-
 export async function checkMembership(req, res, next) {
   try {
     const { project_id } = req.params;
