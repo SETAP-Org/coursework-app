@@ -15,8 +15,8 @@
                 userId: "<%= userId %>",
             };
         </script>
-        <script src="/scripts/L&D-mode.js" defer></script>
-        <script src="/scripts/profile.js" defer></script>
+        <script src="/scripts/L&D-mode.js" defer type="module"></script>
+        <script src="/scripts/profile.js" defer type="module"></script>
 
         <title>GCMS | Profile</title>
     </head>
@@ -34,7 +34,7 @@
                     
                 </div>
 
-                <p><button onclick="changeTheme()">Toggle Theme</button></p>
+                <button id="change-theme-button">Toggle Theme</button>
             </div>
             
             <form action="" class="username-form">
