@@ -19,12 +19,6 @@ import {
   serveProjectContributions,
 } from "../controllers/serveControllers.js";
 
-import {
-  saveNote,
-  deleteNote,
-  getNotes,
-} from "../controllers/KonvaController.js";
-
 // Middleware Imports
 import {
   checkIfLoggedIn,
@@ -92,25 +86,6 @@ router.get(
   checkIfLoggedInRedirect,
   checkMembership,
   serveProjectContributions,
-);
-
-// Note routes
-router.post(
-  "/:username/projects/:project_id/save",
-  checkIfLoggedInRedirect,
-  saveNote,
-);
-
-router.post(
-  "/:username/projects/:project_id/delete",
-  checkIfLoggedInRedirect,
-  deleteNote,
-);
-
-router.get(
-  "/:username/projects/:project_id/notes",
-  checkIfLoggedInRedirect,
-  getNotes,
 );
 
 // Export router

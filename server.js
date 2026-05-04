@@ -16,6 +16,7 @@ import taskRoutes from "./routes/taskRoutes.js";
 import calendarRoutes from "./routes/calendarRoutes.js";
 import notificationRoutes from "./routes/notificationsRoutes.js";
 import contributionsRoutes from "./routes/contributionsRoutes.js";
+import noteRoutes from "./routes/noteRoutes.js";
 
 // util imports
 import createSession from "./utils/session.js";
@@ -52,6 +53,7 @@ app.use("/api", taskRoutes);
 app.use("/api", calendarRoutes);
 app.use("/api", notificationRoutes);
 app.use("/api", contributionsRoutes);
+app.use("/api", noteRoutes);
 
 // start server
 server.listen(port, () => {

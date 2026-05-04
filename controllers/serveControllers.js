@@ -9,7 +9,7 @@ import { getTasksByProjectIdModel } from "../models/taskModels.js";
 import { getContributionsByProjectIdModel } from "../models/contributionModels.js";
 import { getCalendarEvents } from "../models/calendarModels.js";
 import { getNotesByProjectId } from "../models/konvaModels.js";
-import { getNotes } from "./KonvaController.js";
+import { getNotes } from "./konvaControllers.js";
 
 export function serveLanding(req, res, next) {
   try {
