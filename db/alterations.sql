@@ -59,4 +59,9 @@ AlTER TABLE AI_CHAT_MESSAGES
   ADD CONSTRAINT ai_chat_messages_project_id_fkey
     FOREIGN KEY (project_id) REFERENCES projects(project_id)
     ON DELETE CASCADE;
+
+ALTER TABLE FILES
+  ADD CONSTRAINT files_project_id_fkey
+    FOREIGN KEY (project_id) REFERENCES projects(project_id)
+    ON DELETE CASCADE;
 -- Further Alterations here...
