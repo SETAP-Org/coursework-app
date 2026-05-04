@@ -244,6 +244,18 @@ export async function serveProjectContributions(req, res, next) {
   }
 }
 
+export async function serveProjectFiles(req, res, next) {
+  try {
+    res.render("projectFiles", {
+      username: req.params.username,
+      projectId: req.session.project.project_id,
+      projectName: req.session.project.project_name,
+    });
+  } catch (err) {
+    res.render("error", { error: err });
+  }
+}
+
 // redirects (not added to stack) (for when access to pages is unauthorised)
 export async function redirectUserDash(req, res, next) {
   const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);

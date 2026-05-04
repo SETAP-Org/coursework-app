@@ -24,6 +24,7 @@ import {
   serveProjectChat,
   serveProjectNotes,
   serveProjectContributions,
+  serveProjectFiles,
   redirectWelcome,
 } from "./controllers/serveControllers.js";
 
@@ -181,6 +182,13 @@ app.get( "/:username/projects/:project_id/contributions",
   loadProject,
   checkMembership,
   serveProjectContributions,
+);
+
+app.get( "/:username/projects/:project_id/files",
+  checkIfLoggedInRedirect,
+  loadProject,
+  checkMembership,
+  serveProjectFiles,
 );
 
 // API routes
