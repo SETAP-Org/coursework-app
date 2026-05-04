@@ -1,10 +1,11 @@
-node_modules/
 .env.production
 .env.development
 .env.session-secret
 .env.auth
+.env.mailconfig
+.env.gemini
 testEmail.mjs
 testNotifications.mjs
-.env.gemini
+/node_modules
 /scratch
 test.pdf
