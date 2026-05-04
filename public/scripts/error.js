@@ -5,7 +5,7 @@ loading.style.display = "flex";
 const button = document.querySelector("button");
 
 button.addEventListener("click", async () => {
-  await fetch("/");
+  window.location.href = "/";
 });
 
 // hide loading screen

@@ -20,7 +20,6 @@ import noteRoutes from "./routes/noteRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
 
-
 // util imports
 import createSession from "./utils/session.js";
 import setUpAuth from "./utils/auth.js";
