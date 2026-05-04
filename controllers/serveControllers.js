@@ -8,6 +8,8 @@ import { getUsersByProjectId } from "../models/userProjectModels.js";
 import { getTasksByProjectIdModel } from "../models/taskModels.js";
 import { getContributionsByProjectIdModel } from "../models/contributionModels.js";
 import { getCalendarEvents } from "../models/calendarModels.js";
+import { getNotesByProjectId } from "../models/konvaModels.js";
+import { getNotes } from "./KonvaController.js";
 
 export function serveLanding(req, res, next) {
   try {
@@ -112,6 +114,10 @@ export async function serveProjectDash(req, res, next) {
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult.rows[0];
 
+    // get the project konva notes
+    const notesResult = await getNotesByProjectId(req.params.project_id);
+    const notes = notesResult.rows;
+
     res.render("projectDash", {
       name: req.user.firstName,
       username: req.params.username,
@@ -119,6 +125,8 @@ export async function serveProjectDash(req, res, next) {
       project: req.session.project,
       projectName: req.session.project.project_name,
       projectId: req.session.project.project_id,
+      notes: notes,
+
     });
   } catch (err) {
     res.redirect("/error?err=" + encodeURIComponent(err));
