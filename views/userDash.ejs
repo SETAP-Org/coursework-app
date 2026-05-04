@@ -5,12 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>GCMS | <%= username %></title>
 
-        <link rel="stylesheet" href="/css/user_dash.css" />
-        <link
-            id="theme-stylesheet"
-            rel="stylesheet"
-            href="/css/root-dark.css"
-        />
+        <link rel="stylesheet" href="/css/user_dash.css"/>
+        <link id="theme-stylesheet" rel="stylesheet"/>
         <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml" />
 
         <script>
@@ -21,8 +17,8 @@
                 projects: <%- JSON.stringify(projects) %>
             };
         </script>
-        <script src="/scripts/L&D-mode.js" defer></script>
-        <script src="/scripts/userDash.js" defer></script>
+        <script src="/scripts/L&D-mode.js" defer type="module"></script>
+        <script src="/scripts/userDash.js" defer type="module"></script>
     </head>
     <body>
         <%- include('partials/userNav') %>
@@ -54,6 +50,7 @@
             </section>
         </template>
 
+        <!-- Empty stuff to be filled in with templates via js -->
         <section class="projects-outer-container">
             <div class="projects-inner-container">
                 <ul class="projects-list"></ul>

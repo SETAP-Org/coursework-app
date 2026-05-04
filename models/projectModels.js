@@ -42,21 +42,6 @@ export async function getProjectByIdModel(project_id) {
   );
 }
 
-// read a project via who created it
-export async function getProjectByCreatorAndNameModel(
-  project_creator_id,
-  project_name,
-) {
-  return await query(
-    `
-    SELECT project_id, team_leader_id, project_name, project_deadline
-    FROM projects
-    WHERE created_by = $1 AND project_name = $2;
-    `,
-    [project_creator_id, project_name],
-  );
-}
-
 // read entries from intersection table between users and projects via user ID
 export async function getUserProjectsModel(userId) {
   return await query(

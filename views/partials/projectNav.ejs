@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="/css/header_style.css">
-<script src="/scripts/projectNav.js" defer></script>
+<script src="/scripts/projectNav.js" defer type="module"></script>
 
 <nav class="Dashboard-header project-header" id="MyHeader">
     <div class="card nav-links">
@@ -15,12 +15,14 @@
     <div>
         <input type="checkbox" id="check">
         <label for="check" class="checkbtn">
+            <!-- SVG Burger -->
             <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect y="0" width="20" height="2" rx="1" fill="currentColor"></rect>
             <rect y="6" width="20" height="2" rx="1" fill="currentColor"></rect>
             <rect y="12" width="20" height="2" rx="1" fill="currentColor"></rect>
             </svg>
         </label>
+        <!-- Drop down menu controlled via CSS -->
         <div class="nav-mobile">
             <a href="/<%= username %>/projects/<%= projectId %>/information">Information</a>
             <a href="/<%= username %>/projects/<%= projectId %>/tasks">Tasks</a>

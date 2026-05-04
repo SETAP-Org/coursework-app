@@ -15,6 +15,14 @@
   },
   "keywords": [],
   "author": "",
+  "contributors": [
+    "Jay McKerracher",
+    "Harry Faulkner",
+    "Angelo Espirito Santo Mansur Paixao",
+    "Jake Friend",
+    "Marcus Thomas",
+    "Tom Waller"
+  ],
   "license": "MIT",
   "type": "module",
   "bugs": {
