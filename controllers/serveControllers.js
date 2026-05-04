@@ -241,21 +241,6 @@ export async function serveProjectChat(req, res, next) {
   }
 }
 
-export async function serveProjectNotes(req, res, next) {
-  // get the user details
-  const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
-  const dbUser = dbUserResult.rows[0];
-
-  res.render("projectDash", {
-    name: req.user.firstName,
-    username: req.params.username,
-    userId: dbUser.user_id,
-    project: req.session.project,
-    project_id: req.session.project.project_id,
-    project_name: req.session.project.project_name,
-  });
-}
-
 export async function serveProjectContributions(req, res, next) {
   try {
     // get the user details

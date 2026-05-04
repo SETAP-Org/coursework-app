@@ -23,7 +23,6 @@ import {
   serveProjectTasks,
   serveProjectCalendar,
   serveProjectChat,
-  serveProjectNotes,
   serveProjectContributions,
   redirectWelcome,
   serveError,
@@ -272,12 +271,6 @@ app.get(
   checkIfLoggedInRedirect,
   loadProject,
   getNotes,
-);
-
-app.get(
-  "/:username/projects/:project_id/:page",
-  checkMembership,
-  serveProjectNotes,
 );
 
 app.get("/:username/projects/:project_id", checkMembership, serveProjectDash);
