@@ -1,0 +1,75 @@
+#page-content {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin: 0 auto;
+    padding: 32px 0;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-family: var(--font);
+    color: var(--text);
+}
+
+#upload-button {
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius);
+    border: var(--border);
+    background: var(--accent, #4f8ef7);
+    color: #fff;
+    font-family: var(--font);
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+#upload-button:hover {
+    opacity: 0.85;
+}
+
+#file-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius);
+    border: var(--border);
+    background: rgba(11, 18, 32, 0.25);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    font-family: var(--font);
+    color: var(--text);
+}
+
+.file-name {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.file-meta {
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+.no-files {
+    font-family: var(--font);
+    color: var(--text);
+    opacity: 0.5;
+    font-size: 0.95rem;
+}

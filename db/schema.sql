@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS TASKS CASCADE;
 DROP TABLE IF EXISTS USER_PROJECTS CASCADE;
 DROP TABLE IF EXISTS PROJECTS CASCADE;
 DROP TABLE IF EXISTS USERS CASCADE;
+DROP TABLE IF EXISTS FILES CASCADE;
 
 CREATE TABLE USERS(
     user_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -30,6 +31,7 @@ CREATE TABLE USERS(
     date_created TIMESTAMPTZ,
     last_login TIMESTAMPTZ,
     username VARCHAR(20) UNIQUE,
+    email_notifications BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE PROJECTS(
@@ -42,6 +44,16 @@ CREATE TABLE PROJECTS(
     p_time_updated TIMESTAMPTZ,
     FOREIGN KEY (team_leader_id) REFERENCES USERS(user_id),
     UNIQUE (created_by, project_name)
+);
+
+CREATE TABLE FILES(
+    file_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    project_id UUID NOT NULL,
+    file_name VARCHAR(100) NOT NULL,
+    storage_path TEXT NOT NULL,
+    size BIGINT NOT NULL,
+    date_uploaded TIMESTAMP,
+    FOREIGN KEY (project_id) REFERENCES PROJECTS(project_id)
 );
 
 CREATE TABLE USER_PROJECTS(
@@ -64,6 +76,8 @@ CREATE TABLE TASKS(
     task_deadline DATE,
     t_date_created TIMESTAMPTZ,
     t_time_updated TIMESTAMPTZ,
+    assignee_id UUID,
+    FOREIGN KEY (assignee_id) REFERENCES USERS(user_id),
     FOREIGN KEY (project_id) REFERENCES PROJECTS(project_id)
 );
 
@@ -73,14 +87,13 @@ CREATE TABLE NOTIFICATIONS(
     notification_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL,
     project_id UUID NOT NULL,
-    task_id UUID,
     notification_type notification_type NOT NULL,
     notification_message TEXT,
-    is_read BOOLEAN DEFAULT FALSE,
     n_date_created TIMESTAMPTZ,
+    target_username TEXT,
+    project_name TEXT,
     FOREIGN KEY (user_id) REFERENCES USERS(user_id),
-    FOREIGN KEY (project_id) REFERENCES PROJECTS(project_id),
-    FOREIGN KEY (task_id) REFERENCES TASKS(task_id)
+    FOREIGN KEY (project_id) REFERENCES PROJECTS(project_id)
 );
 
 CREATE TABLE MESSAGES(
@@ -125,8 +138,5 @@ CREATE TABLE WIDGETS(
     widget_x DECIMAL NOT NULL,
     widget_y DECIMAL NOT NULL,
     widget_text VARCHAR(200),
-    widget_height INT NOT NULL,
-    widget_width INT NOT NULL,
-    widget_data JSONB NOT NULL,
     FOREIGN KEY (project_id) REFERENCES PROJECTS(project_id)
 );

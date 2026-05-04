@@ -8,8 +8,11 @@ The features will be described and outlined in the below [section](#features).
 
 For those wishing to contribute to the project, you are welcome to fork this repository and follow the below [instructions](#installation) to get started!
 
+> AI Usage: AI tools, such as Anthropic Claude, have been utilised throughout development as a code reviewer and to help with certain areas such as CSS styling and for the implementation of more advanced features to ensure a thorough understanding of theory has been reached among contributors
+
 ## Demo
 Add a link here to the demo video
+
 
 ## Installation
 ### Prerequisites
@@ -76,7 +79,7 @@ Each project has a chat page, which gives the members access to unlimited messag
 ### Contribution Tracking
 GCMS allows users to easily track group member contributions, so users never have to have those awkward chats! On the contributions page, users are able to view a pie-chart to visualise the individual contribution points for all members assigned to the group. These points are calculated based on the weighting of the tasks each member has completed.
 
-SCREENSHOT
+<img width="2812" height="1515" alt="image" src="https://github.com/user-attachments/assets/bf27f29d-942e-4c06-a146-fe3aecb927e9" />
 
 ### User-Specific Notification System
 All users have access to a notifications viewer, where they can view any updates and changes with any project they are assigned to. If they receive a message from one project, a new task from another, they will always be able to stay up-to-date.
@@ -95,7 +98,7 @@ Any user is able to have a theoretically unlimited number of active projects at 
 ### Frontend
 - **Languages**: HTML, CSS, Javascript
 - **Templated** with EJS
-- **Libraries**: Konva.js
+- **Libraries**: Konva.js, Chart.js
 
 ### Backend & Database
 - **Runtime**: Node.js
@@ -111,7 +114,20 @@ Any user is able to have a theoretically unlimited number of active projects at 
 All the information regarding contributing to the project can be found in the project's in-depth [documentation](https://gcms-docs.readthedocs.io/en/latest/index.html). This goes into all the details on contributing, with detailed troubleshooting steps should they be required. We want anybody to be able to contribute with as little hassle as possible!
 
 ## License
-MIT License, see `LICENSE` file for more details.
+MIT License, see [`LICENSE`](LICENSE) file for more details.
+
+## Contributors
+hfaulk - Harry Faulkner - up2305969
+
+jaymckerracher - Jay McKerracher - up2306458
+
+marqueese - Marcus Thomas - up2271401
+
+Jaketh444 - Jake Friend - up2274964
+
+angeloenrico123 - Angelo Espirito Santo Mansur Paixao - up2267576
+
+tjw-all - Tom Waller - up2212528
 
 ## Acknowledgements
 This project was developed by Group5B for the Software Engineering Theory & Practice (SETaP) module at the [University of Portsmouth](https://www.port.ac.uk/).
