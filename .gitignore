@@ -4,3 +4,4 @@ node_modules/
 .env.session-secret
 .env.auth
 .env.gemini
+/scratch
