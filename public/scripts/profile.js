@@ -1,3 +1,5 @@
+import { getCookie, setCookie } from "/scripts/utils.js";
+
 async function loadProfile() {
   // show loading screen
   const loading = document.querySelector(".loading");
@@ -13,6 +15,8 @@ async function loadProfile() {
   const usernameForm = document.querySelector(".username-form");
   const usernameDialog = document.querySelector(".username-dialog");
   const usernameDialogBtn = document.querySelector(".username-dialog-button");
+  const themeStyleSheet = document.querySelector("#theme-stylesheet");
+  const changeThemeButton = document.querySelector("#change-theme-button");
   const regex = /^(?!^[0-9]+$)[a-zA-Z0-9]+$/;
   let usernameValue = "";
 
@@ -69,6 +73,20 @@ async function loadProfile() {
 
   // event handler for dialog button
   usernameDialogBtn.addEventListener("click", () => window.location.replace("/"));
+
+  // event handler to change l&d theme
+  changeThemeButton.addEventListener("click", () => {
+    const currentTheme = getCookie("theme");
+
+    // change the theme in the cookie and the stylesheet
+    if (currentTheme === "dark") {
+      setCookie("theme", "light");
+      themeStyleSheet.href = "/css/root-light.css";
+    } else {
+      setCookie("theme", "dark");
+      themeStyleSheet.href = "/css/root-dark.css";
+    }
+  })
 
   // hide loading screen
   loading.style.display = "none";

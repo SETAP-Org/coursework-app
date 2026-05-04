@@ -14,3 +14,22 @@ export function formatTime(timestamp) {
         time: formattedTime,
     }
 }
+
+// function to set a cookie in the browser
+export function setCookie(name, value) {
+    if(!name || !value) return;
+    document.cookie = name + "=" + value + "; path=/";
+}
+
+// function to get a cookie from the browser or null if no cookie exists
+export function getCookie(name) {
+    const cookies = document.cookie ? document.cookie.split("; ") : [];
+    for (const cookie of cookies){
+        const [key, value] = cookie.split("=");
+        if (key === name) {
+            return value;
+        }
+    }
+    
+    return null;
+}
