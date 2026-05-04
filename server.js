@@ -18,7 +18,6 @@ import notificationRoutes from "./routes/notificationsRoutes.js";
 import contributionsRoutes from "./routes/contributionsRoutes.js";
 import noteRoutes from "./routes/noteRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js";
-
 import {
   postAiChatMessage,
   getAiChatMessages,
@@ -62,6 +61,7 @@ app.use("/api", notificationRoutes);
 app.use("/api", contributionsRoutes);
 app.use("/api", noteRoutes);
 app.use("/api", fileRoutes);
+
 // start server
 server.listen(port, () => {
   console.log("Server running on http://localhost:3000/ :P");

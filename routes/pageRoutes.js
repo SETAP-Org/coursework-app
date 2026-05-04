@@ -17,6 +17,7 @@ import {
   serveProjectCalendar,
   serveProjectChat,
   serveProjectContributions,
+  serveProjectFiles,
 } from "../controllers/serveControllers.js";
 
 // Middleware Imports
@@ -86,6 +87,13 @@ router.get(
   checkIfLoggedInRedirect,
   checkMembership,
   serveProjectContributions,
+);
+
+router.get(
+  "/:username/projects/:project_id/files",
+  checkIfLoggedInRedirect,
+  checkMembership,
+  serveProjectFiles,
 );
 
 // Export router
