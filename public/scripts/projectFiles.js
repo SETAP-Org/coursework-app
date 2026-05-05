@@ -1,6 +1,11 @@
-const { projectId } = window.scriptData;
-
 async function loadFiles() {
+  // show loading screen
+  const loading = document.querySelector(".loading");
+  loading.style.display = "flex";
+
+  // ejs values
+  const { projectId } = window.scriptData;
+  
   const list = document.getElementById("file-list");
   let files = [];
 
@@ -41,6 +46,9 @@ async function loadFiles() {
       a.click();
     });
   });
+
+  // hide loading screen
+  loading.style.display = "none";
 }
 
 

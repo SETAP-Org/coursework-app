@@ -1,4 +1,8 @@
-(async function () {
+async function projectContributions() {
+  // show loading screen
+  const loading = document.querySelector(".loading");
+  loading.style.display = "flex";
+
   "use strict";
 
   // ---------- Utilities ----------
@@ -167,4 +171,9 @@
 
   const listRoot = document.querySelector("#contributions-list");
   if (listRoot) renderContributionsList(listRoot);
-})();
+
+  // hide loading screen
+  loading.style.display = "none";
+};
+
+projectContributions();

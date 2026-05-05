@@ -1,4 +1,5 @@
 function projectCalendar() {
+  // show loading screen
   const loading = document.querySelector(".loading");
   loading.style.display = "flex";
 
@@ -32,6 +33,8 @@ function projectCalendar() {
     });
 
     calendar.render();
+
+    // hide loading screen
     loading.style.display = "none";
   }
 
