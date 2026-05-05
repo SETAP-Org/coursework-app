@@ -112,6 +112,7 @@ function projectCalendar() {
 const createMeetingDialog = document.querySelector("#create-meeting-dialog");
 const dialogForm = document.querySelector("#create-meeting-dialog form");
 const createMeetingButton = document.querySelector("#create-meeting-button");
+const dialogCloseButton = document.querySelector(".modal-close");
 
 function toggleNewTaskForm() {
   const dialog = document.querySelector("#create-meeting-dialog");
@@ -119,6 +120,7 @@ function toggleNewTaskForm() {
 }
 
 createMeetingButton.addEventListener("click", toggleNewTaskForm);
+dialogCloseButton.addEventListener("click", toggleNewTaskForm);
 
 // If click outside dialog, close
 if (createMeetingDialog) {
