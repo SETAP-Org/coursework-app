@@ -29,7 +29,7 @@
         <%- include('partials/projectNav') %>
 
         <!-- Create Event Form -->
-        <div class="event-form">
+        <!--<div class="event-form">
             <h2>Add Event</h2>
             <form id="event-form">
                 <label for="event-form-subject">Subject</label>
@@ -46,7 +46,36 @@
 
                 <button type="submit" >Create Event</button>
             </form>
-        </div>
+        </div>-->
+
+        <button id="create-meeting-button">New Meeting</button>
+
+        <!-- Create Meeting Popup -->
+        <dialog id="create-meeting-dialog">
+            <button class="modal-close" onclick="toggleNewTaskForm()">
+                X
+            </button>
+            <form method="dialog">
+                <h1>Create Meeting</h1>
+                <label>
+                    Subject
+                    <input type="text" placeholder="e.g. Group Meeting" name="meetingSubject" required />
+                </label>
+                <label>
+                    Description
+                    <input type="text" placeholder="e.g. This is a meeting" name="meetingDescription" required />
+                </label>
+                <label>
+                    Start
+                    <input type="datetime-local" name="meetingStart" required />
+                </label>
+                <label>
+                    End
+                    <input type="datetime-local" name="meetingEnd" required />
+                </label>
+                <button type="submit">Create Meeting</button>
+            </form>
+        </dialog>
 
         <!-- Events List -->
         <h2>Your Events</h2>
