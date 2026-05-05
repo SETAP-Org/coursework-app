@@ -4,58 +4,50 @@ import {
   deleteCalendarEvent,
 } from "../models/calendarModels.js";
 
+import { getProjectByIdModel } from "../models/projectModels.js";
+
 export async function getEvent(req, res) {
   try {
     const accessToken = req.user.accessToken;
-    const events = await getCalendarEvents(accessToken);
+    const project_id = req.query.project_id; // Get the ID from the URL )
 
-    res.status(200).json(events);
+    const rawEvents = await getCalendarEvents(accessToken);
+    const allEvents = rawEvents.value || [];
+
+    const filteredEvents = allEvents.filter(event => {
+      const description = event.body?.content || "";
+      return description.includes(`[ProjectID: ${project_id}]`);
+    });
+
+    res.status(200).json(filteredEvents);
+
   } catch (error) {
+    console.error("Error in getEvent:", error.message);
     res.status(500).json({ error: error.message });
   }
 }
 
 export async function addEvent(req, res) {
-  try {
-    console.log("=== addEvent HIT ===");
-    const accessToken = req.user.accessToken;
-    const { subject, start, end, description } = req.body;
+    const { subject, start, end, description, project_id } = req.body;
 
-    console.log("Received:", { subject, start, end, description });
+    const finalDescription = `${description} [ProjectID: ${project_id}]`;
 
     const event = {
-      subject: subject,
-      body: {
-        contentType: "text",
-        content: description || "",
-      },
-      start: {
-        dateTime: start + ":00", // Add seconds
-        timeZone: "UTC",
-      },
-      end: {
-        dateTime: end + ":00", // Add seconds
-        timeZone: "UTC",
-      },
+        subject,
+        body: { contentType: "text", content: finalDescription },
+        start: { dateTime: `${start}:00`, timeZone: "UTC" },
+        end: { dateTime: `${end}:00`, timeZone: "UTC" }
     };
 
-    console.log("Sending to Microsoft:", JSON.stringify(event, null, 2));
-    const result = await createCalendarEvent(accessToken, event);
-    console.log("Microsoft response:", result);
-    res.status(201).json({
-      success: true,
-      event: result,
-    });
-  } catch (err) {
-    console.error("error with addEvent:", err.message);
-
-    res.status(500).json({
-      success: false,
-      message: err.message,
-    });
-  }
+    try {
+        const result = await createCalendarEvent(req.user.accessToken, event);
+        res.status(201).json({ success: true, event: result });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
 }
 
+//delete an event
 export async function removeEvent(req, res) {
   try {
     const accessToken = req.user.accessToken;

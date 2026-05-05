@@ -28,6 +28,9 @@ async function projectChat() {
 
     // function to add a message to the ui
     function addMessageToUi(message) {
+        // scrolling to the bottom of the chat - similar to a real group chat
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        
         // clone the template
         const clone = chatMsgTemplate.content.cloneNode(true);
         const container = clone.querySelector('#message-container');

@@ -31,7 +31,10 @@ async function userNav() {
     message,
     targetUsername = null,
     projectName = null,
+    projectId = null,
   ) {
+
+    console.log(id, type, message, targetUsername, projectName, projectId, 'last is the id');
     // creating the clone of the template
     const clone = notifTemplate.content.cloneNode(true);
     const listItem = clone.querySelector(".notif-list-item");
@@ -72,13 +75,13 @@ async function userNav() {
       loading.style.display = "none";
 
       if (type === "Message")
-        window.location.href = `/${username}/projects/${id}/chat`;
+        window.location.href = `/${username}/projects/${projectId}/chat`;
       else if (type === "Member Leave" || type === "Member Join")
-        window.location.href = `/${username}/projects/${id}`;
+        window.location.href = `/${username}/projects/${projectId}`;
       else if (type === "Leader")
-        window.location.href = `/${username}/projects/${id}`;
+        window.location.href = `/${username}/projects/${projectId}`;
       else if (type === "Task")
-        window.location.href = `/${username}/projects/${id}/tasks`;
+        window.location.href = `/${username}/projects/${projectId}/tasks`;
     });
 
     // event listener to delete notification
@@ -115,6 +118,9 @@ async function userNav() {
       // hide the loading screen
       loading.style.display = "none";
     });
+
+    // add to the ui
+    notifList.appendChild(clone);
   }
 
   // assigning urls to nav buttons
@@ -146,12 +152,14 @@ async function userNav() {
     bellNumBubble.style.display = "none";
   } else {
     for (const notification of notificationData.notifications) {
+      console.log(notification, 'this is the notification...')
       addNotificationUi(
         notification.notification_id,
         notification.notification_type,
         notification.notification_message,
         notification.target_username,
         notification.project_name,
+        notification.project_id,
       );
     }
 
@@ -179,6 +187,7 @@ async function userNav() {
         notif.notification.notificationMessage,
         notif.notification.targetUsername,
         notif.notification.projectName,
+        notif.notification.projectId,
       );
 
       // increment the bubble counter and show it if not already showing

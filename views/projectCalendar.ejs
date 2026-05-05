@@ -18,8 +18,9 @@
               events: <%- JSON.stringify(events) %>,
               isTeamLeader: <%= typeof isTeamLeader !== 'undefined' && isTeamLeader ? 'true' : 'false' %>
           };
+        </script>
         <script src="/scripts/L&D-mode.js" defer type="module"></script>
-        <script src="/scripts/projectCalendar.js" defer type="module"></script>
+        <script src="/scripts/projectCalendar.js" type="module"></script>
 
         <title>GCMS | <%= projectName %> Calendar</title>
     </head>
@@ -52,7 +53,7 @@
         <div id="events-list">
             <template class="event-template">
                 <div class="event-card">
-                    <h3 class="event-heading"></h3>
+                    <h3 class="event-heading"></h3><br>
                     <p class="event-start"></p>
                     <p class="event-end"></p>
                     <p class="event-description"></p>

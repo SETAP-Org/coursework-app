@@ -132,13 +132,13 @@ export async function serveProjectDash(req, res) {
 
     if (rawDeadline) {
       const today = new Date();
-      today.setHours(0,0,0,0);
+      today.setHours(0, 0, 0, 0);
 
       const deadlineDate = new Date(rawDeadline);
-      deadlineDate.setHours(0,0,0,0);
+      deadlineDate.setHours(0, 0, 0, 0);
 
       const daysLeft = Math.ceil(
-        (deadlineDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+        (deadlineDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
       );
 
       if (daysLeft > 0) {
@@ -150,8 +150,6 @@ export async function serveProjectDash(req, res) {
         deadlineLabel = `Deadline passed ${daysOverdue} day${daysOverdue > 1 ? "s" : ""} ago`;
       }
     }
-    
-
 
     res.render("projectDash", {
       name: req.user.firstName,
@@ -247,11 +245,11 @@ export async function serveProjectCalendar(req, res, next) {
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult.rows[0];
 
-    const isTeamLeader =
-      req.session.project &&
-      req.session.project.team_leader_id === dbUser.user_id;
+    // get the project details
     const projectResponse = await getProjectByIdModel(req.params.project_id);
     const project = projectResponse.rows[0];
+
+    const isTeamLeader = project && project.team_leader_id === dbUser.user_id;
 
     // get the calendar events
     const events = await getCalendarEvents(req.user.accessToken);
@@ -259,8 +257,6 @@ export async function serveProjectCalendar(req, res, next) {
     res.render("projectCalendar", {
       username: req.params.username,
       userId: dbUser.user_id,
-      projectId: req.session.project.project_id,
-      projectName: req.session.project.project_name,
       isTeamLeader,
       project: project,
       projectId: project.project_id,
@@ -369,12 +365,13 @@ export async function serveProjectFiles(req, res, next) {
     const projectResponse = await getProjectByIdModel(req.params.project_id);
     const project = projectResponse.rows[0];
 
-    const isTeamLeader = project.team_leader_id === dbUser.user_id;
+    const isTeamLeader = project.team_leader_id === req.params.user_id;
 
     res.render("projectFiles", {
+      userId: req.params.user_id,
       username: req.params.username,
-      projectId: req.session.project.project_id,
-      projectName: req.session.project.project_name,
+      projectId: project.project_id,
+      projectName: project.project_name,
       isTeamLeader: isTeamLeader,
     });
   } catch (err) {
