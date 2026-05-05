@@ -57,8 +57,8 @@ test("UR-4 Valid: Valid MS account, project lead, delete project", () => {
   expect(loginResult.redirect).toBe("/dashboard");
 
   const deleteResult = simulateDeleteProject(
-    true,   // User IS the project lead
-    true    // Project EXISTS
+    true, // User IS the project lead
+    true // Project EXISTS
   );
 
   expect(deleteResult.success).toBe(true);
@@ -77,9 +77,9 @@ test("UR-4 Valid: Valid MS account, project lead, add existing member", () => {
 
   const existingUsers = ["user_1", "user_2", "user_3"]; // Simulated database of users
   const addResult = simulateAddMember(
-    true,           // User IS the project lead
-    "user_2",       // Username to add
-    existingUsers   // List of existing users
+    true, // User IS the project lead
+    "user_2",// Username to add
+    existingUsers // List of existing users
   );
 
   expect(addResult.success).toBe(true);
@@ -96,8 +96,8 @@ test("UR-4 Valid: Valid MS account, not project lead, >= 2 members, leave projec
   expect(loginResult.redirect).toBe("/dashboard");
 
   const leaveResult = simulateLeaveProject(
-    false,  // User is NOT the project lead
-    4       // 4 members in the group
+    false, // User is NOT the project lead
+    4  // 4 members in the group
   );
 
   expect(leaveResult.success).toBe(true);
@@ -114,8 +114,8 @@ test("UR-4 Invalid: Valid MS account, project lead cannot leave without assignin
   expect(loginResult.redirect).toBe("/dashboard");
 
   const leaveResult = simulateLeaveProject(
-    true,   // User IS the project lead
-    4       // 4 members in the group
+    true,  // User IS the project lead
+    4// 4 members in the group
   );
 
   expect(leaveResult.success).toBe(false);
@@ -128,8 +128,8 @@ test("UR-4 Invalid: Valid MS account, project lead cannot leave without assignin
 // ============================================================
 test("UR-4 Invalid: Invalid MS account, redirected to landing page", () => {
   const loginResult = simulateLogin(
-    false,  // No valid MS token
-    false   // Cookies not accepted
+    false, // No valid MS token
+    false// Cookies not accepted
   );
 
   expect(loginResult.success).toBe(false);
@@ -147,9 +147,9 @@ test("UR-4 Invalid: Valid MS account, project lead, add nonexistent user", () =>
 
   const existingUsers = ["user_1", "user_2", "user_3"]; // Simulated database of users
   const addResult = simulateAddMember(
-    true,           // User IS the project lead
-    "user_999",     // This user does NOT exist
-    existingUsers   // List of existing users
+    true,// User IS the project lead
+    "user_999",// This user does NOT exist
+    existingUsers// List of existing users
   );
 
   expect(addResult.success).toBe(false);

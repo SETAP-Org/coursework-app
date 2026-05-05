@@ -63,10 +63,10 @@ test("UR-3 Valid: Valid MS account, Existing project, > 2 members, transfer grou
 
   // memberID matches groupLeadID so the user IS the leader
   const transferResult = simulateLeaderTransfer(
-    "user_1",   // memberID (the person clicking transfer)
-    "user_1",   // groupLeadID (current leader)
-    4,          // memberCount (4 members in the group)
-    "user_2"    // newLeaderID (who they want to make leader)
+    "user_1",// memberID (the person clicking transfer)
+    "user_1",// groupLeadID (current leader)
+    4, // memberCount (4 members in the group)
+    "user_2" // newLeaderID (who they want to make leader)
   );
 
   expect(transferResult.success).toBe(true);
@@ -88,10 +88,10 @@ test("UR-3 Invalid: Valid MS account, user is not the group leader", () => {
 
   // memberID does NOT match groupLeadID so transfer should fail
   const transferResult = simulateLeaderTransfer(
-    "user_2",   // memberID (not the leader)
-    "user_1",   // groupLeadID (the actual leader)
-    4,          // memberCount
-    "user_3"    // newLeaderID
+    "user_2",// memberID (not the leader)
+    "user_1",// groupLeadID (the actual leader)
+    4, // memberCount
+    "user_3" // newLeaderID
   );
 
   expect(transferResult.success).toBe(false);
@@ -112,10 +112,10 @@ test("UR-3 Invalid: Valid MS account, group only has 1 member", () => {
 
   // Only 1 member in the group so transfer should fail
   const transferResult = simulateLeaderTransfer(
-    "user_1",   // memberID (the leader)
-    "user_1",   // groupLeadID
-    1,          // memberCount (only 1 member)
-    "user_2"    // newLeaderID
+    "user_1", // memberID (the leader)
+    "user_1", // groupLeadID
+    1, // memberCount (only 1 member)
+    "user_2" // newLeaderID
   );
 
   expect(transferResult.success).toBe(false);
@@ -136,10 +136,10 @@ test("UR-3 Invalid: Valid MS account, new leader is the same as current leader",
 
   // New leader is the same as the current leader so transfer should fail
   const transferResult = simulateLeaderTransfer(
-    "user_1",   // memberID (the leader)
-    "user_1",   // groupLeadID
-    4,          // memberCount
-    "user_1"    // newLeaderID (same as current leader)
+    "user_1", // memberID (the leader)
+    "user_1",// groupLeadID
+    4,// memberCount
+    "user_1" // newLeaderID (same as current leader)
   );
 
   expect(transferResult.success).toBe(false);
