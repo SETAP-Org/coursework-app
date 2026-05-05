@@ -8,7 +8,7 @@ function simulateLogin(hasValidToken, cookiesAccepted) {
   return { success: true, redirect: "/dashboard" };
 }
 
-function simulateProjectCreation(projectName, projectDeadline) {
+function simulateProjectCreation(projectName, projectDeadline, existingProject) {
   // Both missing
   if (!projectName && !projectDeadline) {
     return { success: false, message: "Project name and deadline are required" };
@@ -21,6 +21,9 @@ function simulateProjectCreation(projectName, projectDeadline) {
   else if (new Date(projectDeadline) < new Date()) {
     return { success: false, message: "Project deadine has passed" };
   }
+  //project already exists
+  else if (existingProject == projectName)
+    return { success: false, message: "Project already exists"};
   // All good here
   return { success: true, projectId: 123 };
 }
@@ -86,15 +89,25 @@ test("UR-2 Invalid: Valid MS account, Create new project, Expired deadline", () 
 });
 
 //================================================================
-//UR-2 TEST 4 : Valid MS account, create project, duplicate name
-//Expected: Fails as one user cannot have duplicate owned projects
+// UR-2 TEST 4: Valid MS account, create project, duplicate name
+// Expected: Fails as one user cannot have duplicate owned projects
 //================================================================
-test("UR-2 Invalid: Valid MS account, Create new project, Expired deadline", () => {
+test("UR-2 Invalid: Valid MS account, Create new project, Duplicate project name", () => {
     const hasValidToken = true;
     const cookiesAccepted = true;
     const loginResult = simulateLogin(hasValidToken, cookiesAccepted);
 
     expect(loginResult.success).toBe(true);
     expect(loginResult.redirect).toBe("/dashboard");
+
+    const existingProject = "Project 4"; // Already exists in the system
+    const projectName = "Project 4";     // User tries to create one with the same name
+    const projectDeadline = "2099-09-23";
+
+    // Call the function with the duplicate name
+    const projectCreationResult = simulateProjectCreation(projectName, projectDeadline, existingProject);
+
+    expect(projectCreationResult.success).toBe(false);
+    expect(projectCreationResult.message).toBe("Project already exists"); // Must match exactly
 });
 
