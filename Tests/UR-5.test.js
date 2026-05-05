@@ -1,6 +1,6 @@
-// UR-4: Authenticated users assigned as a team leader should be able to manage members for their projects
+// UR-5: Authenticated users assigned as a team leader should be able to manage and assign tasks within a project
 
-// Simulates what happens when a user logs in
+// Simulates login
 function simulateLogin(hasValidToken, cookiesAccepted) {
   if (!hasValidToken || !cookiesAccepted) {
     return { success: false, redirect: "/" };
@@ -8,150 +8,97 @@ function simulateLogin(hasValidToken, cookiesAccepted) {
   return { success: true, redirect: "/dashboard" };
 }
 
-// Simulates deleting a project
-function simulateDeleteProject(isProjectLead, projectExists) {
+// Simulates creating and assigning a task
+function simulateCreateTask(isProjectLead, taskName, assignedTo, weighting) {
   if (!isProjectLead) {
-    return { success: false, message: "User is not the project lead" };
+    return { success: false, message: "Only the project leader can assign tasks" };
   }
-  if (!projectExists) {
-    return { success: false, message: "Project does not exist" };
+  if (!taskName) {
+    return { success: false, message: "Task name is required" };
   }
-  return { success: true, message: "Project deleted", redirect: "/dashboard" };
+  if (!assignedTo) {
+    return { success: false, message: "Task must be assigned to a member" };
+  }
+  if (!weighting || weighting < 1 || weighting > 100) {
+    return { success: false, message: "Task weighting must be between 1 and 100" };
+  }
+  return {
+    success: true,
+    message: "Task created and assigned",
+    task: { taskName, assignedTo, weighting, completed: false }
+  };
 }
 
-// Simulates adding a member to a project
-function simulateAddMember(isProjectLead, username, existingUsers) {
-  if (!isProjectLead) {
-    return { success: false, message: "User is not the project lead" };
+// Simulates ticking off a task
+function simulateTickOffTask(isProjectLead, isMemberAssigned, taskExists) {
+  if (!taskExists) {
+    return { success: false, message: "Task does not exist" };
   }
-  if (!username) {
-    return { success: false, message: "Username is required" };
+  if (!isProjectLead && !isMemberAssigned) {
+    return { success: false, message: "Only the project lead or assigned member can complete this task" };
   }
-  // Check if the user exists in the system
-  if (!existingUsers.includes(username)) {
-    return { success: false, message: "this user does not exist" };
-  }
-  return { success: true, message: "User added to project, notification sent" };
-}
-
-// Simulates leaving a project
-function simulateLeaveProject(isProjectLead, memberCount) {
-  // Project lead cannot leave without assigning a new lead
-  if (isProjectLead && memberCount >= 2) {
-    return { success: false, message: "You must assign a new leader before leaving" };
-  }
-  // Cannot leave if only member
-  if (memberCount <= 1) {
-    return { success: false, message: "You are the only member, delete the project instead" };
-  }
-  return { success: true, message: "User removed from project" };
+  return { success: true, message: "Task marked as complete" };
 }
 
 // ============================================================
-// UR-4 TEST 1: Valid MS account, existing project, project lead, Delete project
-// Expected: Project deleted, redirect to dashboard
+// UR-5 TEST 1: Valid MS account, existing project, team leader, assign task with weighting
+// Expected: Task created and assigned successfully
 // ============================================================
-test("UR-4 Valid: Valid MS account, project lead, delete project", () => {
+test("UR-5 Valid: Valid MS account, team leader, assign task with weighting", () => {
   const loginResult = simulateLogin(true, true);
   expect(loginResult.success).toBe(true);
   expect(loginResult.redirect).toBe("/dashboard");
 
-  const deleteResult = simulateDeleteProject(
+  const taskResult = simulateCreateTask(
     true,// User IS the project lead
-    true // Project EXISTS
+    "Write report section 1", // Task name
+    "user_2",// Assigned to this member
+    25 // Weighting out of 100
   );
 
-  expect(deleteResult.success).toBe(true);
-  expect(deleteResult.message).toBe("Project deleted");
-  expect(deleteResult.redirect).toBe("/dashboard");
+  expect(taskResult.success).toBe(true);
+  expect(taskResult.message).toBe("Task created and assigned");
+  expect(taskResult.task.taskName).toBe("Write report section 1");
+  expect(taskResult.task.assignedTo).toBe("user_2");
+  expect(taskResult.task.weighting).toBe(25);
+  expect(taskResult.task.completed).toBe(false);
 });
 
 // ============================================================
-// UR-4 TEST 2: Valid MS account, existing project, project lead, Add member
-// Expected: Member added, notification sent
+// UR-5 TEST 2: Valid MS account, existing project, NOT team leader, create task
+// Expected: Fails, only the project leader can assign tasks
 // ============================================================
-test("UR-4 Valid: Valid MS account, project lead, add existing member", () => {
+test("UR-5 Invalid: Valid MS account, not team leader, cannot create task", () => {
   const loginResult = simulateLogin(true, true);
   expect(loginResult.success).toBe(true);
   expect(loginResult.redirect).toBe("/dashboard");
 
-  const existingUsers = ["user_1", "user_2", "user_3"]; // Simulated database of users
-  const addResult = simulateAddMember(
-    true, // User IS the project lead
-    "user_2", // Username to add
-    existingUsers // List of existing users
+  const taskResult = simulateCreateTask(
+    false,                    // User is NOT the project lead
+    "Write report section 2",
+    "user_3",
+    25
   );
 
-  expect(addResult.success).toBe(true);
-  expect(addResult.message).toBe("User added to project, notification sent");
+  expect(taskResult.success).toBe(false);
+  expect(taskResult.message).toBe("Only the project leader can assign tasks");
 });
 
 // ============================================================
-// UR-4 TEST 3: Valid MS account, existing project, >= 2 members, Leave project
-// Expected: User leaves project, removed from database
+// UR-5 TEST 3: Valid MS account, team leader, tick off task on behalf of member
+// Expected: Task marked as complete by the project lead
 // ============================================================
-test("UR-4 Valid: Valid MS account, not project lead, >= 2 members, leave project", () => {
+test("UR-5 Valid: Valid MS account, team leader, tick off task on behalf of member", () => {
   const loginResult = simulateLogin(true, true);
   expect(loginResult.success).toBe(true);
   expect(loginResult.redirect).toBe("/dashboard");
 
-  const leaveResult = simulateLeaveProject(
-    false,// User is NOT the project lead
-    4  // 4 members in the group
+  const tickOffResult = simulateTickOffTask(
+    true,   // User IS the project lead
+    false,  // Member has NOT ticked it off yet
+    true    // Task EXISTS
   );
 
-  expect(leaveResult.success).toBe(true);
-  expect(leaveResult.message).toBe("User removed from project");
-});
-
-// ============================================================
-// UR-4 TEST 4: Valid MS account, project lead, >= 2 members, Leave project
-// Expected: Fails, project lead cannot leave without assigning a new lead first
-// ============================================================
-test("UR-4 Invalid: Valid MS account, project lead cannot leave without assigning new leader", () => {
-  const loginResult = simulateLogin(true, true);
-  expect(loginResult.success).toBe(true);
-  expect(loginResult.redirect).toBe("/dashboard");
-
-  const leaveResult = simulateLeaveProject(
-    true,// User IS the project lead
-    4 // 4 members in the group
-  );
-
-  expect(leaveResult.success).toBe(false);
-  expect(leaveResult.message).toBe("You must assign a new leader before leaving");
-});
-
-// ============================================================
-// UR-4 TEST 5: Invalid MS account, project lead, Add/Remove/Leave
-// Expected: Redirect to landing page, no access
-// ============================================================
-test("UR-4 Invalid: Invalid MS account, redirected to landing page", () => {
-  const loginResult = simulateLogin(
-    false, // No valid MS token
-    false // Cookies not accepted
-  );
-
-  expect(loginResult.success).toBe(false);
-  expect(loginResult.redirect).toBe("/");
-});
-
-// ============================================================
-// UR-4 TEST 6: Valid MS account, project lead, add nonexistent user
-// Expected: Fails, returns "this user does not exist"
-// ============================================================
-test("UR-4 Invalid: Valid MS account, project lead, add nonexistent user", () => {
-  const loginResult = simulateLogin(true, true);
-  expect(loginResult.success).toBe(true);
-  expect(loginResult.redirect).toBe("/dashboard");
-
-  const existingUsers = ["user_1", "user_2", "user_3"]; // Simulated database of users
-  const addResult = simulateAddMember(
-    true,// User IS the project lead
-    "user_999",// This user does NOT exist
-    existingUsers// List of existing users
-  );
-
-  expect(addResult.success).toBe(false);
-  expect(addResult.message).toBe("this user does not exist");
+  expect(tickOffResult.success).toBe(true);
+  expect(tickOffResult.message).toBe("Task marked as complete");
 });
