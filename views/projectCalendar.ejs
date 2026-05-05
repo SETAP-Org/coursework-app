@@ -28,27 +28,26 @@
         <%- include('partials/userNav') %>
         <%- include('partials/projectNav') %>
 
-        <!-- Create Event Form -->
-        <!--<div class="event-form">
-            <h2>Add Event</h2>
-            <form id="event-form">
-                <label for="event-form-subject">Subject</label>
-                <input type="text" id="event-form-subject" required placeholder="Meeting title">
+        <section id="page-content">
+            <section class="page-header">
+                <h1 id="page-title">Meetings</h1>
+                <button id="create-meeting-button">New Meeting</button>
+            </section>
 
-                <label for="event-form-start">Start</label>
-                <input type="datetime-local" id="event-form-start" required>
-
-                <label for="event-form-end">End</label>
-                <input type="datetime-local" id="event-form-end" required>
-
-                <label for="event-form-description">Description</label>
-                <textarea id="event-form-description" rows="3" placeholder="Optional description"></textarea>
-
-                <button type="submit" >Create Event</button>
-            </form>
-        </div>-->
-
-        <button id="create-meeting-button">New Meeting</button>
+            <!-- Events List -->
+            <h2>Your Events</h2>
+            <div id="events-list">
+                <template class="event-template">
+                    <div class="event-card">
+                        <h3 class="event-heading"></h3>
+                        <p class="event-start"></p>
+                        <p class="event-end"></p>
+                        <p class="event-description"></p>
+                        <button class="event-delete-button">Delete</button>
+                    </div>
+                </template>
+            </div>
+        </section>
 
         <!-- Create Meeting Popup -->
         <dialog id="create-meeting-dialog">
@@ -76,20 +75,6 @@
                 <button type="submit">Create Meeting</button>
             </form>
         </dialog>
-
-        <!-- Events List -->
-        <h2>Your Events</h2>
-        <div id="events-list">
-            <template class="event-template">
-                <div class="event-card">
-                    <h3 class="event-heading"></h3>
-                    <p class="event-start"></p>
-                    <p class="event-end"></p>
-                    <p class="event-description"></p>
-                    <button class="event-delete-button">Delete</button>
-                </div>
-            </template>
-        </div>
 
         <%- include('partials/footer') %>
 
