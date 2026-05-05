@@ -12,6 +12,8 @@ export default function setupSocket(io) {
         msg.message,
       );
 
+      console.log(data.rows[0]);
+
       io.emit("chat", data.rows[0]);
     });
 
@@ -26,9 +28,12 @@ export default function setupSocket(io) {
           notif.projectName || null,
         );
 
+        console.log(data, 'this is the data');
+
         io.emit("notification", {
           notification: {
             targetUsers: [notif.targetUsers[i]],
+            notificationId: data.rows[0].notification_id,
             projectId: notif.projectId,
             notificationType: notif.notificationType,
             notificationMessage: notif.notificationMessage,
