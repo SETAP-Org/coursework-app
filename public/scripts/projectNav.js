@@ -8,7 +8,7 @@ async function projectNav() {
 
   // Get DOM elements
   const projectsBtn = document.querySelector("#projects-button");
-  const navCheckbox = document.getElementById("check");
+  const navCheckbox = document.querySelector("#check");
   const navMobile = document.querySelector(".nav-mobile");
   const checkBtn = document.querySelector(".checkbtn");
 

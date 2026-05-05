@@ -5,7 +5,7 @@ function setCookie(name, value, days) {
 
 const acceptAllBtn = document.querySelector("#accept-all");
 const acceptEssentialBtn = document.querySelector("#accept-essential");
-const banner = document.getElementById("cookie-banner");
+const banner = document.querySelector("#cookie-banner");
 
 acceptAllBtn.addEventListener("click", () => {
     setCookie("cookieConsent", "all", 365);

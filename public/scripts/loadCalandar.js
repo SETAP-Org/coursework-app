@@ -18,7 +18,7 @@ function projectCalendar() {
     }));
 
     // ddraw calendar with events
-    const calendarEl = document.getElementById("calendar");
+    const calendarEl = document.querySelector("#calendar");
     const calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: "dayGridMonth",
       headerToolbar: {

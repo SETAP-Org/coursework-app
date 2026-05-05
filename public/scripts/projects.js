@@ -12,7 +12,7 @@ async function projects() {
   // Get relevant dom elements
   const projectsList = document.querySelector(".projects-list");
   const template = document.querySelector("#project-template");
-  const dialog = document.getElementById("create-project-dialog");
+  const dialog = document.querySelector("#create-project-dialog");
   const dialogForm = document.querySelector("#create-project-dialog form");
   const createProjectBtn = document.querySelector("#create-project-button");
   const closeCreateNewFormButton = document.querySelector(".modal-close");
@@ -124,7 +124,7 @@ async function projects() {
       if (res.ok) {
         const data = await res.json();
         if (data.success) {
-          document.getElementById("create-project-dialog").close();
+          document.querySelector("#create-project-dialog").close();
           form.reset();
           window.location.replace(
             `/${username}/projects/${data.project.project_id}`,

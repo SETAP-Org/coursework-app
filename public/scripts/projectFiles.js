@@ -6,7 +6,7 @@ async function loadFiles() {
   // ejs values
   const { projectId } = window.scriptData;
   
-  const list = document.getElementById("file-list");
+  const list = document.querySelector("#file-list");
   let files = [];
 
   try {
@@ -70,11 +70,11 @@ async function uploadFile(file) {
   await loadFiles();
 }
 
-document.getElementById("upload-button").addEventListener("click", () => document.getElementById("file-input").click());
+document.querySelector("#upload-button").addEventListener("click", () => document.querySelector("#file-input").click());
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
-document.getElementById("file-input").addEventListener("change", async (e) => {
+document.querySelector("#file-input").addEventListener("change", async (e) => {
   const file = e.target.files[0];
   if (!file) return;
   if (file.size > MAX_FILE_SIZE) {

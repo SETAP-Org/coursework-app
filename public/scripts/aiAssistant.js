@@ -26,14 +26,14 @@
 
   // Cache element handles up front. Doing this once is cheaper than
   // querying the DOM on every interaction.
-  const launcher = document.getElementById("ai-assistant-launcher");
-  const panel = document.getElementById("ai-assistant-panel");
-  const closeBtn = document.getElementById("ai-assistant-close");
-  const clearBtn = document.getElementById("ai-assistant-clear");
-  const messagesEl = document.getElementById("ai-assistant-messages");
-  const form = document.getElementById("ai-assistant-form");
-  const input = document.getElementById("ai-assistant-input");
-  const sendBtn = document.getElementById("ai-assistant-send");
+  const launcher = document.querySelector("#ai-assistant-launcher");
+  const panel = document.querySelector("#ai-assistant-panel");
+  const closeBtn = document.querySelector("#ai-assistant-close");
+  const clearBtn = document.querySelector("#ai-assistant-clear");
+  const messagesEl = document.querySelector("#ai-assistant-messages");
+  const form = document.querySelector("#ai-assistant-form");
+  const input = document.querySelector("#ai-assistant-input");
+  const sendBtn = document.querySelector("#ai-assistant-send");
 
   // Hide the clear button if the current user isn't the team leader.
   // The server still enforces this; this is just UI politeness.
@@ -126,7 +126,7 @@
   }
 
   function clearTypingIndicator() {
-    const el = document.getElementById("ai-assistant-typing");
+    const el = document.querySelector("#ai-assistant-typing");
     if (el) el.remove();
   }
 

@@ -141,8 +141,8 @@ function showTasks() {
 // Get DOM references and consolidate data
 const createTaskDialog = document.querySelector("#create-task-dialog");
 const dialogForm = document.querySelector("#create-task-dialog form");
-const weightRange = document.getElementById("taskWeightRange");
-const valueOutput = document.getElementById("taskWeightValue");
+const weightRange = document.querySelector("#taskWeightRange");
+const valueOutput = document.querySelector("#taskWeightValue");
 const taskListEl = document.querySelector("#task-list");
 
 // Only draw create task button if current user is also the team leader
@@ -246,7 +246,7 @@ if (dialogForm) {
         }
 
         // Close dialog and reset
-        const dlg = document.getElementById("create-task-dialog");
+        const dlg = document.querySelector("#create-task-dialog");
         if (dlg) dlg.close();
         form.reset();
 
