@@ -88,7 +88,7 @@ GCMS allows users to easily track group member contributions, so users never hav
 ### User-Specific Notification System
 All users have access to a notifications viewer, where they can view any updates and changes with any project they are assigned to. If they receive a message from one project, a new task from another, they will always be able to stay up-to-date.
 
-SCREENSHOT
+<img width="2841" height="1522" alt="image" src="https://github.com/user-attachments/assets/08c35c87-8483-4705-bfff-4f673924f477" />
 
 ### Interactive Project Board
 A collaborative workspace featuring draggable widgets for notes, reminders, and project organization, built seamlessly into the project dashboard using Konva.js.
