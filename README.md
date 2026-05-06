@@ -41,6 +41,10 @@ npm run install_db
 ```
 
 > For any troubleshooting, or more information, see the in-depth documentation linked [below](#contributing).
+## Automated Testing 
+```bash 
+npm run test #for running the autometed tests with jest 
+```
 
 ## Usage
 1. Run the app

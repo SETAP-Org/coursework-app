@@ -4,13 +4,12 @@
   "description": "A comprehensive web-based platform designed to streamline group coursework management for university students. This application addresses common challenges in academic collaboration by consolidating communication, task management, and file sharing into a single, integrated solution.",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env NODE_ENV=development node server.js --watch",
     "prod": "cross-env NODE_ENV=production node server.js --watch",
     "install_db": "node node_scripts/install_db.js",
     "email:test": "node testEmail.mjs",
-    "notification:test": "node testNotification.mjs"
-  },
+    "notification:test": "node testNotification.mjs",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SETAP-Org/group-coursework-management-system.git"
@@ -48,5 +47,14 @@
     "pg": "^8.19.0",
     "postgres": "^3.4.8",
     "socket.io": "^4.8.3"
+  },
+  "devDependencies": {
+    "jest": "^30.3.0",
+    "supertest": "^7.2.2"
+  },
+   "jest": {
+    "testMatch": ["**/Tests/**/*.test.js"],
+    "testEnvironment": "node",
+    "transform": {}
   }
 }
