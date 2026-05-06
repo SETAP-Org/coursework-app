@@ -65,12 +65,12 @@ http://localhost:3000
 ### Task Management
 GCMS provides the user with a straightforward, clear task tracking system. It allows a project's 'team leader' to assign tasks to a project's members, including assigning deadlines to tasks to keep members accountable. All users in a project are able to see everyone's tasks, and can see who is completing tasks on time vs. who is going over the deadlines. Tasks are also assigned weights, to make the contribution tracking as accurate as possible - a bigger task can have a bigger weighting to give the assignee a higher contribution % for completing that task.
 
-<img width="2817" height="1515" alt="image" src="https://github.com/user-attachments/assets/5d592293-5f42-4989-8108-baa831127298" />
+<img width="2841" height="1517" alt="image" src="https://github.com/user-attachments/assets/0b5380a3-d192-4a42-b773-b6ccee923f5e" />
 
 ### Deadline Monitoring
 All projects and tasks are assigned a deadline. This allows users to clearly see how long they have until each project and task is due. The dashboard automatically colours tasks/projects in amber and red for close to and over deadlines respectively.
 
-<img width="2817" height="1515" alt="image" src="https://github.com/user-attachments/assets/d15867c9-defd-4947-8019-68c98dfad0c1" />
+<img width="2841" height="1517" alt="image" src="https://github.com/user-attachments/assets/1e226142-5f8f-4843-8d1c-98c206047328" />
 
 ### Calendar Integrations
 Within a project, you can create a meeting on the calendar page. This will display for all members of a project, and will also integrate into your Microsoft calendar, utilising the [Microsoft Graph API](#tech-stack).
@@ -93,7 +93,7 @@ All users have access to a notifications viewer, where they can view any updates
 ### Interactive Project Board
 A collaborative workspace featuring draggable widgets for notes, reminders, and project organization, built seamlessly into the project dashboard using Konva.js.
 
-<img width="2817" height="1515" alt="image" src="https://github.com/user-attachments/assets/36d3e1c0-3a0a-4d67-b0d5-e52589a8a361" />
+<img width="2841" height="1517" alt="image" src="https://github.com/user-attachments/assets/d347e564-a9f1-4459-8fa1-77f1e8bc3d2d" />
 
 ### Shared File System
 All users in a project are able to upload files to a shared folder in the app. They can then download the individual files, or ask the in-built AI chatbot to tell them about the files that have been uploaded.
