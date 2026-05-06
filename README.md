@@ -95,8 +95,15 @@ A collaborative workspace featuring draggable widgets for notes, reminders, and 
 
 <img width="2817" height="1515" alt="image" src="https://github.com/user-attachments/assets/36d3e1c0-3a0a-4d67-b0d5-e52589a8a361" />
 
-### Multiple Concurrent Project Capabilities
-Any user is able to have a theoretically unlimited number of active projects at one time. This allows them to keep track of as many group coursework projects they may have assigned to them across multiple modules on their course.
+### Shared File System
+All users in a project are able to upload files to a shared folder in the app. They can then download the individual files, or ask the in-built AI chatbot to tell them about the files that have been uploaded.
+
+<img width="2841" height="1522" alt="image" src="https://github.com/user-attachments/assets/2127eedf-5807-4d1c-8d85-8c4796d8fc37" />
+
+### Context-Aware AI Chatbot
+Any user can open the AI chat menu in the bottom left of every project related page, and ask any question they want regarding the uploaded files. The AI is able to read all files uploaded to have context regarding the selected project.
+
+<img width="2841" height="1522" alt="image" src="https://github.com/user-attachments/assets/cb2152ef-aa0a-4f20-b902-2a56423e3508" />
 
 ## Tech Stack
 ### Frontend
