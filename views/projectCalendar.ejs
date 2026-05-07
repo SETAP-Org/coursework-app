@@ -10,14 +10,24 @@
         <link rel="icon" href="/assets/logo/logo-mark.svg" type="image/svg+xml" />
 
         <script>
-          window.scriptData = {
-              userId: "<%= userId %>",
-              username: "<%= username %>",
-              projectId: "<%= projectId %>",
-              projectName: "<%= projectName %>",
-              events: <%- JSON.stringify(events) %>,
-              isTeamLeader: <%= typeof isTeamLeader !== 'undefined' && isTeamLeader ? 'true' : 'false' %>
-          };
+            window.scriptData = {
+                userId: "<%= userId %>",
+                username: "<%= username %>",
+                projectId: "<%= projectId %>",
+                projectName: "<%= projectName %>",
+                isTeamLeader: <%= typeof isTeamLeader !== 'undefined' && isTeamLeader ? 'true' : 'false' %>
+            };
+        </script>
+        <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.20/index.global.min.js'></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const calendarEl = document.querySelector('#calendar');
+                const calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth'
+                });
+
+                calendar.render();
+            });
         </script>
         <script src="/scripts/L&D-mode.js" defer type="module"></script>
         <script src="/scripts/projectCalendar.js" type="module"></script>
@@ -35,7 +45,7 @@
             </section>
 
             <!-- Events List -->
-            <h2>Your Events</h2>
+            <!-- <h2>Your Events</h2>
             <div id="events-list">
                 <template class="event-template">
                     <div class="event-card">
@@ -46,7 +56,9 @@
                         <button class="event-delete-button">Delete</button>
                     </div>
                 </template>
-            </div>
+            </div> -->
+
+            <div id="calendar"></div>
         </section>
 
         <!-- Create Meeting Popup -->

@@ -251,8 +251,8 @@ export async function serveProjectCalendar(req, res, next) {
 
     const isTeamLeader = project && project.team_leader_id === dbUser.user_id;
 
-    // get the calendar events
-    const events = await getCalendarEvents(req.user.accessToken);
+    // // get the calendar events
+    // const events = await getCalendarEvents(req.user.accessToken);
 
     res.render("projectCalendar", {
       username: req.params.username,
@@ -261,7 +261,7 @@ export async function serveProjectCalendar(req, res, next) {
       project: project,
       projectId: project.project_id,
       projectName: project.project_name,
-      events: events.value,
+      // events: events.value,
     });
   } catch (err) {
     res.redirect("/error?err=" + encodeURIComponent(err));
