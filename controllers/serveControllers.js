@@ -10,6 +10,7 @@ import { getContributionsByProjectIdModel } from "../models/contributionModels.j
 import { getCalendarEvents } from "../models/calendarModels.js";
 import { getNotesByProjectId } from "../models/konvaModels.js";
 import { getNotes } from "./konvaControllers.js";
+import { getMeetingsByProjectId } from "../models/meetingModels.js";
 
 export function serveLanding(req, res, next) {
   try {
@@ -254,6 +255,8 @@ export async function serveProjectCalendar(req, res, next) {
     // // get the calendar events
     // const events = await getCalendarEvents(req.user.accessToken);
 
+    const meetings = await getMeetingsByProjectId(req.params.project_id);
+
     res.render("projectCalendar", {
       username: req.params.username,
       userId: dbUser.user_id,
@@ -262,6 +265,7 @@ export async function serveProjectCalendar(req, res, next) {
       projectId: project.project_id,
       projectName: project.project_name,
       // events: events.value,
+      meetings: meetings
     });
   } catch (err) {
     res.redirect("/error?err=" + encodeURIComponent(err));
