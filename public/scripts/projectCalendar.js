@@ -8,7 +8,9 @@ function projectCalendar() {
   loading.style.display = "flex";
 
   // ejs values
-  const { events } = window.scriptData;
+  const { meetings, projectId, groupUsers, userId, username, projectName } = window.scriptData;
+
+  console.log(groupUsers, 'these are the group users....')
 
   // getting dom elements
   const eventsList = document.querySelector("#events-list");
@@ -83,6 +85,27 @@ function projectCalendar() {
       description: description,
     });
   }
+
+  console.log(meetings, 'this is the meetings')
+
+  // populating the calendar
+  for (const meeting of meetings) {
+    addEventToUi(
+      meeting.meeting_subject,
+      meeting.meeting_start,
+      meeting.meeting_end,
+      meeting.meeting_description,
+    );
+  }
+
+  socket.on("meeting", (meeting) => {
+    addEventToUi(
+      meeting.meeting_subject,
+      meeting.meeting_start,
+      meeting.meeting_end,
+      meeting.meeting_description,
+    )
+  })
 
   // // populating the ui with the events
   // if (!events || events.length === 0) {
@@ -178,11 +201,10 @@ function projectCalendar() {
       }
 
       try {
-        console.log('we are here')
         // send a meeting to the web socket
         socket.emit('meeting', {
             projectId: projectId,
-            location: "Online",
+            location: "Virtual",
             description: payload.meetingDescription,
             subject: payload.meetingSubject,
             start: startDateTz,
@@ -193,14 +215,14 @@ function projectCalendar() {
         socket.emit('notification', {
             targetUsers: groupUsers
             .filter(u => u.user_id !== userId)
-            .map(u => u.user_id),
+            .map(u => u.user_id) || [],
             projectId: projectId,
             notificationType: "Meeting",
             notificationMessage: `${username} set a new meeting in ${projectName}`,
         });
       } catch (err) {
         alert(
-          "Error creating meeting."
+          err.message
         )
       }
     });
