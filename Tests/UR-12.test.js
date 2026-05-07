@@ -96,7 +96,7 @@ function simulateToggleEmailPreference(currentPreference) {
   return {
     success: true,
     message: "Email preference updated",
-    newPreference: !currentPreference // Toggles true to false and vice versa
+    newPreference: !currentPreference 
   };
 }
 
@@ -139,12 +139,12 @@ test("UR-12 Valid: Valid MS account, email notification sent to group member", (
 
   recipients.forEach(targetUserId => {
     const notificationResult = simulateSendEmailNotification(
-      true,// Transporter is connected
-      true,// Target has email notifications enabled
-      "user_1",// Trigger user (the one who performed the action)
-      targetUserId, // Target user
-      "new_task",// Notification type
-      projectMembers// Project members
+      true,
+      true,
+      "user_1",
+      targetUserId, 
+      "new_task",
+      projectMembers
     );
 
     expect(notificationResult.success).toBe(true);
@@ -165,23 +165,23 @@ test("UR-12 Valid: Email formatted with GCMS branding and notification details",
 
   // Test formatting for a new task notification
   const taskEmailResult = simulateFormatEmail(
-    "new_task",// Notification type
-    "SETAP Project",// Project name
-    "user_1" // Sender name
+    "new_task",
+    "SETAP Project",
+    "user_1" 
   );
 
   expect(taskEmailResult.success).toBe(true);
-  expect(taskEmailResult.email.hasLogo).toBe(true); // Has GCMS logo
-  expect(taskEmailResult.email.hasBranding).toBe(true); // Has GCMS branding
+  expect(taskEmailResult.email.hasLogo).toBe(true); 
+  expect(taskEmailResult.email.hasBranding).toBe(true);
   expect(taskEmailResult.email.subject).toContain("GCMS");
   expect(taskEmailResult.email.subject).toContain("SETAP Project");
   expect(taskEmailResult.email.body).toContain("user_1");
 
   // Test formatting for a chat message notification
   const chatEmailResult = simulateFormatEmail(
-    "chat_message",// Notification type
-    "SETAP Project",// Project name
-    "user_2" // Sender name
+    "chat_message",
+    "SETAP Project",
+    "user_2" 
   );
 
   expect(chatEmailResult.success).toBe(true);
@@ -214,7 +214,7 @@ test("UR-12 Valid: Valid MS account, toggle email notification preference", () =
 });
 
 // ============================================================
-// UR-12 TEST 4: Valid MS account, emails sent at high volume (spam filter)
+// UR-12 TEST 4: Valid MS account, emails sent at high volume, spam filter
 // Expected: Spam filter triggered after too many emails in a short time
 // ============================================================
 test("UR-12 Invalid: Spam filter triggered on high volume of emails", () => {
@@ -228,17 +228,17 @@ test("UR-12 Invalid: Spam filter triggered on high volume of emails", () => {
   const emailLog = Array.from({ length: 5 }, (_, i) => ({
     id: i + 1,
     targetUserId: "user_2",
-    sentAt: now - (i * 1000) // Each one second apart
+    sentAt: now - (i * 1000) //sent a seocnd apart
   }));
 
   // Try to send a 6th email within the same time window
   const newEmail = { targetUserId: "user_2" };
 
   const spamResult = simulateSpamFilter(
-    emailLog,// Existing email log
-    newEmail,// New email trying to be sent
-    10, // Time window of 10 seconds
-    5 // Max 5 emails allowed per window
+    emailLog,
+    newEmail,
+    10,
+    5 
   );
 
   expect(spamResult.success).toBe(false);
@@ -257,11 +257,11 @@ test("UR-12 Invalid: Valid MS account, email notification preference disabled", 
   const projectMembers = ["user_1", "user_2"];
 
   const notificationResult = simulateSendEmailNotification(
-    true,// Transporter is connected
-    false,// Target has email notifications DISABLED
-    "user_1",// Trigger user
-    "user_2",// Target user
-    "new_task",// Notification type
+    true,
+    false,
+    "user_1",
+    "user_2",
+    "new_task",
     projectMembers
   );
 
@@ -281,10 +281,10 @@ test("UR-12 Invalid: Valid MS account, trigger user cannot receive own notificat
   const projectMembers = ["user_1", "user_2"];
 
   const notificationResult = simulateSendEmailNotification(
-    true,// Transporter is connected
-    true,// Target has email notifications enabled
-    "user_1",// Trigger user
-    "user_1",// Target is the SAME as trigger user
+    true,
+    true,
+    "user_1",
+    "user_1",
     "new_task",
     projectMembers
   );

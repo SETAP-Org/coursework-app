@@ -34,7 +34,7 @@ function simulateFetchDocuments(userId, folderId, sharedFolders) {
   if (!accessResult.success) {
     return { success: false, message: accessResult.message, documents: [] };
   }
-  // Return mock documents from the folder
+  // Return documents from folder
   return {
     success: true,
     message: "Documents fetched successfully",
@@ -92,7 +92,7 @@ function simulateAiQuery(userId, folderId, sharedFolders, question, conversation
     response: aiResponse,
     basedOnDocuments: docsResult.documents.map(d => d.name),
     conversationHistory: updatedHistory,
-    hadContext: previousResponse !== null // Whether the AI had previous context
+    hadContext: previousResponse !== null
   };
 }
 
@@ -111,19 +111,19 @@ test("UR-14 Valid: Valid MS account, AI chatbot returns relevant document respon
   ];
 
   const queryResult = simulateAiQuery(
-    "user_1",// User ID
-    "folder_123",// Folder ID
-    sharedFolders,// Shared folders list
-    "What is the project about?", // Question
-    []// No conversation history yet
+    "user_1",
+    "folder_123",
+    sharedFolders,
+    "What is the project about?", 
+    []
   );
 
   expect(queryResult.success).toBe(true);
   expect(queryResult.message).toBe("AI response generated");
-  expect(queryResult.response).toContain("Project Report");  // Response references the document
-  expect(queryResult.basedOnDocuments).toContain("Project Report.pdf"); // Used the correct document
-  expect(queryResult.conversationHistory.length).toBe(1); // One exchange in history
-  expect(queryResult.hadContext).toBe(false); // No prior context
+  expect(queryResult.response).toContain("Project Report");  
+  expect(queryResult.basedOnDocuments).toContain("Project Report.pdf"); 
+  expect(queryResult.conversationHistory.length).toBe(1); 
+  expect(queryResult.hadContext).toBe(false); 
 });
 
 // ============================================================
@@ -145,27 +145,27 @@ test("UR-14 Valid: Valid MS account, AI chatbot retains context for follow-up qu
     "folder_123",
     sharedFolders,
     "Who attended the meeting?",
-    [] // No history yet
+    [] 
   );
 
   expect(firstQuery.success).toBe(true);
   expect(firstQuery.response).toContain("sprint review");
   expect(firstQuery.conversationHistory.length).toBe(1);
-  expect(firstQuery.hadContext).toBe(false); // No prior context on first question
+  expect(firstQuery.hadContext).toBe(false); 
 
   // Follow-up question using the conversation history from the first question
   const followUpQuery = simulateAiQuery(
     "user_1",
     "folder_123",
     sharedFolders,
-    "What did you just tell me?",// Follow-up question
-    firstQuery.conversationHistory// Pass previous history for context
+    "What did you just tell me?",
+    firstQuery.conversationHistory
   );
 
   expect(followUpQuery.success).toBe(true);
-  expect(followUpQuery.hadContext).toBe(true);// AI had previous context
-  expect(followUpQuery.conversationHistory.length).toBe(2);// Two exchanges in history
-  expect(followUpQuery.response).toContain("sprint review");// Response references previous context
+  expect(followUpQuery.hadContext).toBe(true);
+  expect(followUpQuery.conversationHistory.length).toBe(2);
+  expect(followUpQuery.response).toContain("sprint review");
 });
 
 // ============================================================
@@ -184,7 +184,7 @@ test("UR-14 Invalid: Valid MS account, user queries unauthorised OneDrive folder
 
   const queryResult = simulateAiQuery(
     "user_1",
-    "folder_999",// Folder user does NOT have access to
+    "folder_999",
     sharedFolders,
     "What is in this folder?",
     []
@@ -211,7 +211,7 @@ test("UR-14 Invalid: Valid MS account, empty question submitted to AI chatbot", 
     "user_1",
     "folder_123",
     sharedFolders,
-    "",// Empty question
+    "",
     []
   );
 
@@ -242,6 +242,6 @@ test("UR-14 Valid: Valid MS account, AI references correct document for the ques
   );
 
   expect(queryResult.success).toBe(true);
-  expect(queryResult.response).toContain("Task Breakdown");// References correct document
-  expect(queryResult.basedOnDocuments).toContain("Task Breakdown.xlsx"); // Correct file used
+  expect(queryResult.response).toContain("Task Breakdown");
+  expect(queryResult.basedOnDocuments).toContain("Task Breakdown.xlsx");
 });

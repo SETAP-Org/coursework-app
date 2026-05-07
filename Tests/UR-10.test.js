@@ -16,8 +16,8 @@ function simulateFileUpload(projectId, fileName, fileSizeInMB, existingFiles) {
   if (!fileName) {
     return { success: false, message: "File name is required" };
   }
-  // File size cap at 25MB
-  if (fileSizeInMB > 25) {
+  // File size cap at 10MB
+  if (fileSizeInMB > 10) {
     return { success: false, message: "File size exceeds the 10MB limit" };
   }
   // Check for duplicate file name
@@ -66,10 +66,10 @@ test("UR-10 Valid: Valid MS account, existing project, upload a file", () => {
 
   const existingFiles = [];
   const uploadResult = simulateFileUpload(
-    "project_123", // Project ID
-    "report.pdf",// File name
-    2,// File size 2MB (under the limit)
-    existingFiles// No existing files
+    "project_123", 
+    "report.pdf",
+    2,
+    existingFiles
   );
 
   expect(uploadResult.success).toBe(true);
@@ -94,9 +94,9 @@ test("UR-10 Valid: Valid MS account, existing project, view a file", () => {
   ];
 
   const viewResult = simulateViewFile(
-    1,// File ID to open
-    existingFiles,// Existing files
-    true// User has project access
+    1,
+    existingFiles,
+    true
   );
 
   expect(viewResult.success).toBe(true);
@@ -115,9 +115,9 @@ test("UR-10 Invalid: Valid MS account, upload a 100GB file", () => {
 
   const existingFiles = [];
   const uploadResult = simulateFileUpload(
-    "project_123",// Project ID
-    "bigfile.zip",// File name
-    123456,// 100GB in MB
+    "project_123",
+    "bigfile.zip",
+    123456,
     existingFiles
   );
 
@@ -140,9 +140,9 @@ test("UR-10 Invalid: Valid MS account, upload duplicate file name", () => {
   ];
 
   const uploadResult = simulateFileUpload(
-    "project_123",// Project ID
-    "report.pdf",// Same file name as existing file
-    3,// Different size but same name
+    "project_123",
+    "report.pdf",
+    3,
     existingFiles
   );
 
@@ -164,9 +164,9 @@ test("UR-10 Invalid: Valid MS account, view file without project access", () => 
   ];
 
   const viewResult = simulateViewFile(
-    1,// File ID
+    1,
     existingFiles,
-    false// User does NOT have project access
+    false
   );
 
   expect(viewResult.success).toBe(false);
@@ -187,9 +187,9 @@ test("UR-10 Invalid: Valid MS account, view a file that does not exist", () => {
   ];
 
   const viewResult = simulateViewFile(
-    999,// File ID that does not exist
+    999,
     existingFiles,
-    true// User has project access
+    true
   );
 
   expect(viewResult.success).toBe(false);

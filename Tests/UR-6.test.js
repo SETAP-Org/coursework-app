@@ -31,9 +31,9 @@ test("UR-6 Valid: Valid MS account, tick off own task", () => {
   expect(loginResult.redirect).toBe("/dashboard");
 
   const taskResult = simulateTaskCompletion(
-    "user_1",// Current logged in user
-    "user_1",// Task owner (same person)
-    true // Task exists
+    "user_1",
+    "user_1",
+    true 
   );
 
   expect(taskResult.success).toBe(true);
@@ -51,9 +51,9 @@ test("UR-6 Invalid: Valid MS account, tick off task that does not belong to user
   expect(loginResult.redirect).toBe("/dashboard");
 
   const taskResult = simulateTaskCompletion(
-    "user_1",// Current logged in user
-    "user_2",// Task owner (different person)
-    true  // Task exists
+    "user_1",
+    "user_2",
+    true 
   );
 
   expect(taskResult.success).toBe(false);

@@ -74,16 +74,16 @@ test("UR-13 Valid: Valid MS account, notification bell visible on dashboard", ()
   ];
 
   const notificationResult = simulateNotificationAccess(
-    true,// User is authenticated
-    "/dashboard",// Current route
-    mockNotifications // Current notifications
+    true,
+    "/dashboard",
+    mockNotifications 
   );
 
   expect(notificationResult.success).toBe(true);
   expect(notificationResult.notificationVisible).toBe(true);
   expect(notificationResult.message).toBe("Notification component is visible");
   expect(notificationResult.currentRoute).toBe("/dashboard");
-  expect(notificationResult.notificationCount).toBe(3); // 3 notifications present
+  expect(notificationResult.notificationCount).toBe(3);
 });
 
 // ============================================================
@@ -110,13 +110,13 @@ test("UR-13 Valid: Valid MS account, notification bell visible on project page",
 
   internalRoutes.forEach(route => {
     const notificationResult = simulateNotificationAccess(
-      true,// User is authenticated
-      route,// Each internal route
+      true,
+      route,
       mockNotifications
     );
 
     expect(notificationResult.success).toBe(true);
-    expect(notificationResult.notificationVisible).toBe(true); // Visible on all routes
+    expect(notificationResult.notificationVisible).toBe(true);
     expect(notificationResult.currentRoute).toBe(route);
   });
 });
@@ -127,8 +127,8 @@ test("UR-13 Valid: Valid MS account, notification bell visible on project page",
 // ============================================================
 test("UR-13 Invalid: Invalid MS account, cookies rejected, no notifications visible", () => {
   const loginResult = simulateLogin(
-    false,// No valid MS token
-    false// Cookies rejected
+    false,
+    false
   );
 
   expect(loginResult.success).toBe(false);
@@ -136,9 +136,9 @@ test("UR-13 Invalid: Invalid MS account, cookies rejected, no notifications visi
 
   // Since login failed, notification component should not be accessible
   const notificationResult = simulateNotificationAccess(
-    false, // User is NOT authenticated
-    "/dashboard", // Attempted route
-    [] // No notifications
+    false, 
+    "/dashboard", 
+    [] 
   );
 
   expect(notificationResult.success).toBe(false);
@@ -157,8 +157,8 @@ test("UR-13 Invalid: Expired session cookie, notifications no longer accessible"
 
   // Simulate session that has been active for 25 hours (expired after 24)
   const sessionResult = simulateSessionCheck(
-    "valid-session-token", // Token exists
-    25// But it is 25 hours old (expired)
+    "valid-session-token",
+    25
   );
 
   expect(sessionResult.success).toBe(false);
@@ -167,8 +167,8 @@ test("UR-13 Invalid: Expired session cookie, notifications no longer accessible"
 
   // Since session expired, notification component should not be accessible
   const notificationResult = simulateNotificationAccess(
-    false,// User is no longer authenticated
-    "/dashboard", // Attempted route
+    false,
+    "/dashboard",
     []
   );
 
@@ -188,8 +188,8 @@ test("UR-13 Valid: Valid MS account, session still active, notifications accessi
 
   // Simulate session that has been active for 12 hours (still valid)
   const sessionResult = simulateSessionCheck(
-    "valid-session-token", // Token exists
-    12 // 12 hours old (still valid)
+    "valid-session-token", 
+    12 
   );
 
   expect(sessionResult.success).toBe(true);
@@ -201,7 +201,7 @@ test("UR-13 Valid: Valid MS account, session still active, notifications accessi
   ];
 
   const notificationResult = simulateNotificationAccess(
-    true, // User is still authenticated
+    true, 
     "/dashboard",
     mockNotifications
   );

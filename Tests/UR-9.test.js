@@ -103,7 +103,7 @@ test("UR-9 Valid: Valid MS account, add a note", () => {
   expect(loginResult.success).toBe(true);
   expect(loginResult.redirect).toBe("/dashboard");
 
-  const existingNotes = []; // No notes yet
+  const existingNotes = []; // No notes 
   const addResult = simulateAddNote("project_123", "This is a new note", existingNotes);
 
   expect(addResult.success).toBe(true);
@@ -169,11 +169,11 @@ test("UR-9 Valid: Valid MS account, move note to new position", () => {
   ];
 
   const moveResult = simulateMoveNote(
-    1,// Note ID
-    { x: 250, y: 300 },// New position
+    1,
+    { x: 250, y: 300 },
     existingNotes,
-    null,// No other user has it locked
-    "user_1"// Current user
+    null,
+    "user_1"
   );
 
   expect(moveResult.success).toBe(true);
@@ -243,8 +243,8 @@ test("UR-9 Valid: Valid MS account, edit and delete simultaneously", () => {
   const editResult = simulateEditNote(
     1,
     "New text",
-    deleteResult.remainingNotes, // Note is no longer in here
-    true// noteDeleted flag = true
+    deleteResult.remainingNotes, 
+    true
   );
 
   expect(editResult.success).toBe(false);
@@ -268,10 +268,10 @@ test("UR-9 Valid: Valid MS account, add/edit/move simultaneously, last user wins
   // user_2 lets go last so their position should win
   const moveResult = simulateMoveNote(
     1,
-    { x: 500, y: 500 },// user_2's final position
+    { x: 500, y: 500 },
     existingNotes,
-    "user_1",// user_1 also has it but user_2 is last
-    "user_2"// user_2 is the last to let go
+    "user_1",
+    "user_2"
   );
 
   expect(moveResult.success).toBe(true);

@@ -41,7 +41,7 @@ test("UR-2 Valid: Valid MS account, new project clicked, Project name & Deadline
     expect(loginResult.redirect).toBe("/dashboard");
 
     const projectName = "New Project";
-    const projectDeadline = "2099-05-05"; // Far future date so it never expires
+    const projectDeadline = "2099-05-05";
     const projectCreationResult = simulateProjectCreation(projectName, projectDeadline);
 
     expect(projectCreationResult.success).toBe(true);
@@ -84,8 +84,8 @@ test("UR-2 Invalid: Valid MS account, Create new project, Expired deadline", () 
     const projectDeadline = "1800-01-01"; // Date in the past
     const projectCreationResult = simulateProjectCreation(projectName, projectDeadline);
 
-    expect(projectCreationResult.success).toBe(false); // Should fail
-    expect(projectCreationResult.message).toBe("Project deadine has passed"); // Note: kept your spelling
+    expect(projectCreationResult.success).toBe(false); 
+    expect(projectCreationResult.message).toBe("Project deadine has passed");
 });
 
 //================================================================
@@ -100,14 +100,14 @@ test("UR-2 Invalid: Valid MS account, Create new project, Duplicate project name
     expect(loginResult.success).toBe(true);
     expect(loginResult.redirect).toBe("/dashboard");
 
-    const existingProject = "Project 4"; // Already exists in the system
-    const projectName = "Project 4";     // User tries to create one with the same name
+    const existingProject = "Project 4"; 
+    const projectName = "Project 4";     
     const projectDeadline = "2099-09-23";
 
     // Call the function with the duplicate name
     const projectCreationResult = simulateProjectCreation(projectName, projectDeadline, existingProject);
 
     expect(projectCreationResult.success).toBe(false);
-    expect(projectCreationResult.message).toBe("Project already exists"); // Must match exactly
+    expect(projectCreationResult.message).toBe("Project already exists"); // Must match
 });
 

@@ -49,7 +49,7 @@ test("UR-1 Invalid: Cookies rejected redirects back to landing page", () => {
 // Expected: Cookie expires, user redirected to / landing page
 // ============================================================
 test("UR-1 Invalid: Expired session cookie redirects to landing page", () => {
-  const cookieExpired = true; // Simulating a cookie that has timed out after 24 hours
+  const cookieExpired = true; // Expired cookie
 
   const result = simulateSessionCheck(cookieExpired);
 

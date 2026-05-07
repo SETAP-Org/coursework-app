@@ -18,8 +18,7 @@ function simulateSendMessage(currentUserId, projectMembers, message) {
   if (!projectMembers || projectMembers.length === 0) {
     return { success: false, message: "No project members to send to" };
   }
-  // Store the message as plain text (no HTML parsing)
-  // This prevents XSS and SQL injection as the message is treated as a plain string
+  // This prevents XSS and SQL injection as the message is read as a plain string
   const storedMessage = String(message);
 
   return {
@@ -27,7 +26,7 @@ function simulateSendMessage(currentUserId, projectMembers, message) {
     message: "Message sent",
     sentBy: currentUserId,
     recipients: projectMembers,
-    content: storedMessage  // Stored as plain text, not executed
+    content: storedMessage  // Stored as plain text
   };
 }
 
@@ -42,9 +41,9 @@ test("UR-7 Valid: Valid MS account, send a message to all project members", () =
 
   const projectMembers = ["user_2", "user_3", "user_4"]; // Simulated project members
   const messageResult = simulateSendMessage(
-    "user_1",// Sender
-    projectMembers,// Recipients
-    "Hello everyone!"// Message content
+    "user_1",
+    projectMembers,
+    "Hello everyone!"
   );
 
   expect(messageResult.success).toBe(true);
@@ -60,8 +59,8 @@ test("UR-7 Valid: Valid MS account, send a message to all project members", () =
 // ============================================================
 test("UR-7 Invalid: Invalid MS account, redirected to landing page", () => {
   const loginResult = simulateLogin(
-    false,  // No valid MS token
-    false   // Cookies not accepted
+    false,  
+    false  
   );
 
   expect(loginResult.success).toBe(false);
@@ -79,9 +78,9 @@ test("UR-7 Invalid: Valid MS account, send an empty message", () => {
 
   const projectMembers = ["user_2", "user_3", "user_4"];
   const messageResult = simulateSendMessage(
-    "user_1",// Sender
-    projectMembers, // Recipients
-    "" // Empty message
+    "user_1",
+    projectMembers, 
+    "" 
   );
 
   expect(messageResult.success).toBe(false);
@@ -101,15 +100,15 @@ test("UR-7 Invalid: Valid MS account, XSS attack stored as plain text", () => {
   const xssAttempt = "<script>alert('hello')</script>";
 
   const messageResult = simulateSendMessage(
-    "user_1",// Sender
-    projectMembers, // Recipients
-    xssAttempt// XSS attempt as message content
+    "user_1",
+    projectMembers, 
+    xssAttempt
   );
 
   // Message should be stored but as plain text, not executed
   expect(messageResult.success).toBe(true);
-  expect(messageResult.content).toBe("<script>alert('hello')</script>"); // Stored as plain text
-  expect(messageResult.content).not.toBe(undefined); // Not blocked, just not executed
+  expect(messageResult.content).toBe("<script>alert('hello')</script>"); 
+  expect(messageResult.content).not.toBe(undefined); 
 });
 
 // ============================================================
@@ -125,13 +124,13 @@ test("UR-7 Invalid: Valid MS account, SQL injection stored as plain text", () =>
   const sqlAttempt = "SELECT * FROM users;";
 
   const messageResult = simulateSendMessage(
-    "user_1",// Sender
-    projectMembers, // Recipients
-    sqlAttempt // SQL injection attempt as message content
+    "user_1",
+    projectMembers,
+    sqlAttempt 
   );
 
   // Message should be stored as plain text, not executed as SQL
   expect(messageResult.success).toBe(true);
-  expect(messageResult.content).toBe("SELECT * FROM users;"); // Stored as plain text
-  expect(messageResult.content).not.toBe(undefined); // Not blocked, just not executed
+  expect(messageResult.content).toBe("SELECT * FROM users;"); 
+  expect(messageResult.content).not.toBe(undefined); 
 });

@@ -104,8 +104,8 @@ test("UR-11 Valid: Valid MS account, unequal contributions reflected correctly",
   const user1 = contributionResult.contributions.find(c => c.userId === "user_1");
   const user2 = contributionResult.contributions.find(c => c.userId === "user_2");
 
-  expect(user1.percentage).toBe(75); // user_1 did 75% of the work
-  expect(user2.percentage).toBe(25); // user_2 did 25% of the work
+  expect(user1.percentage).toBe(75); 
+  expect(user2.percentage).toBe(25); 
 });
 
 // ============================================================
@@ -125,11 +125,10 @@ test("UR-11 Valid: Valid MS account, one member completed all tasks", () => {
   const contributionResult = simulateCalculateContributions("project_123", completedTasks);
 
   expect(contributionResult.success).toBe(true);
-  expect(contributionResult.contributions.length).toBe(1); // Only 1 member has contributions
-
+  expect(contributionResult.contributions.length).toBe(1); 
   const user1 = contributionResult.contributions.find(c => c.userId === "user_1");
-  expect(user1.percentage).toBe(100);   // user_1 did everything
-  expect(user1.completedTasks).toBe(2); // user_1 completed 2 tasks
+  expect(user1.percentage).toBe(100);   
+  expect(user1.completedTasks).toBe(2); 
 });
 
 // ============================================================

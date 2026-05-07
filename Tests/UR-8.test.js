@@ -58,7 +58,7 @@ function simulateCreateCalendarEvent(eventName, eventDate, eventTime, projectId)
       name: eventName,
       date: eventDate,
       time: eventTime,
-      description: `[ProjectID: ${projectId}]`, // Tag for filtering
+      description: `[ProjectID: ${projectId}]`,
       completed: false
     }
   };
@@ -73,7 +73,7 @@ test("UR-8 Valid: Valid MS account, existing project, view calendar with events"
   expect(loginResult.success).toBe(true);
   expect(loginResult.redirect).toBe("/dashboard");
 
-  // Simulated calendar data with mixed project events
+  // Simulated calendar datas
   const mockCalendarData = [
     { id: "1", subject: "Team Meeting",    description: "[ProjectID: 123]", start: { dateTime: "2099-06-01T10:00:00" }, end: { dateTime: "2099-06-01T11:00:00" } },
     { id: "2", subject: "Task Deadline",   description: "[ProjectID: 123]", start: { dateTime: "2099-06-05T09:00:00" }, end: { dateTime: "2099-06-05T10:00:00" } },
@@ -84,7 +84,7 @@ test("UR-8 Valid: Valid MS account, existing project, view calendar with events"
 
   expect(calendarResult.success).toBe(true);
   expect(calendarResult.message).toBe("Calendar loaded");
-  expect(calendarResult.events.length).toBe(2);// Only 2 events belong to project 123
+  expect(calendarResult.events.length).toBe(2);
   expect(calendarResult.events[0].subject).toBe("Team Meeting");
   expect(calendarResult.events[1].subject).toBe("Task Deadline");
 });
@@ -98,7 +98,7 @@ test("UR-8 Valid: Valid MS account, existing project, calendar with no events", 
   expect(loginResult.success).toBe(true);
   expect(loginResult.redirect).toBe("/dashboard");
 
-  const calendarResult = simulateLoadCalendar("123", []); // No events
+  const calendarResult = simulateLoadCalendar("123", []);
 
   expect(calendarResult.success).toBe(true);
   expect(calendarResult.message).toBe("No events found");
@@ -115,10 +115,10 @@ test("UR-8 Valid: Valid MS account, existing project, create calendar event", ()
   expect(loginResult.redirect).toBe("/dashboard");
 
   const eventResult = simulateCreateCalendarEvent(
-    "Sprint Review",// Event name
-    "2099-06-10",// Event date (far future so it never expires)
-    "14:00",// Event time
-    "123"// Project ID
+    "Sprint Review",
+    "2099-06-10",
+    "14:00",
+    "123"
   );
 
   expect(eventResult.success).toBe(true);
@@ -126,7 +126,7 @@ test("UR-8 Valid: Valid MS account, existing project, create calendar event", ()
   expect(eventResult.event.name).toBe("Sprint Review");
   expect(eventResult.event.date).toBe("2099-06-10");
   expect(eventResult.event.time).toBe("14:00");
-  expect(eventResult.event.description).toContain("[ProjectID: 123]"); // Linked to project
+  expect(eventResult.event.description).toContain("[ProjectID: 123]"); 
   expect(eventResult.event.completed).toBe(false);
 });
 
@@ -140,7 +140,7 @@ test("UR-8 Invalid: Valid MS account, create event with missing name", () => {
   expect(loginResult.redirect).toBe("/dashboard");
 
   const eventResult = simulateCreateCalendarEvent(
-    "",// Missing event name
+    "",
     "2099-06-10",
     "14:00",
     "123"
@@ -161,7 +161,7 @@ test("UR-8 Invalid: Valid MS account, create event with past date", () => {
 
   const eventResult = simulateCreateCalendarEvent(
     "Old Meeting",
-    "1800-01-01",// Date in the past
+    "1800-01-01",
     "10:00",
     "123"
   );

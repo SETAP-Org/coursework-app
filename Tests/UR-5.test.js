@@ -50,10 +50,10 @@ test("UR-5 Valid: Valid MS account, team leader, assign task with weighting", ()
   expect(loginResult.redirect).toBe("/dashboard");
 
   const taskResult = simulateCreateTask(
-    true,// User IS the project lead
-    "Write report section 1", // Task name
-    "user_2",// Assigned to this member
-    25 // Weighting out of 100
+    true,
+    "Write report section 1", 
+    "user_2",
+    25
   );
 
   expect(taskResult.success).toBe(true);
@@ -74,7 +74,7 @@ test("UR-5 Invalid: Valid MS account, not team leader, cannot create task", () =
   expect(loginResult.redirect).toBe("/dashboard");
 
   const taskResult = simulateCreateTask(
-    false,                    // User is NOT the project lead
+    false,                   
     "Write report section 2",
     "user_3",
     25
@@ -94,9 +94,9 @@ test("UR-5 Valid: Valid MS account, team leader, tick off task on behalf of memb
   expect(loginResult.redirect).toBe("/dashboard");
 
   const tickOffResult = simulateTickOffTask(
-    true,   // User IS the project lead
-    false,  // Member has NOT ticked it off yet
-    true    // Task EXISTS
+    true,  
+    false,  
+    true 
   );
 
   expect(tickOffResult.success).toBe(true);
