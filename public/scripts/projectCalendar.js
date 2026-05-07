@@ -1,3 +1,7 @@
+import { formatTime } from "/scripts/utils.js";
+
+const socket = io();
+
 function projectCalendar() {
   // show loading screen
   const loading = document.querySelector(".loading");
@@ -126,9 +130,9 @@ function projectCalendar() {
   }
 
   if (dialogForm) {
-    // Submit logic -- TO BE FINISHED
     dialogForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+
       const form = e.target;
       const payload = {
         meetingSubject: form["meetingSubject"].value,
@@ -139,6 +143,11 @@ function projectCalendar() {
 
       const startDateObj = new Date(payload.meetingStart);
       const endDateObj = new Date(payload.meetingEnd);
+
+      const startDateTz = new Date(payload.meetingStart).toISOString();
+      const endDateTz = new Date(payload.meetingEnd).toISOString();
+
+      console.log(startDateObj, payload.meetingStart, 'These are the dates...')
 
       if (
         startDateObj > endDateObj ||
@@ -152,8 +161,31 @@ function projectCalendar() {
       }
 
       try {
-        // code to post new meeting, like lines 227-272 in projectTasks.js
-      } catch (err) {}
+        console.log('we are here')
+        // send a meeting to the web socket
+        socket.emit('meeting', {
+            projectId: projectId,
+            subject: payload.meetingSubject,
+            location: "Online",
+            description: payload.meetingDescription,
+            start: startDateTz,
+            end: endDateTz,
+        })
+
+        // create notifications for other group members
+        // socket.emit('notification', {
+        //     targetUsers: groupUsers
+        //     .filter(u => u.user_id !== userId)
+        //     .map(u => u.user_id),
+        //     projectId: projectId,
+        //     notificationType: "Meeting",
+        //     notificationMessage: `${username} set a new meeting in ${projectName}`,
+        // });
+      } catch (err) {
+        alert(
+          "Error creating meeting."
+        )
+      }
     });
   }
 
