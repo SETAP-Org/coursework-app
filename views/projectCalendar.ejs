@@ -15,7 +15,9 @@
                 username: "<%= username %>",
                 projectId: "<%= projectId %>",
                 projectName: "<%= projectName %>",
-                isTeamLeader: <%= typeof isTeamLeader !== 'undefined' && isTeamLeader ? 'true' : 'false' %>
+                isTeamLeader: <%= typeof isTeamLeader !== 'undefined' && isTeamLeader ? 'true' : 'false' %>,
+                meetings: <%- JSON.stringify(meetings) %>,
+                groupUsers: <%- JSON.stringify(groupUsers) %>,
             };
         </script>
         <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.20/index.global.min.js'></script>
