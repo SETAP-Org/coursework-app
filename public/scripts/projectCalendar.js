@@ -165,22 +165,22 @@ function projectCalendar() {
         // send a meeting to the web socket
         socket.emit('meeting', {
             projectId: projectId,
-            subject: payload.meetingSubject,
             location: "Online",
             description: payload.meetingDescription,
+            subject: payload.meetingSubject,
             start: startDateTz,
             end: endDateTz,
         })
 
         // create notifications for other group members
-        // socket.emit('notification', {
-        //     targetUsers: groupUsers
-        //     .filter(u => u.user_id !== userId)
-        //     .map(u => u.user_id),
-        //     projectId: projectId,
-        //     notificationType: "Meeting",
-        //     notificationMessage: `${username} set a new meeting in ${projectName}`,
-        // });
+        socket.emit('notification', {
+            targetUsers: groupUsers
+            .filter(u => u.user_id !== userId)
+            .map(u => u.user_id),
+            projectId: projectId,
+            notificationType: "Meeting",
+            notificationMessage: `${username} set a new meeting in ${projectName}`,
+        });
       } catch (err) {
         alert(
           "Error creating meeting."
