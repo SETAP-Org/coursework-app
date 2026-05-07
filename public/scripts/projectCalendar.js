@@ -21,6 +21,13 @@ function projectCalendar() {
   //   "#event-form-description",
   // );
 
+  // add full calendar modal to the ui
+  const calendarEl = document.querySelector('#calendar');
+  const calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth'
+  });
+  calendar.render();
+
   // function to add event to ui
   // function addEventToUi(event) {
   //   // clone the template
@@ -66,6 +73,16 @@ function projectCalendar() {
   //   // append to the relevant list
   //   eventsList.appendChild(clone);
   // }
+
+  // function to add event to the ui
+  function addEventToUi(title, start, end, description) {
+    calendar.addEvent({
+      title: title,
+      start: start,
+      end: end,
+      description: description,
+    });
+  }
 
   // // populating the ui with the events
   // if (!events || events.length === 0) {
