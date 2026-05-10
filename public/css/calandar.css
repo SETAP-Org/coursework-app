@@ -12,7 +12,22 @@
     padding: 5px;
     margin: 10px 0;
     background: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    color: black;
+    font-weight: bold;
+    display: flex;
+    grid-template-rows: repeat(2, minmax(10px, 1fr));
+    font-size: 1em;
+    flex-direction: column;
+    font-size: 1em;
+    box-sizing: border-box;
+    flex: 0 0 48%;
+}
+
+#events-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .event-form {
@@ -155,4 +170,10 @@
 #calendar {
     margin-top: 50px;
     height: 600px;
+}
+@media (max-width: 600px) {
+    .event-card {
+        flex: 0 0 100%;
+    }
+    
 }

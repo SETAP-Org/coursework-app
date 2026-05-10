@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { postNotificationModel } from './models/notificationModels.js';
+import { postNotificationModel } from '../models/notificationModels.js';
 
 // Load environment variables
 dotenv.config({ path: '.env.mailconfig' });

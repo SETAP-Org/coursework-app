@@ -3,7 +3,6 @@ import { formatTime } from "/scripts/utils.js";
 const socket = io();
 
 function projectCalendar() {
-  // show loading screen
   const loading = document.querySelector(".loading");
   loading.style.display = "flex";
 
@@ -12,7 +11,6 @@ function projectCalendar() {
 
   console.log(groupUsers, 'these are the group users....')
 
-  // getting dom elements
   const eventsList = document.querySelector("#events-list");
   const eventTemplate = document.querySelector(".event-template");
   // const eventForm = document.querySelector("#event-form");
@@ -228,7 +226,7 @@ function projectCalendar() {
     });
   }
 
-  // hide loading screen
+  loadEvents();
   loading.style.display = "none";
 }
 
