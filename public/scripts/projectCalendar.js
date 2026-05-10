@@ -17,7 +17,7 @@ function projectCalendar() {
   const dialogCloseButton = document.querySelector(".modal-close");
 
   // add full calendar modal to the ui
-  const calendarEl = document.querySelector('#calendar');
+  const calendarEl = document.querySelector('#calendar-large');
   const calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'dayGridMonth'
   });
