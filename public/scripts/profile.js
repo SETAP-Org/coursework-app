@@ -124,18 +124,18 @@ async function loadProfile() {
   usernameDialogBtn.addEventListener("click", () => window.location.replace("/"));
 
   // event handler to change l&d theme
-  changeThemeButton.addEventListener("click", () => {
-    const currentTheme = getCookie("theme");
+  // changeThemeButton.addEventListener("click", () => {
+  //   const currentTheme = getCookie("theme");
 
-    // change the theme in the cookie and the stylesheet
-    if (currentTheme === "dark") {
-      setCookie("theme", "light");
-      themeStyleSheet.href = "/css/root-light.css";
-    } else {
-      setCookie("theme", "dark");
-      themeStyleSheet.href = "/css/root-dark.css";
-    }
-  })
+  //   // change the theme in the cookie and the stylesheet
+  //   if (currentTheme === "dark") {
+  //     setCookie("theme", "light");
+  //     themeStyleSheet.href = "/css/root-light.css";
+  //   } else {
+  //     setCookie("theme", "dark");
+  //     themeStyleSheet.href = "/css/root-dark.css";
+  //   }
+  // })
 
   // hide loading screen
   loading.style.display = "none";
