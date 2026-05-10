@@ -1,5 +1,6 @@
 import { postMessageModel } from "../models/chatModels.js";
 import { postNotificationModel } from "../models/notificationModels.js";
+import { postMeetingModel } from "../models/meetingModels.js";
 
 export default function setupSocket(io) {
   io.on("connection", (socket) => {
@@ -43,6 +44,19 @@ export default function setupSocket(io) {
           dbReturn: data.rows[0],
         });
       }
+    });
+
+    socket.on("meeting", async (meeting) => {
+      const data = await postMeetingModel(
+        meeting.projectId,
+        meeting.location,
+        meeting.description,
+        meeting.subject,
+        meeting.start,
+        meeting.end,
+      );
+
+      io.emit("meeting", data.rows[0]);
     });
 
     socket.on("disconnect", () => {

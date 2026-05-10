@@ -82,6 +82,8 @@ async function userNav() {
         window.location.href = `/${username}/projects/${projectId}`;
       else if (type === "Task")
         window.location.href = `/${username}/projects/${projectId}/tasks`;
+      else if (type === "Meeting")
+        window.location.href = `/${username}/projects/${projectId}/calendar`;
     });
 
     // event listener to delete notification

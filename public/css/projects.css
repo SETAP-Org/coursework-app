@@ -1,9 +1,5 @@
 /* ========== Create project dialog ========== */
 #create-project-dialog {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
     font-family: var(--font);
     color: var(--text);
     background: rgba(11, 18, 32, 0.25);

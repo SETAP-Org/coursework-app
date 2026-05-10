@@ -13,8 +13,8 @@ export default function setUpAuth(app) {
         clientID: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
         callbackURL: "http://localhost:3000/api/auth/callback",
-        //callbackURL: "https://outdoors-chasing-riverbed.ngrok-free.dev/api/auth/callback",
-        scope: ["User.Read", "Calendars.ReadWrite"], 
+        // callbackURL: "https://outdoors-chasing-riverbed.ngrok-free.dev/api/auth/callback",
+        scope: ["User.Read", "Calendars.ReadWrite"],
       },
       function (accessToken, refreshToken, profile, done) {
         return done(null, { accessToken, refreshToken, ...profile });

@@ -10,6 +10,7 @@ import { getContributionsByProjectIdModel } from "../models/contributionModels.j
 import { getCalendarEvents } from "../models/calendarModels.js";
 import { getNotesByProjectId } from "../models/konvaModels.js";
 import { getNotes } from "./konvaControllers.js";
+import { getMeetingsByProjectIdModel } from "../models/meetingModels.js";
 
 export function serveLanding(req, res, next) {
   try {
@@ -249,10 +250,18 @@ export async function serveProjectCalendar(req, res, next) {
     const projectResponse = await getProjectByIdModel(req.params.project_id);
     const project = projectResponse.rows[0];
 
+    // get the usernames of the other members of the group
+    const groupUsersResponse = await getUsersByProjectId(req.params.project_id);
+    const groupUsersData = groupUsersResponse.rows;
+
+    console.log(groupUsersData, 'these are the group users...')
+
     const isTeamLeader = project && project.team_leader_id === dbUser.user_id;
 
-    // get the calendar events
-    const events = await getCalendarEvents(req.user.accessToken);
+    // // get the calendar events
+    // const events = await getCalendarEvents(req.user.accessToken);
+
+    const meetings = await getMeetingsByProjectIdModel(req.params.project_id);
 
     res.render("projectCalendar", {
       username: req.params.username,
@@ -261,7 +270,9 @@ export async function serveProjectCalendar(req, res, next) {
       project: project,
       projectId: project.project_id,
       projectName: project.project_name,
-      events: events.value,
+      // events: events.value,
+      groupUsers: groupUsersData,
+      meetings: meetings.rows,
     });
   } catch (err) {
     res.redirect("/error?err=" + encodeURIComponent(err));
