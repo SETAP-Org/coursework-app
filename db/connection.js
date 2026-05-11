@@ -8,7 +8,7 @@ dotenv.config({
 // creates connection to database depending on mode of app
 const pool = new Pool({
   connectionString: process.env.DB_URL,
-  ssl: {rejectUnauthorized: false }
+  ssl: process.env.NODE_ENV === 'test' ? false : {rejectUnauthorized: false }
 });
 
 // function to make queries to the database

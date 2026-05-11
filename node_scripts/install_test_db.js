@@ -18,12 +18,14 @@ async function recreateDatabase() {
 
 async function seedDatabase() {
     const schema = await readFile('./db/schema.sql', 'utf8');
+    const seed = await readFile('./db/seed_test.sql', 'utf8');
     
     const appPool = new Pool({
         connectionString: process.env.DB_URL
     });
 
     await appPool.query(schema);
+    await appPool.query(seed);
     await appPool.end();
 }
 
