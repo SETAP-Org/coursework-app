@@ -59,4 +59,21 @@ describe('The system should allow users assigned as team leaders to assign a new
         expect(response.body.success).toBe(false);
         expect(response.body.message).toMatch("Missing projectId");
     });
+
+    test('Should fail with missing newLeaderId', async () => {
+        // get the relevant database data
+        const projectRes = await query("SELECT project_id FROM projects WHERE project_name = 'Test Project'");
+        
+        // attempting to change the team leader
+        const projectId = projectRes.rows[0].project_id;
+
+        const response = await request(app)
+            .put("/api/projects/leader")
+            .send({ projectId });
+
+        // expecting failute
+        expect(response.status).toBe(400);
+        expect(response.body.success).toBe(false);
+        expect(response.body.message).toMatch("Missing newLeaderId");
+    });
 })
