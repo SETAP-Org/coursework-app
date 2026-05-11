@@ -18,7 +18,9 @@
                 <span id="notif-bell-num"></span>
             </div>
         </div>
-        <a class="Dashboard-text Dashboard-links" id="projects-button" href="/<%= username %>/projects">Projects</a>
+        <a class="Dashboard-text Dashboard-links" id="projects-button" href="/<%= username %>/projects" aria-label="Open projects">
+            <i class="fa-solid fa-folder-open" aria-hidden="true"></i>
+        </a>
         <a class="profile-nav-button" id="profile-button" href="/<%= username %>/profile" type="button" aria-label="Open profile">
             <img class="profile-nav-avatar" src="/api/me/photo" alt="Your profile picture" onerror="this.onerror=null;this.src='/assets/default-avatar.svg';">
         </a>

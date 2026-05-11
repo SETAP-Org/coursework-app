@@ -104,7 +104,8 @@
     justify-content: center;
     align-items: center;
     padding: 2px;
-    margin-right: 6px;
+    margin: 5px;
+    color: #fff;
     cursor: pointer;
     transition: color 0.3s ease;
 }
@@ -113,14 +114,20 @@
     color: var(--accent);
 }
 
-#projects-button span {
+#projects-button i {
     font-size: 1.5em;
-    color: white;
+    background-color: transparent;
+    color: #fff;
     transition: color 0.3s ease;
 }
 
-#projects-button:hover span {
+#projects-button:hover i,
+#projects-button:focus-visible i {
     color: var(--accent);
+}
+
+#projects-button:focus-visible {
+    outline: none;
 }
 
 .profile-nav-button {
