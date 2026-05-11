@@ -32,8 +32,8 @@ CREATE TABLE USERS(
     microsoft_id TEXT NOT NULL UNIQUE,
     date_created TIMESTAMPTZ,
     last_login TIMESTAMPTZ,
-    username VARCHAR(20) UNIQUE,
-    email_notifications BOOLEAN DEFAULT TRUE
+    username VARCHAR(20) NOT NULL UNIQUE CHECK (length(username) >= 3),
+    email_notifications BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE PROJECTS(
@@ -54,7 +54,7 @@ CREATE TABLE FILES(
     file_name VARCHAR(100) NOT NULL,
     storage_path TEXT NOT NULL,
     size BIGINT NOT NULL,
-    date_uploaded TIMESTAMP,
+    date_uploaded TIMESTAMPTZ,
     FOREIGN KEY (project_id) REFERENCES PROJECTS(project_id)
 );
 
@@ -88,7 +88,7 @@ CREATE TYPE notification_type AS ENUM ('Task Assigned', 'Task Updated', 'Project
 CREATE TABLE NOTIFICATIONS(
     notification_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL,
-    project_id UUID NOT NULL,
+    project_id UUID,
     notification_type notification_type NOT NULL,
     notification_message TEXT,
     n_date_created TIMESTAMPTZ,
@@ -112,13 +112,12 @@ CREATE TYPE meeting_location AS ENUM('Virtual', 'Presential');
 
 CREATE TABLE MEETINGS(
     meeting_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    team_leader_id UUID NOT NULL,
     project_id UUID NOT NULL,
-    scheduled_time TIMESTAMPTZ NOT NULL,
-    meeting_duration INT NOT NULL,
     meeting_location meeting_location,
-    meeting_notes TEXT,
-    FOREIGN KEY (team_leader_id) REFERENCES USERS(user_id),
+    meeting_description TEXT,
+    meeting_subject TEXT NOT NULL,
+    meeting_start TIMESTAMPTZ NOT NULL,
+    meeting_end TIMESTAMPTZ NOT NULL,
     FOREIGN KEY (project_id) REFERENCES PROJECTS(project_id)
 );
 

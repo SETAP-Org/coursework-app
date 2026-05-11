@@ -61,8 +61,36 @@
                     <section class="calendar-box">
                         <div id="calendar"></div>
                     </section>
-                </main>
 
+                    <dialog id="create-meeting-dialog">
+
+                        <form id="meeting-form">
+                            <h2>Create Meeting</h2>
+                            <label>
+                                Title
+                                <input type="text" name="meetingSubject" required>
+                            </label>
+                            <label>
+                                Description
+                                <textarea name="meetingDescription"></textarea>
+                            </label>
+                            <label>
+                                Start
+                                <input type="datetime-local" name="meetingStart" required>
+                            </label>
+                            <label>
+                                End
+                                <input type="datetime-local" name="meetingEnd" required>
+                            </label>
+                            <div class="dialog-buttons">
+                                <button type="submit">Create</button>
+                                <button type="button" class="modal-close">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </dialog>
+                </main>
             </div>
 
             <%- include('partials/footer') %>

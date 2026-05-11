@@ -14,6 +14,8 @@ function toggleNewTaskForm() {
   dialog.open ? dialog.close() : dialog.showModal();
 }
 
+window.toggleNewTaskForm = toggleNewTaskForm;
+
 // Function to run when page loads to draw all tasks
 function showTasks() {
   const tasks = SD.tasks || [];

@@ -1,7 +1,6 @@
 async function projectNav() {
-  // Show loading screen
   const loading = document.querySelector(".loading");
-  loading.style.display = "flex";
+  if (loading) loading.style.display = "flex";
 
   // Extract EJS values
   const { username } = window.scriptData;
@@ -15,7 +14,7 @@ async function projectNav() {
   // Validate required elements exist
   if (!projectsBtn || !navCheckbox || !navMobile || !checkBtn) {
     console.warn("Required navigation elements not found");
-    loading.style.display = "none";
+    if (loading) loading.style.display = "none";
     return;
   }
 
@@ -47,7 +46,7 @@ async function projectNav() {
   });
 
   // Hide loading screen
-  loading.style.display = "none";
+  if (loading) loading.style.display = "none";
 }
 
 projectNav();

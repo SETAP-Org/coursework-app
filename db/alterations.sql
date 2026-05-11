@@ -36,12 +36,6 @@ ALTER TABLE notifications
     FOREIGN KEY (project_id) REFERENCES projects(project_id)
     ON DELETE CASCADE;
 
-ALTER TABLE notifications
-  DROP CONSTRAINT IF EXISTS notifications_task_id_fkey,
-  ADD CONSTRAINT notifications_task_id_fkey
-    FOREIGN KEY (task_id) REFERENCES tasks(task_id)
-    ON DELETE CASCADE;
-
 ALTER TABLE meetings
   DROP CONSTRAINT IF EXISTS meetings_project_id_fkey,
   ADD CONSTRAINT meetings_project_id_fkey

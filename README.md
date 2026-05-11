@@ -75,6 +75,8 @@ All projects and tasks are assigned a deadline. This allows users to clearly see
 ### Calendar Integrations
 Within a project, you can create a meeting on the calendar page. This will display for all members of a project, and will also integrate into your Microsoft calendar, utilising the [Microsoft Graph API](#tech-stack).
 
+<img width="2836" height="1522" alt="image" src="https://github.com/user-attachments/assets/2fc23619-dd12-4b93-bda9-495bdb171f5a" />
+
 ### Live Project Group Chat
 Each project has a chat page, which gives the members access to unlimited messaging between anybody in the group. The page updates in real-time, allowing for seamless integration. The group chat feature integrates with the notification system to keep members informed, even if they aren't on the message page.
 
