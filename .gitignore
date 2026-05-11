@@ -4,6 +4,7 @@
 .env.auth
 .env.mailconfig
 .env.gemini
+.env.test
 testEmail.mjs
 testNotifications.mjs
 /node_modules
