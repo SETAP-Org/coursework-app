@@ -7,7 +7,7 @@ import { query } from "../db/connection.js";
 
 describe('The system should allow users assigned as team leaders to assign a new team leader', () => {
     test('Should succeed with valid input', async () => {
-        // get the relevant database items
+        // get the relevant database data
         const bobRes = await query("SELECT user_id FROM users WHERE username = 'bob'")
         const projectRes = await query("SELECT project_id FROM projects WHERE project_name = 'Test Project'");
         
@@ -26,18 +26,37 @@ describe('The system should allow users assigned as team leaders to assign a new
     });
 
     test('Should fail with unknown projectId', async () => {
+        // get the relevant database data
         const bobRes = await query("SELECT user_id FROM users WHERE username = 'bob'");
-        const newLeaderId = bobRes.rows[0].user_id;
         
         // attempting to change the team leader
+        const newLeaderId = bobRes.rows[0].user_id;
         const fakeProjectId = '00000000-0000-0000-0000-000000000000';
 
         const response = await request(app)
             .put("/api/projects/leader")
             .send({ newLeaderId, projectId: fakeProjectId });
 
+        // expecting failure
         expect(response.status).toBe(404);
         expect(response.body.success).toBe(false);
         expect(response.body.message).toMatch("Project not found");
-    })
+    });
+
+    test('Should fail with missing projectId', async () => {
+        // get the relevant database data
+        const bobRes = await query("SELECT user_id FROM users WHERE username = 'bob'");
+        
+        // attempting to change the team leader
+        const newLeaderId = bobRes.rows[0].user_id;
+
+        const response = await request(app)
+            .put("/api/projects/leader")
+            .send({ newLeaderId });
+
+        // expecting failure
+        expect(response.status).toBe(400);
+        expect(response.body.success).toBe(false);
+        expect(response.body.message).toMatch("Missing projectId");
+    });
 })
