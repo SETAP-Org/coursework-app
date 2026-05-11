@@ -361,14 +361,17 @@ export async function serveProjectContributions(req, res, next) {
 
 export async function serveProjectFiles(req, res, next) {
   try {
+    const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+    const dbUser = dbUserResult.rows[0];
+
     // get the project details from route params (do not rely on session state)
     const projectResponse = await getProjectByIdModel(req.params.project_id);
     const project = projectResponse.rows[0];
 
-    const isTeamLeader = project.team_leader_id === req.params.user_id;
+    const isTeamLeader = project.team_leader_id === dbUser.user_id;
 
     res.render("projectFiles", {
-      userId: req.params.user_id,
+      userId: dbUser.user_id,
       username: req.params.username,
       projectId: project.project_id,
       projectName: project.project_name,

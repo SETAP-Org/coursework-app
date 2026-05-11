@@ -1,4 +1,11 @@
-import { postFileModel, getFilesByProjectIdModel } from "../models/fileModels.js";
+import {
+  postFileModel,
+  getFilesByProjectIdModel,
+  getFileByProjectIdAndFileIdModel,
+  deleteFileByProjectIdAndFileIdModel,
+} from "../models/fileModels.js";
+import { getProjectByIdModel } from "../models/projectModels.js";
+import { getUserByMicrosoftIdModel } from "../models/userModels.js";
 import { supabase, SHARED_FOLDERS_BUCKET } from "../utils/supabase.js";
 
 const MAX_FILE_SIZE = Number(process.env.MAX_UPLOAD_BYTES) || 10 * 1024 * 1024; // 10 MB
@@ -34,5 +41,57 @@ export async function getDownloadUrl(req, res) {
   const { storagePath } = req.query;
   const { data } = await supabase.storage.from(SHARED_FOLDERS_BUCKET).createSignedUrl(storagePath, 60);
   return res.status(200).json(data);
+}
+
+export async function deleteFile(req, res) {
+  try {
+    const { project_id, file_id } = req.params;
+
+    const projectResult = await getProjectByIdModel(project_id);
+    const project = projectResult.rows[0];
+
+    if (!project) {
+      return res.status(400).json({ success: false, error: "Project not loaded" });
+    }
+
+    const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+    const dbUser = dbUserResult.rows[0];
+
+    if (String(dbUser.user_id) !== String(project.team_leader_id)) {
+      return res.status(403).json({
+        success: false,
+        error: "Only the team leader may delete files",
+      });
+    }
+
+    const fileResult = await getFileByProjectIdAndFileIdModel(project_id, file_id);
+    const file = fileResult.rows[0];
+
+    if (!file) {
+      return res.status(404).json({ success: false, error: "File not found" });
+    }
+
+    const { error: storageError } = await supabase.storage
+      .from(SHARED_FOLDERS_BUCKET)
+      .remove([file.storage_path]);
+
+    if (storageError) {
+      return res.status(500).json({
+        success: false,
+        error: "Failed to remove file from shared folder",
+      });
+    }
+
+    const deleted = await deleteFileByProjectIdAndFileIdModel(project_id, file_id);
+
+    if (!deleted.rows[0]) {
+      return res.status(404).json({ success: false, error: "File not found" });
+    }
+
+    return res.status(200).json({ success: true, file: deleted.rows[0] });
+  } catch (err) {
+    console.error("deleteFile error:", err);
+    return res.status(500).json({ success: false, error: err.message });
+  }
 }
 
