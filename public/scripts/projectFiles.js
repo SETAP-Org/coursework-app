@@ -1,4 +1,4 @@
-const { projectId, isTeamLeader } = window.scriptData;
+const { projectId } = window.scriptData;
 
 function formatFileDate(dateValue) {
   return new Date(dateValue).toLocaleDateString("en-GB", {
@@ -19,7 +19,7 @@ function renderFiles(list, files) {
           </div>
           <div class="file-actions">
             <button class="download-btn" data-path="${file.storage_path}" data-name="${file.file_name}">Download</button>
-            ${isTeamLeader ? `<button class="delete-btn" data-file-id="${file.file_id}" data-file-name="${file.file_name}">Delete</button>` : ""}
+            <button class="delete-btn" data-file-id="${file.file_id}" data-file-name="${file.file_name}">Remove</button>
           </div>
         </li>`).join("");
 }
@@ -82,7 +82,7 @@ async function loadFiles() {
 
   renderFiles(list, files);
   bindDownloadHandlers(list);
-  if (isTeamLeader) bindDeleteHandlers(list);
+  bindDeleteHandlers(list);
 }
 
 

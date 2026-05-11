@@ -7,7 +7,7 @@
 <nav class="Dashboard-header" id="MyHeader">
     <div class="card logo-card">
         <h2 class="Dashboard-text">
-            <a class="Dashboard-links" id="home-button">Home</a>
+            <a class="Dashboard-links" id="home-button" href="/<%= username %>">Home</a>
         </h2>
     </div>
 
@@ -18,8 +18,8 @@
                 <span id="notif-bell-num"></span>
             </div>
         </div>
-        <a class="Dashboard-text Dashboard-links" id="projects-button">Projects</a>
-        <a class="profile-nav-button" id="profile-button" type="button" aria-label="Open profile">
+        <a class="Dashboard-text Dashboard-links" id="projects-button" href="/<%= username %>/projects">Projects</a>
+        <a class="profile-nav-button" id="profile-button" href="/<%= username %>/profile" type="button" aria-label="Open profile">
             <img class="profile-nav-avatar" src="/api/me/photo" alt="Your profile picture" onerror="this.onerror=null;this.src='/assets/default-avatar.svg';">
         </a>
     </div>

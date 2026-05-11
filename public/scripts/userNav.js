@@ -1,18 +1,9 @@
 const notifSocket = io();
 
 async function userNav() {
-  // show loading screen
   const loading = document.querySelector(".loading");
-  loading.style.display = "flex";
+  if (loading) loading.style.display = "flex";
 
-  // ejs values
-  const { username, userId } = window.scriptData;
-
-  // fetching notifications
-  const notificationResponse = await fetch(`/api/notifications/${userId}`);
-  const notificationData = await notificationResponse.json();
-
-  // getting dom elements
   const homeBtn = document.querySelector("#home-button");
   const projectsBtn = document.querySelector("#projects-button");
   const profileBtn = document.querySelector("#profile-button");
@@ -23,6 +14,39 @@ async function userNav() {
   const notifInnerContainer = document.querySelector(".dialog-inner-container");
   const notifList = document.querySelector(".notif-list");
   const notifTemplate = document.querySelector(".notif-template");
+
+  const { username, userId } = window.scriptData;
+
+  // Keep core nav working even if notifications fail.
+  if (homeBtn) homeBtn.href = `/${username}`;
+  if (projectsBtn) projectsBtn.href = `/${username}/projects`;
+  if (profileBtn) {
+    profileBtn.href = `/${username}/profile`;
+    profileBtn.addEventListener("click", () => {
+      window.location.href = `/${username}/profile`;
+    });
+  }
+
+  if (notificationBell && notificationBox) {
+    notificationBell.addEventListener("click", () => notificationBox.showModal());
+    notificationBox.addEventListener("click", (e) => {
+      if (e.target === notificationBox) notificationBox.close();
+    });
+  }
+
+  // No notifications UI present on this page; still keep nav links functional.
+  if (!notifInnerContainer || !notifList || !notifTemplate || !bellNumber || !bellNumBubble) {
+    if (loading) loading.style.display = "none";
+    return;
+  }
+
+  let notificationData = { success: false, notifications: [] };
+  try {
+    const notificationResponse = await fetch(`/api/notifications/${userId}`);
+    notificationData = await notificationResponse.json();
+  } catch (err) {
+    console.error("Notifications failed to load:", err);
+  }
 
   // function to add notification ui element
   function addNotificationUi(
@@ -49,7 +73,7 @@ async function userNav() {
 
     // sets the target url when notification is clicked
     listItem.addEventListener("click", async () => {
-      loading.style.display = "flex";
+      if (loading) loading.style.display = "flex";
 
       const response = await fetch(`/api/notifications/${id}`, {
         method: "DELETE",
@@ -72,7 +96,7 @@ async function userNav() {
         bellNumBubble.style.display = "none";
       }
 
-      loading.style.display = "none";
+      if (loading) loading.style.display = "none";
 
       if (type === "Message")
         window.location.href = `/${username}/projects/${projectId}/chat`;
@@ -92,7 +116,7 @@ async function userNav() {
       e.stopPropagation();
 
       // show the loading screen
-      loading.style.display = "flex";
+      if (loading) loading.style.display = "flex";
 
       // deleting the notification from the db
       const response = await fetch(`/api/notifications/${id}`, {
@@ -118,25 +142,12 @@ async function userNav() {
       if (bellNumber.innerText === "0") bellNumBubble.style.display = "none";
 
       // hide the loading screen
-      loading.style.display = "none";
+      if (loading) loading.style.display = "none";
     });
 
     // add to the ui
     notifList.appendChild(clone);
   }
-
-  // assigning urls to nav buttons
-  homeBtn.href = `/${username}`;
-  projectsBtn.href = `/${username}/projects`;
-  profileBtn.addEventListener("click", () => {
-    window.location.href = `/${username}/profile`;
-  });
-
-  // event listener to open and close notification dialog
-  notificationBell.addEventListener("click", () => notificationBox.showModal());
-  notificationBox.addEventListener("click", (e) => {
-    if (e.target === notificationBox) notificationBox.close();
-  });
 
   // populate the notifications panel (either with notifications or a message)
   if (!notificationData.success || !notificationData.notifications.length) {
@@ -199,7 +210,7 @@ async function userNav() {
   });
 
   // hide loading screen
-  loading.style.display = "none";
+  if (loading) loading.style.display = "none";
 }
 
 userNav();

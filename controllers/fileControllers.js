@@ -4,7 +4,7 @@ import {
   getFileByProjectIdAndFileIdModel,
   deleteFileByProjectIdAndFileIdModel,
 } from "../models/fileModels.js";
-import { getProjectByIdModel } from "../models/projectModels.js";
+import { isUserMemberOfProjectModel } from "../models/projectModels.js";
 import { getUserByMicrosoftIdModel } from "../models/userModels.js";
 import { supabase, SHARED_FOLDERS_BUCKET } from "../utils/supabase.js";
 
@@ -47,20 +47,20 @@ export async function deleteFile(req, res) {
   try {
     const { project_id, file_id } = req.params;
 
-    const projectResult = await getProjectByIdModel(project_id);
-    const project = projectResult.rows[0];
-
-    if (!project) {
-      return res.status(400).json({ success: false, error: "Project not loaded" });
-    }
-
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult.rows[0];
 
-    if (String(dbUser.user_id) !== String(project.team_leader_id)) {
+    if (!dbUser) {
+      return res.status(401).json({ success: false, error: "User not found" });
+    }
+
+    const membershipResult = await isUserMemberOfProjectModel(dbUser.user_id, project_id);
+    const isMember = membershipResult.rows[0]?.is_member;
+
+    if (!isMember) {
       return res.status(403).json({
         success: false,
-        error: "Only the team leader may delete files",
+        error: "Access denied",
       });
     }
 

@@ -1,4 +1,5 @@
-body, .page-container * {
+.page-container,
+.page-container * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -79,7 +80,7 @@ body, .page-container * {
     font-size: 1.3em;
 }
 
-.fa {
+.info-section-li .fa {
     position: absolute;
     left: 0;
     font-size: 1.3em;
