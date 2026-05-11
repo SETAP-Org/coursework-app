@@ -23,5 +23,21 @@ describe('The system should allow users assigned as team leaders to assign a new
         expect(response.status).toBe(200);
         expect(response.body.success).toBe(true);
         expect(response.body.message).toBe("The team leader has been changed");
+    });
+
+    test('Should fail with unknown projectId', async () => {
+        const bobRes = await query("SELECT user_id FROM users WHERE username = 'bob'");
+        const newLeaderId = bobRes.rows[0].user_id;
+        
+        // attempting to change the team leader
+        const fakeProjectId = '00000000-0000-0000-0000-000000000000';
+
+        const response = await request(app)
+            .put("/api/projects/leader")
+            .send({ newLeaderId, projectId: fakeProjectId });
+
+        expect(response.status).toBe(404);
+        expect(response.body.success).toBe(false);
+        expect(response.body.message).toMatch("Project not found");
     })
 })
