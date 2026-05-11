@@ -125,16 +125,17 @@ export async function updateTeamLeader(req, res, next) {
         message: "The team leader has been changed",
       });
     } else {
-      res.status(400).json({
+      res.status(404).json({
         success: false,
-        message: "Something went wrong!",
+        message: "Project not found",
       });
     }
   } catch (err) {
-    console.error("Error with getUserProjects:", err);
-    res.status(400).json({
+    console.error("Error with updateTeamLeader:", err);
+    res.status(500).json({
       success: true,
-      message: err,
+      message: "Database error",
+      error: err.message,
     });
   }
 }
