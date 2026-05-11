@@ -19,8 +19,11 @@ function projectCalendar() {
   // add full calendar modal to the ui
   const calendarEl = document.querySelector('#calendar-large');
   const calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth'
-  });
+  headerToolbar: {
+        left: "prev,next today",
+        center: "title",
+        right: "dayGridMonth,timeGridWeek,timeGridDay"
+      },  });
   calendar.render();
 
   // function to add event to the ui
