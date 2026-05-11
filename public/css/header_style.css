@@ -5,7 +5,6 @@
     font-family: "Poppins", sans-serif;
 }
 
-
 .Dashboard-header {
     display: flex;
     align-items: center;
@@ -13,7 +12,7 @@
     position: relative;
     width: 100%;
     min-height: 60px;
-    padding: 10px 24px;
+    padding: 2px 24px;
     background:
         radial-gradient(
             900px 500px at 10% 10%,
@@ -99,6 +98,31 @@
     color: var(--accent);
 }
 
+#projects-button {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2px;
+    margin-right: 6px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+#projects-button:hover {
+    color: var(--accent);
+}
+
+#projects-button span {
+    font-size: 1.5em;
+    color: white;
+    transition: color 0.3s ease;
+}
+
+#projects-button:hover span {
+    color: var(--accent);
+}
+
 .profile-nav-button {
     display: inline-flex;
     align-items: center;
@@ -106,18 +130,16 @@
     width: 44px;
     height: 44px;
     padding: 0;
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    border: 2px solid transparent;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.06);
+    background: none;
     cursor: pointer;
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color 0.3s ease;
 }
 
 .profile-nav-button:hover,
 .profile-nav-button:focus-visible {
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(61, 220, 151, 0.18);
-    transform: translateY(-1px);
 }
 
 .profile-nav-button:focus-visible {
@@ -224,10 +246,13 @@
     justify-content: center;
     align-items: center;
     padding: 2px;
+    margin: 5px;
+    transition: color 0.3s ease;
 }
 
 .notif-bell:hover {
     cursor: pointer;
+    color: var(--accent);
 }
 
 .bell-icon {

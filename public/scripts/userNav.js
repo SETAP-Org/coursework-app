@@ -128,7 +128,9 @@ async function userNav() {
   // assigning urls to nav buttons
   homeBtn.href = `/${username}`;
   projectsBtn.href = `/${username}/projects`;
-  profileBtn.href = `/${username}/profile`;
+  profileBtn.addEventListener("click", () => {
+    window.location.href = `/${username}/profile`;
+  });
 
   // event listener to open and close notification dialog
   notificationBell.addEventListener("click", () => notificationBox.showModal());

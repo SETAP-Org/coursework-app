@@ -47,6 +47,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 1rem;
     padding: 1rem 1.25rem;
     border-radius: var(--radius);
     border: var(--border);
@@ -55,6 +56,52 @@
     backdrop-filter: blur(20px) saturate(180%);
     font-family: var(--font);
     color: var(--text);
+}
+
+.file-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+.file-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.download-btn,
+.delete-btn {
+    padding: 0.55rem 1rem;
+    border-radius: var(--radius);
+    border: var(--border);
+    font-family: var(--font);
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.download-btn {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text);
+}
+
+.delete-btn {
+    background: rgba(250, 0, 63, 0.16);
+    color: #ffd7e1;
+    border-color: rgba(250, 0, 63, 0.35);
+}
+
+.download-btn:hover,
+.delete-btn:hover {
+    opacity: 0.88;
+}
+
+.download-btn:focus,
+.delete-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(79, 142, 247, 0.22);
 }
 
 .file-name {

@@ -23,3 +23,27 @@ export async function getFilesByProjectIdModel(projectId) {
     [projectId],
   );
 }
+
+export async function getFileByProjectIdAndFileIdModel(projectId, fileId) {
+  return await query(
+    `
+    SELECT file_id, project_id, file_name, storage_path, size, date_uploaded
+    FROM files
+    WHERE project_id = $1
+      AND file_id = $2;
+    `,
+    [projectId, fileId],
+  );
+}
+
+export async function deleteFileByProjectIdAndFileIdModel(projectId, fileId) {
+  return await query(
+    `
+    DELETE FROM files
+    WHERE project_id = $1
+      AND file_id = $2
+    RETURNING file_id, project_id, file_name, storage_path;
+    `,
+    [projectId, fileId],
+  );
+}

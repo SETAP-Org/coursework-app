@@ -372,6 +372,9 @@ export async function serveProjectContributions(req, res, next) {
 
 export async function serveProjectFiles(req, res, next) {
   try {
+    const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+    const dbUser = dbUserResult.rows[0];
+
     // get the project details from route params (do not rely on session state)
     const projectResponse = await getProjectByIdModel(req.params.project_id);
     const project = projectResponse.rows[0];
