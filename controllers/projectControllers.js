@@ -103,6 +103,20 @@ export async function updateTeamLeader(req, res, next) {
   try {
     const { newLeaderId, projectId } = req.body;
 
+    if (!projectId) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing projectId",
+      })
+    }
+
+    if (!newLeaderId) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing newLeaderId",
+      })
+    }
+
     const data = await putTeamLeader(newLeaderId, projectId);
 
     if (data.rows.length > 0) {
