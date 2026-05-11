@@ -1,67 +1,73 @@
-{
-  "name": "group-coursework-management-system",
-  "version": "1.0.0",
-  "description": "A comprehensive web-based platform designed to streamline group coursework management for university students. This application addresses common challenges in academic collaboration by consolidating communication, task management, and file sharing into a single, integrated solution.",
-  "main": "server.js",
-  "scripts": {
-    "dev": "cross-env NODE_ENV=development node server.js --watch",
-    "prod": "cross-env NODE_ENV=production node server.js --watch",
-    "install_db": "node node_scripts/install_db.js",
-    "email:test": "node testEmail.mjs",
-    "notification:test": "node testNotification.mjs",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/SETAP-Org/group-coursework-management-system.git"
-  },
-  "keywords": [],
-  "author": "",
-  "contributors": [
-    "Jay McKerracher",
-    "Harry Faulkner",
-    "Angelo Espirito Santo Mansur Paixao",
-    "Jake Friend",
-    "Marcus Thomas",
-    "Tom Waller"
-  ],
-  "license": "MIT",
-  "type": "module",
-  "bugs": {
-    "url": "https://github.com/SETAP-Org/group-coursework-management-system/issues"
-  },
-  "homepage": "https://github.com/SETAP-Org/group-coursework-management-system#readme",
-  "dependencies": {
-    "@google/genai": "^1.51.0",
-    "@supabase/supabase-js": "^2.105.1",
-    "chart.js": "^4.5.1",
-    "cookie-parser": "^1.4.7",
-    "cross-env": "^10.1.0",
-    "dotenv": "^17.3.1",
-    "ejs": "^5.0.1",
-    "express": "^5.2.1",
-    "express-session": "^1.19.0",
-    "fullcalendar": "^6.1.20",
-    "konva": "^10.2.3",
-    "mammoth": "^1.12.0",
-    "nodemailer": "^6.9.7",
-    "officeparser": "^6.1.1",
-    "passport": "^0.7.0",
-    "passport-microsoft": "^2.1.0",
-    "pg": "^8.19.0",
-    "postgres": "^3.4.8",
-    "socket.io": "^4.8.3",
-    "xlsx": "^0.18.5"
-  },
-  "devDependencies": {
-    "jest": "^30.3.0",
-    "supertest": "^7.2.2"
-  },
-  "jest": {
-    "testMatch": [
-      "**/Tests/**/*.test.js"
+  {
+    "name": "group-coursework-management-system",
+    "version": "1.0.0",
+    "description": "A comprehensive web-based platform designed to streamline group coursework management for university students. This application addresses common challenges in academic collaboration by consolidating communication, task management, and file sharing into a single, integrated solution.",
+    "main": "server.js",
+    "scripts": {
+      "dev": "cross-env NODE_ENV=development node server.js --watch",
+      "prod": "cross-env NODE_ENV=production node server.js --watch",
+      "install_db": "node node_scripts/install_db.js",
+      "email:test": "node testEmail.mjs",
+      "notification:test": "node testNotification.mjs",
+      "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage --runInBand"  },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/SETAP-Org/group-coursework-management-system.git"
+    },
+    "keywords": [],
+    "author": "",
+    "contributors": [
+      "Jay McKerracher",
+      "Harry Faulkner",
+      "Angelo Espirito Santo Mansur Paixao",
+      "Jake Friend",
+      "Marcus Thomas",
+      "Tom Waller"
     ],
+    "license": "MIT",
+    "type": "module",
+    "bugs": {
+      "url": "https://github.com/SETAP-Org/group-coursework-management-system/issues"
+    },
+    "homepage": "https://github.com/SETAP-Org/group-coursework-management-system#readme",
+    "dependencies": {
+      "@google/genai": "^1.51.0",
+      "@supabase/supabase-js": "^2.105.1",
+      "chart.js": "^4.5.1",
+      "cookie-parser": "^1.4.7",
+      "cross-env": "^10.1.0",
+      "dotenv": "^17.3.1",
+      "ejs": "^5.0.1",
+      "express": "^5.2.1",
+      "express-session": "^1.19.0",
+      "fullcalendar": "^6.1.20",
+      "konva": "^10.2.3",
+      "mammoth": "^1.12.0",
+      "nodemailer": "^6.9.7",
+      "officeparser": "^6.1.1",
+      "passport": "^0.7.0",
+      "passport-microsoft": "^2.1.0",
+      "pg": "^8.19.0",
+      "postgres": "^3.4.8",
+      "socket.io": "^4.8.3",
+      "xlsx": "^0.18.5"
+    },
+    "devDependencies": {
+      "jest": "^30.3.0",
+      "supertest": "^7.2.2"
+    },
+    "jest": {
     "testEnvironment": "node",
-    "transform": {}
+    "transform": {},
+    "coverageProvider": "v8",
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "controllers/**/*.js",
+      "models/**/*.js",
+      "utils/**/*.js",
+      "routes/**/*.js",
+      "server.js"
+    ],
+    "coverageDirectory": "coverage"
   }
-}
+  }

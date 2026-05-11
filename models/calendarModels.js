@@ -51,7 +51,7 @@ export async function createCalendarEvent(accessToken, data) {
     if (!response.ok) {
         console.error("Graph API FULL error:"); 
         throw new Error(`Error creating calendar event: ${response.statusText}`);
-    }
+    }   
     return await response.json();
 }
 
