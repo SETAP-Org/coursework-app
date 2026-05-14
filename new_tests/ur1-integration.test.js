@@ -81,5 +81,65 @@ describe('addUser', () => {
 
         expect(userModels.postUserModel).toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(200);
-    })
+
+        userModels.postUserModel.mockReset();
+    });
+
+    test('Should return the correct response when invalid session user', async () => {
+        const { addUser } = await import('../controllers/userControllers.js');
+        const userModels = await import('../models/userModels.js');
+
+        const req = {}
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+        
+        await addUser(req, res, next);
+
+        expect(userModels.postUserModel).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "No session user"
+        });
+
+        userModels.postUserModel.mockReset();
+    });
+
+    test('Should return the correct response when invalid session user', async () => {
+        const { addUser } = await import('../controllers/userControllers.js');
+        const userModels = await import('../models/userModels.js');
+
+        // mock model to give error
+        userModels.postUserModel.mockImplementation(() => {
+            throw new Error('DB Error');
+        });
+
+        const req = {
+            user: {
+                microsoftId: '123',
+                firstName: 'John',
+                lastName: 'Smith',
+                email: 'johnsmith@example.com'
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+        
+        await addUser(req, res, next);
+
+        expect(userModels.postUserModel).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "Database error"
+        });
+
+        userModels.postUserModel.mockReset();
+    });
 })
