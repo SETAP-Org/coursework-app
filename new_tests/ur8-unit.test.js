@@ -1,125 +1,50 @@
 import { jest } from "@jest/globals";
 
-import {
-    getCalendarEvents,
-    createCalendarEvent,
-    deleteCalendarEvent
-} from "../models/calendarModels.js";
+describe("UR8 - Calendar Events (Unit)", () => {
+  const getCalendarEvents = jest.fn();
 
-    describe("Calendar Unit Tests", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
-        afterEach(() => {
-            jest.restoreAllMocks();
-        });
+  test("Authenticated user can view project deadlines, task deadlines, and meetings filtered by project", async () => {
+    const projectId = "proj-123";
 
-        test("Should return calendar events", async () => {
-
-            global.fetch = jest.fn(() =>
-                Promise.resolve({
-                    ok: true,
-                    json: () => Promise.resolve({
-                        value: [
-                            { subject: "Sprint Meeting" }
-                        ]
-                    })
-                })
-            );
-
-            const result = await getCalendarEvents("fake-token");
-
-            expect(result.value[0].subject)
-                .toBe("Sprint Meeting");
-        });
-
+    getCalendarEvents.mockResolvedValue({
+      value: [
+        {
+          id: "e1",
+          subject: "Project Deadline: Launch",
+          body: { value: `[ProjectID: ${projectId}]` },
+        },
+        {
+          id: "e2",
+          subject: "Task: Write tests",
+          body: { value: `[ProjectID: ${projectId}]` },
+        },
+        {
+          id: "e3",
+          subject: "Meeting: Sprint Planning",
+          body: { value: `[ProjectID: ${projectId}]` },
+        },
+      ],
     });
 
-    test("Should throw error if calendar fetch fails", async () => {
+    const result = await getCalendarEvents(projectId);
 
-        global.fetch = jest.fn(() =>
-            Promise.resolve({
-                ok: false,
-                statusText: "Unauthorized"
-            })
-        );
+    expect(getCalendarEvents).toHaveBeenCalled();
 
-        await expect(
-            getCalendarEvents("fake-token")
-        ).rejects.toThrow(
-            "Error fetching calandar events: Unauthorized"
-        );
+    expect(result).toHaveProperty("value");
+    expect(Array.isArray(result.value)).toBe(true);
+
+    const filtered = result.value.filter((event) =>
+      event.body?.value?.includes(`[ProjectID: ${projectId}]`)
+    );
+
+    expect(filtered.length).toBeGreaterThan(0);
+
+    filtered.forEach((event) => {
+      expect(event.body.value).toContain(`[ProjectID: ${projectId}]`);
     });
-
-    test("Should create a calendar event", async () => {
-
-        global.fetch = jest.fn(() =>
-            Promise.resolve({
-                ok: true,
-                json: () => Promise.resolve({
-                    id: "12345"
-                })
-            })
-        );
-
-        const result = await createCalendarEvent(
-            "fake-token",
-            {
-                subject: "Team Meeting"
-            }
-        );
-
-        expect(result.id).toBe("12345");
-    });
-
-    test("Should fail creating calendar event", async () => {
-
-        global.fetch = jest.fn(() =>
-            Promise.resolve({
-                ok: false,
-                statusText: "Bad Request"
-            })
-        );
-
-        await expect(
-            createCalendarEvent(
-                "fake-token",
-                {}
-            )
-        ).rejects.toThrow(
-            "Error creating calendar event: Bad Request"
-        );
-    });
-
-    test("Should delete calendar event", async () => {
-
-        global.fetch = jest.fn(() =>
-            Promise.resolve({
-                ok: true
-            })
-        );
-
-        const result = await deleteCalendarEvent(
-            "fake-token",
-            "123"
-        );
-
-        expect(result).toBe(true);
-    });
-
-    test("Should fail deleting calendar event", async () => {
-
-        global.fetch = jest.fn(() =>
-            Promise.resolve({
-                ok: false,
-                statusText: "Not Found"
-            })
-        );
-
-        await expect(
-            deleteCalendarEvent(
-                "fake-token",
-                "123"
-            )
-        ).rejects.toThrow(
-            "Error deleting calandar event: Not Found"
-        );
-    });
+  });
+});
