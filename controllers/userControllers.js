@@ -62,6 +62,34 @@ export async function checkValidUsername(req, res, next) {
 // controller to update usernames
 export async function updateUsername(req, res, next) {
     try {
+        if (!req.user) {
+            return res.status(400).json({
+                success: false,
+                message: "No session user"
+            })
+        }
+
+        if (!req.body) {
+            return res.status(400).json({
+                success: false,
+                message: "No request body"
+            })
+        }
+
+        if (!req.body.username) {
+            return res.status(400).json({
+                success: false,
+                message: "No given username"
+            })
+        }
+
+        if (req.body.username.length < 3 || req.body.username.length < 3) {
+            return res.status(400).json({
+                success: false,
+                message: "Username has an invalid length"
+            })
+        }
+
         const userId = req.user.microsoftId;
         const data = await putUsernameByIdModel(userId, req.body.usernameValue);
 
@@ -72,10 +100,9 @@ export async function updateUsername(req, res, next) {
             })
         }
     } catch(err) {
-        console.error("updateUsername error:", err)
-        res.status(400).json({
+        res.status(500).json({
             success: false,
-            message: "Error updating username, see console logs for more information."
+            message: "Database error"
         })
     }
 }
