@@ -58,6 +58,10 @@ export async function updateTaskStatus(req, res, next) {
     const taskResult = await getTaskByIdModel(task_id);
     const task = taskResult.rows[0];
 
+    if (!task) {
+      return res.status(404).json({ success: false, error: "Task not found" });
+    }
+
     if (task.assignee_id !== dbUser.user_id) {
       return res.status(403).json({
         success: false,

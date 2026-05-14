@@ -12,7 +12,11 @@ import {
 } from "../controllers/taskControllers.js";
 
 // Middleware Imports
-import { checkMembership } from "../controllers/projectControllers.js";
+import {
+  checkMembership,
+  isAuthenticated,
+} from "../controllers/projectControllers.js";
+import { isAuthImplicitGrantRedirectError } from "@supabase/supabase-js";
 
 // Router Declaration
 const router = Router();
@@ -22,7 +26,7 @@ const router = Router();
 router.get("/projects/:project_id/tasks", getProjectTasks);
 
 // CREATE
-router.post("/tasks/:project_id/addTask", addTask);
+router.post("/tasks/:project_id/addTask", isAuthenticated, addTask);
 
 // UPDATE
 router.put(
