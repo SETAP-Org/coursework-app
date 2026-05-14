@@ -6,7 +6,8 @@ import {
     checkIfLoggedIn,
     checkIfLoggedInRedirect,
     checkIfLoggedInCalendar,
-    signOut
+    signOut,
+    setJustAuthenticatedFlag
 } from "../controllers/authControllers.js";
 
 describe('checkIfLoggedIn', () => {
@@ -134,5 +135,18 @@ describe('signOut', () => {
         signOut(req, res, next);
 
         expect(req.logout).toHaveBeenCalledWith(next);
+    });
+});
+
+describe('setJustAuthenticatedFlag', () => {
+    test('Should set justAuthenticated flag to True', () => {
+        const req = { session: {} };
+        const res = {};
+        const next = jest.fn();
+
+        setJustAuthenticatedFlag(req, res, next);
+
+        expect(req.session.justAuthenticated).toBe(true);
+        expect(next).toHaveBeenCalled();
     });
 });
