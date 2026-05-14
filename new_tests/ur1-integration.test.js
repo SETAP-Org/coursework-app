@@ -1,10 +1,11 @@
 import { describe, jest } from "@jest/globals";
-// import { getUserByMicrosoftIdModel, postUserModel } from "../models/userModels.js";
+import { putUsernameByIdModel } from "../models/userModels.js";
 
 jest.unstable_mockModule('../models/userModels.js', () => ({
     ...jest.requireActual('../models/userModels.js'),
     postUserModel: jest.fn(),
-    getUserByMicrosoftIdModel: jest.fn()
+    getUserByMicrosoftIdModel: jest.fn(),
+    putUsernameByIdModel: jest.fn(),
 }));
 
 describe('checkIfLoggedIn', () => {

@@ -83,7 +83,7 @@ export async function updateUsername(req, res, next) {
             })
         }
 
-        if (req.body.username.length < 3 || req.body.username.length < 3) {
+        if (req.body.username.length < 3 || req.body.username.length > 20) {
             return res.status(400).json({
                 success: false,
                 message: "Username has an invalid length"
