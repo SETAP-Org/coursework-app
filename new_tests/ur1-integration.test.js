@@ -163,7 +163,87 @@ describe('updateUsername', () => {
 
         expect(userModels.putUsernameByIdModel).toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({
+            success: true,
+            message: "Your username has been changed :)"
+        });
 
         userModels.putUsernameByIdModel.mockReset();
-    })
+    });
+
+    test('Should return the correct response when no session user exists', async () => {
+        const { updateUsername } = await import('../controllers/userControllers.js');
+        const userModels = await import('../models/userModels.js');
+
+        const req = {
+            body: { usernameValue: 'username123' }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await updateUsername(req, res, next);
+
+        expect(userModels.putUsernameByIdModel).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "No session user"
+        });
+
+        userModels.putUsernameByIdModel.mockReset();
+    });
+
+    test('Should return the correct response when no request body is sent', async () => {
+        const { updateUsername } = await import('../controllers/userControllers.js');
+        const userModels = await import('../models/userModels.js');
+
+        const req = {
+            user: { microsoftId: '123' }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await updateUsername(req, res, next);
+
+        expect(userModels.putUsernameByIdModel).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "No request body"
+        });
+
+        userModels.putUsernameByIdModel.mockReset();
+    });
+
+    test('Should return the correct response when no username is given to the body', async () => {
+        const { updateUsername } = await import('../controllers/userControllers.js');
+        const userModels = await import('../models/userModels.js');
+
+        const req = {
+            user: { microsoftId: '123' },
+            body: {}
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await updateUsername(req, res, next);
+
+        expect(userModels.putUsernameByIdModel).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "No given username"
+        });
+
+        userModels.putUsernameByIdModel.mockReset();
+    });
 })
