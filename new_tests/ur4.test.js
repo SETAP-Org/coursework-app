@@ -70,4 +70,64 @@ describe('addUserToProject', () => {
         userModels.getUserByUsernameModel.mockReset();
         userProjectModels.postUserToProjectModel.mockReset();
     });
+
+    test('Should return the correct response if the request body does not contain a project ID', async () => {
+        const { addUserToProject } = await import('../controllers/userProjectControllers.js');
+        const userProjectModels = await import('../models/userProjectModels.js');
+        const userModels = await import('../models/userModels.js');
+
+        const req = {
+            body: {
+                projectId: 'myProjectId'
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await addUserToProject(req, res, next);
+
+        expect(userModels.getUserByUsernameModel).not.toHaveBeenCalled();
+        expect(userProjectModels.postUserToProjectModel).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "No username provided"
+        });
+
+        userModels.getUserByUsernameModel.mockReset();
+        userProjectModels.postUserToProjectModel.mockReset();
+    });
+
+    test('Should return the correct response if the request body does not contain a username', async () => {
+        const { addUserToProject } = await import('../controllers/userProjectControllers.js');
+        const userProjectModels = await import('../models/userProjectModels.js');
+        const userModels = await import('../models/userModels.js');
+
+        const req = {
+            body: {
+                username: 'username123',
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await addUserToProject(req, res, next);
+
+        expect(userModels.getUserByUsernameModel).not.toHaveBeenCalled();
+        expect(userProjectModels.postUserToProjectModel).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "No project ID provided"
+        });
+
+        userModels.getUserByUsernameModel.mockReset();
+        userProjectModels.postUserToProjectModel.mockReset();
+    });
 });
