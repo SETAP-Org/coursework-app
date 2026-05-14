@@ -4,7 +4,7 @@ import app from "../app.js";
 import request from "supertest";
 import { query } from "../db/connection.js";
 
-describe('The system should allow users assigned as team leaders to assign a new team leader', () => {
+describe('updateTeamLeader', () => {
     test('Should succeed with valid input', async () => {
         // get the relevant database data
         const bobRes = await query("SELECT user_id FROM users WHERE username = 'bob'")
