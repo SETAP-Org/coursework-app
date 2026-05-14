@@ -344,4 +344,37 @@ describe('removeUserFromProject', () => {
 
         userProjectModels.deleteUserFromProjectModel.mockReset();
     });
+
+    test('Should return the correct response if deleteUserFromProjectModel() fails', async () => {
+        const { removeUserFromProject } = await import('../controllers/userProjectControllers.js');
+        const userProjectModels = await import('../models/userProjectModels.js');
+
+        // mock model to give error
+        userProjectModels.deleteUserFromProjectModel.mockImplementation(() => {
+            throw new Error('DB Error');
+        });
+
+        const req = {
+            body: {
+                userId: 'myUserId',
+                projectId: 'myProjectId'
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await removeUserFromProject(req, res, next);
+
+        expect(userProjectModels.deleteUserFromProjectModel).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "Database error"
+        });
+
+        userProjectModels.deleteUserFromProjectModel.mockReset();
+    });
 });
