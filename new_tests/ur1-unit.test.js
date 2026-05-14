@@ -1,8 +1,12 @@
 // User Requirement 1:  Users should be able to authenticate with their Microsoft account
 
 import app from "../app.js";
-import { jest } from "@jest/globals";
-import { checkIfLoggedIn, checkIfLoggedInRedirect } from "../controllers/authControllers.js";
+import { jest, test } from "@jest/globals";
+import {
+    checkIfLoggedIn,
+    checkIfLoggedInRedirect,
+    checkIfLoggedInCalendar
+} from "../controllers/authControllers.js";
 
 describe('checkIfLoggedIn', () => {
     test("Should call the 'next()' function if no valid session user", async () => {
@@ -90,3 +94,18 @@ describe('checkIfLoggedInRedirect', () => {
         expect(next).not.toHaveBeenCalled();
     });
 });
+
+describe('checkIfLoggedInCalendar', () => {
+    test("Should move onto the next middleware function when user is authenticated", async () => {
+        const req = { isAuthenticated: jest.fn().mockReturnValue(true) };
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await checkIfLoggedInCalendar(req, res, next);
+
+        expect(next).toHaveBeenCalled();
+    });
+})
