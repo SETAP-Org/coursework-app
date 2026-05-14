@@ -22,7 +22,12 @@ const router = Router();
 
 // Routes
 // API
-router.get("/projects/:project_id/tasks", isAuthenticated, getProjectTasks);
+router.get(
+  "/projects/:project_id/tasks",
+  isAuthenticated,
+  checkMembership,
+  getProjectTasks,
+);
 
 // CREATE
 router.post("/tasks/:project_id/addTask", isAuthenticated, addTask);
