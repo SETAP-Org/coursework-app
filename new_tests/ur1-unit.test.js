@@ -5,7 +5,8 @@ import { jest, test } from "@jest/globals";
 import {
     checkIfLoggedIn,
     checkIfLoggedInRedirect,
-    checkIfLoggedInCalendar
+    checkIfLoggedInCalendar,
+    signOut
 } from "../controllers/authControllers.js";
 
 describe('checkIfLoggedIn', () => {
@@ -122,4 +123,16 @@ describe('checkIfLoggedInCalendar', () => {
         expect(res.status).toHaveBeenCalledWith(401);
         expect(res.json).toHaveBeenCalledWith({ error: "Not authenticated" });
     });
-})
+});
+
+describe('signOut', () => {
+    test('Should hand control over to Passport.js when route is called', () => {
+        const req = { logout: jest.fn() };
+        const res = {};
+        const next = jest.fn();
+
+        signOut(req, res, next);
+
+        expect(req.logout).toHaveBeenCalledWith(next);
+    });
+});

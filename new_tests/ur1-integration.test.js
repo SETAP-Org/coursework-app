@@ -31,7 +31,9 @@ describe('checkIfLoggedIn', () => {
     
         userModels.getUserByMicrosoftIdModel.mockReset();
     });
+});
 
+describe('checkIfLoggedInRedirect', () => {
     test("Should call the 'res.redirect(/error)' function after error from model to retrieve user by Microsoft ID", async () => {
         const { checkIfLoggedInRedirect } = await import('../controllers/authControllers.js');
         const userModels = await import('../models/userModels.js');
