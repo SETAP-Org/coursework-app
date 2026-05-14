@@ -130,4 +130,36 @@ describe('addUserToProject', () => {
         userModels.getUserByUsernameModel.mockReset();
         userProjectModels.postUserToProjectModel.mockReset();
     });
+
+    test('Should return the correct response if username matches no users in the database', async () => {
+        const { addUserToProject } = await import('../controllers/userProjectControllers.js');
+        const userProjectModels = await import('../models/userProjectModels.js');
+        const userModels = await import('../models/userModels.js');
+        userModels.getUserByUsernameModel.mockResolvedValue({ rows: [] });
+
+        const req = {
+            body: {
+                username: 'username123',
+                projectId: 'myProjectId'
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await addUserToProject(req, res, next);
+
+        expect(userModels.getUserByUsernameModel).toHaveBeenCalled();
+        expect(userProjectModels.postUserToProjectModel).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "User does not exist!"
+        });
+
+        userModels.getUserByUsernameModel.mockReset();
+        userProjectModels.postUserToProjectModel.mockReset();
+    });
 });
