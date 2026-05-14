@@ -28,4 +28,18 @@ describe('checkIfLoggedIn', () => {
         expect(next).toHaveBeenCalled();
         expect(res.redirect).not.toHaveBeenCalled();
     });
+
+    test("Should call the 'next()' function if valid user in session but no matching user in database", async () => {
+        const req = { user: {
+            microsoftId: "ms-not-jdoe",
+            accessToken: "ms-access-token"
+        } };
+        const res = { redirect: jest.fn() };
+        const next = jest.fn();
+
+        await checkIfLoggedIn(req, res, next);
+
+        expect(next).toHaveBeenCalled();
+        expect(res.redirect).not.toHaveBeenCalled();
+    });
 })
