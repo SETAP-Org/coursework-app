@@ -1,3 +1,5 @@
+// graphService.js
+
 const GRAPH_URL = "https://graph.microsoft.com/v1.0";
 
 export async function getProfilePhoto(accessToken) {
@@ -14,7 +16,6 @@ export async function getProfilePhoto(accessToken) {
     }
 
     const arrayBuffer = await response.arrayBuffer();
-
     return {
         contentType: response.headers.get('content-type') || 'image/jpeg',
         buffer: Buffer.from(arrayBuffer)
@@ -23,22 +24,25 @@ export async function getProfilePhoto(accessToken) {
 
 export async function getCalendarEvents(accessToken) {
     console.log("fetching calendar events");
-    const response = await fetch( `${GRAPH_URL}/me/events`, {
-        headers : {
-            'Authorization' : `Bearer ${accessToken}`,
-            'Content-Type' : 'application/json'
+    const response = await fetch(`${GRAPH_URL}/me/events`, {
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
         }
     });
 
     if (!response.ok) {
-        throw new Error(`Error fetching calandar events: ${response.statusText}`);
+        const error = new Error(`Error fetching calendar events: ${response.statusText}`);
+        error.status = response.status;
+        throw error;
     }
+
     return await response.json();
 }
 
 export async function createCalendarEvent(accessToken, data) {
     console.log("Sending event data:", JSON.stringify(data, null, 2));
-    
+
     const response = await fetch(`${GRAPH_URL}/me/events`, {
         method: 'POST',
         headers: {
@@ -49,14 +53,16 @@ export async function createCalendarEvent(accessToken, data) {
     });
 
     if (!response.ok) {
-        console.error("Graph API FULL error:"); 
-        throw new Error(`Error creating calendar event: ${response.statusText}`);
+        const error = new Error(`Error creating calendar event: ${response.statusText}`);
+        error.status = response.status;
+        throw error;
     }
+
     return await response.json();
 }
 
 export async function deleteCalendarEvent(accessToken, eventId) {
-    console.log("event deleted");
+    console.log("deleting event:", eventId);
     const response = await fetch(`${GRAPH_URL}/me/events/${eventId}`, {
         method: 'DELETE',
         headers: {
@@ -66,7 +72,10 @@ export async function deleteCalendarEvent(accessToken, eventId) {
     });
 
     if (!response.ok) {
-        throw new Error(`Error deleting calandar event: ${response.statusText}`);
+        const error = new Error(`Error deleting calendar event: ${response.statusText}`);
+        error.status = response.status;
+        throw error;
     }
+
     return true;
 }
