@@ -31,6 +31,7 @@ router.post("/tasks/:project_id/addTask", isAuthenticated, addTask);
 // UPDATE
 router.put(
   "/projects/:project_id/tasks/:task_id/updateStatus",
+  isAuthenticated,
   checkMembership,
   updateTaskStatus,
 );
