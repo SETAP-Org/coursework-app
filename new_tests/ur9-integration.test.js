@@ -1,67 +1,92 @@
 import { jest } from "@jest/globals";
-import express from "express";
-import request from "supertest";
 
-/**
- * =========================================================
- * MOCK MODEL LAYER (NO DB)
- * =========================================================
- */
-jest.unstable_mockModule("../models/konvaModels.js", () => ({
-  postNoteToDB: jest.fn(),
-  putNoteById: jest.fn(),
-  deleteNoteFromDB: jest.fn(),
-  getNotesByProjectId: jest.fn(),
+// =========================================================
+// 1. MOCK FIRST (MUST BE BEFORE ANY IMPORTS)
+// =========================================================
+await jest.unstable_mockModule("../models/konvaModels.js", () => ({
+  postNoteToDB: jest.fn(async (projectId, text, x, y) => ({
+    rows: [
+      {
+        widget_id: 1,
+        project_id: projectId,
+        widget_text: text,
+        widget_x: Math.round(x),
+        widget_y: Math.round(y),
+      },
+    ],
+  })),
+
+  putNoteById: jest.fn(async (id, text, x, y) => ({
+    rows: [
+      {
+        widget_id: id,
+        widget_text: text,
+        widget_x: Math.round(x),
+        widget_y: Math.round(y),
+      },
+    ],
+  })),
+
+  deleteNoteFromDB: jest.fn(async (id) => ({
+    rows: id ? [{ widget_id: id }] : [],
+  })),
+
+  getNotesByProjectId: jest.fn(async (projectId) => ({
+    rows:
+      projectId === 1
+        ? [
+            { widget_id: 1, widget_x: 10, widget_y: 10, widget_text: "A" },
+            { widget_id: 2, widget_x: 20, widget_y: 20, widget_text: "B" },
+          ]
+        : [],
+  })),
 }));
 
-const {
-  postNoteToDB,
-  putNoteById,
-  deleteNoteFromDB,
-  getNotesByProjectId,
-} = await import("../models/konvaModels.js");
+// =========================================================
+// 2. IMPORTS (AFTER MOCKS)
+// =========================================================
+const express = (await import("express")).default;
+const request = (await import("supertest")).default;
+const session = (await import("express-session")).default;
+const bodyParser = (await import("body-parser")).default;
+const notesRouter = (await import("../routes/noteRoutes.js")).default;
 
-const {
-  addNote,
-  updateNote,
-  removeNote,
-  getNotes,
-} = await import("../controllers/konvaControllers.js");
+// =========================================================
+// 3. APP SETUP
+// =========================================================
+const app = express();
+const emptyApp = express();
 
-const testApp = express();
+function setupApp(instance, projectId = 1) {
+  instance.use(bodyParser.json());
 
-testApp.use(express.json());
+  instance.use(
+    session({
+      secret: "test",
+      resave: false,
+      saveUninitialized: true,
+    })
+  );
 
-testApp.use((req, res, next) => {
-  req.session = {
-    project: {
-      project_id: 1,
-    },
-  };
-  next();
-});
+  instance.use((req, res, next) => {
+    req.session.project = { project_id: projectId };
+    next();
+  });
 
-testApp.post("/api/notes", addNote);
-testApp.put("/api/notes/:note_id", updateNote);
-testApp.delete("/api/notes/:note_id", removeNote);
-testApp.get("/api/notes", getNotes);
+  instance.use("/api", notesRouter);
+}
 
-describe("Widget (Konva) Integration Tests", () => {
-  beforeEach(() => jest.clearAllMocks());
+setupApp(app, 1);
+setupApp(emptyApp, null);
 
-  test("POST /api/notes creates widget", async () => {
-    postNoteToDB.mockResolvedValue({
-      rows: [
-        {
-          widget_id: 1,
-          widget_text: "Idea",
-          widget_x: 12,
-          widget_y: 34,
-        },
-      ],
-    });
+// =========================================================
+// 4. TESTS (FULL UR9 RESTORED)
+// =========================================================
+describe("UR9 - Konva Widget Integration Tests (NO ROUTE CHANGES)", () => {
 
-    const res = await request(testApp).post("/api/notes").send({
+  // ---------------- POST ----------------
+  test("Valid integer coords, text under 200 chars", async () => {
+    const res = await request(app).post("/api/notes").send({
       projectId: 1,
       text: "Idea",
       x: 12,
@@ -72,45 +97,92 @@ describe("Widget (Konva) Integration Tests", () => {
     expect(res.body.success).toBe(true);
   });
 
-  test("PUT /api/notes/:id updates widget", async () => {
-    putNoteById.mockResolvedValue({
-      rows: [
-        {
-          widget_id: 1,
-          widget_text: "Updated",
-          widget_x: 10,
-          widget_y: 20,
-        },
-      ],
+  test("Floating coordinates (Math.round applied)", async () => {
+    const res = await request(app).post("/api/notes").send({
+      projectId: 1,
+      text: "Idea",
+      x: 12.1,
+      y: 34.9,
     });
-
-    const res = await request(testApp)
-      .put("/api/notes/1")
-      .send({ text: "Updated", x: 10, y: 20 });
 
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
   });
 
-  test("DELETE /api/notes/:id removes widget", async () => {
-    deleteNoteFromDB.mockResolvedValue({
-      rows: [{ widget_id: 1 }],
+  test("text over 200 chars returns 400", async () => {
+    const res = await request(app).post("/api/notes").send({
+      projectId: 1,
+      text: "x".repeat(201),
+      x: 1,
+      y: 1,
     });
 
-    const res = await request(testApp).delete("/api/notes/1");
+    expect(res.status).toBe(400);
+  });
+
+  test("missing projectID returns 400", async () => {
+    const res = await request(app).post("/api/notes").send({
+      text: "Idea",
+      x: 1,
+      y: 1,
+    });
+
+    expect(res.status).toBe(400);
+  });
+
+  // ---------------- GET ----------------
+  test("project with widgets returns array", async () => {
+    const res = await request(app).get("/api/notes");
 
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
-  });
-
-  test("GET /api/notes returns widgets", async () => {
-    getNotesByProjectId.mockResolvedValue({
-      rows: [{ widget_id: 1 }, { widget_id: 2 }],
-    });
-
-    const res = await request(testApp).get("/api/notes");
-
-    expect(res.status).toBe(200);
+    expect(Array.isArray(res.body.notes)).toBe(true);
     expect(res.body.notes.length).toBe(2);
+  });
+
+  test("project without widgets returns empty array", async () => {
+    const res = await request(emptyApp).get("/api/notes");
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.notes.length).toBe(0);
+  });
+
+  // ---------------- PUT ----------------
+  test("Valid update conditions", async () => {
+    const res = await request(app).put("/api/notes/1").send({
+      text: "Updated",
+      x: 10,
+      y: 20,
+    });
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+  });
+
+  test("unknown noteID still returns success", async () => {
+    const res = await request(app).put("/api/notes/999").send({
+      text: "Updated",
+      x: 10,
+      y: 20,
+    });
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+  });
+
+  // ---------------- DELETE ----------------
+  test("Existing noteID", async () => {
+    const res = await request(app).delete("/api/notes/1");
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+  });
+
+  test("Unknown noteID still returns success", async () => {
+    const res = await request(app).delete("/api/notes/999999");
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
   });
 });

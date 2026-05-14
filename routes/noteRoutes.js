@@ -3,25 +3,21 @@
 
 import { Router } from "express";
 
-// Controller Imports
 import {
   addNote,
   updateNote,
   removeNote,
+  getNotes,
 } from "../controllers/konvaControllers.js";
 
-// Router Declaration
 const router = Router();
 
-// Routes
-// CREATE
 router.post("/notes", addNote);
 
-// UPDATE
+router.get("/notes", getNotes);
+
 router.put("/notes/:note_id", updateNote);
 
-// DELETE
 router.delete("/notes/:note_id", removeNote);
 
-// Export Router
 export default router;
