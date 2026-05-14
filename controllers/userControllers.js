@@ -34,13 +34,6 @@ export async function addUser(req, res, next) {
 
 // function to get a user by username
 export async function checkValidUsername(req, res, next) {
-    if (!req.user) {
-        return res.status(400).json({
-            success: false,
-            message: "No session user"
-        })
-    }
-
     if (!req.body) {
         return res.status(400).json({
             success: false,

@@ -1,10 +1,12 @@
 import { describe, jest, test } from "@jest/globals";
+import { getUserByUsernameModel } from "../models/userModels.js";
 
 jest.unstable_mockModule('../models/userModels.js', () => ({
     ...jest.requireActual('../models/userModels.js'),
     postUserModel: jest.fn(),
     getUserByMicrosoftIdModel: jest.fn(),
     putUsernameByIdModel: jest.fn(),
+    getUserByUsernameModel: jest.fn(),
 }));
 
 describe('checkIfLoggedIn', () => {
@@ -329,4 +331,189 @@ describe('updateUsername', () => {
 
         userModels.putUsernameByIdModel.mockReset();
     });
-})
+});
+
+describe('checkValidUsername', () => {
+    test('Should call the getUserByUsernameModel() and next() functions if valid username given', async () => {
+        const { checkValidUsername } = await import('../controllers/userControllers.js');
+        const userModels = await import('../models/userModels.js');
+        userModels.getUserByUsernameModel.mockResolvedValue({ rows: [] });
+
+        const req = {
+            body: { usernameValue: 'username123' }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await checkValidUsername(req, res, next);
+
+        expect(userModels.getUserByUsernameModel).toHaveBeenCalled();
+        expect(next).toHaveBeenCalledWith();
+
+        userModels.getUserByUsernameModel.mockReset();
+    });
+
+    test('Should return the correct response when no request body is sent', async () => {
+        const { checkValidUsername } = await import('../controllers/userControllers.js');
+        const userModels = await import('../models/userModels.js');
+
+        const req = {}
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await checkValidUsername(req, res, next);
+
+        expect(userModels.getUserByUsernameModel).not.toHaveBeenCalled();
+        expect(next).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "No request body"
+        });
+
+        userModels.getUserByUsernameModel.mockReset();
+    });
+
+    test('Should return the correct response when no username is given to the body', async () => {
+        const { checkValidUsername } = await import('../controllers/userControllers.js');
+        const userModels = await import('../models/userModels.js');
+
+        const req = {
+            body: {}
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await checkValidUsername(req, res, next);
+
+        expect(userModels.getUserByUsernameModel).not.toHaveBeenCalled();
+        expect(next).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "No given username"
+        });
+
+        userModels.getUserByUsernameModel.mockReset();
+    });
+
+    test('Should return the correct response when username provided is too short', async () => {
+        const { checkValidUsername } = await import('../controllers/userControllers.js');
+        const userModels = await import('../models/userModels.js');
+
+        const req = {
+            body: { usernameValue: 'no'}
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await checkValidUsername(req, res, next);
+
+        expect(userModels.getUserByUsernameModel).not.toHaveBeenCalled();
+        expect(next).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "Username has an invalid length"
+        });
+
+        userModels.getUserByUsernameModel.mockReset();
+    });
+
+    test('Should return the correct response when username provided is too long', async () => {
+        const { checkValidUsername } = await import('../controllers/userControllers.js');
+        const userModels = await import('../models/userModels.js');
+
+        const req = {
+            body: { usernameValue: 'abcdefghijklmnopqrstuvwxyz'}
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await checkValidUsername(req, res, next);
+
+        expect(userModels.getUserByUsernameModel).not.toHaveBeenCalled();
+        expect(next).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "Username has an invalid length"
+        });
+
+        userModels.getUserByUsernameModel.mockReset();
+    });
+
+    test('Should return the correct response if the username is already taken', async () => {
+        const { checkValidUsername } = await import('../controllers/userControllers.js');
+        const userModels = await import('../models/userModels.js');
+        userModels.getUserByUsernameModel.mockResolvedValue({ rows: [{username: "user exists!"}] });
+
+        const req = {
+            body: { usernameValue: 'username123' }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await checkValidUsername(req, res, next);
+
+        expect(userModels.getUserByUsernameModel).toHaveBeenCalled();
+        expect(next).not.toHaveBeenCalledWith();
+        expect(res.status).toHaveBeenCalledWith(409);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "Username already taken!"
+        });
+
+        userModels.getUserByUsernameModel.mockReset();
+    });
+
+    test('Should return the correct response when getUserByUsername() fails', async () => {
+        const { checkValidUsername } = await import('../controllers/userControllers.js');
+        const userModels = await import('../models/userModels.js');
+        
+
+        // mock model to give error
+        userModels.getUserByUsernameModel.mockImplementation(() => {
+            throw new Error('DB Error');
+        });
+
+        const req = {
+            body: { usernameValue: 'jay'}
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await checkValidUsername(req, res, next);
+
+        expect(userModels.getUserByUsernameModel).toHaveBeenCalled();
+        expect(next).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "Database error"
+        });
+
+        userModels.getUserByUsernameModel.mockReset();
+    });
+});
