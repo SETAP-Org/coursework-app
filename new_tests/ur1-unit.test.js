@@ -108,4 +108,18 @@ describe('checkIfLoggedInCalendar', () => {
 
         expect(next).toHaveBeenCalled();
     });
+
+    test("Should send an error code and message if user not authenticated", async () => {
+        const req = { isAuthenticated: jest.fn().mockReturnValue(false) };
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        const response = await checkIfLoggedInCalendar(req, res, next);
+
+        expect(res.status).toHaveBeenCalledWith(401);
+        expect(res.json).toHaveBeenCalledWith({ error: "Not authenticated" });
+    });
 })
