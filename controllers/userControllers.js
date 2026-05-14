@@ -12,17 +12,18 @@ export async function addUser(req, res, next) {
     try {
         if (!req.user) {
             res.status(400).json({
-            success: false,
-            message: "No session user"
-        })
+                success: false,
+                message: "No session user"
+            })
+        } else {
+            const { microsoftId, firstName, lastName, email } = req.user;
+            const data = await postUserModel(microsoftId, firstName, lastName, email, microsoftId);
+            res.status(200).json({
+                success: true,
+                message: "User added successfully!",
+                user: data.rows[0],
+            })
         }
-        const { microsoftId, firstName, lastName, email } = req.user;
-        const data = await postUserModel(microsoftId, firstName, lastName, email, microsoftId);
-        res.status(200).json({
-            success: true,
-            message: "User added successfully!",
-            user: data.rows[0],
-        })
     } catch (err) {
         res.status(500).json({
             success: false,
