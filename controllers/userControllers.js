@@ -34,10 +34,35 @@ export async function addUser(req, res, next) {
 
 // function to get a user by username
 export async function checkValidUsername(req, res, next) {
-    try {
-        const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
-        const dbUser = await dbUserResult.rows[0];
+    if (!req.user) {
+        return res.status(400).json({
+            success: false,
+            message: "No session user"
+        })
+    }
 
+    if (!req.body) {
+        return res.status(400).json({
+            success: false,
+            message: "No request body"
+        })
+    }
+
+    if (!req.body.usernameValue) {
+        return res.status(400).json({
+            success: false,
+            message: "No given username"
+        })
+    }
+
+    if (req.body.usernameValue.length < 3 || req.body.usernameValue.length > 20) {
+        return res.status(400).json({
+            success: false,
+            message: "Username has an invalid length"
+        })
+    }
+
+    try {
         // check if anyone else has that username
         const fetchedUser = await getUserByUsernameModel(req.body.usernameValue);
         
@@ -51,10 +76,9 @@ export async function checkValidUsername(req, res, next) {
         // if not, then move to the next middleware
         next()
     } catch(err) {
-        console.error("checkValidUsername error:", err);
-        return res.status(400).json({
+        return res.status(500).json({
             success: false,
-            message: "There was an error. Check console logs for more information."
+            message: "Database error"
         })
     }
 }
