@@ -10,8 +10,8 @@ jest.unstable_mockModule('../models/projectModels.js', () => ({
 test('Should fail after error from model to update team leader', async () => {
     const { default: app } = await import("../app.js");
     const projectModels = await import('../models/projectModels.js');
-
-    // Mock putTeamLeader to throw error
+    
+    // mock model to give back error
     projectModels.putTeamLeader.mockImplementation(() => {
         throw new Error('DB Error');
     });

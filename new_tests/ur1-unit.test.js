@@ -52,6 +52,6 @@ describe('checkIfLoggedIn', () => {
         await checkIfLoggedIn(req, res, next);
 
         expect(next).not.toHaveBeenCalled();
-        expect(res.redirect).toHaveBeenCalled();
+        expect(res.redirect).toHaveBeenCalledWith("/jdoe");
     });
 })
