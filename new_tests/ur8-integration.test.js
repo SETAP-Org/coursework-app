@@ -1,103 +1,163 @@
 import { jest } from "@jest/globals";
-
-jest.unstable_mockModule("../models/projectModels.js", () => ({
-  postProjectModel: jest.fn().mockResolvedValue({
-    rows: [{ project_id: 1 }],
-  }),
-
-  postUserProjectModel: jest.fn().mockResolvedValue({
-    rows: [{ project_id: 1 }],
-  }),
-
-  getProjectByIdModel: jest.fn().mockResolvedValue({
-    rows: [{ project_id: 1, project_name: "Test Project" }],
-  }),
-
-  getUserProjectsModel: jest.fn().mockResolvedValue({
-    rows: [{ project_id: 1 }],
-  }),
-
-  isUserMemberOfProjectModel: jest.fn().mockResolvedValue({
-    rows: [{ is_member: true }],
-  }),
-
-  putTeamLeader: jest.fn().mockResolvedValue({
-    rows: [{ project_id: 1 }],
-  }),
-
-  deleteProjectByIdModel: jest.fn().mockResolvedValue({
-    rows: [{ project_id: 1 }],
-  }),
-}));
-
-jest.unstable_mockModule("../models/calendarModels.js", () => ({
-  getCalendarEvents: jest.fn().mockResolvedValue({
-    value: [
-      { id: "1", body: { content: "Test event [ProjectID: 1]" } },
-    ],
-  }),
-
-  createCalendarEvent: jest.fn().mockResolvedValue({
-    id: "2",
-  }),
-
-  deleteCalendarEvent: jest.fn().mockResolvedValue(true),
-
-  getProfilePhoto: jest.fn().mockResolvedValue({
-    photo: "test-photo-url",
-  }),
-}));
-
-const { default: app } = await import("../app.js");
-
 import express from "express";
 import request from "supertest";
-const testApp = express();
 
+jest.unstable_mockModule("../models/calendarModels.js", () => ({
+  getCalendarEvents: jest.fn(),
+  createCalendarEvent: jest.fn(),
+  deleteCalendarEvent: jest.fn(),
+}));
+
+const {
+  getCalendarEvents,
+  createCalendarEvent,
+  deleteCalendarEvent,
+} = await import("../models/calendarModels.js");
+
+const {
+  getEvent,
+  addEvent,
+  removeEvent,
+} = await import("../controllers/calendarControllers.js"); 
+
+const testApp = express();
 testApp.use(express.json());
 
-testApp.use((req, res, next) => {
+const authMiddleware = (req, res, next) => {
+
   req.user = {
-    id: 1,
     accessToken: "test-token",
-    microsoftId: "test-id",
   };
-
-  req.isAuthenticated = () => true;
   next();
-});
+};
 
-testApp.use(app);
+const noAuth = (req, res, next) => {
+  req.user = null;
+  next();
+};
 
-describe("UR8 Integration Tests", () => {
-  test("(getEvent) view calendar events", async () => {
+testApp.get("/api/calendar/events", authMiddleware, getEvent);
+testApp.post("/api/calendar/events", authMiddleware, addEvent);
+testApp.delete("/api/calendar/events/:eventId", authMiddleware, removeEvent);
+
+describe("UR8 Calendar Integration Tests", () => {
+  beforeEach(() => jest.clearAllMocks());
+
+  test("Authenticated with project filter", async () => {
+    getCalendarEvents.mockResolvedValue({
+      value: [
+        {
+          id: "1",
+          body: { content: "A [ProjectID: 1]" },
+        },
+        {
+          id: "2",
+          body: { content: "B [ProjectID: 1]" },
+        },
+      ],
+    });
+
     const res = await request(testApp)
       .get("/api/calendar/events")
       .query({ project_id: 1 });
 
     expect(res.status).toBe(200);
+    expect(res.body.length).toBe(2);
+  });
+
+  test("Missing project ID query", async () => {
+    getCalendarEvents.mockResolvedValue({
+      value: [
+        {
+          id: "1",
+          body: { content: "Test [ProjectID: undefined]" },
+        },
+      ],
+    });
+
+    const res = await request(testApp).get("/api/calendar/events");
+
+    expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });
 
-  test("(addEvent) create meeting", async () => {
+  test("Graph rejects (throws error)", async () => {
+    getCalendarEvents.mockRejectedValue(new Error("Graph failure"));
+
     const res = await request(testApp)
-      .post("/api/calendar/events")
-      .send({
-        subject: "Test Meeting",
-        start: "2026-01-01T10:00",
-        end: "2026-01-01T11:00",
-        description: "Meeting",
-        project_id: 1,
-      });
+      .get("/api/calendar/events")
+      .query({ project_id: 1 });
+
+    expect(res.status).toBe(500);
+  });
+
+  test("Valid EventID create meeting", async () => {
+    createCalendarEvent.mockResolvedValue({ id: "1" });
+
+    const res = await request(testApp).post("/api/calendar/events").send({
+      subject: "Meeting",
+      start: "2026-01-01T10:00",
+      end: "2026-01-01T11:00",
+      description: "Project discussion",
+      project_id: 1,
+    });
 
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
   });
 
-  test("(removeEvent) delete event", async () => {
-    const res = await request(testApp)
-      .delete("/api/calendar/events/1");
+  test("Missing subject", async () => {
+    createCalendarEvent.mockRejectedValue(new Error("Missing subject"));
+
+    const res = await request(testApp).post("/api/calendar/events").send({
+      start: "2026-01-01T10:00",
+      end: "2026-01-01T11:00",
+      description: "Test",
+    });
+
+    expect(res.status).toBe(500);
+  });
+
+  test("Missing start/end", async () => {
+    createCalendarEvent.mockRejectedValue(new Error("Missing time"));
+
+    const res = await request(testApp).post("/api/calendar/events").send({
+      subject: "Meeting",
+      description: "Test",
+    });
+
+    expect(res.status).toBe(500);
+  });
+
+  test("Valid EventID delete", async () => {
+    deleteCalendarEvent.mockResolvedValue({ success: true });
+
+    const res = await request(testApp).delete(
+      "/api/calendar/events/123"
+    );
 
     expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+  });
+
+  test("Unknown EventID delete", async () => {
+    deleteCalendarEvent.mockRejectedValue(new Error("Graph error"));
+
+    const res = await request(testApp).delete(
+      "/api/calendar/events/does-not-exist"
+    );
+
+    expect(res.status).toBe(500);
+  });
+
+  test("Project without meetings returns empty array", async () => {
+    getCalendarEvents.mockResolvedValue({ value: [] });
+
+    const res = await request(testApp)
+      .get("/api/calendar/events")
+      .query({ project_id: 99 });
+
+    expect(res.status).toBe(200);
+    expect(res.body.length).toBe(0);
   });
 });
