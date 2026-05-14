@@ -1,5 +1,4 @@
-import { describe, jest } from "@jest/globals";
-import { putUsernameByIdModel } from "../models/userModels.js";
+import { describe, jest, test } from "@jest/globals";
 
 jest.unstable_mockModule('../models/userModels.js', () => ({
     ...jest.requireActual('../models/userModels.js'),
@@ -143,4 +142,28 @@ describe('addUser', () => {
 
         userModels.postUserModel.mockReset();
     });
+});
+
+describe('updateUsername', () => {
+    test('Should call the putUsernameByIdModel() function if valid username given', async () => {
+        const { updateUsername } = await import('../controllers/userControllers.js');
+        const userModels = await import('../models/userModels.js');
+
+        const req = {
+            user: { microsoftId: '123' },
+            body: { usernameValue: 'username123' }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await updateUsername(req, res, next);
+
+        expect(userModels.putUsernameByIdModel).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(200);
+
+        userModels.putUsernameByIdModel.mockReset();
+    })
 })

@@ -76,14 +76,14 @@ export async function updateUsername(req, res, next) {
             })
         }
 
-        if (!req.body.username) {
+        if (!req.body.usernameValue) {
             return res.status(400).json({
                 success: false,
                 message: "No given username"
             })
         }
 
-        if (req.body.username.length < 3 || req.body.username.length > 20) {
+        if (req.body.usernameValue.length < 3 || req.body.usernameValue.length > 20) {
             return res.status(400).json({
                 success: false,
                 message: "Username has an invalid length"
@@ -93,12 +93,10 @@ export async function updateUsername(req, res, next) {
         const userId = req.user.microsoftId;
         const data = await putUsernameByIdModel(userId, req.body.usernameValue);
 
-        if (data.rows[0].username == req.body.usernameValue) {
-            return res.status(200).json({
-                success: true,
-                message: "Your username has been changed :)"
-            })
-        }
+        return res.status(200).json({
+            success: true,
+            message: "Your username has been changed :)"
+        })
     } catch(err) {
         res.status(500).json({
             success: false,
