@@ -108,7 +108,7 @@ describe('addUser', () => {
         userModels.postUserModel.mockReset();
     });
 
-    test('Should return the correct response when invalid session user', async () => {
+    test('Should return the correct response when postUserModel() fails', async () => {
         const { addUser } = await import('../controllers/userControllers.js');
         const userModels = await import('../models/userModels.js');
 
@@ -242,6 +242,89 @@ describe('updateUsername', () => {
         expect(res.json).toHaveBeenCalledWith({
             success: false,
             message: "No given username"
+        });
+
+        userModels.putUsernameByIdModel.mockReset();
+    });
+
+    test('Should return the correct response when username provided is too short', async () => {
+        const { updateUsername } = await import('../controllers/userControllers.js');
+        const userModels = await import('../models/userModels.js');
+
+        const req = {
+            user: { microsoftId: '123' },
+            body: { usernameValue: 'no'}
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await updateUsername(req, res, next);
+
+        expect(userModels.putUsernameByIdModel).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "Username has an invalid length"
+        });
+
+        userModels.putUsernameByIdModel.mockReset();
+    });
+
+    test('Should return the correct response when username provided is too long', async () => {
+        const { updateUsername } = await import('../controllers/userControllers.js');
+        const userModels = await import('../models/userModels.js');
+
+        const req = {
+            user: { microsoftId: '123' },
+            body: { usernameValue: 'abcdefghijklmnopqrstuvwxyz'}
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await updateUsername(req, res, next);
+
+        expect(userModels.putUsernameByIdModel).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "Username has an invalid length"
+        });
+
+        userModels.putUsernameByIdModel.mockReset();
+    });
+
+    test('Should return the correct response when putUsernameByIdModel() fails', async () => {
+        const { updateUsername } = await import('../controllers/userControllers.js');
+        const userModels = await import('../models/userModels.js');
+
+        // mock model to give error
+        userModels.putUsernameByIdModel.mockImplementation(() => {
+            throw new Error('DB Error');
+        });
+
+        const req = {
+            user: { microsoftId: '123' },
+            body: { usernameValue: 'jay'}
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await updateUsername(req, res, next);
+
+        expect(userModels.putUsernameByIdModel).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "Database error"
         });
 
         userModels.putUsernameByIdModel.mockReset();
