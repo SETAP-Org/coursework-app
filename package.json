@@ -9,7 +9,7 @@
     "install_db": "node node_scripts/install_db.js",
     "email:test": "node testEmail.mjs",
     "notification:test": "node testNotification.mjs",
-    "test": "cross-env NODE_ENV=test node node_scripts/install_test_db.js && cross-env NODE_ENV=test node --experimental-vm-modules ./node_modules/jest/bin/jest.js --forceExit"
+    "test": "cross-env NODE_ENV=test node node_scripts/install_test_db.js && cross-env NODE_ENV=test node --experimental-vm-modules ./node_modules/jest/bin/jest.js --forceExit --runInBand"
   },
   "repository": {
     "type": "git",
