@@ -31,4 +31,26 @@ describe('checkIfLoggedIn', () => {
     
         userModels.getUserByMicrosoftIdModel.mockReset();
     });
+
+    test("Should call the 'res.redirect(/error)' function after error from model to retrieve user by Microsoft ID", async () => {
+        const { checkIfLoggedInRedirect } = await import('../controllers/authControllers.js');
+        const userModels = await import('../models/userModels.js');
+        
+        // mock model to give error
+        userModels.getUserByMicrosoftIdModel.mockImplementation(() => {
+            throw new Error('DB Error');
+        });
+    
+        // structuring dummy controller arguments
+        const req = { user: {microsoftId: "ms-johndoe"} };
+        const res = { redirect: jest.fn() };
+        const next = jest.fn();
+    
+        await checkIfLoggedInRedirect(req, res, next);
+    
+        expect(res.redirect).toHaveBeenCalledWith("/error");
+        expect(next).not.toHaveBeenCalled();
+    
+        userModels.getUserByMicrosoftIdModel.mockReset();
+    });
 })
