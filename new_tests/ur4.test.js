@@ -162,4 +162,77 @@ describe('addUserToProject', () => {
         userModels.getUserByUsernameModel.mockReset();
         userProjectModels.postUserToProjectModel.mockReset();
     });
+
+    test('Should return the correct response if getUserByUsernameModel() fails', async () => {
+        const { addUserToProject } = await import('../controllers/userProjectControllers.js');
+        const userProjectModels = await import('../models/userProjectModels.js');
+        const userModels = await import('../models/userModels.js');
+        
+        // mock model to give error
+        userModels.getUserByUsernameModel.mockImplementation(() => {
+            throw new Error('DB Error');
+        });
+
+        const req = {
+            body: {
+                username: 'username123',
+                projectId: 'myProjectId'
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await addUserToProject(req, res, next);
+
+        expect(userModels.getUserByUsernameModel).toHaveBeenCalled();
+        expect(userProjectModels.postUserToProjectModel).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "Database error"
+        });
+
+        userModels.getUserByUsernameModel.mockReset();
+        userProjectModels.postUserToProjectModel.mockReset();
+    });
+
+    test('Should return the correct response if postUserToProjectModel() fails', async () => {
+        const { addUserToProject } = await import('../controllers/userProjectControllers.js');
+        const userProjectModels = await import('../models/userProjectModels.js');
+        const userModels = await import('../models/userModels.js');
+        userModels.getUserByUsernameModel.mockResolvedValue({ rows: [{username: "user exists!"}] });
+        
+        // mock model to give error
+        userProjectModels.postUserToProjectModel.mockImplementation(() => {
+            throw new Error('DB Error');
+        });
+
+        const req = {
+            body: {
+                username: 'username123',
+                projectId: 'myProjectId'
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await addUserToProject(req, res, next);
+
+        expect(userModels.getUserByUsernameModel).toHaveBeenCalled();
+        expect(userProjectModels.postUserToProjectModel).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "Database error"
+        });
+
+        userModels.getUserByUsernameModel.mockReset();
+        userProjectModels.postUserToProjectModel.mockReset();
+    });
 });
