@@ -73,31 +73,6 @@ export async function updateUsername(req, res, next) {
     }
 }
 
-// function to return user info (might not be needed as part of req.user)
-export async function getCurrentUser(req, res, next) {
-    if (req.user) {
-        const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
-        const dbUser = dbUserResult.rows[0];
-
-        if (!dbUser) {
-            return res.status(200).json({
-                sessionUser: req.user,
-                dbUser: null
-            });
-        }
-
-        res.status(200).json({
-            sessionUser: req.user,
-            dbUser: dbUser,
-        });
-    } else {
-        res.status(404).json({
-            sessionUser: null,
-            dbUser: null
-        });
-    }
-}
-
 export async function getCurrentUserPhoto(req, res) {
     if (!req.user?.accessToken) {
         return res.redirect("/assets/default-avatar.svg");

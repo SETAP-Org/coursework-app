@@ -5,7 +5,6 @@ import { Router } from "express";
 
 // Controller Imports
 import {
-  getCurrentUser,
   updateUsername,
   getCurrentUserPhoto,
   addUser,
@@ -23,7 +22,6 @@ const router = Router();
 
 // Routes
 // API
-router.get("/me", getCurrentUser);
 router.get("/me/photo", checkIfLoggedInCalendar, getCurrentUserPhoto);
 
 // CREATE

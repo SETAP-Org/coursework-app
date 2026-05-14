@@ -6,7 +6,7 @@ async function loadProfile() {
   loading.style.display = "flex";
 
   // ejs variables
-  const { username } = window.scriptData;
+  const { username, emailNotifications } = window.scriptData;
 
   // DOM elements
   const usernameBtn = document.querySelector(".username-save-button");
@@ -24,10 +24,8 @@ async function loadProfile() {
 
   // Fetch current email notification preference
   try {
-    const response = await fetch('/api/me');
-    const data = await response.json();
-    if (data.dbUser && data.dbUser.email_notifications !== undefined) {
-      emailNotificationsToggle.checked = data.dbUser.email_notifications;
+    if (emailNotifications !== undefined) {
+      emailNotificationsToggle.checked = emailNotifications;
     }
   } catch (err) {
     console.error('Error fetching user preferences:', err);
