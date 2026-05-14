@@ -16,7 +16,6 @@ import {
   checkMembership,
   isAuthenticated,
 } from "../controllers/projectControllers.js";
-import { isAuthImplicitGrantRedirectError } from "@supabase/supabase-js";
 
 // Router Declaration
 const router = Router();
