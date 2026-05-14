@@ -15,24 +15,27 @@ export async function checkIfLoggedInRedirect(req, res, next) {
       next();
     }
   } catch (err) {
-    console.error("checkIfLoggedInRedirect error:", err);
-    res.redirect("/");
+    res.redirect("/error");
   }
 }
 
 // function to navigate to user dashboard if user already signed in
 export async function checkIfLoggedIn(req, res, next) {
-  if (req.user && req.user.accessToken) {
-    const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
-    const dbUser = dbUserResult.rows[0];
-
-    if (!dbUser) {
-      next();
+  try {
+    if (req.user && req.user.accessToken) {
+      const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+      const dbUser = dbUserResult.rows[0];
+  
+      if (!dbUser) {
+        next();
+      } else {
+        return res.redirect(`/${dbUser.username}`);
+      }
     } else {
-      return res.redirect(`/${dbUser.username}`);
+      next();
     }
-  } else {
-    next();
+  } catch (err) {
+    res.redirect("/error");
   }
 }
 
