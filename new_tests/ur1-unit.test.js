@@ -78,4 +78,15 @@ describe('checkIfLoggedInRedirect', () => {
         expect(res.redirect).toHaveBeenCalledWith("/");
         expect(next).not.toHaveBeenCalled();
     });
+
+    test("Should call the 'res.redirect(/)' function if valid user in session but no matching user in database", async () => {
+        const req = { user: {microsoftId: "ms-not-johndoe"} };
+        const res = { redirect: jest.fn() };
+        const next = jest.fn();
+
+        await checkIfLoggedInRedirect(req, res, next);
+
+        expect(res.redirect).toHaveBeenCalledWith("/");
+        expect(next).not.toHaveBeenCalled();
+    });
 });
