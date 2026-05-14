@@ -17,4 +17,15 @@ describe('checkIfLoggedIn', () => {
         expect(next).toHaveBeenCalled();
         expect(res.redirect).not.toHaveBeenCalled();
     });
+
+    test("Should call the 'next()' function if session user has no access token", async () => {
+        const req = { user: {accessToken: undefined} };
+        const res = { redirect: jest.fn() };
+        const next = jest.fn();
+
+        await checkIfLoggedIn(req, res, next);
+
+        expect(next).toHaveBeenCalled();
+        expect(res.redirect).not.toHaveBeenCalled();
+    });
 })
