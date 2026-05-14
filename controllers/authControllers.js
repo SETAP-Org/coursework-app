@@ -25,7 +25,7 @@ export async function checkIfLoggedIn(req, res, next) {
   if (req.user && req.user.accessToken) {
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult.rows[0];
-    //console.log(dbUser , "this is the db user in check if logged in")
+
     if (!dbUser) {
       next();
     } else {

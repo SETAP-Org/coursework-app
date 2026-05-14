@@ -1,6 +1,5 @@
 // User Requirement 3: An authenticated user assigned as a team leader should be able to assign a team leader for a project
 
-import { updateTeamLeader } from "../controllers/projectControllers.js";
 import app from "../app.js";
 import request from "supertest";
 import { query } from "../db/connection.js";
