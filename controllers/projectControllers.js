@@ -13,10 +13,6 @@ import { getUserByMicrosoftIdModel } from "../models/userModels.js";
 // function to add a project to the database
 export async function addProject(req, res, next) {
   try {
-    if (!req.user) {
-      return res.status(401).json({ success: false, error: "Unauthorised" });
-    }
-
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult.rows[0];
 
@@ -213,4 +209,11 @@ export async function checkMembership(req, res, next) {
   } catch (err) {
     next(err);
   }
+}
+
+export function isAuthenticated(req, res, next) {
+  if (!req.user) {
+    return res.status(401).json({ success: false, error: "Unauthorised" });
+  }
+  next();
 }
