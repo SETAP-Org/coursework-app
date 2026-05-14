@@ -9,6 +9,7 @@ import {
     signOut,
     setJustAuthenticatedFlag
 } from "../controllers/authControllers.js";
+import { addUser } from "../controllers/userControllers.js";
 
 describe('checkIfLoggedIn', () => {
     test("Should call the 'next()' function if no valid session user", async () => {

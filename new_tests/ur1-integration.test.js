@@ -1,8 +1,9 @@
 import { describe, jest } from "@jest/globals";
-import { getUserByMicrosoftIdModel } from "../models/userModels.js";
+// import { getUserByMicrosoftIdModel, postUserModel } from "../models/userModels.js";
 
 jest.unstable_mockModule('../models/userModels.js', () => ({
     ...jest.requireActual('../models/userModels.js'),
+    postUserModel: jest.fn(),
     getUserByMicrosoftIdModel: jest.fn()
 }));
 
@@ -55,4 +56,30 @@ describe('checkIfLoggedInRedirect', () => {
     
         userModels.getUserByMicrosoftIdModel.mockReset();
     });
+});
+
+describe('addUser', () => {
+    test('Should call the postUserModel if valid user', async () => {
+        const { addUser } = await import('../controllers/userControllers.js');
+        const userModels = await import('../models/userModels.js');
+
+        const req = {
+            user: {
+                microsoftId: '123',
+                firstName: 'John',
+                lastName: 'Smith',
+                email: 'johnsmith@example.com'
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+        
+        await addUser(req, res, next);
+
+        expect(userModels.postUserModel).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(200);
+    })
 })
