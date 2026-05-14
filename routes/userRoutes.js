@@ -25,10 +25,10 @@ const router = Router();
 router.get("/me/photo", checkIfLoggedInCalendar, getCurrentUserPhoto);
 
 // CREATE
-router.post("/users/addUser", setJustAuthenticatedFlag, addUser);
+router.post("/users", setJustAuthenticatedFlag, addUser);
 
 // UPDATE
-router.put("/users/changeUsername", checkValidUsername, updateUsername);
+router.put("/users", checkValidUsername, updateUsername);
 
 // Export Router
 export default router;

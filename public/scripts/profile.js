@@ -99,7 +99,7 @@ async function loadProfile() {
       usernameMsg.innerText = "You already have that username!";
     } else {
       // change the username in the database
-      const response = await fetch('/api/users/changeUsername', {
+      const response = await fetch('/api/users', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ usernameValue })
