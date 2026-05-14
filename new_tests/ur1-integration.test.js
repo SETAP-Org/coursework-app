@@ -1,5 +1,4 @@
 import { describe, jest, test } from "@jest/globals";
-import { getUserByUsernameModel } from "../models/userModels.js";
 
 jest.unstable_mockModule('../models/userModels.js', () => ({
     ...jest.requireActual('../models/userModels.js'),
