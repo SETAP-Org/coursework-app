@@ -67,4 +67,15 @@ describe('checkIfLoggedInRedirect', () => {
         expect(next).toHaveBeenCalled();
         expect(res.redirect).not.toHaveBeenCalled();
     });
+
+    test("Should call the 'res.redirect(/)' function if no valid session user", async () => {
+        const req = { user: undefined };
+        const res = { redirect: jest.fn() };
+        const next = jest.fn();
+
+        await checkIfLoggedInRedirect(req, res, next);
+
+        expect(res.redirect).toHaveBeenCalledWith("/");
+        expect(next).not.toHaveBeenCalled();
+    });
 });
