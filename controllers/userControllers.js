@@ -10,6 +10,12 @@ import { getProfilePhoto } from "../models/calendarModels.js";
 // function to add a user to the database
 export async function addUser(req, res, next) {
     try {
+        if (!req.user) {
+            res.status(400).json({
+            success: false,
+            message: "No session user"
+        })
+        }
         const { microsoftId, firstName, lastName, email } = req.user;
         const data = await postUserModel(microsoftId, firstName, lastName, email, microsoftId);
         res.status(200).json({
@@ -18,9 +24,9 @@ export async function addUser(req, res, next) {
             user: data.rows[0],
         })
     } catch (err) {
-        res.status(400).json({
+        res.status(500).json({
             success: false,
-            message: err
+            message: "Database error"
         })
     }
 }
