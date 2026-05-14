@@ -23,7 +23,7 @@ const router = Router();
 
 // Routes
 // API
-router.get("/projects/:project_id/tasks", getProjectTasks);
+router.get("/projects/:project_id/tasks", isAuthenticated, getProjectTasks);
 
 // CREATE
 router.post("/tasks/:project_id/addTask", isAuthenticated, addTask);
@@ -39,6 +39,7 @@ router.put(
 // DELETE
 router.delete(
   "/projects/:project_id/tasks/:task_id",
+  isAuthenticated,
   checkMembership,
   deleteTask,
 );
