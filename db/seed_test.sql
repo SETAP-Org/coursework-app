@@ -1,4 +1,8 @@
 -- Test Seed Data --
+-- Users: alice (team leader), bob (member), charlie (member, no completed tasks)
+-- Projects: Test Project (alice, bob, charlie), Test Project 2 (alice only, no tasks)
+-- Tasks: Test Task (To Do, alice, weight 1), Alice Completed Task (weight 3), Bob Completed Task (weight 1)
+
 WITH alice AS (
     INSERT INTO USERS (user_first_name, user_last_name, user_email, microsoft_id, date_created, last_login, username, email_notifications)
     VALUES ('Alice', 'Leader', 'alice@example.com', 'ms-alice', NOW(), NOW(), 'alice', FALSE)
@@ -21,7 +25,7 @@ WITH alice AS (
     SELECT alice.user_id, alice.user_id, 'Test Project 2', '2099-12-31', NOW(), NOW()
     FROM alice
     RETURNING project_id
-), task AS (o
+), task AS (
     INSERT INTO TASKS (project_id, assignee_id, task_title, task_description, task_weight, task_status, task_deadline, t_date_created, t_time_updated)
     SELECT project.project_id, alice.user_id, 'Test Task', 'Test Description', 1, 'To Do', '2099-12-31', NOW(), NOW()
     FROM alice, project
