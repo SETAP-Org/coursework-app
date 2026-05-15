@@ -5,6 +5,7 @@ import { describe, jest, test } from "@jest/globals";
 jest.unstable_mockModule('../models/userModels.js', () => ({
     ...jest.requireActual('../models/userModels.js'),
     getUserByUsernameModel: jest.fn(),
+    getUserByMicrosoftIdModel: jest.fn()
 }));
 
 jest.unstable_mockModule('../models/userProjectModels.js', () => ({
@@ -16,6 +17,7 @@ jest.unstable_mockModule('../models/userProjectModels.js', () => ({
 jest.unstable_mockModule('../models/projectModels.js', () => ({
     ...jest.requireActual('../models/projectModels.js'),
     deleteProjectByIdModel: jest.fn(),
+    isUserMemberOfProjectModel: jest.fn()
 }));
 
 describe('addUserToProject', () => {
@@ -520,3 +522,98 @@ describe('removeProject', () => {
         projectModels.deleteProjectByIdModel.mockReset();
     });
 });
+
+describe('checkMembership', () => {
+    test('Should call the getUserByMicrosftId() and isUserMemberOfProjectModel() functions and send back a successful response when removing a project', async () => {
+        const { checkMembership } = await import('../controllers/projectControllers.js');
+        const projectModels = await import('../models/projectModels.js');
+        const userModels = await import('../models/userModels.js');
+        projectModels.isUserMemberOfProjectModel.mockResolvedValue({ rows: [{is_member: true}] });
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [{user_id: "mock user id"}] });
+
+        const req = {
+            params: {
+                project_id: "myProjectId"
+            },
+            user: {
+                microsoftId: "myMicrosoftId"
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await checkMembership(req, res, next);
+
+        expect(userModels.getUserByMicrosoftIdModel).toHaveBeenCalled();
+        expect(projectModels.isUserMemberOfProjectModel).toHaveBeenCalled();
+        expect(next).toHaveBeenCalled();
+
+        projectModels.isUserMemberOfProjectModel.mockReset();
+        userModels.getUserByMicrosoftIdModel.mockReset();
+    });
+
+    test('Should send the correct error response when there is no user in the session', async () => {
+        const { checkMembership } = await import('../controllers/projectControllers.js');
+        const projectModels = await import('../models/projectModels.js');
+        const userModels = await import('../models/userModels.js');
+
+        const req = {
+            params: {
+                project_id: "myProjectId"
+            },
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await checkMembership(req, res, next);
+
+        expect(userModels.getUserByMicrosoftIdModel).not.toHaveBeenCalled();
+        expect(projectModels.isUserMemberOfProjectModel).not.toHaveBeenCalled();
+        expect(next).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "No session user detected"
+        });
+
+        projectModels.isUserMemberOfProjectModel.mockReset();
+        userModels.getUserByMicrosoftIdModel.mockReset();
+    });
+
+    test('Should send the correct error response when there is no request parameters', async () => {
+        const { checkMembership } = await import('../controllers/projectControllers.js');
+        const projectModels = await import('../models/projectModels.js');
+        const userModels = await import('../models/userModels.js');
+
+        const req = {
+            user: {
+                microsoftId: "myMicrosoftId"
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await checkMembership(req, res, next);
+
+        expect(userModels.getUserByMicrosoftIdModel).not.toHaveBeenCalled();
+        expect(projectModels.isUserMemberOfProjectModel).not.toHaveBeenCalled();
+        expect(next).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "No request parameters"
+        });
+
+        projectModels.isUserMemberOfProjectModel.mockReset();
+        userModels.getUserByMicrosoftIdModel.mockReset();
+    });
+})
