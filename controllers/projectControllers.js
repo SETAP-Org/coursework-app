@@ -232,9 +232,10 @@ export async function checkMembership(req, res, next) {
       dbUser.user_id,
       req.params.project_id,
     );
-    const isMember = membershipResult.rows[0].is_member;
 
-    if (!isMember) return res.status(403).send("Access denied");
+    if (!membershipResult.rows[0]) {
+      return res.status(403).send("Access denied");
+    }
 
     req.isProjectMember = true;
     next();

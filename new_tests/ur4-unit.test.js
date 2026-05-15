@@ -616,4 +616,180 @@ describe('checkMembership', () => {
         projectModels.isUserMemberOfProjectModel.mockReset();
         userModels.getUserByMicrosoftIdModel.mockReset();
     });
+
+    test('Should send the correct error response when there is no project ID provided', async () => {
+        const { checkMembership } = await import('../controllers/projectControllers.js');
+        const projectModels = await import('../models/projectModels.js');
+        const userModels = await import('../models/userModels.js');
+
+        const req = {
+            params: {},
+            user: {
+                microsoftId: "myMicrosoftId"
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await checkMembership(req, res, next);
+
+        expect(userModels.getUserByMicrosoftIdModel).not.toHaveBeenCalled();
+        expect(projectModels.isUserMemberOfProjectModel).not.toHaveBeenCalled();
+        expect(next).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "No project ID provided"
+        });
+
+        projectModels.isUserMemberOfProjectModel.mockReset();
+        userModels.getUserByMicrosoftIdModel.mockReset();
+    });
+
+    test('Should send the correct error response when no matching user is found in the database', async () => {
+        const { checkMembership } = await import('../controllers/projectControllers.js');
+        const projectModels = await import('../models/projectModels.js');
+        const userModels = await import('../models/userModels.js');
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [] });
+
+        const req = {
+            params: {
+                project_id: "myProjectId"
+            },
+            user: {
+                microsoftId: "myMicrosoftId"
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            send: jest.fn()
+        };
+        const next = jest.fn();
+
+        await checkMembership(req, res, next);
+
+        expect(userModels.getUserByMicrosoftIdModel).toHaveBeenCalled();
+        expect(projectModels.isUserMemberOfProjectModel).not.toHaveBeenCalled();
+        expect(next).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(401);
+        expect(res.send).toHaveBeenCalledWith("User not found")
+
+        projectModels.isUserMemberOfProjectModel.mockReset();
+        userModels.getUserByMicrosoftIdModel.mockReset();
+    });
+
+    test('Should send the correct error response when user is not a part of the project', async () => {
+        const { checkMembership } = await import('../controllers/projectControllers.js');
+        const projectModels = await import('../models/projectModels.js');
+        const userModels = await import('../models/userModels.js');
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [{user_id: "mock user id"}] });
+        projectModels.isUserMemberOfProjectModel.mockResolvedValue({ rows: [] });
+
+        const req = {
+            params: {
+                project_id: "myProjectId"
+            },
+            user: {
+                microsoftId: "myMicrosoftId"
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            send: jest.fn()
+        };
+        const next = jest.fn();
+
+        await checkMembership(req, res, next);
+
+        expect(userModels.getUserByMicrosoftIdModel).toHaveBeenCalled();
+        expect(projectModels.isUserMemberOfProjectModel).toHaveBeenCalled();
+        expect(next).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(403);
+        expect(res.send).toHaveBeenCalledWith("Access denied")
+
+        projectModels.isUserMemberOfProjectModel.mockReset();
+        userModels.getUserByMicrosoftIdModel.mockReset();
+    });
+
+    test('Should send the correct error response when getUserByMicrosoftIdModel() function fails', async () => {
+        const { checkMembership } = await import('../controllers/projectControllers.js');
+        const projectModels = await import('../models/projectModels.js');
+        const userModels = await import('../models/userModels.js');
+
+        // mock model to give error
+        userModels.getUserByMicrosoftIdModel.mockImplementation(() => {
+            throw new Error('DB Error');
+        });
+
+        const req = {
+            params: {
+                project_id: "myProjectId"
+            },
+            user: {
+                microsoftId: "myMicrosoftId"
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await checkMembership(req, res, next);
+
+        expect(userModels.getUserByMicrosoftIdModel).toHaveBeenCalled();
+        expect(projectModels.isUserMemberOfProjectModel).not.toHaveBeenCalled();
+        expect(next).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "Database error"
+        });
+
+        projectModels.isUserMemberOfProjectModel.mockReset();
+        userModels.getUserByMicrosoftIdModel.mockReset();
+    });
+
+    test('Should send the correct error response when isUserMemberOfProjectModel() function fails', async () => {
+        const { checkMembership } = await import('../controllers/projectControllers.js');
+        const projectModels = await import('../models/projectModels.js');
+        const userModels = await import('../models/userModels.js');
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [{user_id: "mock user id"}] });
+
+        // mock model to give error
+        projectModels.isUserMemberOfProjectModel.mockImplementation(() => {
+            throw new Error('DB Error');
+        });
+
+        const req = {
+            params: {
+                project_id: "myProjectId"
+            },
+            user: {
+                microsoftId: "myMicrosoftId"
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await checkMembership(req, res, next);
+
+        expect(userModels.getUserByMicrosoftIdModel).toHaveBeenCalled();
+        expect(projectModels.isUserMemberOfProjectModel).toHaveBeenCalled();
+        expect(next).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "Database error"
+        });
+
+        projectModels.isUserMemberOfProjectModel.mockReset();
+        userModels.getUserByMicrosoftIdModel.mockReset();
+    });
 })
