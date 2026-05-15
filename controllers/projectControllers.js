@@ -19,6 +19,24 @@ export async function addProject(req, res, next) {
     const userId = dbUser.user_id;
     const { project_name, project_deadline } = req.body;
 
+    if (!project_name) {
+      return res
+        .status(400)
+        .json({ success: false, error: "Missing project_name" });
+    }
+
+    if (!project_deadline) {
+      return res
+        .status(400)
+        .json({ success: false, error: "Missing project_deadline" });
+    }
+
+    if (isNaN(new Date(project_deadline).getTime())) {
+      return res
+        .status(400)
+        .json({ success: false, error: "Invalid project_deadline format" });
+    }
+
     const result = await postProjectModel(
       userId,
       project_name,
@@ -34,7 +52,9 @@ export async function addProject(req, res, next) {
         throw new Error("Error adding user link in user_projects");
       }
     } else {
-      throw new Error("Cannot create duplicate projects!");
+      return res
+        .status(409)
+        .json({ success: false, error: "Cannot create duplicate projects!" });
     }
   } catch (err) {
     console.error("addProject error:", err);
@@ -107,14 +127,14 @@ export async function updateTeamLeader(req, res, next) {
       return res.status(400).json({
         success: false,
         message: "Missing projectId",
-      })
+      });
     }
 
     if (!newLeaderId) {
       return res.status(400).json({
         success: false,
         message: "Missing newLeaderId",
-      })
+      });
     }
 
     const data = await putTeamLeader(newLeaderId, projectId);
@@ -189,4 +209,11 @@ export async function checkMembership(req, res, next) {
   } catch (err) {
     next(err);
   }
+}
+
+export function isAuthenticated(req, res, next) {
+  if (!req.user) {
+    return res.status(401).json({ success: false, error: "Unauthorised" });
+  }
+  next();
 }

@@ -43,7 +43,7 @@ export async function getProjectByIdModel(project_id) {
 }
 
 // read entries from intersection table between users and projects via user ID
-export async function getUserProjectsModel(userId) {
+export const getUserProjectsModel = async (userId) => {
   return await query(
     `
     SELECT p.*, up.*, u.username AS creator_username
@@ -57,7 +57,7 @@ export async function getUserProjectsModel(userId) {
     `,
     [userId],
   );
-}
+};
 
 // reads whether or not a memebr is a part of a project
 export async function isUserMemberOfProjectModel(userId, projectId) {
