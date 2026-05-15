@@ -166,7 +166,7 @@ export async function removeProject(req, res, next) {
     if (!req.params) {
       return res.status(400).json({
         success: false,
-        message: "No request paramaters",
+        message: "No request parameters",
       });
     }
 

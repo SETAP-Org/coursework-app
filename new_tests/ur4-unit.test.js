@@ -1,7 +1,6 @@
 // User Requirement 4:  Authenticated users assigned as a team leader should be able to manage members for their projects
 
 import { describe, jest, test } from "@jest/globals";
-import { deleteUserFromProjectModel } from "../models/userProjectModels.js";
 
 jest.unstable_mockModule('../models/userModels.js', () => ({
     ...jest.requireActual('../models/userModels.js'),
@@ -12,6 +11,11 @@ jest.unstable_mockModule('../models/userProjectModels.js', () => ({
     ...jest.requireActual('../models/userProjectModels.js'),
     postUserToProjectModel: jest.fn(),
     deleteUserFromProjectModel: jest.fn(),
+}));
+
+jest.unstable_mockModule('../models/projectModels.js', () => ({
+    ...jest.requireActual('../models/projectModels.js'),
+    deleteProjectByIdModel: jest.fn(),
 }));
 
 describe('addUserToProject', () => {
@@ -376,5 +380,35 @@ describe('removeUserFromProject', () => {
         });
 
         userProjectModels.deleteUserFromProjectModel.mockReset();
+    });
+});
+
+describe('removeProject', () => {
+    test('Should call the deleteProjectByIdModel() function and send back a successful response when removing a project', async () => {
+        const { removeProject } = await import('../controllers/projectControllers.js');
+        const projectModels = await import('../models/projectModels.js');
+        projectModels.deleteProjectByIdModel.mockResolvedValue({ rows: [{project: "Project Deleted!"}] });
+
+        const req = {
+            params: {
+                project_id: "myProjectId"
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await removeProject(req, res, next);
+
+        expect(projectModels.deleteProjectByIdModel).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({
+            success: true,
+            message: "The project has been deleted!"
+        });
+
+        projectModels.deleteProjectByIdModel.mockReset();
     });
 });
