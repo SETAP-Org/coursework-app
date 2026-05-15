@@ -5,7 +5,6 @@ import { Router } from "express";
 
 // Controller Imports
 import {
-  getCurrentUser,
   updateUsername,
   getCurrentUserPhoto,
   addUser,
@@ -23,14 +22,13 @@ const router = Router();
 
 // Routes
 // API
-router.get("/me", getCurrentUser);
 router.get("/me/photo", checkIfLoggedInCalendar, getCurrentUserPhoto);
 
 // CREATE
-router.post("/users/addUser", setJustAuthenticatedFlag, addUser);
+router.post("/users", setJustAuthenticatedFlag, addUser);
 
 // UPDATE
-router.put("/users/changeUsername", checkValidUsername, updateUsername);
+router.put("/users", checkValidUsername, updateUsername);
 
 // Export Router
 export default router;

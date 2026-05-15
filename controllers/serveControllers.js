@@ -80,10 +80,13 @@ export async function serveProfile(req, res, next) {
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult.rows[0];
 
+    console.log(dbUser, 'this is the user')
+
     res.render("profile", {
       userFirstName: req.user.firstName,
       username: req.params.username,
       userId: dbUser.user_id,
+      emailNotifications: dbUser.email_notifications,
     });
   } catch (err) {
     res.redirect("/error?err=" + encodeURIComponent(err));
