@@ -411,4 +411,112 @@ describe('removeProject', () => {
 
         projectModels.deleteProjectByIdModel.mockReset();
     });
+
+    test('Should send the correct response when no request parameters are passed into the function', async () => {
+        const { removeProject } = await import('../controllers/projectControllers.js');
+        const projectModels = await import('../models/projectModels.js');
+
+        const req = {}
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await removeProject(req, res, next);
+
+        expect(projectModels.deleteProjectByIdModel).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "No request parameters"
+        });
+
+        projectModels.deleteProjectByIdModel.mockReset();
+    });
+
+    test('Should send the correct response when no project ID is provided', async () => {
+        const { removeProject } = await import('../controllers/projectControllers.js');
+        const projectModels = await import('../models/projectModels.js');
+
+        const req = {
+            params: {}
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await removeProject(req, res, next);
+
+        expect(projectModels.deleteProjectByIdModel).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "No project ID provided"
+        });
+
+        projectModels.deleteProjectByIdModel.mockReset();
+    });
+
+    test('Should call the deleteProjectByIdModel() function and send back a successful response when removing a project', async () => {
+        const { removeProject } = await import('../controllers/projectControllers.js');
+        const projectModels = await import('../models/projectModels.js');
+        projectModels.deleteProjectByIdModel.mockResolvedValue({ rows: [] });
+
+        const req = {
+            params: {
+                project_id: "myProjectId"
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await removeProject(req, res, next);
+
+        expect(projectModels.deleteProjectByIdModel).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "Project could not be found"
+        });
+
+        projectModels.deleteProjectByIdModel.mockReset();
+    });
+
+    test('Should call the deleteProjectByIdModel() function and send back a successful response when removing a project', async () => {
+        const { removeProject } = await import('../controllers/projectControllers.js');
+        const projectModels = await import('../models/projectModels.js');
+
+        // mock model to give error
+        projectModels.deleteProjectByIdModel.mockImplementation(() => {
+            throw new Error('DB Error');
+        });
+
+        const req = {
+            params: {
+                project_id: "myProjectId"
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await removeProject(req, res, next);
+
+        expect(projectModels.deleteProjectByIdModel).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "Database error"
+        });
+
+        projectModels.deleteProjectByIdModel.mockReset();
+    });
 });
