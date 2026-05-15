@@ -1,6 +1,4 @@
-// UR10 unit tests: MIME type resolution for file names
-
-// mimeTypeFromFileName is a pure utility — no DB, HTTP, or storage involved
+// mimeTypeFromFileName is a pure utility — no mocks needed
 const { mimeTypeFromFileName } = await import("../utils/fileFetcher.js");
 
 describe('mimeTypeFromFileName resolves the correct MIME type from a file name', () => {
