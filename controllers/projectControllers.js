@@ -163,6 +163,20 @@ export async function updateTeamLeader(req, res, next) {
 // function to delete the project (should cascade to delete other parts)
 export async function removeProject(req, res, next) {
   try {
+    if (!req.params) {
+      return res.status(400).json({
+        success: false,
+        message: "No request paramaters",
+      });
+    }
+
+    if (!req.params.project_id) {
+      return res.status(400).json({
+        success: false,
+        message: "No project ID provided",
+      });
+    }
+
     const data = await deleteProjectByIdModel(req.params.project_id);
 
     if (data.rows.length > 0) {
@@ -173,15 +187,13 @@ export async function removeProject(req, res, next) {
     } else {
       res.status(400).json({
         success: false,
-        message: "Something went wrong!",
+        message: "Project could not be found",
       });
     }
   } catch (err) {
-    console.error("Error with removeProject", err);
-
-    res.status(400).json({
+    res.status(500).json({
       success: false,
-      message: err,
+      message: "Database error",
     });
   }
 }
