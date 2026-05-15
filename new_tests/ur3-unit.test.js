@@ -75,4 +75,4 @@ describe('updateTeamLeader', () => {
         expect(response.body.success).toBe(false);
         expect(response.body.message).toMatch("Missing newLeaderId");
     });
-})
+});

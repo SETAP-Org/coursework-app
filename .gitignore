@@ -10,3 +10,4 @@ testNotifications.mjs
 /node_modules
 /scratch
 test.pdf
+coverage
