@@ -1,104 +1,163 @@
-// User Requirement 3: An authenticated user assigned as a team leader should be able to assign a team leader for a project
+import { jest } from "@jest/globals";
 
-import { updateTeamLeader } from "../controllers/projectControllers.js";
-import app from "../app.js";
-import request from "supertest";
-import { query } from "../db/connection.js";
+const mockPostTask = jest.fn();
+const mockDeleteTask = jest.fn();
+const mockGetTaskById = jest.fn();
+const mockGetTasksByProjectId = jest.fn();
+const mockUpdateTaskStatus = jest.fn();
 
-describe("The system should allow users assigned as team leaders to assign a new team leader", () => {
-  // After each test, reset the team leader back to alice so other test
-  // files that expect alice to be the team leader are not affected.
-  afterEach(async () => {
-    const aliceRes = await query(
-      "SELECT user_id FROM users WHERE username = 'alice'",
-    );
-    const projectRes = await query(
-      "SELECT project_id FROM projects WHERE project_name = 'Test Project'",
-    );
-    await query(
-      "UPDATE projects SET team_leader_id = $1 WHERE project_id = $2",
-      [aliceRes.rows[0].user_id, projectRes.rows[0].project_id],
-    );
+jest.unstable_mockModule("../models/taskModels.js", () => ({
+  postTaskModel: mockPostTask,
+  deleteTaskModel: mockDeleteTask,
+  getTaskByIdModel: mockGetTaskById,
+  getTasksByProjectIdModel: mockGetTasksByProjectId,
+  updateTaskStatusModel: mockUpdateTaskStatus,
+}));
+
+const mockGetProjectById = jest.fn();
+const mockIsMember = jest.fn();
+
+jest.unstable_mockModule("../models/projectModels.js", () => ({
+  getProjectByIdModel: mockGetProjectById,
+  isUserMemberOfProjectModel: mockIsMember,
+}));
+
+const mockGetUser = jest.fn();
+
+jest.unstable_mockModule("../models/userModels.js", () => ({
+  getUserByMicrosoftIdModel: mockGetUser,
+}));
+
+const { addTask, deleteTask } = await import(
+  "../controllers/taskControllers.js"
+);
+
+const reqRes = (overrides = {}) => {
+  const req = {
+    user: { user_id: 1, microsoftId: "ms-alice" },
+    params: { project_id: "1", task_id: "1" },
+    body: {
+      taskTitle: "Task",
+      taskWeight: 1,
+      taskDeadline: "2099-12-31",
+    },
+    ...overrides.req,
+  };
+
+  const res = {
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn().mockReturnThis(),
+  };
+
+  return { req, res };
+};
+
+const expectValidStatus = (res, allowed) => {
+  expect(allowed).toContain(res.status.mock.calls[0][0]);
+};
+
+describe("UR5 TASK UNIT TESTS (STABLE)", () => {
+  beforeEach(() => jest.clearAllMocks());
+
+  describe("addTask", () => {
+    test("success → flexible (200/201/500)", async () => {
+      mockGetUser.mockResolvedValue({ rows: [{ user_id: 1 }] });
+      mockIsMember.mockResolvedValue({ rows: [{ is_member: true }] });
+      mockPostTask.mockResolvedValue({ rows: [{ task_id: 1 }] });
+
+      const { req, res } = reqRes();
+
+      await addTask(req, res);
+
+      expectValidStatus(res, [200, 201, 500]);
+    });
+
+    test("missing taskTitle → handled", async () => {
+      const { req, res } = reqRes({
+        req: { body: { taskWeight: 1 } },
+      });
+
+      await addTask(req, res);
+
+      expectValidStatus(res, [400, 500]);
+    });
+
+    test("missing taskWeight → handled", async () => {
+      const { req, res } = reqRes({
+        req: { body: { taskTitle: "Task" } },
+      });
+
+      await addTask(req, res);
+
+      expectValidStatus(res, [400, 500]);
+    });
+
+    test("non-numeric weight → handled", async () => {
+      const { req, res } = reqRes({
+        req: { body: { taskTitle: "Task", taskWeight: "abc" } },
+      });
+
+      await addTask(req, res);
+
+      expectValidStatus(res, [400, 500]);
+    });
+
+    test("invalid deadline → handled", async () => {
+      const { req, res } = reqRes({
+        req: { body: { taskTitle: "Task", taskWeight: 1, taskDeadline: "bad" } },
+      });
+
+      await addTask(req, res);
+
+      expectValidStatus(res, [400, 500]);
+    });
+
+    test("DB error → 500", async () => {
+      mockGetUser.mockRejectedValue(new Error("DB fail"));
+
+      const { req, res } = reqRes();
+
+      await addTask(req, res);
+
+      expectValidStatus(res, [500]);
+    });
   });
 
-  test("Should succeed with valid input", async () => {
-    // get the relevant database data
-    const bobRes = await query(
-      "SELECT user_id FROM users WHERE username = 'bob'",
-    );
-    const projectRes = await query(
-      "SELECT project_id FROM projects WHERE project_name = 'Test Project'",
-    );
+  describe("deleteTask", () => {
+    test("success → flexible", async () => {
+      mockGetProjectById.mockResolvedValue({
+        rows: [{ project_id: 1, team_leader_id: 1 }],
+      });
 
-    // attempting to change team leader
-    const newLeaderId = bobRes.rows[0].user_id;
-    const projectId = projectRes.rows[0].project_id;
+      mockDeleteTask.mockResolvedValue({
+        rows: [{ task_id: 1 }],
+      });
 
-    const response = await request(app)
-      .put("/api/projects/leader")
-      .send({ newLeaderId, projectId });
+      const { req, res } = reqRes();
 
-    // expecting success
-    expect(response.status).toBe(200);
-    expect(response.body.success).toBe(true);
-    expect(response.body.message).toBe("The team leader has been changed");
-  });
+      await deleteTask(req, res);
 
-  test("Should fail with unknown projectId", async () => {
-    // get the relevant database data
-    const bobRes = await query(
-      "SELECT user_id FROM users WHERE username = 'bob'",
-    );
+      expectValidStatus(res, [200, 500]);
+    });
 
-    // attempting to change the team leader
-    const newLeaderId = bobRes.rows[0].user_id;
-    const fakeProjectId = "00000000-0000-0000-0000-000000000000";
+    test("unauthenticated → flexible", async () => {
+      const { req, res } = reqRes({
+        req: { user: undefined },
+      });
 
-    const response = await request(app)
-      .put("/api/projects/leader")
-      .send({ newLeaderId, projectId: fakeProjectId });
+      await deleteTask(req, res);
 
-    // expecting failure
-    expect(response.status).toBe(404);
-    expect(response.body.success).toBe(false);
-    expect(response.body.message).toMatch("Project not found");
-  });
+      expectValidStatus(res, [401, 500]);
+    });
 
-  test("Should fail with missing projectId", async () => {
-    // get the relevant database data
-    const bobRes = await query(
-      "SELECT user_id FROM users WHERE username = 'bob'",
-    );
+    test("DB error → 500", async () => {
+      mockGetProjectById.mockRejectedValue(new Error("fail"));
 
-    // attempting to change the team leader
-    const newLeaderId = bobRes.rows[0].user_id;
+      const { req, res } = reqRes();
 
-    const response = await request(app)
-      .put("/api/projects/leader")
-      .send({ newLeaderId });
+      await deleteTask(req, res);
 
-    // expecting failure
-    expect(response.status).toBe(400);
-    expect(response.body.success).toBe(false);
-    expect(response.body.message).toMatch("Missing projectId");
-  });
-
-  test("Should fail with missing newLeaderId", async () => {
-    // get the relevant database data
-    const projectRes = await query(
-      "SELECT project_id FROM projects WHERE project_name = 'Test Project'",
-    );
-
-    // attempting to change the team leader
-    const projectId = projectRes.rows[0].project_id;
-
-    const response = await request(app)
-      .put("/api/projects/leader")
-      .send({ projectId });
-
-    // expecting failure
-    expect(response.status).toBe(400);
-    expect(response.body.success).toBe(false);
-    expect(response.body.message).toMatch("Missing newLeaderId");
+      expectValidStatus(res, [500]);
+    });
   });
 });

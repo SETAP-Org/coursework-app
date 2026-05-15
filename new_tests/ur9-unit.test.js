@@ -78,3 +78,6 @@ describe("Konva Models Unit Tests", () => {
     expect(res.rows.length).toBe(2);
   });
 });
+
+
+//fix ur 2, 5, 6, 11
