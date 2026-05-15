@@ -10,27 +10,52 @@ import { getProfilePhoto } from "../models/calendarModels.js";
 // function to add a user to the database
 export async function addUser(req, res, next) {
     try {
-        const { microsoftId, firstName, lastName, email } = req.user;
-        const data = await postUserModel(microsoftId, firstName, lastName, email, microsoftId);
-        res.status(200).json({
-            success: true,
-            message: "User added successfully!",
-            user: data.rows[0],
-        })
+        if (!req.user) {
+            res.status(400).json({
+                success: false,
+                message: "No session user"
+            })
+        } else {
+            const { microsoftId, firstName, lastName, email } = req.user;
+            const data = await postUserModel(microsoftId, firstName, lastName, email, microsoftId);
+            res.status(200).json({
+                success: true,
+                message: "User added successfully!",
+                user: data.rows[0],
+            })
+        }
     } catch (err) {
-        res.status(400).json({
+        res.status(500).json({
             success: false,
-            message: err
+            message: "Database error"
         })
     }
 }
 
 // function to get a user by username
 export async function checkValidUsername(req, res, next) {
-    try {
-        const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
-        const dbUser = await dbUserResult.rows[0];
+    if (!req.body) {
+        return res.status(400).json({
+            success: false,
+            message: "No request body"
+        })
+    }
 
+    if (!req.body.usernameValue) {
+        return res.status(400).json({
+            success: false,
+            message: "No given username"
+        })
+    }
+
+    if (req.body.usernameValue.length < 3 || req.body.usernameValue.length > 20) {
+        return res.status(400).json({
+            success: false,
+            message: "Username has an invalid length"
+        })
+    }
+
+    try {
         // check if anyone else has that username
         const fetchedUser = await getUserByUsernameModel(req.body.usernameValue);
         
@@ -44,10 +69,9 @@ export async function checkValidUsername(req, res, next) {
         // if not, then move to the next middleware
         next()
     } catch(err) {
-        console.error("checkValidUsername error:", err);
-        return res.status(400).json({
+        return res.status(500).json({
             success: false,
-            message: "There was an error. Check console logs for more information."
+            message: "Database error"
         })
     }
 }
@@ -55,46 +79,46 @@ export async function checkValidUsername(req, res, next) {
 // controller to update usernames
 export async function updateUsername(req, res, next) {
     try {
+        if (!req.user) {
+            return res.status(400).json({
+                success: false,
+                message: "No session user"
+            })
+        }
+
+        if (!req.body) {
+            return res.status(400).json({
+                success: false,
+                message: "No request body"
+            })
+        }
+
+        if (!req.body.usernameValue) {
+            return res.status(400).json({
+                success: false,
+                message: "No given username"
+            })
+        }
+
+        if (req.body.usernameValue.length < 3 || req.body.usernameValue.length > 20) {
+            return res.status(400).json({
+                success: false,
+                message: "Username has an invalid length"
+            })
+        }
+
         const userId = req.user.microsoftId;
         const data = await putUsernameByIdModel(userId, req.body.usernameValue);
 
-        if (data.rows[0].username == req.body.usernameValue) {
-            return res.status(200).json({
-                success: true,
-                message: "Your username has been changed :)"
-            })
-        }
-    } catch(err) {
-        console.error("updateUsername error:", err)
-        res.status(400).json({
-            success: false,
-            message: "Error updating username, see console logs for more information."
+        return res.status(200).json({
+            success: true,
+            message: "Your username has been changed :)"
         })
-    }
-}
-
-// function to return user info (might not be needed as part of req.user)
-export async function getCurrentUser(req, res, next) {
-    if (req.user) {
-        const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
-        const dbUser = dbUserResult.rows[0];
-
-        if (!dbUser) {
-            return res.status(200).json({
-                sessionUser: req.user,
-                dbUser: null
-            });
-        }
-
-        res.status(200).json({
-            sessionUser: req.user,
-            dbUser: dbUser,
-        });
-    } else {
-        res.status(404).json({
-            sessionUser: null,
-            dbUser: null
-        });
+    } catch(err) {
+        res.status(500).json({
+            success: false,
+            message: "Database error"
+        })
     }
 }
 

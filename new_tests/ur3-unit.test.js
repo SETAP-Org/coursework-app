@@ -1,11 +1,10 @@
 // User Requirement 3: An authenticated user assigned as a team leader should be able to assign a team leader for a project
 
-import { updateTeamLeader } from "../controllers/projectControllers.js";
 import app from "../app.js";
 import request from "supertest";
 import { query } from "../db/connection.js";
 
-describe('The system should allow users assigned as team leaders to assign a new team leader', () => {
+describe('updateTeamLeader', () => {
     test('Should succeed with valid input', async () => {
         // get the relevant database data
         const bobRes = await query("SELECT user_id FROM users WHERE username = 'bob'")
@@ -76,4 +75,4 @@ describe('The system should allow users assigned as team leaders to assign a new
         expect(response.body.success).toBe(false);
         expect(response.body.message).toMatch("Missing newLeaderId");
     });
-})
+});

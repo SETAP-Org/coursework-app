@@ -1,3 +1,9 @@
+-- UR1 Seed Data --
+INSERT INTO USERS (user_first_name, user_last_name, user_email, microsoft_id, date_created, last_login, username, email_notifications)
+VALUES ('John', 'Doe', 'jdoe@example.com', 'ms-johndoe', NOW(), NOW(), 'jdoe', FALSE)
+RETURNING user_id;
+
+-- UR3 Seed Data --
 -- Test Seed Data --
 -- Users: alice (team leader), bob (member), charlie (member, no completed tasks)
 -- Projects: Test Project (alice, bob, charlie), Test Project 2 (alice only, no tasks)

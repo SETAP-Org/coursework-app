@@ -15,33 +15,35 @@ export async function checkIfLoggedInRedirect(req, res, next) {
       next();
     }
   } catch (err) {
-    console.error("checkIfLoggedInRedirect error:", err);
-    res.redirect("/");
+    res.redirect("/error");
   }
 }
 
 // function to navigate to user dashboard if user already signed in
 export async function checkIfLoggedIn(req, res, next) {
-  if (req.user && req.user.accessToken) {
-    const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
-    const dbUser = dbUserResult.rows[0];
-    //console.log(dbUser , "this is the db user in check if logged in")
-    if (!dbUser) {
-      next();
+  try {
+    if (req.user && req.user.accessToken) {
+      const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+      const dbUser = dbUserResult.rows[0];
+  
+      if (!dbUser) {
+        next();
+      } else {
+        return res.redirect(`/${dbUser.username}`);
+      }
     } else {
-      return res.redirect(`/${dbUser.username}`);
+      next();
     }
-  } else {
-    next();
+  } catch (err) {
+    res.redirect("/error");
   }
 }
 
 export function checkIfLoggedInCalendar(req, res, next) {
-  console.log("it made it to the calandar redirect");
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.status(401).json({ error: "Not authenticated" });
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.status(401).json({ error: "Not authenticated" });
 }
 
 // function to sign out user on request
@@ -58,10 +60,4 @@ export function authenticatePassport(req, res, next) {
 export function setJustAuthenticatedFlag(req, res, next) {
   req.session.justAuthenticated = true;
   next();
-}
-
-// function to get the justAuthenticated value
-export function getJustAuthenticatedFlag(req, res, next) {
-  if (req.session.justAuthenticated) res.json(req.session.justAuthenticated);
-  else res.json({ justAuthenticated: false });
 }
