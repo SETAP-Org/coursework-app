@@ -7,7 +7,6 @@ import { Router } from "express";
 import {
   authenticatePassport,
   checkIfLoggedInRedirect,
-  getJustAuthenticatedFlag,
   setJustAuthenticatedFlag,
   signOut,
   checkIfLoggedIn,
@@ -27,7 +26,6 @@ router.get(
   redirectWelcome,
 );
 router.get("/auth/signout", signOut, checkIfLoggedInRedirect);
-router.get("/auth/justAuthenticated", getJustAuthenticatedFlag);
 
 // Export Router
 export default router;

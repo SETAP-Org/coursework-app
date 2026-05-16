@@ -15,12 +15,12 @@ const transporter = nodemailer.createTransport({
 });
 
 // Verify transporter connection
-transporter.verify((error) => {
-    if (error) {
-        console.error('email transporter invalid credentials:', error);
-    } else {
-        console.log('email transporter ready');
-    }
-});
+// transporter.verify((error) => {
+//     if (error) {
+//         console.error('email transporter invalid credentials:', error);
+//     } else {
+//         console.log('email transporter ready');
+//     }
+// });
 
 export default transporter;

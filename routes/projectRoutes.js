@@ -10,6 +10,7 @@ import {
   updateTeamLeader,
   removeProject,
   getUserProjects,
+  isAuthenticated,
 } from "../controllers/projectControllers.js";
 import {
   addUserToProject,
@@ -25,7 +26,7 @@ router.get("/me/projects", getUserProjects);
 router.get("/projects/:project_id", getProjectDetails);
 
 // CREATE
-router.post("/projects/addProject", addProject);
+router.post("/projects/addProject", isAuthenticated, addProject);
 router.post("/projects/user", addUserToProject);
 
 // UPDATE

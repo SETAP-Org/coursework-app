@@ -19,6 +19,24 @@ export async function addProject(req, res, next) {
     const userId = dbUser.user_id;
     const { project_name, project_deadline } = req.body;
 
+    if (!project_name) {
+      return res
+        .status(400)
+        .json({ success: false, error: "Missing project_name" });
+    }
+
+    if (!project_deadline) {
+      return res
+        .status(400)
+        .json({ success: false, error: "Missing project_deadline" });
+    }
+
+    if (isNaN(new Date(project_deadline).getTime())) {
+      return res
+        .status(400)
+        .json({ success: false, error: "Invalid project_deadline format" });
+    }
+
     const result = await postProjectModel(
       userId,
       project_name,
@@ -34,7 +52,9 @@ export async function addProject(req, res, next) {
         throw new Error("Error adding user link in user_projects");
       }
     } else {
-      throw new Error("Cannot create duplicate projects!");
+      return res
+        .status(409)
+        .json({ success: false, error: "Cannot create duplicate projects!" });
     }
   } catch (err) {
     console.error("addProject error:", err);
@@ -107,14 +127,14 @@ export async function updateTeamLeader(req, res, next) {
       return res.status(400).json({
         success: false,
         message: "Missing projectId",
-      })
+      });
     }
 
     if (!newLeaderId) {
       return res.status(400).json({
         success: false,
         message: "Missing newLeaderId",
-      })
+      });
     }
 
     const data = await putTeamLeader(newLeaderId, projectId);
@@ -131,9 +151,8 @@ export async function updateTeamLeader(req, res, next) {
       });
     }
   } catch (err) {
-    console.error("Error with updateTeamLeader:", err);
     res.status(500).json({
-      success: true,
+      success: false,
       message: "Database error",
       error: err.message,
     });
@@ -143,6 +162,20 @@ export async function updateTeamLeader(req, res, next) {
 // function to delete the project (should cascade to delete other parts)
 export async function removeProject(req, res, next) {
   try {
+    if (!req.params) {
+      return res.status(400).json({
+        success: false,
+        message: "No request parameters",
+      });
+    }
+
+    if (!req.params.project_id) {
+      return res.status(400).json({
+        success: false,
+        message: "No project ID provided",
+      });
+    }
+
     const data = await deleteProjectByIdModel(req.params.project_id);
 
     if (data.rows.length > 0) {
@@ -153,15 +186,13 @@ export async function removeProject(req, res, next) {
     } else {
       res.status(400).json({
         success: false,
-        message: "Something went wrong!",
+        message: "Project could not be found",
       });
     }
   } catch (err) {
-    console.error("Error with removeProject", err);
-
-    res.status(400).json({
+    res.status(500).json({
       success: false,
-      message: err,
+      message: "Database error",
     });
   }
 }
@@ -169,8 +200,28 @@ export async function removeProject(req, res, next) {
 // Middleware
 export async function checkMembership(req, res, next) {
   try {
-    const { project_id } = req.params;
-    if (!project_id) return res.status(500).send("Project not loaded");
+    if (!req.user) {
+      return res.status(400).json({
+        success: false,
+        message: "No session user detected",
+      });
+    }
+
+    if (!req.params) {
+      return res.status(400).json({
+        success: false,
+        message: "No request parameters",
+      });
+    }
+
+    if (!req.params.project_id) {
+      return res.status(400).json({
+        success: false,
+        message: "No project ID provided",
+      });
+    }
+
+    const { project_id } = req.params.project_id;
 
     const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
     const dbUser = dbUserResult.rows[0];
@@ -178,15 +229,26 @@ export async function checkMembership(req, res, next) {
 
     const membershipResult = await isUserMemberOfProjectModel(
       dbUser.user_id,
-      project_id,
+      req.params.project_id,
     );
-    const isMember = membershipResult.rows[0].is_member;
 
-    if (!isMember) return res.status(403).send("Access denied");
+    if (!membershipResult.rows[0]) {
+      return res.status(403).send("Access denied");
+    }
 
     req.isProjectMember = true;
     next();
   } catch (err) {
-    next(err);
+    return res.status(500).json({
+      success: false,
+      message: "Database error",
+    });
   }
+}
+
+export function isAuthenticated(req, res, next) {
+  if (!req.user) {
+    return res.status(401).json({ success: false, error: "Unauthorised" });
+  }
+  next();
 }

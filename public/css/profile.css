@@ -1,4 +1,4 @@
-.user-info h1{
+.user-info h1 {
     font-size: 1.4em;
     color: rgb(255, 255, 255);
     margin-bottom: 5px;
@@ -38,7 +38,7 @@
 }
 
 .username-save-button {
-    width: 50%;
+    width: 100%;
     padding: 0.6rem 1.2rem;
     border-radius: var(--radius);
     border: var(--border);
@@ -81,7 +81,6 @@
 #sign-out-button:hover {
     opacity: 0.85;
 }
-
 
 .username-form-section h3 {
     color: rgb(0, 0, 0);
@@ -126,13 +125,13 @@
 }
 
 .user-info h1,
-.user-info h2, 
+.user-info h2,
 .user-info p {
     word-break: break-word;
 }
 
 #change-profile-picture {
-    background-image: url('/assets/change_picture_icon.svg');
+    background-image: url("/assets/change_picture_icon.svg");
     background-size: cover;
     background-position: center;
     width: 35px;
@@ -151,7 +150,6 @@
     color: rgb(255, 255, 255);
     margin-bottom: 5px;
     text-align: center;
-
 }
 
 .user-info h2 {
@@ -173,7 +171,6 @@
     color: var(--text);
 }
 
-
 .profile-card {
     background-color: #fff;
     border: var(--border);
@@ -182,10 +179,9 @@
     box-shadow: var(--shadow);
     transition: transform 0.2s ease;
     color: var(--text);
-
 }
 
-.profile-card:hover{
+.profile-card:hover {
     transform: translateY(-5px);
 }
 
@@ -193,7 +189,7 @@
     color: rgb(0, 0, 0);
 }
 
-.profile-progress-item{
+.profile-progress-item {
     margin-bottom: 15px;
 }
 
@@ -213,7 +209,7 @@
 
 .profile-progress-fill {
     height: 100%;
-    background-color: #007BFF;
+    background-color: #007bff;
     border-radius: 4px;
 }
 
@@ -242,7 +238,7 @@
 .profile-date {
     color: var(--text);
     background-color: rgb(255, 255, 255);
-    padding: 5px  10px;
+    padding: 5px 10px;
     border-radius: 5px;
     font-size: 1em;
 }
@@ -282,6 +278,43 @@
     font-size: 0.9em;
     color: var(--text-2);
     min-height: 20px;
+}
+
+.username-dialog {
+    border-radius: 20px;
+    padding: 20px;
+    align-self: center;
+    margin: auto;
+    left: 0;
+    right: 0;
+}
+
+.username-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.username-dialog-message {
+    color: rgb(0, 0, 0);
+    font-size: 1em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.username-dialog-button {
+    display: block;
+    margin: 0 auto;
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius);
+    border: var(--border);
+    background: var(--accent, #4f8ef7);
+    color: #fff;
+    font-family: var(--font);
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.username-dialog-button:hover {
+    opacity: 0.85;
 }
 
 @media (max-width: 480px) {

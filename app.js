@@ -1,5 +1,4 @@
 // ===== imports =====
-// package imports
 import express from "express";
 import path from "path";
 import dotenv from "dotenv";
@@ -28,6 +27,16 @@ dotenv.config({ path: ".env.auth" });
 // configuration data for server
 const __dirname = import.meta.dirname;
 const app = express();
+
+// TEST BYPASS AUTH (ONLY IN TEST MODE)
+if (process.env.NODE_ENV === "test") {
+  app.use((req, res, next) => {
+    req.user = {
+      microsoftId: "ms-1",
+    };
+    next();
+  });
+}
 
 // middleware
 app.set("view engine", "ejs");

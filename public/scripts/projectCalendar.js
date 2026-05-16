@@ -6,7 +6,8 @@ function projectCalendar() {
   loading.style.display = "flex";
 
   // ejs values
-  const { meetings, projectId, groupUsers, userId, username, projectName } = window.scriptData;
+  const { meetings, projectId, groupUsers, userId, username, projectName } =
+    window.scriptData;
 
   // getting dom elements
   const eventsList = document.querySelector("#events-list");
@@ -17,13 +18,14 @@ function projectCalendar() {
   const dialogCloseButton = document.querySelector(".modal-close");
 
   // add full calendar modal to the ui
-  const calendarEl = document.querySelector('#calendar-large');
+  const calendarEl = document.querySelector("#calendar-large");
   const calendar = new FullCalendar.Calendar(calendarEl, {
-  headerToolbar: {
-        left: "prev,next today",
-        center: "title",
-        right: "dayGridMonth,timeGridWeek,timeGridDay"
-      },  });
+    headerToolbar: {
+      left: "prev,next today",
+      center: "title",
+      right: "dayGridMonth,timeGridWeek,timeGridDay",
+    },
+  });
   calendar.render();
 
   // function to add event to the ui
@@ -53,8 +55,8 @@ function projectCalendar() {
       meeting.meeting_start,
       meeting.meeting_end,
       meeting.meeting_description,
-    )
-  })
+    );
+  });
 
   // function to show or hide new meeting dialog
   function toggleNewMeetingForm() {
@@ -104,31 +106,32 @@ function projectCalendar() {
         return;
       }
 
-
       try {
         // send a meeting to the web socket
-        socket.emit('meeting', {
-            projectId: projectId,
-            location: "Virtual",
-            description: payload.meetingDescription,
-            subject: payload.meetingSubject,
-            start: startDateTz,
-            end: endDateTz,
-        })
+        socket.emit("meeting", {
+          projectId: projectId,
+          location: "Virtual",
+          description: payload.meetingDescription,
+          subject: payload.meetingSubject,
+          start: startDateTz,
+          end: endDateTz,
+        });
 
         // create notifications for other group members
-        socket.emit('notification', {
-            targetUsers: groupUsers
-            .filter(u => u.user_id !== userId)
-            .map(u => u.user_id) || [],
-            projectId: projectId,
-            notificationType: "Meeting",
-            notificationMessage: `${username} set a new meeting in ${projectName}`,
+        socket.emit("notification", {
+          targetUsers:
+            groupUsers
+              .filter((u) => u.user_id !== userId)
+              .map((u) => u.user_id) || [],
+          projectId: projectId,
+          notificationType: "Meeting",
+          notificationMessage: `${username} set a new meeting in ${projectName}`,
         });
+
+        dialogForm.reset();
+        createMeetingDialog.close();
       } catch (err) {
-        alert(
-          err.message
-        )
+        alert(err.message);
       }
     });
   }

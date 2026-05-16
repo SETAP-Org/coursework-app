@@ -12,21 +12,30 @@ import {
 } from "../controllers/taskControllers.js";
 
 // Middleware Imports
-import { checkMembership } from "../controllers/projectControllers.js";
+import {
+  checkMembership,
+  isAuthenticated,
+} from "../controllers/projectControllers.js";
 
 // Router Declaration
 const router = Router();
 
 // Routes
 // API
-router.get("/projects/:project_id/tasks", getProjectTasks);
+router.get(
+  "/projects/:project_id/tasks",
+  isAuthenticated,
+  checkMembership,
+  getProjectTasks,
+);
 
 // CREATE
-router.post("/tasks/:project_id/addTask", addTask);
+router.post("/tasks/:project_id/addTask", isAuthenticated, addTask);
 
 // UPDATE
 router.put(
   "/projects/:project_id/tasks/:task_id/updateStatus",
+  isAuthenticated,
   checkMembership,
   updateTaskStatus,
 );
@@ -34,6 +43,7 @@ router.put(
 // DELETE
 router.delete(
   "/projects/:project_id/tasks/:task_id",
+  isAuthenticated,
   checkMembership,
   deleteTask,
 );

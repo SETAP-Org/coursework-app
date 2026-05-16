@@ -116,7 +116,9 @@ dialog {
     border-radius: 20px;
     padding: 20px;
     align-self: center;
-    left: 30%;
+    margin: auto;
+    left: 0;
+    right: 0;
 }
 
 dialog::backdrop {

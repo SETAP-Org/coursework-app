@@ -13,6 +13,7 @@
                 userFirstName: "<%= userFirstName %>",
                 username: "<%= username %>",
                 userId: "<%= userId %>",
+                emailNotifications: "<%= emailNotifications %>"
             };
         </script>
         <script src="/scripts/L&D-mode.js" defer type="module"></script>
@@ -42,8 +43,8 @@
                     <p>New Username</p>
                     <input type="text" class="username-input">
                     <p class="username-message"></p>
+                    <button class="username-save-button" disabled="true">Save Changes</button>
                 </form>
-                <button class="username-save-button" disabled="true">Save Changes</button>
             </div>
 
             <div class="email-notification-preferences">

@@ -1,6 +1,6 @@
 async function welcomeUser() {
     // try to add the user to database
-    const addUserResponse = await fetch("/api/users/addUser", { method: 'POST' });
+    const addUserResponse = await fetch("/api/users", { method: 'POST' });
     const addUserData = await addUserResponse.json();
 
     if (addUserData.success) {
