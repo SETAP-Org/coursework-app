@@ -9,7 +9,9 @@
     "install_db": "node node_scripts/install_db.js",
     "email:test": "node testEmail.mjs",
     "notification:test": "node testNotification.mjs",
-    "test": "cross-env NODE_ENV=test node node_scripts/install_test_db.js && cross-env NODE_ENV=test node --experimental-vm-modules ./node_modules/jest/bin/jest.js new_tests/ur6-unit.test.js new_tests/ur6-integration.test.js --runInBand --forceExit --coverage"
+    "test": "cross-env NODE_ENV=test node node_scripts/install_test_db.js && cross-env NODE_ENV=test node --experimental-vm-modules ./node_modules/jest/bin/jest.js new_tests/ur11-unit.test.js new_tests/ur11-integration.test.js --runInBand --forceExit --coverage",
+    "test-all": "cross-env NODE_ENV=test node node_scripts/install_test_db.js && cross-env NODE_ENV=test node --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand --forceExit --coverage"
+
   },
   "repository": {
     "type": "git",
