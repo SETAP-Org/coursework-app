@@ -147,4 +147,113 @@ describe('removeNotification', () => {
 
         notificationModels.deleteNotificationModel.mockReset();
     });
+
+    test('Should send the correct response when no request parameters are provided', async () => {
+        const { removeNotification } = await import('../controllers/notificationControllers.js');
+        const notificationModels = await import('../models/notificationModels.js');
+        notificationModels.deleteNotificationModel.mockResolvedValue({ rows: [{ notification: "deleted notification" }] });
+
+        const req = {}
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await removeNotification(req, res, next);
+
+        expect(notificationModels.deleteNotificationModel).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "No request parameters"
+        });
+
+        notificationModels.deleteNotificationModel.mockReset();
+    });
+
+    test('Should send the corrrect response when no notification ID is provided', async () => {
+        const { removeNotification } = await import('../controllers/notificationControllers.js');
+        const notificationModels = await import('../models/notificationModels.js');
+
+        const req = {
+            params: {}
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await removeNotification(req, res, next);
+
+        expect(notificationModels.deleteNotificationModel).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "No notification ID provided"
+        });
+
+        notificationModels.deleteNotificationModel.mockReset();
+    });
+
+    test('Should send the correct response when no data comes back from the database', async () => {
+        const { removeNotification } = await import('../controllers/notificationControllers.js');
+        const notificationModels = await import('../models/notificationModels.js');
+        notificationModels.deleteNotificationModel.mockResolvedValue({ rows: [] });
+
+        const req = {
+            params: {
+                notification_id: "my notification id"
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await removeNotification(req, res, next);
+
+        expect(notificationModels.deleteNotificationModel).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "Something went wrong"
+        });
+
+        notificationModels.deleteNotificationModel.mockReset();
+    });
+
+    test('Should send the correct response when deleteNotificationModel() fails', async () => {
+        const { removeNotification } = await import('../controllers/notificationControllers.js');
+        const notificationModels = await import('../models/notificationModels.js');
+
+        // mock model to give error
+        notificationModels.deleteNotificationModel.mockImplementation(() => {
+            throw new Error('DB Error');
+        });
+
+        const req = {
+            params: {
+                notification_id: "my notification id"
+            }
+        }
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        const next = jest.fn();
+
+        await removeNotification(req, res, next);
+
+        expect(notificationModels.deleteNotificationModel).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({
+            success: false,
+            message: "Database error"
+        });
+
+        notificationModels.deleteNotificationModel.mockReset();
+    });
 });
