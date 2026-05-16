@@ -4,14 +4,14 @@ import { postNotificationModel, getNotificationsModel, deleteNotificationModel }
 export async function fetchNotificationsByUserId(req, res, next) {
     try {
         if (!req.params) {
-            res.status(400).json({
+            return res.status(400).json({
                 success: false,
                 message: "No request parameters",
             })
         }
 
         if (!req.params.user_id) {
-            res.status(400).json({
+            return res.status(400).json({
                 success: false,
                 message: "No user ID provided",
             })
@@ -36,14 +36,14 @@ export async function fetchNotificationsByUserId(req, res, next) {
 export async function removeNotification(req, res, next) {
     try {
         if (!req.params) {
-            res.status(400).json({
+            return res.status(400).json({
                 success: false,
                 message: "No request parameters",
             })
         }
 
         if (!req.params.notification_id) {
-            res.status(400).json({
+            return res.status(400).json({
                 success: false,
                 message: "No notification ID provided",
             })
@@ -54,7 +54,7 @@ export async function removeNotification(req, res, next) {
         if (data.rows.length === 0) {
             res.status(400).json({
                 success: false,
-                message: "Something went wrong.",
+                message: "Something went wrong",
             })
         } else {
             res.status(200).json({
