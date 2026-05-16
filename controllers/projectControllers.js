@@ -121,21 +121,28 @@ export async function getProjectDetails(req, res, next) {
 // function to change the team leader of a project
 export async function updateTeamLeader(req, res, next) {
   try {
-    const { newLeaderId, projectId } = req.body;
+    if (!req.body) {
+      return res.status(400).json({
+        success: false,
+        message: "No request body"
+      })
+    };
 
-    if (!projectId) {
+    if (!req.body.projectId) {
       return res.status(400).json({
         success: false,
         message: "Missing projectId",
       });
     }
 
-    if (!newLeaderId) {
+    if (!req.body.newLeaderId) {
       return res.status(400).json({
         success: false,
         message: "Missing newLeaderId",
       });
     }
+
+    const { newLeaderId, projectId } = req.body;
 
     const data = await putTeamLeader(newLeaderId, projectId);
 
@@ -154,7 +161,6 @@ export async function updateTeamLeader(req, res, next) {
     res.status(500).json({
       success: false,
       message: "Database error",
-      error: err.message,
     });
   }
 }

@@ -398,10 +398,23 @@ export async function serveProjectFiles(req, res, next) {
 
 // redirects (not added to stack) (for when access to pages is unauthorised)
 export async function redirectUserDash(req, res, next) {
-  const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
-  const dbUser = dbUserResult.rows[0];
+  try {
+    if (!req.user || !req.user.microsoftId) {
+      return res.redirect("/");
+    }
 
-  res.redirect(`/${dbUser.username}`);
+    const dbUserResult = await getUserByMicrosoftIdModel(req.user.microsoftId);
+
+    if (dbUserResult.rows === 0) {
+      res.redirect("/");
+    }
+
+    const dbUser = dbUserResult.rows[0];
+
+    res.redirect(`/${dbUser.username}`);
+  } catch (err) {
+    res.redirect("/error?err=" + encodeURIComponent(err));
+  }
 }
 
 export async function redirectWelcome(req, res, next) {
