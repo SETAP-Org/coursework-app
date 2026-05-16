@@ -151,7 +151,6 @@ export async function updateTeamLeader(req, res, next) {
       });
     }
   } catch (err) {
-    console.error("Error with updateTeamLeader:", err);
     res.status(500).json({
       success: false,
       message: "Database error",
