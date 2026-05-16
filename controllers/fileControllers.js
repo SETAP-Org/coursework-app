@@ -14,6 +14,10 @@ export async function addFileMetadata(req, res) {
   const { project_id } = req.params;
   const { fileName, storagePath, size } = req.body;
 
+  if (!fileName || !storagePath || size === undefined || size === null || !Number.isFinite(Number(size))) {
+    return res.status(400).json({ error: "Error, missing required fields" });
+  }
+
   const data = await postFileModel(project_id, fileName, storagePath, Number(size));
   return res.status(201).json(data.rows[0]);
 }
@@ -29,7 +33,13 @@ export async function initFileUpload(req, res) {
   const { project_id } = req.params;
   const { fileName, size } = req.body;
   const fileSize = Number(size);
-  if (!Number.isFinite(fileSize) || fileSize <= 0 || fileSize > MAX_FILE_SIZE) {
+  if (!Number.isFinite(fileSize)) {
+    return res.status(400).json({ error: "Invalid file size. Size must be a number." }); // 
+  }
+  if (fileSize <= 0) {
+    return res.status(400).json({ error: "Invalid file size. Size must be greater than 0." });
+  }
+  if (fileSize > MAX_FILE_SIZE) {
     return res.status(413).json({ error: "File too large. Make sure it is up to 10 MB." });
   }
   const storagePath = `projects/${project_id}/${Date.now()}_${fileName}`;
@@ -39,6 +49,9 @@ export async function initFileUpload(req, res) {
 
 export async function getDownloadUrl(req, res) {
   const { storagePath } = req.query;
+  if (!storagePath) {
+    return res.status(400).json({ error: "Missing required field: storagePath" });
+  }
   const { data } = await supabase.storage.from(SHARED_FOLDERS_BUCKET).createSignedUrl(storagePath, 60);
   return res.status(200).json(data);
 }

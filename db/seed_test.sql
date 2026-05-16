@@ -51,8 +51,62 @@ WITH alice AS (
 INSERT INTO USER_PROJECTS (user_id, project_id)
 SELECT alice.user_id, project.project_id FROM alice, project
 UNION ALL
-SELECT bob.user_id, project.project_id FROM bob, project
+SELECT bob.user_id, project.project_id FROM bob, project;
+
+-- UR10 Seed Data --
+
+INSERT INTO files (project_id, file_name, storage_path, size, date_uploaded)
+SELECT project_id, 'report.pdf', 'projects/' || project_id || '/report.pdf', 5120, NOW()
+FROM projects
+WHERE project_name = 'Test Project';
+
+INSERT INTO projects (created_by, team_leader_id, project_name, project_deadline, p_date_created, p_time_updated)
+SELECT user_id, user_id, 'Empty Project', '2026-12-31', NOW(), NOW()
+FROM users
+WHERE username = 'alice';
+
+-- UR 14 Seed Data --
+
+WITH john AS (
+    INSERT INTO users (user_first_name, user_last_name, user_email, microsoft_id, date_created, last_login, username, email_notifications)
+    VALUES ('John', 'Smith', 'john@example.com', 'ms-john', NOW(), NOW(), 'john', FALSE)
+    RETURNING user_id
+), julia AS (
+    INSERT INTO users (user_first_name, user_last_name, user_email, microsoft_id, date_created, last_login, username, email_notifications)
+    VALUES ('Julia', 'Smith', 'julia@example.com', 'ms-julia', NOW(), NOW(), 'julia', FALSE)
+    RETURNING user_id
+), project AS (
+    INSERT INTO projects (created_by, team_leader_id, project_name, project_deadline, p_date_created, p_time_updated)
+    SELECT john.user_id, john.user_id, 'AI Test Project', '2026-12-31', NOW(), NOW()
+    FROM john
+    RETURNING project_id
+), memberships AS (
+    INSERT INTO USER_PROJECTS (user_id, project_id)
+    SELECT john.user_id, project.project_id FROM john, project
+    UNION ALL
+    SELECT julia.user_id, project.project_id FROM julia, project
+    RETURNING *
+)
+INSERT INTO ai_chat_messages (project_id, user_id, role, content, ai_date_sent)
+SELECT project.project_id, john.user_id, 'user'::ai_chat_role, 'What is the project status?',
+    '2026-01-01T00:00:00Z'::TIMESTAMPTZ FROM john, project
 UNION ALL
-SELECT charlie.user_id, project.project_id FROM charlie, project
+SELECT project.project_id, NULL, 'assistant'::ai_chat_role, 'The project is on track and all tasks are progressing as planned.',
+    '2026-01-01T00:00:01Z'::TIMESTAMPTZ FROM project
 UNION ALL
-SELECT alice.user_id, project2.project_id FROM alice, project2;
+SELECT project.project_id, john.user_id, 'user'::ai_chat_role, 'What are the next steps?',
+    '2026-01-01T00:00:02Z'::TIMESTAMPTZ FROM john, project
+UNION ALL
+SELECT project.project_id, NULL, 'assistant'::ai_chat_role, 'Complete current steps to receive future steps.',
+    '2026-01-01T00:00:03Z'::TIMESTAMPTZ FROM project;
+
+WITH julia AS (
+    SELECT user_id FROM users WHERE microsoft_id = 'ms-julia'
+), empty_project AS (
+    INSERT INTO projects (created_by, team_leader_id, project_name, project_deadline, p_date_created, p_time_updated)
+    SELECT julia.user_id, julia.user_id, 'AI Empty Project', '2099-12-31', NOW(), NOW()
+    FROM julia
+    RETURNING project_id
+)
+INSERT INTO USER_PROJECTS (user_id, project_id)
+SELECT julia.user_id, empty_project.project_id FROM julia, empty_project;
