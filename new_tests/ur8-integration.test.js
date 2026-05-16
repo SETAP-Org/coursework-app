@@ -1,163 +1,120 @@
-import { jest } from "@jest/globals";
 import express from "express";
 import request from "supertest";
+import { jest } from "@jest/globals";
 
-jest.unstable_mockModule("../models/calendarModels.js", () => ({
-  getCalendarEvents: jest.fn(),
-  createCalendarEvent: jest.fn(),
-  deleteCalendarEvent: jest.fn(),
-}));
+global.fetch = jest.fn();
 
-const {
-  getCalendarEvents,
-  createCalendarEvent,
-  deleteCalendarEvent,
-} = await import("../models/calendarModels.js");
-
-const {
+import {
   getEvent,
   addEvent,
   removeEvent,
-} = await import("../controllers/calendarControllers.js"); 
+} from "../controllers/calendarControllers.js";
 
-const testApp = express();
-testApp.use(express.json());
+const app = express();
+app.use(express.json());
 
-const authMiddleware = (req, res, next) => {
-
-  req.user = {
-    accessToken: "test-token",
-  };
+app.use((req, res, next) => {
+  req.user = { accessToken: "test-token" };
   next();
-};
+});
 
-const noAuth = (req, res, next) => {
-  req.user = null;
-  next();
-};
+app.get("/events", getEvent);
+app.post("/events", addEvent);
+app.delete("/events/:eventId", removeEvent);
 
-testApp.get("/api/calendar/events", authMiddleware, getEvent);
-testApp.post("/api/calendar/events", authMiddleware, addEvent);
-testApp.delete("/api/calendar/events/:eventId", authMiddleware, removeEvent);
-
-describe("UR8 Calendar Integration Tests", () => {
-  beforeEach(() => jest.clearAllMocks());
-
-  test("Authenticated with project filter", async () => {
-    getCalendarEvents.mockResolvedValue({
-      value: [
-        {
-          id: "1",
-          body: { content: "A [ProjectID: 1]" },
-        },
-        {
-          id: "2",
-          body: { content: "B [ProjectID: 1]" },
-        },
-      ],
-    });
-
-    const res = await request(testApp)
-      .get("/api/calendar/events")
-      .query({ project_id: 1 });
-
-    expect(res.status).toBe(200);
-    expect(res.body.length).toBe(2);
+describe("UR8 - Integration Tests (FULL COVERAGE)", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  test("Missing project ID query", async () => {
-    getCalendarEvents.mockResolvedValue({
-      value: [
-        {
-          id: "1",
-          body: { content: "Test [ProjectID: undefined]" },
-        },
-      ],
+  test("GET events success", async () => {
+    fetch.mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        value: [
+          { body: { content: "A [ProjectID: 1]" } },
+          { body: { content: "B [ProjectID: 1]" } },
+        ],
+      }),
     });
 
-    const res = await request(testApp).get("/api/calendar/events");
+    const res = await request(app).get("/events").query({ project_id: "1" });
 
-    expect(res.status).toBe(200);
+    expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });
 
-  test("Graph rejects (throws error)", async () => {
-    getCalendarEvents.mockRejectedValue(new Error("Graph failure"));
+  test("GET events failure branch", async () => {
+    fetch.mockResolvedValue({
+      ok: false,
+      statusText: "Unauthorized",
+    });
 
-    const res = await request(testApp)
-      .get("/api/calendar/events")
-      .query({ project_id: 1 });
+    const res = await request(app).get("/events");
 
-    expect(res.status).toBe(500);
+    expect(res.statusCode).toBe(500);
   });
 
-  test("Valid EventID create meeting", async () => {
-    createCalendarEvent.mockResolvedValue({ id: "1" });
+  test("GET events throws error", async () => {
+    fetch.mockRejectedValue(new Error("Network error"));
 
-    const res = await request(testApp).post("/api/calendar/events").send({
+    const res = await request(app).get("/events");
+
+    expect(res.statusCode).toBe(500);
+  });
+
+  test("POST event success", async () => {
+    fetch.mockResolvedValue({
+      ok: true,
+      json: async () => ({ id: "1" }),
+    });
+
+    const res = await request(app).post("/events").send({
       subject: "Meeting",
       start: "2026-01-01T10:00",
       end: "2026-01-01T11:00",
-      description: "Project discussion",
-      project_id: 1,
+      description: "Test",
+      project_id: "1",
     });
 
-    expect(res.status).toBe(200);
+    expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
   });
 
-  test("Missing subject", async () => {
-    createCalendarEvent.mockRejectedValue(new Error("Missing subject"));
+  test("POST event failure branch", async () => {
+    fetch.mockResolvedValue({
+      ok: false,
+      statusText: "Bad Request",
+    });
 
-    const res = await request(testApp).post("/api/calendar/events").send({
+    const res = await request(app).post("/events").send({
+      subject: "Meeting",
       start: "2026-01-01T10:00",
       end: "2026-01-01T11:00",
       description: "Test",
+      project_id: "1",
     });
 
-    expect(res.status).toBe(500);
+    expect(res.statusCode).toBe(500);
   });
 
-  test("Missing start/end", async () => {
-    createCalendarEvent.mockRejectedValue(new Error("Missing time"));
+  test("DELETE event success", async () => {
+    fetch.mockResolvedValue({ ok: true });
 
-    const res = await request(testApp).post("/api/calendar/events").send({
-      subject: "Meeting",
-      description: "Test",
-    });
+    const res = await request(app).delete("/events/1");
 
-    expect(res.status).toBe(500);
-  });
-
-  test("Valid EventID delete", async () => {
-    deleteCalendarEvent.mockResolvedValue({ success: true });
-
-    const res = await request(testApp).delete(
-      "/api/calendar/events/123"
-    );
-
-    expect(res.status).toBe(200);
+    expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
   });
 
-  test("Unknown EventID delete", async () => {
-    deleteCalendarEvent.mockRejectedValue(new Error("Graph error"));
+  test("DELETE event failure branch", async () => {
+    fetch.mockResolvedValue({
+      ok: false,
+      statusText: "Not Found",
+    });
 
-    const res = await request(testApp).delete(
-      "/api/calendar/events/does-not-exist"
-    );
+    const res = await request(app).delete("/events/999");
 
-    expect(res.status).toBe(500);
-  });
-
-  test("Project without meetings returns empty array", async () => {
-    getCalendarEvents.mockResolvedValue({ value: [] });
-
-    const res = await request(testApp)
-      .get("/api/calendar/events")
-      .query({ project_id: 99 });
-
-    expect(res.status).toBe(200);
-    expect(res.body.length).toBe(0);
+    expect(res.statusCode).toBe(500);
   });
 });

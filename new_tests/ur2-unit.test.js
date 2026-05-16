@@ -1,29 +1,25 @@
 import { jest } from "@jest/globals";
 
 /* =========================
-   MOCKS (same style as working test)
+   MOCKS (MUST MATCH CONTROLLER IMPORTS)
 ========================= */
 
-const mockGetUser = jest.fn();
-const mockPostProject = jest.fn();
-const mockPostUserProject = jest.fn();
+const mockGetUserByMicrosoftIdModel = jest.fn();
+const mockPostProjectModel = jest.fn();
+const mockPostUserProjectModel = jest.fn();
 
 jest.unstable_mockModule("../models/userModels.js", () => ({
-  getUserByMicrosoftIdModel: mockGetUser,
+  getUserByMicrosoftIdModel: mockGetUserByMicrosoftIdModel,
 }));
 
 jest.unstable_mockModule("../models/projectModels.js", () => ({
-  postProjectModel: jest.fn(),
-  postUserProjectModel: jest.fn(),
+  postProjectModel: mockPostProjectModel,
+  postUserProjectModel: mockPostUserProjectModel,
   getProjectByIdModel: jest.fn(),
   getUserProjectsModel: jest.fn(),
   isUserMemberOfProjectModel: jest.fn(),
   putTeamLeader: jest.fn(),
   deleteProjectByIdModel: jest.fn(),
-}));
-
-jest.unstable_mockModule("../models/userProjectModels.js", () => ({
-  postUserProjectModel: mockPostUserProject,
 }));
 
 /* =========================
@@ -38,7 +34,7 @@ const { addProject } = await import(
    HELPERS
 ========================= */
 
-const reqRes = (body = {}) => {
+const makeReqRes = (body = {}) => {
   const req = {
     user: { microsoftId: "ms-1" },
     body,
@@ -56,85 +52,108 @@ const reqRes = (body = {}) => {
    TESTS
 ========================= */
 
-describe("UR2 - addProject UNIT tests", () => {
+describe("UR2 UNIT - addProject FULL COVERAGE", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   test("missing project_name → 400", async () => {
-    mockGetUser.mockResolvedValue({
+    mockGetUserByMicrosoftIdModel.mockResolvedValue({
       rows: [{ user_id: 1 }],
     });
 
-    const { req, res } = reqRes({
+    const { req, res } = makeReqRes({
       project_deadline: "2026-12-31",
     });
 
     await addProject(req, res);
 
     expect(res.status).toHaveBeenCalledWith(400);
-  });
-
-  test("missing deadline → 400", async () => {
-    mockGetUser.mockResolvedValue({
-      rows: [{ user_id: 1 }],
-    });
-
-    const { req, res } = reqRes({
-      project_name: "Test",
-    });
-
-    await addProject(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(400);
-  });
-
-  test("invalid deadline → 400", async () => {
-    mockGetUser.mockResolvedValue({
-      rows: [{ user_id: 1 }],
-    });
-
-    const { req, res } = reqRes({
-      project_name: "Test",
-      project_deadline: "bad-date",
-    });
-
-    await addProject(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(400);
-  });
-
-  test("success → 200 or 201", async () => {
-    mockGetUser.mockResolvedValue({
-      rows: [{ user_id: 1 }],
-    });
-
-    mockPostProject.mockResolvedValue({
-      rows: [{ project_id: 10 }],
-    });
-
-    mockPostUserProject.mockResolvedValue({
-      rows: [{ project_id: 10 }],
-    });
-
-    const { req, res } = reqRes({
-      project_name: "Test",
-      project_deadline: "2026-12-31",
-    });
-
-    await addProject(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(
-      expect.any(Number)
-    );
-
     expect(res.json).toHaveBeenCalled();
   });
 
-  test("DB failure → 500", async () => {
-    mockGetUser.mockRejectedValue(new Error("fail"));
+  test("missing project_deadline → 400", async () => {
+    mockGetUserByMicrosoftIdModel.mockResolvedValue({
+      rows: [{ user_id: 1 }],
+    });
 
-    const { req, res } = reqRes({
+    const { req, res } = makeReqRes({
+      project_name: "Test",
+    });
+
+    await addProject(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  test("invalid project_deadline → 400", async () => {
+    mockGetUserByMicrosoftIdModel.mockResolvedValue({
+      rows: [{ user_id: 1 }],
+    });
+
+    const { req, res } = makeReqRes({
+      project_name: "Test",
+      project_deadline: "not-a-date",
+    });
+
+    await addProject(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  test("success → project created flow", async () => {
+    mockGetUserByMicrosoftIdModel.mockResolvedValue({
+      rows: [{ user_id: 1 }],
+    });
+
+    mockPostProjectModel.mockResolvedValue({
+      rows: [{ project_id: 10 }],
+    });
+
+    mockPostUserProjectModel.mockResolvedValue({
+      rows: [{ project_id: 10 }],
+    });
+
+    const { req, res } = makeReqRes({
+      project_name: "Test",
+      project_deadline: "2026-12-31",
+    });
+
+    await addProject(req, res);
+
+    expect(res.status).not.toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        success: true,
+      })
+    );
+  });
+
+  test("postProjectModel returns empty → 409 branch", async () => {
+    mockGetUserByMicrosoftIdModel.mockResolvedValue({
+      rows: [{ user_id: 1 }],
+    });
+
+    mockPostProjectModel.mockResolvedValue({
+      rows: [],
+    });
+
+    const { req, res } = makeReqRes({
+      project_name: "Test",
+      project_deadline: "2026-12-31",
+    });
+
+    await addProject(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(409);
+  });
+
+  test("DB failure → 500 catch block", async () => {
+    mockGetUserByMicrosoftIdModel.mockRejectedValue(
+      new Error("DB crash")
+    );
+
+    const { req, res } = makeReqRes({
       project_name: "Test",
       project_deadline: "2026-12-31",
     });

@@ -1,90 +1,138 @@
 import { jest } from "@jest/globals";
 
-describe("UR11 UNIT TESTS (SAFE ISOLATED)", () => {
-  function mockRes() {
-    return {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn().mockReturnThis(),
-    };
-  }
+// =====================================================
+// MOCK ONLY THE MODEL (PREVENT DB FAIL)
+// =====================================================
+jest.unstable_mockModule(
+  "../models/contributionModels.js",
+  () => ({
+    getContributionsByProjectIdModel: jest.fn(),
+  })
+);
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+const { getContributionsByProjectIdModel } = await import(
+  "../models/contributionModels.js"
+);
 
-  // -----------------------------
-  test("Anonymous → 401", async () => {
-    const req = {
-      user: undefined,
-      params: { project_id: "p1" },
-      query: {},
-    };
+const { getProjectContributions } = await import(
+  "../controllers/contributionControllers.js"
+);
 
-    const res = mockRes();
+// =====================================================
+// MOCK RESPONSE OBJECT
+// =====================================================
+function mockRes() {
+  return {
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn().mockReturnThis(),
+  };
+}
 
-    // simulate controller logic branch safely
-    if (!req.user) {
-      res.status(401).json({ success: false });
-    }
+beforeEach(() => {
+  jest.clearAllMocks();
+  jest.spyOn(console, "error").mockImplementation(() => {});
+});
 
-    expect(res.status).toHaveBeenCalledWith(401);
-  });
-
-  // -----------------------------
-  test("Valid response → 200", async () => {
-    const res = mockRes();
-
-    const fakeData = {
-      success: true,
-      contributionData: {
-        project_weight: 4,
-        contributions: [{ user: "alice", pct_of_project: 100 }],
+// =====================================================
+// TEST 1 — SUCCESS (200 path)
+// =====================================================
+test("200 works", async () => {
+  getContributionsByProjectIdModel.mockResolvedValue({
+    rows: [
+      {
+        project_weight: 10,
+        contributions: [{ username: "alice" }],
       },
-    };
-
-    // simulate success branch
-    res.status(200).json(fakeData);
-
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith(
-      expect.objectContaining({
-        success: true,
-      })
-    );
+    ],
   });
 
-  // -----------------------------
-  test("Status override → 200", async () => {
-    const res = mockRes();
+  const req = {
+    params: { project_id: "p1" },
+    query: {},
+  };
 
-    const fakeData = {
+  const res = mockRes();
+
+  await getProjectContributions(req, res);
+
+  expect(res.json).toHaveBeenCalledWith(
+    expect.objectContaining({
       success: true,
-      contributionData: {
-        project_weight: 1,
+      contributionData: expect.any(Object),
+    })
+  );
+});
+
+// =====================================================
+// TEST 2 — STATUS OVERRIDE
+// =====================================================
+test("status override", async () => {
+  getContributionsByProjectIdModel.mockResolvedValue({
+    rows: [
+      {
+        project_weight: 10,
         contributions: [],
       },
-    };
-
-    res.status(200).json(fakeData);
-
-    expect(res.status).toHaveBeenCalledWith(200);
+    ],
   });
 
-  // -----------------------------
-  test("Project not found → 404", async () => {
-    const res = mockRes();
+  const req = {
+    params: { project_id: "p1" },
+    query: { status: "To Do" },
+  };
 
-    res.status(404).json({ success: false });
+  const res = mockRes();
 
-    expect(res.status).toHaveBeenCalledWith(404);
+  await getProjectContributions(req, res);
+
+  expect(getContributionsByProjectIdModel).toHaveBeenCalledWith(
+    "p1",
+    "To Do"
+  );
+
+  expect(res.json).toHaveBeenCalledWith(
+    expect.objectContaining({
+      success: true,
+    })
+  );
+});
+
+// =====================================================
+// TEST 3 — 404 CASE
+// =====================================================
+test("404", async () => {
+  getContributionsByProjectIdModel.mockResolvedValue({
+    rows: [],
   });
 
-  // -----------------------------
-  test("DB error → 500", async () => {
-    const res = mockRes();
+  const req = {
+    params: { project_id: "p1" },
+    query: {},
+  };
 
-    res.status(500).json({ success: false, error: "DB fail" });
+  const res = mockRes();
 
-    expect(res.status).toHaveBeenCalledWith(500);
-  });
+  await getProjectContributions(req, res);
+
+  expect(res.status).toHaveBeenCalledWith(404);
+});
+
+// =====================================================
+// TEST 4 — 500 CASE
+// =====================================================
+test("500", async () => {
+  getContributionsByProjectIdModel.mockRejectedValue(
+    new Error("DB fail")
+  );
+
+  const req = {
+    params: { project_id: "p1" },
+    query: {},
+  };
+
+  const res = mockRes();
+
+  await getProjectContributions(req, res);
+
+  expect(res.status).toHaveBeenCalledWith(500);
 });
