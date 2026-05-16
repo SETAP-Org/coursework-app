@@ -3,6 +3,20 @@ import { postNotificationModel, getNotificationsModel, deleteNotificationModel }
 // function to fetch all user notifications
 export async function fetchNotificationsByUserId(req, res, next) {
     try {
+        if (!req.params) {
+            res.status(400).json({
+                success: false,
+                message: "No request parameters",
+            })
+        }
+
+        if (!req.params.user_id) {
+            res.status(400).json({
+                success: false,
+                message: "No user ID provided",
+            })
+        }
+
         const response = await getNotificationsModel(req.params.user_id);
         const data = await response.rows;
 
@@ -11,11 +25,9 @@ export async function fetchNotificationsByUserId(req, res, next) {
             notifications: data,
         })
     } catch(err) {
-        console.error("Error with fetchNotificationsByUserId:", err);
-
-        res.status(400).json({
+        res.status(500).json({
             success: false,
-            message: err,
+            message: "Database error",
         })
     }
 };
@@ -23,6 +35,20 @@ export async function fetchNotificationsByUserId(req, res, next) {
 // function to delete a notification
 export async function removeNotification(req, res, next) {
     try {
+        if (!req.params) {
+            res.status(400).json({
+                success: false,
+                message: "No request parameters",
+            })
+        }
+
+        if (!req.params.notification_id) {
+            res.status(400).json({
+                success: false,
+                message: "No notification ID provided",
+            })
+        }
+
         const data = await deleteNotificationModel(req.params.notification_id);
 
         if (data.rows.length === 0) {
@@ -37,11 +63,9 @@ export async function removeNotification(req, res, next) {
             })
         }
     } catch(err) {
-        console.error("Error with fetchNotificationsByUserId:", err);
-
-        res.status(400).json({
+        res.status(500).json({
             success: false,
-            message: err,
+            message: "Database error",
         })
     }
 };
