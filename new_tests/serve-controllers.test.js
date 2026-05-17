@@ -203,3 +203,33 @@ describe('serveLanding', () => {
         expect(res.redirect).toHaveBeenCalledWith(expect.stringContaining("/error"));
     });
 });
+
+describe('serveWelcome', () => {
+    test('Should redirect to /welcome when the user has just authenticated', async () => {
+        const { serveWelcome } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+ 
+        const req = {
+            session: {
+                justAuthenticated: true
+            },
+            user: {
+                microsoftId: "myMicrosoftId"
+            }
+        }
+        const res = {
+            render: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await serveWelcome(req, res, next);
+ 
+        expect(req.session.justAuthenticated).toBe(false);
+        expect(res.render).toHaveBeenCalledWith("/welcome");
+        expect(userModels.getUserByMicrosoftIdModel).not.toHaveBeenCalled();
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+    });
+
+    
+});
