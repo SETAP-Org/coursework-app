@@ -13,8 +13,6 @@ beforeAll((done) => {
     server.listen(0, async () => {
         port = server.address().port;
 
-        await query(`TRUNCATE TABLE messages RESTART IDENTITY CASCADE`);
-
         const users = await query(`
             SELECT user_id, username
             FROM users
@@ -36,6 +34,10 @@ beforeAll((done) => {
 
         done();
     });
+});
+
+beforeEach(async () => {
+    await query(`TRUNCATE TABLE messages RESTART IDENTITY CASCADE`);
 });
 
 // after each test, close the server
@@ -185,6 +187,36 @@ describe("Chat socket", () => {
                 AND message_content IS NULL
         `, [aliceId, projectId]);
 
+        expect(dbResult.rows.length).toBe(0);
+
+        clientA.disconnect();
+    });
+
+    test("chat fails when senderId is missing", async () => {
+        const clientA = new Client(`http://localhost:${port}`);
+
+        await new Promise(res => clientA.on("connect", res));
+
+        const ack = await new Promise((resolve) => {
+            clientA.emit("chat", {
+                projectId,
+                message: "hello world"
+            }, resolve);
+        });
+
+        // expect from ack
+        expect(ack.success).toBe(false);
+        expect(ack.message).toBe("Missing senderId, projectId or message");
+
+        // database query
+        const dbResult = await query(`
+            SELECT *
+            FROM messages
+            WHERE project_id = $1
+                AND message_content = $2
+        `, [projectId, "hello world"]);
+
+            // expect from database
         expect(dbResult.rows.length).toBe(0);
 
         clientA.disconnect();
