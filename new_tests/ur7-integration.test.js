@@ -1,3 +1,5 @@
+// User Requirement 7:  Authenticated users should be able to send and receive messages to and from their project members
+
 import { server } from "../server.js";
 import Client from "socket.io-client";
 import { query } from "../db/connection.js";

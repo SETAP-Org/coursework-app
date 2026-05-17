@@ -60,7 +60,7 @@
   },
   "jest": {
     "testMatch": [
-      "**/new_tests/ur7-integration.test.js"
+      "**/new_tests/ur13-integration.test.js"
     ],
     "testEnvironment": "node",
     "transform": {}

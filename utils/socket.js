@@ -44,30 +44,54 @@ export default function setupSocket(io) {
       }
     });
 
-    socket.on("notification", async (notif) => {
-      for (let i = 0; i < notif.targetUsers.length; i++) {
-        const data = await postNotificationModel(
-          notif.targetUsers[i],
-          notif.projectId || null,
-          notif.notificationType,
-          notif.notificationMessage,
-          notif.targetUsername || null,
-          notif.projectName || null,
-        );
+    socket.on("notification", async (notif, ack) => {
+      try {
+        // return failing ack for invalid notification
+        if (
+            !notif.targetUsers ||
+            !Array.isArray(notif.targetUsers) ||
+            notif.targetUsers.length === 0 ||
+            !notif.notificationType ||
+            !notif.notificationMessage
+        ) {
+            return ack?.({
+                success: false,
+                message: "Missing required notification fields"
+            });
+        }
 
-        console.log(data, 'this is the data');
+        for (let i = 0; i < notif.targetUsers.length; i++) {
+          const data = await postNotificationModel(
+            notif.targetUsers[i],
+            notif.projectId || null,
+            notif.notificationType,
+            notif.notificationMessage,
+            notif.targetUsername || null,
+            notif.projectName || null,
+          );
+  
+          io.emit("notification", {
+            notification: {
+              targetUsers: [notif.targetUsers[i]],
+              notificationId: data.rows[0].notification_id,
+              projectId: notif.projectId,
+              notificationType: notif.notificationType,
+              notificationMessage: notif.notificationMessage,
+              targetUsername: notif.targetUsername || null,
+              projectName: notif.projectName || null,
+            },
+            dbReturn: data.rows[0],
+          });
+        }
 
-        io.emit("notification", {
-          notification: {
-            targetUsers: [notif.targetUsers[i]],
-            notificationId: data.rows[0].notification_id,
-            projectId: notif.projectId,
-            notificationType: notif.notificationType,
-            notificationMessage: notif.notificationMessage,
-            targetUsername: notif.targetUsername || null,
-            projectName: notif.projectName || null,
-          },
-          dbReturn: data.rows[0],
+        ack({
+          success: true,
+          message: "Message sent successfully"
+        });
+      } catch (err) {
+        ack({
+          success: false,
+          message: "Database error"
         });
       }
     });
