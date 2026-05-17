@@ -16,6 +16,11 @@ jest.unstable_mockModule('../models/konvaModels.js', () => ({
     getNotesByProjectId: jest.fn(),
 }));
 
+jest.unstable_mockModule('../models/userProjectModels.js', () => ({
+    ...jest.requireActual('../models/userProjectModels.js'),
+    getUsersByProjectId: jest.fn(),
+}));
+
 describe('redirectUserDash', () => {
     test('Should call the getUserByMicrosoftIdModel() function and redirect to /:username when a valid Microsoft ID is given', async () => {
         const { redirectUserDash } = await import('../controllers/serveControllers.js');
@@ -924,4 +929,66 @@ describe('serveProjectDash', () => {
         projectModels.getProjectByIdModel.mockReset();
         konvaModels.getNotesByProjectId.mockReset();
     });
+});
+
+describe('serveProjectInfo', () => {
+    test('Should render the projectInfo page with isTeamLeader: true when the user is the team leader', async () => {
+        const { serveProjectInfo } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+        const projectModels = await import('../models/projectModels.js');
+        const userProjectModels = await import('../models/userProjectModels.js');
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [{ user_id: 1 }] });
+        projectModels.getProjectByIdModel.mockResolvedValue({
+            rows: [{
+                project_id: 1,
+                project_name: "Project A",
+                created_by: 1,
+                team_leader_id: 1,
+                deadline: "2026-12-31"
+            }]
+        });
+        userProjectModels.getUsersByProjectId.mockResolvedValue({ rows: [{ user_id: 1, username: "johndoe" }] });
+ 
+        const req = {
+            user: {
+                microsoftId: "myMicrosoftId"
+            },
+            params: {
+                username: "johndoe",
+                project_id: "1"
+            },
+            session: {
+                project: {
+                    team_leader_id: 1
+                }
+            }
+        }
+        const res = {
+            render: jest.fn(),
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await serveProjectInfo(req, res, next);
+ 
+        expect(userModels.getUserByMicrosoftIdModel).toHaveBeenCalled();
+        expect(projectModels.getProjectByIdModel).toHaveBeenCalled();
+        expect(userProjectModels.getUsersByProjectId).toHaveBeenCalled();
+        expect(res.render).toHaveBeenCalledWith("projectInfo", expect.objectContaining({
+            userId: 1,
+            username: "johndoe",
+            projectId: "1",
+            projectName: "Project A",
+            isTeamLeader: true,
+            projectMembers: expect.arrayContaining([
+                expect.objectContaining({ user_id: 1 })
+            ])
+        }));
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+        projectModels.getProjectByIdModel.mockReset();
+        userProjectModels.getUsersByProjectId.mockReset();
+    });
+
+
 });
