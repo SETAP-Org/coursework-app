@@ -41,60 +41,120 @@ afterAll((done) => {
     server.close(() => done());
 });
 
-test("message is delivered between users and saved in DB", async () => {
-    // connect clients
-    const clientA = new Client(`http://localhost:${port}`);
-    const clientB = new Client(`http://localhost:${port}`);
-
-    await Promise.all([
-        new Promise(res => clientA.on("connect", res)),
-        new Promise(res => clientB.on("connect", res)),
-    ]);
-
-    // listen for broadcast
-    const receivedPromise = new Promise((resolve) => {
-        clientB.on("chat", resolve);
-    });
-
-    // send message and capture ack
-    const ack = await new Promise((resolve) => {
-        clientA.emit("chat", {
-            senderId: aliceId,
-            projectId,
-            message: "hello world"
-        }, resolve);
-    });
-
-    // wait for broadcast
-    const received = await receivedPromise;
-
-    // expects from socket
-    expect(received.sender_id).toBe(aliceId);
-    expect(received.project_id).toBe(projectId);
-    expect(received.message_content).toBe("hello world");
-    expect(ack.success).toBe(true);
-    expect(ack.message).toBe("Message sent successfully");
-
-    // database check
-    const dbResult = await query(`
-        SELECT *
-        FROM messages
-        WHERE sender_id = $1
-            AND project_id = $2
-            AND message_content = $3
-        ORDER BY m_date_sent DESC
-        LIMIT 1;
-    `, [aliceId, projectId, "hello world"]);
-
-    const dbMessage = dbResult.rows[0];
-
-    // expects from database
-    expect(dbResult.rows.length).toBe(1);
-    expect(dbMessage.sender_id).toBe(aliceId);
-    expect(dbMessage.project_id).toBe(projectId);
-    expect(dbMessage.message_content).toBe("hello world");
+describe("Chat socket", () => {
+    test("message is delivered between users and saved in DB", async () => {
+        // connect clients
+        const clientA = new Client(`http://localhost:${port}`);
+        const clientB = new Client(`http://localhost:${port}`);
     
-    // disconnect clients from socket
-    clientA.disconnect();
-    clientB.disconnect();
-});
+        await Promise.all([
+            new Promise(res => clientA.on("connect", res)),
+            new Promise(res => clientB.on("connect", res)),
+        ]);
+    
+        // listen for broadcast
+        const receivedPromise = new Promise((resolve) => {
+            clientB.on("chat", resolve);
+        });
+    
+        // send message and capture ack
+        const ack = await new Promise((resolve) => {
+            clientA.emit("chat", {
+                senderId: aliceId,
+                projectId,
+                message: "hello world"
+            }, resolve);
+        });
+    
+        // wait for broadcast
+        const received = await receivedPromise;
+    
+        // expects from socket
+        expect(received.sender_id).toBe(aliceId);
+        expect(received.project_id).toBe(projectId);
+        expect(received.message_content).toBe("hello world");
+        expect(ack.success).toBe(true);
+        expect(ack.message).toBe("Message sent successfully");
+    
+        // database check
+        const dbResult = await query(`
+            SELECT *
+            FROM messages
+            WHERE sender_id = $1
+                AND project_id = $2
+                AND message_content = $3
+            ORDER BY m_date_sent DESC
+            LIMIT 1;
+        `, [aliceId, projectId, "hello world"]);
+    
+        const dbMessage = dbResult.rows[0];
+    
+        // expects from database
+        expect(dbResult.rows.length).toBe(1);
+        expect(dbMessage.sender_id).toBe(aliceId);
+        expect(dbMessage.project_id).toBe(projectId);
+        expect(dbMessage.message_content).toBe("hello world");
+        
+        // disconnect clients from socket
+        clientA.disconnect();
+        clientB.disconnect();
+    });
+
+    test("chat fails when senderId is invalid", async () => {
+        const clientA = new Client(`http://localhost:${port}`);
+
+        await new Promise(res => clientA.on("connect", res));
+
+        const ack = await new Promise((resolve) => {
+            clientA.emit("chat", {
+                senderId: "invalid-user-id",
+                projectId,
+                message: "this should fail"
+            }, resolve);
+        });
+
+        // ack assertions
+        expect(ack.success).toBe(false);
+        expect(ack.message).toBe("Database error");
+
+        // db assertion (no insert)
+        const dbResult = await query(`
+            SELECT *
+            FROM messages
+            WHERE message_content = $1;
+        `, ["this should fail"]);
+
+        expect(dbResult.rows.length).toBe(0);
+
+        clientA.disconnect();
+    });
+
+    test("chat fails when projectId is invalid", async () => {
+        const clientA = new Client(`http://localhost:${port}`);
+
+        await new Promise(res => clientA.on("connect", res));
+
+        const ack = await new Promise((resolve) => {
+            clientA.emit("chat", {
+                senderId: aliceId,
+                projectId: "Invalid project ID",
+                message: "this should fail"
+            }, resolve);
+        });
+
+        // ack assertions
+        expect(ack.success).toBe(false);
+        expect(ack.message).toBe("Database error");
+
+        // db assertion (no insert)
+        const dbResult = await query(`
+            SELECT *
+            FROM messages
+            WHERE message_content = $1;
+        `, ["this should fail"]);
+
+        expect(dbResult.rows.length).toBe(0);
+
+        clientA.disconnect();
+    });
+})
