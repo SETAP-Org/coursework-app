@@ -257,5 +257,27 @@ describe('serveWelcome', () => {
         userModels.getUserByMicrosoftIdModel.mockReset();
     });
 
+    test('Should redirect to / when there is no user in the session', async () => {
+        const { serveWelcome } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+ 
+        const req = {
+            session: {
+                justAuthenticated: false
+            }
+        }
+        const res = {
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await serveWelcome(req, res, next);
+ 
+        expect(userModels.getUserByMicrosoftIdModel).not.toHaveBeenCalled();
+        expect(res.redirect).toHaveBeenCalledWith("/");
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+    });
+
     
 });
