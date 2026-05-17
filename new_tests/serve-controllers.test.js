@@ -467,3 +467,40 @@ describe('serveUserDash', () => {
         projectModels.getUserProjectsModel.mockReset();
     });
 });
+
+describe('serveProfile', () => {
+    test('Should call the getUserByMicrosoftIdModel() function and render the profile page when a valid session user is given', async () => {
+        const { serveProfile } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [{ user_id: 1, username: "johndoe", email_notifications: true }] });
+ 
+        const req = {
+            user: {
+                microsoftId: "myMicrosoftId",
+                firstName: "John"
+            },
+            params: {
+                username: "johndoe"
+            }
+        }
+        const res = {
+            render: jest.fn(),
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await serveProfile(req, res, next);
+ 
+        expect(userModels.getUserByMicrosoftIdModel).toHaveBeenCalled();
+        expect(res.render).toHaveBeenCalledWith("profile", expect.objectContaining({
+            userFirstName: "John",
+            username: "johndoe",
+            userId: 1,
+            emailNotifications: true
+        }));
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+    });
+
+    
+});
