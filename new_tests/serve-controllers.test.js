@@ -1406,5 +1406,41 @@ describe('serveProjectCalendar', () => {
         meetingModels.getMeetingsByProjectIdModel.mockReset();
     });
 
-    
+test('Should redirect to /error when one of the underlying models fails', async () => {
+        const { serveProjectCalendar } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+        const projectModels = await import('../models/projectModels.js');
+        const userProjectModels = await import('../models/userProjectModels.js');
+        const meetingModels = await import('../models/meetingModels.js');
+ 
+        // mock model to give error
+        userModels.getUserByMicrosoftIdModel.mockImplementation(() => {
+            throw new Error('DB Error');
+        });
+ 
+        const req = {
+            user: {
+                microsoftId: "myMicrosoftId"
+            },
+            params: {
+                username: "johndoe",
+                project_id: "1"
+            }
+        }
+        const res = {
+            render: jest.fn(),
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await serveProjectCalendar(req, res, next);
+ 
+        expect(res.render).not.toHaveBeenCalled();
+        expect(res.redirect).toHaveBeenCalledWith(expect.stringContaining("/error"));
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+        projectModels.getProjectByIdModel.mockReset();
+        userProjectModels.getUsersByProjectId.mockReset();
+        meetingModels.getMeetingsByProjectIdModel.mockReset();
+    });
 });
