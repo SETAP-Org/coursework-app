@@ -2,31 +2,15 @@ import { jest } from "@jest/globals";
 import express from "express";
 import request from "supertest";
 
-// =====================
-// TASK MODEL MOCKS
-// =====================
-
 const mockPostTask = jest.fn();
 const mockDeleteTask = jest.fn();
 const mockGetTaskById = jest.fn();
 const mockUpdateTaskStatus = jest.fn();
 const mockGetTasksByProjectId = jest.fn();
 
-// =====================
-// USER MODEL MOCKS
-// =====================
-
 const mockGetUser = jest.fn();
 
-// =====================
-// PROJECT MODEL MOCKS
-// =====================
-
 const mockGetProject = jest.fn();
-
-// =====================
-// MOCK TASK MODELS
-// =====================
 
 jest.unstable_mockModule("../models/taskModels.js", () => ({
   postTaskModel: mockPostTask,
@@ -36,14 +20,9 @@ jest.unstable_mockModule("../models/taskModels.js", () => ({
   getTasksByProjectIdModel: mockGetTasksByProjectId,
 }));
 
-// =====================
-// MOCK USER MODELS
-// =====================
-
 jest.unstable_mockModule("../models/userModels.js", () => ({
   getUserByMicrosoftIdModel: mockGetUser,
 
-  // BULLETPROOF EXPORTS
   getUserByUsernameModel: jest.fn(),
   putEmailNotificationPreferenceModel: jest.fn(),
   postUserModel: jest.fn(),
@@ -51,10 +30,6 @@ jest.unstable_mockModule("../models/userModels.js", () => ({
   updateUserModel: jest.fn(),
   deleteUserModel: jest.fn(),
 }));
-
-// =====================
-// MOCK PROJECT MODELS
-// =====================
 
 jest.unstable_mockModule("../models/projectModels.js", () => ({
   getProjectByIdModel: mockGetProject,
@@ -67,10 +42,6 @@ jest.unstable_mockModule("../models/projectModels.js", () => ({
   putTeamLeader: jest.fn(),
   deleteProjectByIdModel: jest.fn(),
 }));
-
-// =====================
-// MOCK PROJECT CONTROLLERS (MIDDLEWARE)
-// =====================
 
 jest.unstable_mockModule("../controllers/projectControllers.js", () => ({
   isAuthenticated: (req, res, next) => {
@@ -85,26 +56,14 @@ jest.unstable_mockModule("../controllers/projectControllers.js", () => ({
   },
 }));
 
-// =====================
-// IMPORT ROUTER AFTER MOCKS
-// =====================
-
 const { default: taskRoutes } = await import(
   "../routes/taskRoutes.js"
 );
-
-// =====================
-// MINI EXPRESS APP
-// =====================
 
 const app = express();
 
 app.use(express.json());
 app.use("/api", taskRoutes);
-
-// =====================
-// TEST DATA
-// =====================
 
 const projectId =
   "00000000-0000-0000-0000-000000000001";
@@ -119,10 +78,6 @@ const validTask = {
   taskDeadline: "2099-12-31",
   taskAssignee: "u1",
 };
-
-// =====================
-// GLOBAL SETUP
-// =====================
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -170,15 +125,7 @@ beforeEach(() => {
   });
 });
 
-// =====================
-// TESTS
-// =====================
-
 describe("UR5 TASK INTEGRATION - BULLETPROOF", () => {
-
-  // =====================
-  // ADD TASK
-  // =====================
 
   test("addTask success", async () => {
     const res = await request(app)
@@ -257,10 +204,6 @@ describe("UR5 TASK INTEGRATION - BULLETPROOF", () => {
     expect(res.statusCode).toBe(404);
   });
 
-  // =====================
-  // GET TASKS
-  // =====================
-
   test("getProjectTasks success", async () => {
     const res = await request(app)
       .get(`/api/projects/${projectId}/tasks`);
@@ -268,10 +211,6 @@ describe("UR5 TASK INTEGRATION - BULLETPROOF", () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
   });
-
-  // =====================
-  // UPDATE TASK STATUS
-  // =====================
 
   test("updateTaskStatus success", async () => {
     const res = await request(app)
@@ -332,10 +271,6 @@ describe("UR5 TASK INTEGRATION - BULLETPROOF", () => {
 
     expect(res.statusCode).toBe(403);
   });
-
-  // =====================
-  // DELETE TASK
-  // =====================
 
   test("deleteTask success", async () => {
     const res = await request(app)

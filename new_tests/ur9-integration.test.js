@@ -1,8 +1,5 @@
 import { jest } from "@jest/globals";
 
-// =========================================================
-// 1. MOCK FIRST (MUST BE BEFORE ANY IMPORTS)
-// =========================================================
 await jest.unstable_mockModule("../models/konvaModels.js", () => ({
   postNoteToDB: jest.fn(async (projectId, text, x, y) => ({
     rows: [
@@ -42,18 +39,12 @@ await jest.unstable_mockModule("../models/konvaModels.js", () => ({
   })),
 }));
 
-// =========================================================
-// 2. IMPORTS (AFTER MOCKS)
-// =========================================================
 const express = (await import("express")).default;
 const request = (await import("supertest")).default;
 const session = (await import("express-session")).default;
 const bodyParser = (await import("body-parser")).default;
 const notesRouter = (await import("../routes/noteRoutes.js")).default;
 
-// =========================================================
-// 3. APP SETUP
-// =========================================================
 const app = express();
 const emptyApp = express();
 
@@ -79,9 +70,6 @@ function setupApp(instance, projectId = 1) {
 setupApp(app, 1);
 setupApp(emptyApp, null);
 
-// =========================================================
-// 4. TESTS (FULL UR9 RESTORED)
-// =========================================================
 describe("UR9 - Konva Widget Integration Tests (NO ROUTE CHANGES)", () => {
 
   // ---------------- POST ----------------

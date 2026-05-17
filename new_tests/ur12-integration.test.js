@@ -13,7 +13,6 @@ describe("INTEGRATION TESTS - postNotificationModel", () => {
   let allowedTypes = [];
 
   beforeAll(async () => {
-    // 🔥 fetch valid enum values from DB
     const enumRes = await query(`
       SELECT unnest(enum_range(NULL::notification_type)) AS type;
     `);

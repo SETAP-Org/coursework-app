@@ -1,9 +1,5 @@
 import { jest } from "@jest/globals";
 
-/* =========================
-   SAFE MOCKS (always valid shape)
-========================= */
-
 const mockPostTask = jest.fn();
 const mockDeleteTask = jest.fn();
 const mockGetUser = jest.fn();
@@ -11,10 +7,6 @@ const mockIsMember = jest.fn();
 const mockGetProject = jest.fn();
 const mockGetTaskById = jest.fn();
 const mockUpdateTaskStatus = jest.fn();
-
-/* =========================
-   MODULE MOCKING
-========================= */
 
 jest.unstable_mockModule("../models/taskModels.js", () => ({
   postTaskModel: mockPostTask,
@@ -33,17 +25,10 @@ jest.unstable_mockModule("../models/userModels.js", () => ({
   getUserByMicrosoftIdModel: mockGetUser,
 }));
 
-/* =========================
-   IMPORT CONTROLLER AFTER MOCKS
-========================= */
 
 const { addTask, deleteTask } = await import(
   "../controllers/taskControllers.js"
 );
-
-/* =========================
-   HELPERS
-========================= */
 
 const makeReqRes = (overrides = {}) => {
   const req = {
@@ -65,10 +50,6 @@ const makeReqRes = (overrides = {}) => {
   return { req, res };
 };
 
-/* =========================
-   TESTS
-========================= */
-
 describe("UR5 TASK UNIT TESTS - FIXED FULL COVERAGE", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -86,10 +67,6 @@ describe("UR5 TASK UNIT TESTS - FIXED FULL COVERAGE", () => {
       rows: [{ is_member: true }],
     });
   });
-
-  /* =========================
-     ADD TASK
-  ========================= */
 
   test("success path hits model", async () => {
     mockPostTask.mockResolvedValue({
@@ -152,10 +129,6 @@ describe("UR5 TASK UNIT TESTS - FIXED FULL COVERAGE", () => {
 
     expect(res.status).toHaveBeenCalledWith(500);
   });
-
-  /* =========================
-     DELETE TASK
-  ========================= */
 
   test("delete success path hits model", async () => {
     mockDeleteTask.mockResolvedValue({

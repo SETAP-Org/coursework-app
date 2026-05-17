@@ -1,9 +1,5 @@
 import { jest } from "@jest/globals";
 
-/* =========================
-   MOCKS (MUST MATCH CONTROLLER IMPORTS)
-========================= */
-
 const mockGetUserByMicrosoftIdModel = jest.fn();
 const mockPostProjectModel = jest.fn();
 const mockPostUserProjectModel = jest.fn();
@@ -22,17 +18,9 @@ jest.unstable_mockModule("../models/projectModels.js", () => ({
   deleteProjectByIdModel: jest.fn(),
 }));
 
-/* =========================
-   IMPORT AFTER MOCKS
-========================= */
-
 const { addProject } = await import(
   "../controllers/projectControllers.js"
 );
-
-/* =========================
-   HELPERS
-========================= */
 
 const makeReqRes = (body = {}) => {
   const req = {
@@ -47,10 +35,6 @@ const makeReqRes = (body = {}) => {
 
   return { req, res };
 };
-
-/* =========================
-   TESTS
-========================= */
 
 describe("UR2 UNIT - addProject FULL COVERAGE", () => {
   beforeEach(() => {
