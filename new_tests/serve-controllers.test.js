@@ -1722,5 +1722,47 @@ describe('serveProjectContributions', () => {
         contributionModels.getContributionsByProjectIdModel.mockReset();
     });
 
+    test('Should render the projectContributions page with isTeamLeader: false when the user is not the team leader', async () => {
+        const { serveProjectContributions } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+        const projectModels = await import('../models/projectModels.js');
+        const contributionModels = await import('../models/contributionModels.js');
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [{ user_id: 2 }] });
+        projectModels.getProjectByIdModel.mockResolvedValue({
+            rows: [{ project_id: 1, project_name: "Project A" }]
+        });
+        contributionModels.getContributionsByProjectIdModel.mockResolvedValue({ rows: [{}] });
+ 
+        const req = {
+            user: {
+                microsoftId: "myMicrosoftId"
+            },
+            params: {
+                username: "johndoe",
+                project_id: "1"
+            },
+            session: {
+                project: {
+                    team_leader_id: 1
+                }
+            }
+        }
+        const res = {
+            render: jest.fn(),
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await serveProjectContributions(req, res, next);
+ 
+        expect(res.render).toHaveBeenCalledWith("projectContributions", expect.objectContaining({
+            isTeamLeader: false
+        }));
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+        projectModels.getProjectByIdModel.mockReset();
+        contributionModels.getContributionsByProjectIdModel.mockReset();
+    });
+    
     
 });
