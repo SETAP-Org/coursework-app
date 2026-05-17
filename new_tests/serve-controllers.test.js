@@ -36,6 +36,11 @@ jest.unstable_mockModule('../models/chatModels.js', () => ({
     getMessagesByProjectIdModel: jest.fn(),
 }));
 
+jest.unstable_mockModule('../models/contributionModels.js', () => ({
+    ...jest.requireActual('../models/contributionModels.js'),
+    getContributionsByProjectIdModel: jest.fn(),
+}));
+
 describe('redirectUserDash', () => {
     test('Should call the getUserByMicrosoftIdModel() function and redirect to /:username when a valid Microsoft ID is given', async () => {
         const { redirectUserDash } = await import('../controllers/serveControllers.js');
@@ -1664,4 +1669,58 @@ describe('serveProjectNotes', () => {
  
         userModels.getUserByMicrosoftIdModel.mockReset();
     });
+});
+
+describe('serveProjectContributions', () => {
+    test('Should render the projectContributions page with isTeamLeader: true when the user is the team leader', async () => {
+        const { serveProjectContributions } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+        const projectModels = await import('../models/projectModels.js');
+        const contributionModels = await import('../models/contributionModels.js');
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [{ user_id: 1 }] });
+        projectModels.getProjectByIdModel.mockResolvedValue({
+            rows: [{ project_id: 1, project_name: "Project A" }]
+        });
+        contributionModels.getContributionsByProjectIdModel.mockResolvedValue({
+            rows: [{ user_id: 1, contribution: 50 }]
+        });
+ 
+        const req = {
+            user: {
+                microsoftId: "myMicrosoftId"
+            },
+            params: {
+                username: "johndoe",
+                project_id: "1"
+            },
+            session: {
+                project: {
+                    team_leader_id: 1
+                }
+            }
+        }
+        const res = {
+            render: jest.fn(),
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await serveProjectContributions(req, res, next);
+ 
+        expect(contributionModels.getContributionsByProjectIdModel).toHaveBeenCalled();
+        expect(res.render).toHaveBeenCalledWith("projectContributions", expect.objectContaining({
+            username: "johndoe",
+            userId: 1,
+            projectId: 1,
+            projectName: "Project A",
+            contributionData: { user_id: 1, contribution: 50 },
+            isTeamLeader: true
+        }));
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+        projectModels.getProjectByIdModel.mockReset();
+        contributionModels.getContributionsByProjectIdModel.mockReset();
+    });
+
+    
 });
