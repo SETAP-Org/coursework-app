@@ -1764,5 +1764,41 @@ describe('serveProjectContributions', () => {
         contributionModels.getContributionsByProjectIdModel.mockReset();
     });
     
+    test('Should redirect to /error when one of the underlying models fails', async () => {
+        const { serveProjectContributions } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+        const projectModels = await import('../models/projectModels.js');
+        const contributionModels = await import('../models/contributionModels.js');
+ 
+        // mock model to give error
+        userModels.getUserByMicrosoftIdModel.mockImplementation(() => {
+            throw new Error('DB Error');
+        });
+ 
+        const req = {
+            user: {
+                microsoftId: "myMicrosoftId"
+            },
+            params: {
+                username: "johndoe",
+                project_id: "1"
+            }
+        }
+        const res = {
+            render: jest.fn(),
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await serveProjectContributions(req, res, next);
+ 
+        expect(res.render).not.toHaveBeenCalled();
+        expect(res.redirect).toHaveBeenCalledWith(expect.stringContaining("/error"));
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+        projectModels.getProjectByIdModel.mockReset();
+        contributionModels.getContributionsByProjectIdModel.mockReset();
+    });
+
     
 });
