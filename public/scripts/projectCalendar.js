@@ -126,6 +126,8 @@ function projectCalendar() {
           projectId: projectId,
           notificationType: "Meeting",
           notificationMessage: `${username} set a new meeting in ${projectName}`,
+        }, (ack) => {
+          if (!ack.success) alert(ack.message);
         });
 
         dialogForm.reset();

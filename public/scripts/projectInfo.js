@@ -126,6 +126,8 @@ leaveDialogYesBtn.addEventListener("click", async () => {
                 projectId: projectId,
                 notificationType: "Member Leave",
                 notificationMessage: `${username} has left ${projectName}`,
+            }, (ack) => {
+                if (!ack.success) alert(ack.message);
             });
 
             // update and show secondary dialog
@@ -230,6 +232,8 @@ if (teamLeaderId === userId) {
                     notificationMessage: `${addUserInputValue} has been added added to ${projectName}`,
                     targetUsername: addUserInputValue,
                     projectName: projectName
+                }, (ack) => {
+                    if (!ack.success) alert(ack.message);
                 });
 
                 // load the secondary dialog
@@ -296,6 +300,8 @@ if (teamLeaderId === userId) {
                 notificationMessage: `${teamLeaderSelect.options[teamLeaderSelect.selectedIndex].text} has been made the team leader of ${projectName}`,
                 targetUsername: teamLeaderSelect.options[teamLeaderSelect.selectedIndex].text,
                 projectName: projectName,
+            }, (ack) => {
+                if (!ack.success) alert(ack.message);
             });
 
             // update and show the secondary dialog
@@ -348,6 +354,8 @@ if (teamLeaderId === userId) {
                     .map(u => u.user_id),
                 notificationType: "Project",
                 notificationMessage: `${projectName} has been deleted`,
+            }, (ack) => {
+                if (!ack.success) alert(ack.message);
             });
 
             // update and show the secondary dialog
