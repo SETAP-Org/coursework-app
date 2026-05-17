@@ -1505,4 +1505,50 @@ describe('serveProjectChat', () => {
         userProjectModels.getUsersByProjectId.mockReset();
     });
 
+     test('Should render the projectChat page with isTeamLeader: false when the user is not the team leader', async () => {
+        const { serveProjectChat } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+        const projectModels = await import('../models/projectModels.js');
+        const chatModels = await import('../models/chatModels.js');
+        const userProjectModels = await import('../models/userProjectModels.js');
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [{ user_id: 1 }] });
+        projectModels.getProjectByIdModel.mockResolvedValue({
+            rows: [{ project_id: 1, project_name: "Project A" }]
+        });
+        chatModels.getMessagesByProjectIdModel.mockResolvedValue({ rows: [] });
+        userProjectModels.getUsersByProjectId.mockResolvedValue({ rows: [] });
+ 
+        const req = {
+            user: {
+                microsoftId: "myMicrosoftId"
+            },
+            params: {
+                username: "johndoe",
+                project_id: "1"
+            },
+            session: {
+                project: {
+                    team_leader_id: 999
+                }
+            }
+        }
+        const res = {
+            render: jest.fn(),
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await serveProjectChat(req, res, next);
+ 
+        expect(res.render).toHaveBeenCalledWith("projectChat", expect.objectContaining({
+            isTeamLeader: false
+        }));
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+        projectModels.getProjectByIdModel.mockReset();
+        chatModels.getMessagesByProjectIdModel.mockReset();
+        userProjectModels.getUsersByProjectId.mockReset();
+    });
+
+    
 });
