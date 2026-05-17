@@ -31,6 +31,11 @@ jest.unstable_mockModule('../models/meetingModels.js', () => ({
     getMeetingsByProjectIdModel: jest.fn(),
 }));
 
+jest.unstable_mockModule('../models/chatModels.js', () => ({
+    ...jest.requireActual('../models/chatModels.js'),
+    getMessagesByProjectIdModel: jest.fn(),
+}));
+
 describe('redirectUserDash', () => {
     test('Should call the getUserByMicrosoftIdModel() function and redirect to /:username when a valid Microsoft ID is given', async () => {
         const { redirectUserDash } = await import('../controllers/serveControllers.js');
@@ -1443,4 +1448,61 @@ test('Should redirect to /error when one of the underlying models fails', async 
         userProjectModels.getUsersByProjectId.mockReset();
         meetingModels.getMeetingsByProjectIdModel.mockReset();
     });
+});
+
+describe('serveProjectChat', () => {
+    test('Should render the projectChat page with isTeamLeader: true when the user is the team leader', async () => {
+        const { serveProjectChat } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+        const projectModels = await import('../models/projectModels.js');
+        const chatModels = await import('../models/chatModels.js');
+        const userProjectModels = await import('../models/userProjectModels.js');
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [{ user_id: 1 }] });
+        projectModels.getProjectByIdModel.mockResolvedValue({
+            rows: [{ project_id: 1, project_name: "Project A" }]
+        });
+        chatModels.getMessagesByProjectIdModel.mockResolvedValue({
+            rows: [{ message_id: 1, message: "Hello team!" }]
+        });
+        userProjectModels.getUsersByProjectId.mockResolvedValue({ rows: [{ user_id: 1, username: "johndoe" }] });
+ 
+        const req = {
+            user: {
+                microsoftId: "myMicrosoftId"
+            },
+            params: {
+                username: "johndoe",
+                project_id: "1"
+            },
+            session: {
+                project: {
+                    team_leader_id: 1
+                }
+            }
+        }
+        const res = {
+            render: jest.fn(),
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await serveProjectChat(req, res, next);
+ 
+        expect(chatModels.getMessagesByProjectIdModel).toHaveBeenCalled();
+        expect(userProjectModels.getUsersByProjectId).toHaveBeenCalled();
+        expect(res.render).toHaveBeenCalledWith("projectChat", expect.objectContaining({
+            userId: 1,
+            username: "johndoe",
+            projectId: "1",
+            projectName: "Project A",
+            messages: [{ message_id: 1, message: "Hello team!" }],
+            isTeamLeader: true
+        }));
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+        projectModels.getProjectByIdModel.mockReset();
+        chatModels.getMessagesByProjectIdModel.mockReset();
+        userProjectModels.getUsersByProjectId.mockReset();
+    });
+
 });
