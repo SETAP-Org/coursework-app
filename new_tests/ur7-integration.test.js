@@ -1,6 +1,8 @@
 import { server } from "../server.js";
 import Client from "socket.io-client";
 import { query } from "../db/connection.js";
+import { describe, jest, test } from "@jest/globals";
+
 
 let port;
 
@@ -251,4 +253,32 @@ describe("Chat socket", () => {
 
         clientA.disconnect();
     });
-})
+
+    test("returns database error when DB insert fails", async () => {
+        const clientA = new Client(`http://localhost:${port}`);
+
+        await new Promise(res => clientA.on("connect", res));
+
+        const ack = await new Promise((resolve) => {
+            clientA.emit("chat", {
+                senderId: aliceId,
+                projectId: "invalid-project-id",
+                message: "hello world"
+            }, resolve);
+        });
+
+        expect(ack.success).toBe(false);
+        expect(ack.message).toBe("Database error");
+
+        const dbResult = await query(`
+            SELECT *
+            FROM messages
+            WHERE sender_id = $1
+                AND message_content = $2
+        `, [aliceId, "hello world"]);
+
+        expect(dbResult.rows.length).toBe(0);
+
+        clientA.disconnect();
+    });
+});
