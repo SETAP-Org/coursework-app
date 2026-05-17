@@ -309,3 +309,27 @@ describe('serveWelcome', () => {
         userModels.getUserByMicrosoftIdModel.mockReset();
     });
 });
+
+describe('serveError', () => {
+    test('Should render the error page with the error message from the query string', async () => {
+        const { serveError } = await import('../controllers/serveControllers.js');
+ 
+        const req = {
+            query: {
+                err: "Something went wrong"
+            }
+        }
+        const res = {
+            render: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        serveError(req, res, next);
+ 
+        expect(res.render).toHaveBeenCalledWith("error", {
+            error: "Something went wrong"
+        });
+    });
+
+    
+});
