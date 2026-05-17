@@ -394,5 +394,41 @@ describe('serveUserDash', () => {
         projectModels.getUserProjectsModel.mockReset();
     });
 
+    test('Should redirect to /error when getUserByMicrosoftIdModel() fails', async () => {
+        const { serveUserDash } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+        const projectModels = await import('../models/projectModels.js');
+ 
+        // mock model to give error
+        userModels.getUserByMicrosoftIdModel.mockImplementation(() => {
+            throw new Error('DB Error');
+        });
+ 
+        const req = {
+            user: {
+                microsoftId: "myMicrosoftId",
+                firstName: "John"
+            },
+            params: {
+                username: "johndoe"
+            }
+        }
+        const res = {
+            render: jest.fn(),
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await serveUserDash(req, res, next);
+ 
+        expect(userModels.getUserByMicrosoftIdModel).toHaveBeenCalled();
+        expect(projectModels.getUserProjectsModel).not.toHaveBeenCalled();
+        expect(res.render).not.toHaveBeenCalled();
+        expect(res.redirect).toHaveBeenCalledWith(expect.stringContaining("/error"));
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+        projectModels.getUserProjectsModel.mockReset();
+    });
 
+    
 });
