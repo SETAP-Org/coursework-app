@@ -1799,6 +1799,48 @@ describe('serveProjectContributions', () => {
         projectModels.getProjectByIdModel.mockReset();
         contributionModels.getContributionsByProjectIdModel.mockReset();
     });
+});
+
+describe('serveProjectFiles', () => {
+    test('Should render the projectFiles page with isTeamLeader: true when the route user_id matches the team leader id', async () => {
+        const { serveProjectFiles } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+        const projectModels = await import('../models/projectModels.js');
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [{ user_id: 1 }] });
+        projectModels.getProjectByIdModel.mockResolvedValue({
+            rows: [{ project_id: 1, project_name: "Project A", team_leader_id: "1" }]
+        });
+ 
+        const req = {
+            user: {
+                microsoftId: "myMicrosoftId"
+            },
+            params: {
+                username: "johndoe",
+                project_id: "1",
+                user_id: "1"
+            }
+        }
+        const res = {
+            render: jest.fn(),
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await serveProjectFiles(req, res, next);
+ 
+        expect(projectModels.getProjectByIdModel).toHaveBeenCalled();
+        expect(res.render).toHaveBeenCalledWith("projectFiles", expect.objectContaining({
+            userId: "1",
+            username: "johndoe",
+            projectId: 1,
+            projectName: "Project A",
+            isTeamLeader: true
+        }));
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+        projectModels.getProjectByIdModel.mockReset();
+    });
 
     
 });
