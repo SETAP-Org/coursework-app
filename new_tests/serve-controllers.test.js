@@ -93,6 +93,32 @@ describe('redirectUserDash', () => {
 
         userModels.getUserByMicrosoftIdModel.mockReset();
     });
-
     
+    test('Should redirect to /error when getUserByMicrosoftIdModel() fails', async () => {
+        const { redirectUserDash } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+ 
+        // mock model to give error
+        userModels.getUserByMicrosoftIdModel.mockImplementation(() => {
+            throw new Error('DB Error');
+        });
+ 
+        const req = {
+            user: {
+                microsoftId: "myMicrosoftId"
+            }
+        }
+        const res = {
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await redirectUserDash(req, res, next);
+ 
+        expect(userModels.getUserByMicrosoftIdModel).toHaveBeenCalled();
+        expect(res.redirect).toHaveBeenCalledWith(expect.stringContaining("/error"));
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+    });
 });
+
