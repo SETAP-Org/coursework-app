@@ -13,6 +13,8 @@ beforeAll((done) => {
     server.listen(0, async () => {
         port = server.address().port;
 
+        await query(`TRUNCATE TABLE messages RESTART IDENTITY CASCADE`);
+
         const users = await query(`
             SELECT user_id, username
             FROM users
