@@ -1588,3 +1588,47 @@ describe('serveProjectChat', () => {
         userProjectModels.getUsersByProjectId.mockReset();
     });
 });
+
+describe('serveProjectNotes', () => {
+    test('Should render the projectDash page with isTeamLeader: true when the user is the team leader', async () => {
+        const { serveProjectNotes } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [{ user_id: 1 }] });
+ 
+        const req = {
+            user: {
+                microsoftId: "myMicrosoftId",
+                firstName: "John"
+            },
+            params: {
+                username: "johndoe"
+            },
+            session: {
+                project: {
+                    project_id: 1,
+                    project_name: "Project A",
+                    team_leader_id: 1
+                }
+            }
+        }
+        const res = {
+            render: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await serveProjectNotes(req, res, next);
+ 
+        expect(res.render).toHaveBeenCalledWith("projectDash", expect.objectContaining({
+            name: "John",
+            username: "johndoe",
+            userId: 1,
+            projectId: 1,
+            projectName: "Project A",
+            isTeamLeader: true
+        }));
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+    });
+
+    
+});
