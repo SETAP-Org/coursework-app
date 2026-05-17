@@ -297,4 +297,35 @@ describe("Notification socket", () => {
 
         clientA.disconnect();
     });
+
+    test("notifications fail with database error (invalid user id)", async () => {
+        const clientA = new Client(`http://localhost:${port}`);
+
+        await new Promise(res => clientA.on("connect", res));
+
+        const ack = await new Promise((resolve) => {
+            clientA.emit("notification", {
+                targetUsers: [crypto.randomUUID()],
+                projectId,
+                notificationType: "Message",
+                notificationMessage: "Hello world"
+            }, resolve);
+        });
+
+        // expect from ack
+        expect(ack.success).toBe(false);
+        expect(ack.message).toBe("Database error");
+
+        // database query
+        const dbResult = await query(`
+            SELECT *
+            FROM notifications
+            WHERE notification_message = $1
+        `, ["Hello world"]);
+
+        // expect from database
+        expect(dbResult.rows.length).toBe(0);
+
+        clientA.disconnect();
+    });
 })
