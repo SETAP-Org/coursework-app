@@ -122,3 +122,18 @@ describe('redirectUserDash', () => {
     });
 });
 
+describe('redirectWelcome', () => {
+    test('Should redirect to /welcome when called', async () => {
+        const { redirectWelcome } = await import('../controllers/serveControllers.js');
+ 
+        const req = {}
+        const res = {
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await redirectWelcome(req, res, next);
+ 
+        expect(res.redirect).toHaveBeenCalledWith("/welcome");
+    });
+});
