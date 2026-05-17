@@ -47,4 +47,26 @@ describe('redirectUserDash', () => {
 
         userModels.getUserByMicrosoftIdModel.mockReset();
     });
+
+    test('Should redirect to / when the session user has no Microsoft ID', async () => {
+        const { redirectUserDash } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+
+        const req = {
+            user: {}
+        }
+        const res = {
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+
+        await redirectUserDash(req, res, next);
+
+        expect(userModels.getUserByMicrosoftIdModel).not.toHaveBeenCalled();
+        expect(res.redirect).toHaveBeenCalledWith("/");
+
+        userModels.getUserByMicrosoftIdModel.mockReset();
+    });
+
+
 });
