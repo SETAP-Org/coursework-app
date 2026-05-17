@@ -113,11 +113,6 @@ FROM users
 WHERE username = 'alice';
 
 -- UR 13 Seed Data --
--- =========================================
--- SOCKET / CHAT / NOTIFICATION TEST DATA
--- =========================================
-
--- USERS
 WITH socket_alice AS (
     INSERT INTO users (
         user_first_name,
