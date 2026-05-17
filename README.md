@@ -11,7 +11,7 @@ For those wishing to contribute to the project, you are welcome to fork this rep
 > AI Usage: AI tools, such as Anthropic Claude, have been utilised throughout development as a code reviewer and to help with certain areas such as CSS styling and for the implementation of more advanced features to ensure a thorough understanding of theory has been reached among contributors
 
 ## Demo
-Add a link here to the demo video
+- [Link](https://youtu.be/CR__Btja5EI?si=8mJ6HY6uxHe0_pwV)
 
 
 ## Installation
