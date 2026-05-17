@@ -2,10 +2,6 @@ import { jest } from "@jest/globals";
 import express from "express";
 import request from "supertest";
 
-// =====================
-// MOCKS
-// =====================
-
 const mockGetUser = jest.fn();
 const mockGetProject = jest.fn();
 const mockGetTaskById = jest.fn();
@@ -88,10 +84,6 @@ beforeEach(() => {
     rows: [{ task_id: taskId }],
   });
 });
-
-// =====================
-// TESTS (ONLY FIXED ONES)
-// =====================
 
 describe("UR6 TASK STATUS INTEGRATION - FINAL STABLE", () => {
 

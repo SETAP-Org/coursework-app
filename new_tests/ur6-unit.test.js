@@ -115,10 +115,7 @@ describe("UR6 updateTaskStatus UNIT (HIGH COVERAGE)", () => {
     expect(res.status).toHaveBeenCalledWith(400);
     expect(mockUpdateTaskStatusModel).not.toHaveBeenCalled();
   });
-
-  // =====================
-  // 3. MISSING STATUS
-  // =====================
+  
   test("missing taskStatus → 400", async () => {
     mockGetUserByMicrosoftIdModel.mockResolvedValue({
       rows: [{ user_id: "user-1" }],
@@ -141,9 +138,6 @@ describe("UR6 updateTaskStatus UNIT (HIGH COVERAGE)", () => {
     expect(res.status).toHaveBeenCalledWith(400);
   });
 
-  // =====================
-  // 4. TASK NOT FOUND
-  // =====================
   test("task not found → 404", async () => {
     mockGetUserByMicrosoftIdModel.mockResolvedValue({
       rows: [{ user_id: "user-1" }],
@@ -166,9 +160,6 @@ describe("UR6 updateTaskStatus UNIT (HIGH COVERAGE)", () => {
     expect(res.status).toHaveBeenCalledWith(404);
   });
 
-  // =====================
-  // 5. NOT ASSIGNEE
-  // =====================
   test("not assignee → 403", async () => {
     mockGetUserByMicrosoftIdModel.mockResolvedValue({
       rows: [{ user_id: "user-1" }],
@@ -191,9 +182,6 @@ describe("UR6 updateTaskStatus UNIT (HIGH COVERAGE)", () => {
     expect(res.status).toHaveBeenCalledWith(403);
   });
 
-  // =====================
-  // 6. DB SUCCESS BUT EMPTY UPDATE
-  // =====================
   test("update returns empty → 404", async () => {
     mockGetUserByMicrosoftIdModel.mockResolvedValue({
       rows: [{ user_id: "user-1" }],
@@ -220,9 +208,6 @@ describe("UR6 updateTaskStatus UNIT (HIGH COVERAGE)", () => {
     expect(res.status).toHaveBeenCalledWith(404);
   });
 
-  // =====================
-  // 7. DB ERROR (REAL COVERAGE BOOSTER)
-  // =====================
   test("DB error → 500", async () => {
     mockGetUserByMicrosoftIdModel.mockResolvedValue({
       rows: [{ user_id: "user-1" }],
@@ -249,9 +234,6 @@ describe("UR6 updateTaskStatus UNIT (HIGH COVERAGE)", () => {
     expect(res.status).toHaveBeenCalledWith(500);
   });
 
-  // =====================
-  // 8. ANONYMOUS USER (REALISTIC FIX)
-  // =====================
   test("anonymous user → 500 (controller crash path)", async () => {
     const req = {
       user: undefined,
