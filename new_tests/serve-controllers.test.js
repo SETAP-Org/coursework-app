@@ -26,6 +26,10 @@ jest.unstable_mockModule('../models/taskModels.js', () => ({
     getTasksByProjectIdModel: jest.fn(),
 }));
 
+jest.unstable_mockModule('../models/meetingModels.js', () => ({
+    ...jest.requireActual('../models/meetingModels.js'),
+    getMeetingsByProjectIdModel: jest.fn(),
+}));
 
 describe('redirectUserDash', () => {
     test('Should call the getUserByMicrosoftIdModel() function and redirect to /:username when a valid Microsoft ID is given', async () => {
@@ -1310,4 +1314,57 @@ describe('serveProjectTasks', () => {
         userProjectModels.getUsersByProjectId.mockReset();
         taskModels.getTasksByProjectIdModel.mockReset();
     });
+});
+
+describe('serveProjectCalendar', () => {
+    test('Should render the projectCalendar page with isTeamLeader: true when the user is the team leader', async () => {
+        const { serveProjectCalendar } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+        const projectModels = await import('../models/projectModels.js');
+        const userProjectModels = await import('../models/userProjectModels.js');
+        const meetingModels = await import('../models/meetingModels.js');
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [{ user_id: 1 }] });
+        projectModels.getProjectByIdModel.mockResolvedValue({
+            rows: [{ project_id: 1, project_name: "Project A", team_leader_id: 1 }]
+        });
+        userProjectModels.getUsersByProjectId.mockResolvedValue({ rows: [{ user_id: 1, username: "johndoe" }] });
+        meetingModels.getMeetingsByProjectIdModel.mockResolvedValue({
+            rows: [{ meeting_id: 1, meeting_title: "Standup" }]
+        });
+ 
+        const req = {
+            user: {
+                microsoftId: "myMicrosoftId"
+            },
+            params: {
+                username: "johndoe",
+                project_id: "1"
+            }
+        }
+        const res = {
+            render: jest.fn(),
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await serveProjectCalendar(req, res, next);
+ 
+        expect(meetingModels.getMeetingsByProjectIdModel).toHaveBeenCalled();
+        expect(userProjectModels.getUsersByProjectId).toHaveBeenCalled();
+        expect(res.render).toHaveBeenCalledWith("projectCalendar", expect.objectContaining({
+            username: "johndoe",
+            userId: 1,
+            projectId: 1,
+            projectName: "Project A",
+            meetings: [{ meeting_id: 1, meeting_title: "Standup" }],
+            isTeamLeader: true
+        }));
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+        projectModels.getProjectByIdModel.mockReset();
+        userProjectModels.getUsersByProjectId.mockReset();
+        meetingModels.getMeetingsByProjectIdModel.mockReset();
+    });
+
+    
 });
