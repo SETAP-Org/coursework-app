@@ -842,5 +842,47 @@ describe('serveProjectDash', () => {
         konvaModels.getNotesByProjectId.mockReset();
     });
 
+     test('Should render the projectDash page with isTeamLeader: false when the user is not the team leader', async () => {
+        const { serveProjectDash } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+        const projectModels = await import('../models/projectModels.js');
+        const konvaModels = await import('../models/konvaModels.js');
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [{ user_id: 1 }] });
+        konvaModels.getNotesByProjectId.mockResolvedValue({ rows: [] });
+        projectModels.getProjectByIdModel.mockResolvedValue({
+            rows: [{ project_id: 1, project_name: "Project A", project_deadline: null }]
+        });
+ 
+        const req = {
+            user: {
+                microsoftId: "myMicrosoftId",
+                firstName: "John"
+            },
+            params: {
+                username: "johndoe",
+                project_id: "1"
+            },
+            session: {
+                project: {
+                    team_leader_id: 999
+                }
+            }
+        }
+        const res = {
+            render: jest.fn(),
+            redirect: jest.fn()
+        };
+ 
+        await serveProjectDash(req, res);
+ 
+        expect(res.render).toHaveBeenCalledWith("projectDash", expect.objectContaining({
+            isTeamLeader: false
+        }));
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+        projectModels.getProjectByIdModel.mockReset();
+        konvaModels.getNotesByProjectId.mockReset();
+    });
+ 
     
 });
