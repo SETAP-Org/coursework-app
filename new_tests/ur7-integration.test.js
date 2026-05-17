@@ -221,4 +221,34 @@ describe("Chat socket", () => {
 
         clientA.disconnect();
     });
+
+    test("chat fails when projectId is missing", async () => {
+        const clientA = new Client(`http://localhost:${port}`);
+
+        await new Promise(res => clientA.on("connect", res));
+
+        const ack = await new Promise((resolve) => {
+            clientA.emit("chat", {
+                senderId: aliceId,
+                message: "hello world"
+            }, resolve);
+        });
+
+        // expect from ack
+        expect(ack.success).toBe(false);
+        expect(ack.message).toBe("Missing senderId, projectId or message");
+
+        // database query
+        const dbResult = await query(`
+            SELECT *
+            FROM messages
+            WHERE sender_id = $1
+                AND message_content = $2
+        `, [aliceId, "hello world"]);
+
+        // expect from database
+        expect(dbResult.rows.length).toBe(0);
+
+        clientA.disconnect();
+    });
 })
