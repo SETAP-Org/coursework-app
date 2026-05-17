@@ -96,6 +96,10 @@ async function projectChat() {
             senderId: userId,
             projectId: projectId,
             message: messageContent,
+        }, (ack) => {
+            if (!ack.success) {
+                alert(ack.message);
+            }
         })
 
         // create notifications for other group members

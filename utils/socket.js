@@ -7,15 +7,41 @@ export default function setupSocket(io) {
     console.log("a user connected");
 
     socket.on("chat", async (msg) => {
-      const data = await postMessageModel(
-        msg.senderId,
-        msg.projectId,
-        msg.message,
-      );
-
-      console.log(data.rows[0]);
-
-      io.emit("chat", data.rows[0]);
+      try {
+        // validate the message
+        if (!msg.senderId || !msg.projectId || !msg.message) {
+          return callback({
+              success: false,
+              message: "Missing senderId, projectId or message"
+          });
+        }
+        
+        // add message to database
+        const data = await postMessageModel(
+          msg.senderId,
+          msg.projectId,
+          msg.message,
+        );
+  
+        if (!data.rows) {
+          return callback({
+              success: false,
+              message: "Message failed to add to database"
+          });
+        }
+  
+        io.emit("chat", data.rows[0]);
+  
+        callback({
+          success: true,
+          message: "Message sent successfully"
+        });
+      } catch (err) {
+        callback({
+          success: false,
+          message: "Database error"
+        });
+      }
     });
 
     socket.on("notification", async (notif) => {
