@@ -1366,5 +1366,45 @@ describe('serveProjectCalendar', () => {
         meetingModels.getMeetingsByProjectIdModel.mockReset();
     });
 
+    test('Should render the projectCalendar page with isTeamLeader: false when the user is not the team leader', async () => {
+        const { serveProjectCalendar } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+        const projectModels = await import('../models/projectModels.js');
+        const userProjectModels = await import('../models/userProjectModels.js');
+        const meetingModels = await import('../models/meetingModels.js');
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [{ user_id: 2 }] });
+        projectModels.getProjectByIdModel.mockResolvedValue({
+            rows: [{ project_id: 1, project_name: "Project A", team_leader_id: 1 }]
+        });
+        userProjectModels.getUsersByProjectId.mockResolvedValue({ rows: [] });
+        meetingModels.getMeetingsByProjectIdModel.mockResolvedValue({ rows: [] });
+ 
+        const req = {
+            user: {
+                microsoftId: "myMicrosoftId"
+            },
+            params: {
+                username: "johndoe",
+                project_id: "1"
+            }
+        }
+        const res = {
+            render: jest.fn(),
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await serveProjectCalendar(req, res, next);
+ 
+        expect(res.render).toHaveBeenCalledWith("projectCalendar", expect.objectContaining({
+            isTeamLeader: false
+        }));
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+        projectModels.getProjectByIdModel.mockReset();
+        userProjectModels.getUsersByProjectId.mockReset();
+        meetingModels.getMeetingsByProjectIdModel.mockReset();
+    });
+
     
 });
