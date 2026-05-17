@@ -536,3 +536,51 @@ describe('serveProfile', () => {
     });
 });
 
+describe('serveProjects', () => {
+    test('Should call the relevant models and render the projects page when a valid session user is given', async () => {
+        const { serveProjects } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+        const projectModels = await import('../models/projectModels.js');
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [{ user_id: 1, username: "johndoe" }] });
+        projectModels.getUserProjectsModel.mockResolvedValue({
+            rows: [
+                { project_id: 1, project_name: "Project A" },
+                { project_id: 2, project_name: "Project B" }
+            ]
+        });
+ 
+        const req = {
+            user: {
+                microsoftId: "myMicrosoftId",
+                firstName: "John"
+            },
+            params: {
+                username: "johndoe"
+            }
+        }
+        const res = {
+            render: jest.fn(),
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await serveProjects(req, res, next);
+ 
+        expect(userModels.getUserByMicrosoftIdModel).toHaveBeenCalled();
+        expect(projectModels.getUserProjectsModel).toHaveBeenCalled();
+        expect(res.render).toHaveBeenCalledWith("projects", expect.objectContaining({
+            userFirstName: "John",
+            username: "johndoe",
+            userId: 1,
+            projects: expect.arrayContaining([
+                expect.objectContaining({ project_id: 1 }),
+                expect.objectContaining({ project_id: 2 })
+            ])
+        }));
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+        projectModels.getUserProjectsModel.mockReset();
+    });
+
+    
+});
