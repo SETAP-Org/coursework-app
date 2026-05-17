@@ -1173,3 +1173,60 @@ describe('serveProjectTasks', () => {
     });
 });
 
+describe('serveProjectTasks', () => {
+    test('Should render the projectTasks page with isTeamLeader: true when the user is the team leader', async () => {
+        const { serveProjectTasks } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+        const projectModels = await import('../models/projectModels.js');
+        const userProjectModels = await import('../models/userProjectModels.js');
+        const taskModels = await import('../models/taskModels.js');
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [{ user_id: 1 }] });
+        userProjectModels.getUsersByProjectId.mockResolvedValue({ rows: [{ user_id: 1, username: "johndoe" }] });
+        projectModels.getProjectByIdModel.mockResolvedValue({
+            rows: [{ project_id: 1, project_name: "Project A", team_leader_id: 1 }]
+        });
+        taskModels.getTasksByProjectIdModel.mockResolvedValue({
+            rows: [{ task_id: 1, task_title: "Write the report" }]
+        });
+ 
+        const req = {
+            user: {
+                microsoftId: "myMicrosoftId"
+            },
+            params: {
+                username: "johndoe",
+                project_id: "1"
+            },
+            session: {
+                project: {
+                    team_leader_id: 1
+                }
+            }
+        }
+        const res = {
+            render: jest.fn(),
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await serveProjectTasks(req, res, next);
+ 
+        expect(taskModels.getTasksByProjectIdModel).toHaveBeenCalled();
+        expect(userProjectModels.getUsersByProjectId).toHaveBeenCalled();
+        expect(res.render).toHaveBeenCalledWith("projectTasks", expect.objectContaining({
+            userId: 1,
+            username: "johndoe",
+            projectId: "1",
+            projectName: "Project A",
+            tasks: [{ task_id: 1, task_title: "Write the report" }],
+            isTeamLeader: true
+        }));
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+        projectModels.getProjectByIdModel.mockReset();
+        userProjectModels.getUsersByProjectId.mockReset();
+        taskModels.getTasksByProjectIdModel.mockReset();
+    });
+
+    
+});
