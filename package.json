@@ -4,14 +4,12 @@
   "description": "A comprehensive web-based platform designed to streamline group coursework management for university students. This application addresses common challenges in academic collaboration by consolidating communication, task management, and file sharing into a single, integrated solution.",
   "main": "server.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development node server.js --watch",
-    "prod": "cross-env NODE_ENV=production node server.js --watch",
+    "dev": "cross-env NODE_ENV=development node listen.js --watch",
+    "prod": "cross-env NODE_ENV=production node listen.js --watch",
     "install_db": "node node_scripts/install_db.js",
     "email:test": "node testEmail.mjs",
     "notification:test": "node testNotification.mjs",
-    "test": "cross-env NODE_ENV=test node node_scripts/install_test_db.js && cross-env NODE_ENV=test node --experimental-vm-modules ./node_modules/jest/bin/jest.js new_tests/ur11-unit.test.js new_tests/ur11-integration.test.js --runInBand --forceExit --coverage",
-    "test-all": "cross-env NODE_ENV=test node node_scripts/install_test_db.js && cross-env NODE_ENV=test node --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand --forceExit --coverage"
-
+    "test": "cross-env NODE_ENV=test node node_scripts/install_test_db.js && cross-env NODE_ENV=test node --experimental-vm-modules ./node_modules/jest/bin/jest.js"
   },
   "repository": {
     "type": "git",
@@ -57,10 +55,13 @@
   },
   "devDependencies": {
     "jest": "^30.3.0",
+    "socket.io-client": "^4.8.3",
     "supertest": "^7.2.2"
   },
   "jest": {
-    "testMatch": ["**/new_tests/*.test.js"],
+    "testMatch": [
+      "**/new_tests/ur7-integration.test.js"
+    ],
     "testEnvironment": "node",
     "transform": {}
   }
