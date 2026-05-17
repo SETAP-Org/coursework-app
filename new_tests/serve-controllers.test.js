@@ -180,4 +180,26 @@ describe('serveLanding', () => {
         });
         expect(res.redirect).not.toHaveBeenCalled();
     });
+
+    test('Should redirect to /error if something goes wrong while rendering', async () => {
+        const { serveLanding } = await import('../controllers/serveControllers.js');
+
+        const req = {
+            cookies: {
+                cookieConsent: "true"
+            }
+        }
+        const res = {
+            render: jest.fn().mockImplementation(() => {
+                throw new Error('Render failed');
+            }),
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+
+        serveLanding(req, res, next);
+
+        expect(res.render).toHaveBeenCalled();
+        expect(res.redirect).toHaveBeenCalledWith(expect.stringContaining("/error"));
+    });
 });
