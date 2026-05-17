@@ -331,5 +331,21 @@ describe('serveError', () => {
         });
     });
 
-    
+    test('Should render the error page even when no error message is provided', async () => {
+        const { serveError } = await import('../controllers/serveControllers.js');
+ 
+        const req = {
+            query: {}
+        }
+        const res = {
+            render: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        serveError(req, res, next);
+ 
+        expect(res.render).toHaveBeenCalledWith("error", {
+            error: undefined
+        });
+    });
 });
