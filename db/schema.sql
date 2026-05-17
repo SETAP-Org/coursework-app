@@ -83,7 +83,7 @@ CREATE TABLE TASKS(
     FOREIGN KEY (project_id) REFERENCES PROJECTS(project_id)
 );
 
-CREATE TYPE notification_type AS ENUM ('Task Assigned', 'Task Updated', 'Project Deadline Approaching', 'Message Received');
+CREATE TYPE notification_type AS ENUM ('Message', 'Project', 'Member Leave', 'Member Join', 'Leader', 'Task', 'Meeting');
 
 CREATE TABLE NOTIFICATIONS(
     notification_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

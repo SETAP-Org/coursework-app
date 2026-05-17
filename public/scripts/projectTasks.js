@@ -244,6 +244,8 @@ if (dialogForm) {
             projectId: SD.projectId,
             notificationType: "Task",
             notificationMessage: `You have been assigned a task in ${projectName}`,
+          }, (ack) => {
+            if (!ack.success) alert(ack.message);
           });
         }
 

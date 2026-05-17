@@ -96,6 +96,8 @@ async function projectChat() {
             senderId: userId,
             projectId: projectId,
             message: messageContent,
+        }, (ack) => {
+            if (!ack.success) alert(ack.message);
         })
 
         // create notifications for other group members
@@ -106,6 +108,8 @@ async function projectChat() {
             projectId: projectId,
             notificationType: "Message",
             notificationMessage: `${username} sent a new message in ${projectName}`,
+        }, (ack) => {
+            if (!ack.success) alert(ack.message);
         });
         
         // allow typing in the fieldset again once processing is complete

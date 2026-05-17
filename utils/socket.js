@@ -6,42 +6,109 @@ export default function setupSocket(io) {
   io.on("connection", (socket) => {
     console.log("a user connected");
 
-    socket.on("chat", async (msg) => {
-      const data = await postMessageModel(
-        msg.senderId,
-        msg.projectId,
-        msg.message,
-      );
-
-      console.log(data.rows[0]);
-
-      io.emit("chat", data.rows[0]);
+    socket.on("chat", async (msg, ack) => {
+      try {
+        // validate the message
+        if (!msg.senderId || !msg.projectId || !msg.message) {
+          return ack({
+              success: false,
+              message: "Missing senderId, projectId or message"
+          });
+        }
+        
+        // add message to database
+        const data = await postMessageModel(
+          msg.senderId,
+          msg.projectId,
+          msg.message,
+        );
+  
+        if (!data.rows) {
+          return ack({
+              success: false,
+              message: "Message failed to add to database"
+          });
+        }
+  
+        io.emit("chat", data.rows[0]);
+  
+        ack({
+          success: true,
+          message: "Message sent successfully"
+        });
+      } catch (err) {
+        ack({
+          success: false,
+          message: "Database error"
+        });
+      }
     });
 
-    socket.on("notification", async (notif) => {
-      for (let i = 0; i < notif.targetUsers.length; i++) {
-        const data = await postNotificationModel(
-          notif.targetUsers[i],
-          notif.projectId || null,
-          notif.notificationType,
-          notif.notificationMessage,
-          notif.targetUsername || null,
-          notif.projectName || null,
-        );
+    socket.on("notification", async (notif, ack) => {
+      try {
+        // return failing ack for invalid notification
+        if (
+            !notif.targetUsers ||
+            !Array.isArray(notif.targetUsers) ||
+            notif.targetUsers.length === 0 ||
+            !notif.notificationType ||
+            !notif.notificationMessage
+        ) {
+            return ack({
+                success: false,
+                message: "Missing required notification fields"
+            });
+        }
 
-        console.log(data, 'this is the data');
+        const validTypes = [
+          "Message",
+          "Project",
+          "Member Leave",
+          "Member Join",
+          "Leader",
+          "Task",
+          "Meeting"
+        ];
 
-        io.emit("notification", {
-          notification: {
-            targetUsers: [notif.targetUsers[i]],
-            notificationId: data.rows[0].notification_id,
-            projectId: notif.projectId,
-            notificationType: notif.notificationType,
-            notificationMessage: notif.notificationMessage,
-            targetUsername: notif.targetUsername || null,
-            projectName: notif.projectName || null,
-          },
-          dbReturn: data.rows[0],
+        if (!validTypes.includes(notif.notificationType)) {
+            return ack({
+                success: false,
+                message: "Invalid notification type"
+            });
+        }
+
+        for (let i = 0; i < notif.targetUsers.length; i++) {
+          const data = await postNotificationModel(
+            notif.targetUsers[i],
+            notif.projectId || null,
+            notif.notificationType,
+            notif.notificationMessage,
+            notif.targetUsername || null,
+            notif.projectName || null,
+          );
+  
+          io.emit("notification", {
+            notification: {
+              targetUsers: [notif.targetUsers[i]],
+              notificationId: data.rows[0].notification_id,
+              projectId: notif.projectId,
+              notificationType: notif.notificationType,
+              notificationMessage: notif.notificationMessage,
+              targetUsername: notif.targetUsername || null,
+              projectName: notif.projectName || null,
+            },
+            dbReturn: data.rows[0],
+          });
+        }
+
+        ack({
+          success: true,
+          message: "Message sent successfully"
+        });
+      } catch (err) {
+        ack({
+          success: false,
+          message: "Database error"
         });
       }
     });

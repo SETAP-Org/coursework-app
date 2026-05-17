@@ -11,7 +11,7 @@ import { getProfilePhoto } from "../models/calendarModels.js";
 export async function addUser(req, res, next) {
     try {
         if (!req.user) {
-            res.status(400).json({
+            return res.status(400).json({
                 success: false,
                 message: "No session user"
             })
