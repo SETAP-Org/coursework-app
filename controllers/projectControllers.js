@@ -238,7 +238,7 @@ export async function checkMembership(req, res, next) {
       req.params.project_id,
     );
 
-    if (!membershipResult.rows[0]) {
+    if (!membershipResult.rows[0]?.is_member) {
       return res.status(403).send("Access denied");
     }
 

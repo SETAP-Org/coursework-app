@@ -72,6 +72,7 @@ describe('An authenticated user should be able to discuss details about the docu
         mockGetProjectByIdModel.mockResolvedValue({ rows: [PROJECT] });
         mockGetFilesByProjectIdModel.mockResolvedValue({ rows: [] });
         mockLoadFilesForGemini.mockResolvedValue([]);
+        mockGetGeminiResponseWithFiles.mockReset();
         mockGetGeminiResponseWithFiles.mockResolvedValue("AI response");
         mockPostAiChatMessageModel.mockReset();
         mockDeleteAiChatMessagesByProjectIdModel.mockResolvedValue({ rows: [] });
