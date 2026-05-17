@@ -54,9 +54,26 @@ export default function setupSocket(io) {
             !notif.notificationType ||
             !notif.notificationMessage
         ) {
-            return ack?.({
+            return ack({
                 success: false,
                 message: "Missing required notification fields"
+            });
+        }
+
+        const validTypes = [
+          "Message",
+          "Project",
+          "Member Leave",
+          "Member Join",
+          "Leader",
+          "Task",
+          "Meeting"
+        ];
+
+        if (!validTypes.includes(notif.notificationType)) {
+            return ack({
+                success: false,
+                message: "Invalid notification type"
             });
         }
 
