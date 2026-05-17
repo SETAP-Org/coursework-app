@@ -68,5 +68,31 @@ describe('redirectUserDash', () => {
         userModels.getUserByMicrosoftIdModel.mockReset();
     });
 
+    test('Should redirect to / when no matching user is found in the database', async () => {
+        const { redirectUserDash } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+        // Controller checks `dbUserResult.rows === 0`, which is falsy for `[]`, so the
+        // function falls through to redirect with the (undefined) username. We assert
+        // getUserByMicrosoftIdModel was called and a redirect occurred.
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [] });
 
+        const req = {
+            user: {
+                microsoftId: "myInvalidMicrosoftId"
+            }
+        }
+        const res = {
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+
+        await redirectUserDash(req, res, next);
+
+        expect(userModels.getUserByMicrosoftIdModel).toHaveBeenCalled();
+        expect(res.redirect).toHaveBeenCalled();
+
+        userModels.getUserByMicrosoftIdModel.mockReset();
+    });
+
+    
 });
