@@ -6,11 +6,11 @@ export default function setupSocket(io) {
   io.on("connection", (socket) => {
     console.log("a user connected");
 
-    socket.on("chat", async (msg) => {
+    socket.on("chat", async (msg, ack) => {
       try {
         // validate the message
         if (!msg.senderId || !msg.projectId || !msg.message) {
-          return callback({
+          return ack({
               success: false,
               message: "Missing senderId, projectId or message"
           });
@@ -24,7 +24,7 @@ export default function setupSocket(io) {
         );
   
         if (!data.rows) {
-          return callback({
+          return ack({
               success: false,
               message: "Message failed to add to database"
           });
@@ -32,12 +32,12 @@ export default function setupSocket(io) {
   
         io.emit("chat", data.rows[0]);
   
-        callback({
+        ack({
           success: true,
           message: "Message sent successfully"
         });
       } catch (err) {
-        callback({
+        ack({
           success: false,
           message: "Database error"
         });

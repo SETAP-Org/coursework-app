@@ -42,6 +42,7 @@ afterAll((done) => {
 });
 
 test("message is delivered between users and saved in DB", async () => {
+    // connect clients
     const clientA = new Client(`http://localhost:${port}`);
     const clientB = new Client(`http://localhost:${port}`);
 
@@ -50,22 +51,31 @@ test("message is delivered between users and saved in DB", async () => {
         new Promise(res => clientB.on("connect", res)),
     ]);
 
+    // listen for broadcast
     const receivedPromise = new Promise((resolve) => {
         clientB.on("chat", resolve);
     });
 
-    clientA.emit("chat", {
-        senderId: aliceId,
-        projectId: projectId,
-        message: "hello world"
+    // send message and capture ack
+    const ack = await new Promise((resolve) => {
+        clientA.emit("chat", {
+            senderId: aliceId,
+            projectId,
+            message: "hello world"
+        }, resolve);
     });
 
+    // wait for broadcast
     const received = await receivedPromise;
 
+    // expects from socket
     expect(received.sender_id).toBe(aliceId);
     expect(received.project_id).toBe(projectId);
     expect(received.message_content).toBe("hello world");
+    expect(ack.success).toBe(true);
+    expect(ack.message).toBe("Message sent successfully");
 
+    // database check
     const dbResult = await query(`
         SELECT *
         FROM messages
@@ -76,14 +86,15 @@ test("message is delivered between users and saved in DB", async () => {
         LIMIT 1;
     `, [aliceId, projectId, "hello world"]);
 
-    expect(dbResult.rows.length).toBe(1);
-
     const dbMessage = dbResult.rows[0];
 
+    // expects from database
+    expect(dbResult.rows.length).toBe(1);
     expect(dbMessage.sender_id).toBe(aliceId);
     expect(dbMessage.project_id).toBe(projectId);
     expect(dbMessage.message_content).toBe("hello world");
-
+    
+    // disconnect clients from socket
     clientA.disconnect();
     clientB.disconnect();
 });
