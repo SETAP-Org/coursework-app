@@ -231,5 +231,31 @@ describe('serveWelcome', () => {
         userModels.getUserByMicrosoftIdModel.mockReset();
     });
 
+    test('Should redirect to /:username when the user has not just authenticated', async () => {
+        const { serveWelcome } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [{ user_id: 1, username: "johndoe" }] });
+ 
+        const req = {
+            session: {
+                justAuthenticated: false
+            },
+            user: {
+                microsoftId: "myMicrosoftId"
+            }
+        }
+        const res = {
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await serveWelcome(req, res, next);
+ 
+        expect(userModels.getUserByMicrosoftIdModel).toHaveBeenCalled();
+        expect(res.redirect).toHaveBeenCalledWith("/johndoe");
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+    });
+
     
 });
