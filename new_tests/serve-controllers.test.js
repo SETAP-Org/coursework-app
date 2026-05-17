@@ -5,6 +5,12 @@ jest.unstable_mockModule('../models/userModels.js', () => ({
     getUserByMicrosoftIdModel: jest.fn(),
 }));
 
+jest.unstable_mockModule('../models/projectModels.js', () => ({
+    ...jest.requireActual('../models/projectModels.js'),
+    getProjectByIdModel: jest.fn(),
+    getUserProjectsModel: jest.fn(),
+}));
+
 
 describe('redirectUserDash', () => {
     test('Should call the getUserByMicrosoftIdModel() function and redirect to /:username when a valid Microsoft ID is given', async () => {
@@ -348,4 +354,45 @@ describe('serveError', () => {
             error: undefined
         });
     });
+});
+
+describe('serveUserDash', () => {
+    test('Should call the relevant models and render the userDash page when a valid session user is given', async () => {
+        const { serveUserDash } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+        const projectModels = await import('../models/projectModels.js');
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [{ user_id: 1, username: "johndoe" }] });
+        projectModels.getUserProjectsModel.mockResolvedValue({ rows: [{ project_id: 1, project_name: "Project A" }] });
+ 
+        const req = {
+            user: {
+                microsoftId: "myMicrosoftId",
+                firstName: "John"
+            },
+            params: {
+                username: "johndoe"
+            }
+        }
+        const res = {
+            render: jest.fn(),
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await serveUserDash(req, res, next);
+ 
+        expect(userModels.getUserByMicrosoftIdModel).toHaveBeenCalled();
+        expect(projectModels.getUserProjectsModel).toHaveBeenCalled();
+        expect(res.render).toHaveBeenCalledWith("userDash", expect.objectContaining({
+            userFirstName: "John",
+            username: "johndoe",
+            userId: 1,
+            projects: [{ project_id: 1, project_name: "Project A" }]
+        }));
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+        projectModels.getUserProjectsModel.mockReset();
+    });
+
+
 });
