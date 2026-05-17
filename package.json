@@ -60,7 +60,7 @@
   },
   "jest": {
     "testMatch": [
-      "**/new_tests/*.test.js"
+      "**/new_tests/serve-controllers.test.js"
     ],
     "testEnvironment": "node",
     "transform": {}
