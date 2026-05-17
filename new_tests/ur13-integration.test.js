@@ -20,7 +20,7 @@ beforeAll((done) => {
         const users = await query(`
             SELECT user_id, username
             FROM users
-            WHERE microsoft_id IN ('ms-socket-alice', 'ms-socket-bob', 'ms-socket-charlie)
+            WHERE microsoft_id IN ('ms-socket-alice', 'ms-socket-bob', 'ms-socket-charlie')
             ORDER BY username;
         `);
 
@@ -49,3 +49,68 @@ beforeEach(async () => {
 afterAll((done) => {
     server.close(() => done());
 });
+
+describe("Notification socket", () => {
+    test("notifications are delivered and saved in DB", async () => {
+        const clientA = new Client(`http://localhost:${port}`);
+        const clientB = new Client(`http://localhost:${port}`);
+
+        await Promise.all([
+            new Promise(res => clientA.on("connect", res)),
+            new Promise(res => clientB.on("connect", res)),
+        ]);
+
+        // listen for notification broadcast
+        const receivedPromise = new Promise((resolve) => {
+            clientB.on("notification", resolve);
+        });
+
+        // send notification + capture ack
+        const ack = await new Promise((resolve) => {
+            clientA.emit("notification", {
+                targetUsers: [bobId, charlieId],
+                projectId,
+                notificationType: "Message",
+                notificationMessage: "Alice sent a new message",
+            }, resolve);
+        });
+
+        // wait for broadcast
+        const received = await receivedPromise;
+
+        // expect from socket
+        expect(received.notification.targetUsers).toContain(bobId);
+        expect(received.notification.projectId).toBe(projectId);
+        expect(received.notification.notificationType).toBe("Message");
+        expect(received.notification.notificationMessage).toBe("Alice sent a new message");
+        expect(ack.success).toBe(true);
+        expect(ack.message).toBe("Message sent successfully");
+
+        // database query
+        const dbResult = await query(`
+            SELECT *
+            FROM notifications
+            WHERE project_id = $1
+                AND notification_type = $2
+                AND notification_message = $3
+            ORDER BY notification_id ASC
+        `, [
+            projectId,
+            "Message",
+            "Alice sent a new message"
+        ]);
+
+        // expect from database
+        expect(dbResult.rows.length).toBe(2);
+
+        const targetUsers = dbResult.rows.map(
+            row => row.user_id
+        );
+
+        expect(targetUsers).toContain(bobId);
+        expect(targetUsers).toContain(charlieId);
+
+        clientA.disconnect();
+        clientB.disconnect();
+    });
+})
