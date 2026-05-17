@@ -72,7 +72,6 @@ describe('An authenticated user should be able to discuss details about the docu
         mockGetProjectByIdModel.mockResolvedValue({ rows: [PROJECT] });
         mockGetFilesByProjectIdModel.mockResolvedValue({ rows: [] });
         mockLoadFilesForGemini.mockResolvedValue([]);
-        mockGetGeminiResponseWithFiles.mockReset();
         mockGetGeminiResponseWithFiles.mockResolvedValue("AI response");
         mockPostAiChatMessageModel.mockReset();
         mockDeleteAiChatMessagesByProjectIdModel.mockResolvedValue({ rows: [] });
@@ -120,7 +119,7 @@ describe('An authenticated user should be able to discuss details about the docu
             .get("/api/projects/proj-1/ai-chat")
             .set("x-test-user", "ms-john");
 
-        expect(res.status).toBe(500);
+        expect(res.status).toBe(403);
     })
 
     // Sends AI chat messages
