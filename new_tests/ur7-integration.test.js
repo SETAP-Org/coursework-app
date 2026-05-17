@@ -157,4 +157,34 @@ describe("Chat socket", () => {
 
         clientA.disconnect();
     });
+
+    test("chat fails when message content is missing", async () => {
+        const clientA = new Client(`http://localhost:${port}`);
+
+        await new Promise(res => clientA.on("connect", res));
+
+        const ack = await new Promise((resolve) => {
+            clientA.emit("chat", {
+                senderId: aliceId,
+                projectId,
+            }, resolve);
+        });
+
+        // expectations from ack
+        expect(ack.success).toBe(false);
+        expect(ack.message).toBe("Missing senderId, projectId or message");
+
+        // database query
+        const dbResult = await query(`
+            SELECT *
+            FROM messages
+            WHERE sender_id = $1
+                AND project_id = $2
+                AND message_content IS NULL
+        `, [aliceId, projectId]);
+
+        expect(dbResult.rows.length).toBe(0);
+
+        clientA.disconnect();
+    });
 })
