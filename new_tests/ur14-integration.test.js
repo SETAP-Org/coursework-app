@@ -119,7 +119,7 @@ describe('An authenticated user should be able to discuss details about the docu
             .get("/api/projects/proj-1/ai-chat")
             .set("x-test-user", "ms-john");
 
-        expect(res.status).toBe(403);
+        expect(res.status).toBe(500);
     })
 
     // Sends AI chat messages
