@@ -137,3 +137,27 @@ describe('redirectWelcome', () => {
         expect(res.redirect).toHaveBeenCalledWith("/welcome");
     });
 });
+
+describe('serveLanding', () => {
+    test('Should render the landing page with cookieConsent: false when the cookie is not set', async () => {
+        const { serveLanding } = await import('../controllers/serveControllers.js');
+ 
+        const req = {
+            cookies: {}
+        }
+        const res = {
+            render: jest.fn(),
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        serveLanding(req, res, next);
+ 
+        expect(res.render).toHaveBeenCalledWith("landing", {
+            cookieConsent: false
+        });
+        expect(res.redirect).not.toHaveBeenCalled();
+    });
+
+    
+});
