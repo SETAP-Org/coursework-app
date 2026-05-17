@@ -112,6 +112,125 @@ SELECT user_id, user_id, 'Empty Project', '2026-12-31', NOW(), NOW()
 FROM users
 WHERE username = 'alice';
 
+-- UR 13 Seed Data --
+-- =========================================
+-- SOCKET / CHAT / NOTIFICATION TEST DATA
+-- =========================================
+
+-- USERS
+WITH socket_alice AS (
+    INSERT INTO users (
+        user_first_name,
+        user_last_name,
+        user_email,
+        microsoft_id,
+        date_created,
+        last_login,
+        username,
+        email_notifications
+    )
+    VALUES (
+        'Socket',
+        'Alice',
+        'socket.alice@example.com',
+        'ms-socket-alice',
+        NOW(),
+        NOW(),
+        'socketalice',
+        FALSE
+    )
+    RETURNING user_id
+),
+
+socket_bob AS (
+    INSERT INTO users (
+        user_first_name,
+        user_last_name,
+        user_email,
+        microsoft_id,
+        date_created,
+        last_login,
+        username,
+        email_notifications
+    )
+    VALUES (
+        'Socket',
+        'Bob',
+        'socket.bob@example.com',
+        'ms-socket-bob',
+        NOW(),
+        NOW(),
+        'socketbob',
+        FALSE
+    )
+    RETURNING user_id
+),
+
+socket_charlie AS (
+    INSERT INTO users (
+        user_first_name,
+        user_last_name,
+        user_email,
+        microsoft_id,
+        date_created,
+        last_login,
+        username,
+        email_notifications
+    )
+    VALUES (
+        'Socket',
+        'Charlie',
+        'socket.charlie@example.com',
+        'ms-socket-charlie',
+        NOW(),
+        NOW(),
+        'socketcharlie',
+        FALSE
+    )
+    RETURNING user_id
+),
+
+socket_project AS (
+    INSERT INTO projects (
+        created_by,
+        team_leader_id,
+        project_name,
+        project_deadline,
+        p_date_created,
+        p_time_updated
+    )
+    SELECT
+        socket_alice.user_id,
+        socket_alice.user_id,
+        'Socket Integration Project',
+        '2099-12-31',
+        NOW(),
+        NOW()
+    FROM socket_alice
+    RETURNING project_id
+)
+
+INSERT INTO user_projects (user_id, project_id)
+
+SELECT
+    socket_alice.user_id,
+    socket_project.project_id
+FROM socket_alice, socket_project
+
+UNION ALL
+
+SELECT
+    socket_bob.user_id,
+    socket_project.project_id
+FROM socket_bob, socket_project
+
+UNION ALL
+
+SELECT
+    socket_charlie.user_id,
+    socket_project.project_id
+FROM socket_charlie, socket_project;
+
 -- UR 14 Seed Data --
 
 WITH john AS (
