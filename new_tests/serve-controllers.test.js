@@ -93,16 +93,16 @@ describe('redirectUserDash', () => {
 
         userModels.getUserByMicrosoftIdModel.mockReset();
     });
-    
+
     test('Should redirect to /error when getUserByMicrosoftIdModel() fails', async () => {
         const { redirectUserDash } = await import('../controllers/serveControllers.js');
         const userModels = await import('../models/userModels.js');
- 
+
         // mock model to give error
         userModels.getUserByMicrosoftIdModel.mockImplementation(() => {
             throw new Error('DB Error');
         });
- 
+
         const req = {
             user: {
                 microsoftId: "myMicrosoftId"
@@ -112,12 +112,12 @@ describe('redirectUserDash', () => {
             redirect: jest.fn()
         };
         const next = jest.fn();
- 
+
         await redirectUserDash(req, res, next);
- 
+
         expect(userModels.getUserByMicrosoftIdModel).toHaveBeenCalled();
         expect(res.redirect).toHaveBeenCalledWith(expect.stringContaining("/error"));
- 
+
         userModels.getUserByMicrosoftIdModel.mockReset();
     });
 });
@@ -125,15 +125,15 @@ describe('redirectUserDash', () => {
 describe('redirectWelcome', () => {
     test('Should redirect to /welcome when called', async () => {
         const { redirectWelcome } = await import('../controllers/serveControllers.js');
- 
+
         const req = {}
         const res = {
             redirect: jest.fn()
         };
         const next = jest.fn();
- 
+
         await redirectWelcome(req, res, next);
- 
+
         expect(res.redirect).toHaveBeenCalledWith("/welcome");
     });
 });
@@ -141,7 +141,7 @@ describe('redirectWelcome', () => {
 describe('serveLanding', () => {
     test('Should render the landing page with cookieConsent: false when the cookie is not set', async () => {
         const { serveLanding } = await import('../controllers/serveControllers.js');
- 
+
         const req = {
             cookies: {}
         }
@@ -150,14 +150,34 @@ describe('serveLanding', () => {
             redirect: jest.fn()
         };
         const next = jest.fn();
- 
+
         serveLanding(req, res, next);
- 
+
         expect(res.render).toHaveBeenCalledWith("landing", {
             cookieConsent: false
         });
         expect(res.redirect).not.toHaveBeenCalled();
     });
 
-    
+    test('Should render the landing page with cookieConsent: true when the cookie is set', async () => {
+        const { serveLanding } = await import('../controllers/serveControllers.js');
+
+        const req = {
+            cookies: {
+                cookieConsent: "true"
+            }
+        }
+        const res = {
+            render: jest.fn(),
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+
+        serveLanding(req, res, next);
+
+        expect(res.render).toHaveBeenCalledWith("landing", {
+            cookieConsent: true
+        });
+        expect(res.redirect).not.toHaveBeenCalled();
+    });
 });
