@@ -26,14 +26,23 @@ export function serveLanding(req, res, next) {
 
 export async function serveWelcome(req, res, next) {
   try {
+    if (!req.user) {
+      res.redirect("/error");
+    }
+
     if (req.session.justAuthenticated) {
       req.session.justAuthenticated = false;
 
-      res.redirect("/welcome");
+      res.render("/welcome");
     } else if (req.user) {
       const dbUserResult = await getUserByMicrosoftIdModel(
         req.user.microsoftId,
       );
+
+      if (dbUserResult.rows.length === 0) {
+        res.redirect("/error");
+      }
+
       const dbUser = dbUserResult.rows[0];
 
       res.redirect(`/${dbUser.username}`);
