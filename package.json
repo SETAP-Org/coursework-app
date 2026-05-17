@@ -9,8 +9,7 @@
     "install_db": "node node_scripts/install_db.js",
     "email:test": "node testEmail.mjs",
     "notification:test": "node testNotification.mjs",
-    "test": "cross-env NODE_ENV=test node node_scripts/install_test_db.js && cross-env NODE_ENV=test node --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand --coverage"
-  },
+    "test": "cross-env NODE_ENV=test node node_scripts/install_test_db.js && cross-env NODE_ENV=test node --experimental-vm-modules ./node_modules/jest/bin/jest.js new_tests/ur12-integration.test.js new_tests --runInBand --coverage --collectCoverageFrom='!**/models/**' --collectCoverageFrom='!**/Automated_Testing/**' --collectCoverageFrom='!**/Tests/**' --collectCoverageFrom='!**/coverage/**' --collectCoverageFrom='!**/node_scripts/**' --collectCoverageFrom='!**/listen.js' --collectCoverageFrom='!**/public/scripts/**'" },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SETAP-Org/group-coursework-management-system.git"
