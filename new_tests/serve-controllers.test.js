@@ -279,5 +279,33 @@ describe('serveWelcome', () => {
         userModels.getUserByMicrosoftIdModel.mockReset();
     });
 
-    
+    test('Should redirect to /error when getUserByMicrosoftIdModel() fails', async () => {
+        const { serveWelcome } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+ 
+        // mock model to give error
+        userModels.getUserByMicrosoftIdModel.mockImplementation(() => {
+            throw new Error('DB Error');
+        });
+ 
+        const req = {
+            session: {
+                justAuthenticated: false
+            },
+            user: {
+                microsoftId: "myInvalidMicrosoftId"
+            }
+        }
+        const res = {
+            redirect: jest.fn()
+        };
+        const next = jest.fn();
+ 
+        await serveWelcome(req, res, next);
+ 
+        expect(userModels.getUserByMicrosoftIdModel).toHaveBeenCalled();
+        expect(res.redirect).toHaveBeenCalledWith(expect.stringContaining("/error"));
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+    });
 });
