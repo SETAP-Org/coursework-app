@@ -206,4 +206,34 @@ describe("Notification socket", () => {
 
         clientA.disconnect();
     });
+
+    test("notifications fail when notificationType is missing", async () => {
+        const clientA = new Client(`http://localhost:${port}`);
+
+        await new Promise(res => clientA.on("connect", res));
+
+        const ack = await new Promise((resolve) => {
+            clientA.emit("notification", {
+                targetUsers: [bobId, charlieId],
+                projectId,
+                notificationMessage: "Hello world"
+            }, resolve);
+        });
+
+        // expect from ack
+        expect(ack.success).toBe(false);
+        expect(ack.message).toBe("Missing required notification fields");
+
+        // database query
+        const dbResult = await query(`
+            SELECT *
+            FROM notifications
+            WHERE notification_message = $1
+        `, ["Hello world"]);
+
+        // expect from database
+        expect(dbResult.rows.length).toBe(0);
+
+        clientA.disconnect();
+    });
 })
