@@ -751,5 +751,50 @@ describe('serveProjectDash', () => {
         konvaModels.getNotesByProjectId.mockReset();
     });
 
+    test('Should render the projectDash page with "Deadline is today!" when the deadline is today', async () => {
+        const { serveProjectDash } = await import('../controllers/serveControllers.js');
+        const userModels = await import('../models/userModels.js');
+        const projectModels = await import('../models/projectModels.js');
+        const konvaModels = await import('../models/konvaModels.js');
+        userModels.getUserByMicrosoftIdModel.mockResolvedValue({ rows: [{ user_id: 1 }] });
+        konvaModels.getNotesByProjectId.mockResolvedValue({ rows: [] });
+ 
+        const today = new Date();
+ 
+        projectModels.getProjectByIdModel.mockResolvedValue({
+            rows: [{ project_id: 1, project_name: "Project A", project_deadline: today.toISOString() }]
+        });
+ 
+        const req = {
+            user: {
+                microsoftId: "myMicrosoftId",
+                firstName: "John"
+            },
+            params: {
+                username: "johndoe",
+                project_id: "1"
+            },
+            session: {
+                project: {
+                    team_leader_id: 1
+                }
+            }
+        }
+        const res = {
+            render: jest.fn(),
+            redirect: jest.fn()
+        };
+ 
+        await serveProjectDash(req, res);
+ 
+        expect(res.render).toHaveBeenCalledWith("projectDash", expect.objectContaining({
+            deadlineLabel: "Deadline is today!"
+        }));
+ 
+        userModels.getUserByMicrosoftIdModel.mockReset();
+        projectModels.getProjectByIdModel.mockReset();
+        konvaModels.getNotesByProjectId.mockReset();
+    });
+
     
 });
